@@ -1,0 +1,9 @@
+.idea/libraries
+.idea/caches
+
+client-android/build
+common/build
+server/build
+
+local.properties
+*.iml
