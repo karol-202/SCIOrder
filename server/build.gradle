@@ -7,7 +7,7 @@ mainClassName = 'io.ktor.server.netty.EngineMain'
 
 dependencies {
     implementation project(':common')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "io.ktor:ktor-server-netty:$ktorVersion"
     implementation "io.ktor:ktor-gson:$ktorVersion"
     implementation "org.slf4j:slf4j-simple:1.6.1"
