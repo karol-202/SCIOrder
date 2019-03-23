@@ -1,41 +1,39 @@
 package pl.karol202.sciorder.server
 
 import io.ktor.application.Application
-import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
-import io.ktor.http.HttpStatusCode
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.get
-import io.ktor.routing.post
 import io.ktor.routing.routing
-import pl.karol202.sciorder.model.Order
-import pl.karol202.sciorder.server.database.AppDatabase
-import pl.karol202.sciorder.server.database.getOrders
-import pl.karol202.sciorder.server.database.insertOrder
+import pl.karol202.sciorder.server.dao.DatabaseDao
+import pl.karol202.sciorder.server.routes.createOrder
+import pl.karol202.sciorder.server.routes.createProduct
+import pl.karol202.sciorder.server.routes.getOrders
+import pl.karol202.sciorder.server.routes.getProducts
+
+val dao = DatabaseDao()
 
 fun Application.main()
+{
+    configure()
+    routing()
+}
+
+private fun Application.configure()
 {
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {
-        gson {
-            setPrettyPrinting()
-        }
+        gson()
     }
+}
 
-    routing {
-        get("/getOrders") {
-            call.respond(AppDatabase.getOrders())
-        }
-        post("/addOrder") {
-            val order = call.receive<Order>()
-            AppDatabase.insertOrder(order)
-            call.respond(HttpStatusCode.Created)
-        }
-    }
+private fun Application.routing() = routing {
+    getOrders(dao)
+    createOrder(dao)
+
+    getProducts(dao)
+    createProduct(dao)
 }
