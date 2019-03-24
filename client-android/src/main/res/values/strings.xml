@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SCIOrder</string>
+
+    <string name="fragment_products">Produkty</string>
+
+	<string name="unknown">Nieznany</string>
 </resources>
