@@ -3,5 +3,7 @@
 
     <string name="fragment_products">Produkty</string>
 
+	<string name="text_error">Błąd ładowania</string>
+
 	<string name="unknown">Nieznany</string>
 </resources>

@@ -13,7 +13,7 @@ private object DatabaseInfo
 }
 
 @Database(entities = [ProductEntity::class], version = DatabaseInfo.VERSION)
-@TypeConverters(ProductConverter::class)
+@TypeConverters(ProductParametersListConverter::class)
 abstract class LocalDatabase : RoomDatabase()
 {
 	companion object
@@ -21,5 +21,5 @@ abstract class LocalDatabase : RoomDatabase()
 		fun create(context: Context) = Room.databaseBuilder(context, LocalDatabase::class.java, DatabaseInfo.NAME).build()
 	}
 
-	abstract fun productDao(): ProductDao
+	abstract fun productEntityDao(): ProductEntityDao
 }

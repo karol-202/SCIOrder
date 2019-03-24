@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import pl.karol202.sciorder.model.Product
 
-@Entity
+@Entity(tableName = ProductEntity.TABLE_NAME)
 data class ProductEntity(@PrimaryKey val id: String,
                          val name: String,
                          val available: Boolean,
