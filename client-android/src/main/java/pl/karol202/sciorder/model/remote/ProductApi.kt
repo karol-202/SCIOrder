@@ -16,9 +16,4 @@ interface ProductApi
 
 	@GET("getProducts")
 	fun getAllProducts(): LiveData<ApiResponse<List<Product>>>
-
-	@POST("createProduct")
-	fun createProduct(@Query("name") name: String,
-					  @Query("available") available: Boolean,
-					  @Body parameters: List<Product.Parameter>)
 }

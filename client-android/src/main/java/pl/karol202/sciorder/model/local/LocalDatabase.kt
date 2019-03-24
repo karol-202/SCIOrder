@@ -13,7 +13,7 @@ private object DatabaseInfo
 }
 
 @Database(entities = [ProductEntity::class], version = DatabaseInfo.VERSION)
-@TypeConverters(ProductParametersListConverter::class)
+@TypeConverters(ProductConverter::class)
 abstract class LocalDatabase : RoomDatabase()
 {
 	companion object
