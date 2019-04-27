@@ -46,8 +46,8 @@ private fun Pair<String, String>.isParamValid(product: Product): Boolean
 	val productParameter = product.parameters.singleOrNull { it.name == name }
 	return when(productParameter?.type)
 	{
-		Product.Parameter.Type.TEXT, Product.Parameter.Type.BOOLEAN -> true
-		Product.Parameter.Type.DECIMAL -> value.toIntOrNull()?.toFloat()?.let { it in productParameter.valueRange() } ?: false
+		Product.Parameter.Type.TEXT, Product.Parameter.Type.BOOL -> true
+		Product.Parameter.Type.INT -> value.toIntOrNull()?.toFloat()?.let { it in productParameter.valueRange() } ?: false
 		Product.Parameter.Type.FLOAT -> value.toFloatOrNull()?.let { it in productParameter.valueRange() } ?: false
 		Product.Parameter.Type.ENUM -> value in (productParameter.attributes.enumValues ?: listOf())
 		null -> false

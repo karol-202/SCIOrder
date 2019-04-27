@@ -4,6 +4,12 @@
     <string name="fragment_products">Produkty</string>
 
 	<string name="text_error">Błąd ładowania</string>
+	<string name="text_product_param_int_range_closed">Od %d do %d</string>
+	<string name="text_product_param_int_range_left_closed">Od %d</string>
+	<string name="text_product_param_int_range_right_closed">Do %d</string>
+	<string name="text_product_param_float_range_closed">Od %f do %f</string>
+	<string name="text_product_param_float_range_left_closed">Od %f</string>
+	<string name="text_product_param_float_range_right_closed">Do %f</string>
 
 	<string name="unknown">Nieznany</string>
 </resources>

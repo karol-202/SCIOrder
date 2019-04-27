@@ -11,7 +11,7 @@ data class Product(val _id: String,
 	{
 		enum class Type
 		{
-			TEXT, DECIMAL, FLOAT, BOOLEAN, ENUM
+			TEXT, INT, FLOAT, BOOL, ENUM
 		}
 
 		data class Attributes(val minimalValue: Float?,

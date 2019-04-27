@@ -10,8 +10,7 @@ interface ProductApi
 {
 	companion object
 	{
-		fun create() =
-			ApiBuilder.create<ProductApi>()
+		fun create() = ApiBuilder.create<ProductApi>()
 	}
 
 	@GET("getProducts")

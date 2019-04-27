@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical">
+
+	<TextView
+			android:id="@+id/textProductParamIntName"
+			android:text="@string/unknown"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp" />
+
+	<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/editLayoutProductParamInt"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="12dp"
+			android:layout_marginEnd="16dp">
+
+		<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/editTextProductParamInt"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="numberSigned|number" />
+	</com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

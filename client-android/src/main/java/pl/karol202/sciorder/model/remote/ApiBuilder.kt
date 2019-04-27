@@ -6,7 +6,7 @@ import retrofit2.create
 
 object ApiBuilder
 {
-	private const val URL = "http://192.168.0.11:8080/"
+	private const val URL = "http://192.168.0.12:8080/"
 
 	@PublishedApi
 	internal val retrofit = Retrofit.Builder()
