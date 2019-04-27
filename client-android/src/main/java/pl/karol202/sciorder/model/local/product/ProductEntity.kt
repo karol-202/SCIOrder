@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.model.local
+package pl.karol202.sciorder.model.local.product
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

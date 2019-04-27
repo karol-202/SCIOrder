@@ -1,17 +1,17 @@
-package pl.karol202.sciorder.model.remote
+package pl.karol202.sciorder.model.remote.product
 
 import androidx.lifecycle.LiveData
 import pl.karol202.sciorder.model.Product
-import retrofit2.http.Body
+import pl.karol202.sciorder.model.remote.ApiBuilder
+import pl.karol202.sciorder.model.remote.ApiResponse
 import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface ProductApi
 {
 	companion object
 	{
-		fun create() = ApiBuilder.create<ProductApi>()
+		fun create() =
+			ApiBuilder.create<ProductApi>()
 	}
 
 	@GET("getProducts")

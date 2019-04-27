@@ -7,9 +7,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.karol202.sciorder.model.Product
-import pl.karol202.sciorder.model.local.LocalDatabase
-import pl.karol202.sciorder.model.local.toProductDao
-import pl.karol202.sciorder.model.remote.ProductApi
 import pl.karol202.sciorder.repository.ProductRepository
 import pl.karol202.sciorder.repository.ResourceState
 
@@ -40,8 +37,7 @@ class ProductsViewModel(application: Application) : AndroidViewModel(application
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)
 
-	private val database = LocalDatabase.create(application)
-	private val productsRepository = ProductRepository(coroutineScope, database.productEntityDao().toProductDao(), ProductApi.create())
+	private val productsRepository = ProductRepository.create(coroutineScope, application)
 	private val productsResource = productsRepository.getAllProducts()
 
 	val productsLiveData: LiveData<List<Product>> = Transformations.map(productsResource.asLiveData) { it.data }

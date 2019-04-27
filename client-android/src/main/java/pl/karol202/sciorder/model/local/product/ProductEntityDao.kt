@@ -1,12 +1,13 @@
-package pl.karol202.sciorder.model.local
+package pl.karol202.sciorder.model.local.product
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import pl.karol202.sciorder.model.Product
 
 @Dao
 interface ProductEntityDao
 {
+	@WorkerThread
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	fun insertProducts(products: List<ProductEntity>)
 

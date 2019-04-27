@@ -1,25 +1,21 @@
 package pl.karol202.sciorder.repository
 
+import android.content.Context
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import pl.karol202.sciorder.model.Product
-import pl.karol202.sciorder.model.local.ProductDao
-import pl.karol202.sciorder.model.remote.ProductApi
+import pl.karol202.sciorder.model.local.LocalDatabase
+import pl.karol202.sciorder.model.local.product.toProductDao
+import pl.karol202.sciorder.model.remote.product.ProductApi
 
-class ProductRepository(private val coroutineScope: CoroutineScope,
-                        private val productDao: ProductDao,
-                        private val productApi: ProductApi)
+interface ProductRepository
 {
-	fun getAllProducts() = object : Resource<List<Product>>() {
-		override fun shouldFetchFromNetwork(data: List<Product>) = data.isEmpty()
-
-		override fun loadFromDatabase() = productDao.getAllProducts()
-
-		override fun loadFromNetwork() = productApi.getAllProducts()
-
-		override fun saveToDatabase(data: List<Product>)
-		{
-			coroutineScope.launch { productDao.insertProducts(data) }
-		}
+	companion object
+	{
+		fun create(coroutineScope: CoroutineScope, context: Context) =
+			ProductRepositoryImpl(coroutineScope,
+								  LocalDatabase.create(context).productEntityDao().toProductDao(),
+								  ProductApi.create())
 	}
+
+	fun getAllProducts(): Resource<List<Product>>
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import pl.karol202.sciorder.model.remote.ApiResponse
 
-abstract class Resource<T> @MainThread constructor()
+abstract class Resource<T> @MainThread constructor() // LiveData can only be modified from main thread
 {
 	@Suppress("LeakingThis")
 	private val databaseSource = loadFromDatabase()
@@ -24,7 +24,7 @@ abstract class Resource<T> @MainThread constructor()
 		}
 	}
 
-	@MainThread
+	@MainThread // LiveData can only be modified from main thread
 	fun reload()
 	{
 		if(fetching) return
@@ -47,20 +47,20 @@ abstract class Resource<T> @MainThread constructor()
 			liveData.removeSource(databaseSource)
 			when(response)
 			{
-				is ApiResponse.ApiResponseSuccess -> onNetworkFetchSuccess(response)
-				is ApiResponse.ApiResponseError -> onNetworkFetchFailure(response)
+				is ApiResponse.Success -> onNetworkFetchSuccess(response)
+				is ApiResponse.Error -> onNetworkFetchFailure(response)
 			}
 			fetching = false
 		}
 	}
 
-	private fun onNetworkFetchSuccess(response: ApiResponse.ApiResponseSuccess<T>)
+	private fun onNetworkFetchSuccess(response: ApiResponse.Success<T>)
 	{
 		saveToDatabase(response.data)
 		liveData.addSource(databaseSource) { data -> setSuccess(data) }
 	}
 
-	private fun onNetworkFetchFailure(response: ApiResponse.ApiResponseError<T>)
+	private fun onNetworkFetchFailure(response: ApiResponse.Error<T>)
 	{
 		liveData.addSource(databaseSource) { data -> setFailure(data, response.message) }
 	}

@@ -5,6 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import pl.karol202.sciorder.model.local.product.ProductEntity
+import pl.karol202.sciorder.model.local.product.ProductEntityDao
+import pl.karol202.sciorder.model.local.product.ProductParametersListConverter
 
 private object DatabaseInfo
 {
