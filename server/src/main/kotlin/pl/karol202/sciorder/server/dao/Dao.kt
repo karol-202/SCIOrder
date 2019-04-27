@@ -5,11 +5,11 @@ import pl.karol202.sciorder.model.Product
 
 interface Dao
 {
-    suspend fun createOrder(entries: List<Order.Entry>)
+    suspend fun addOrder(order: Order)
 
     suspend fun getAllOrders(): List<Order>
 
-    suspend fun createProduct(name: String, available: Boolean, parameters: List<Product.Parameter>)
+    suspend fun addProduct(product: Product)
 
     suspend fun getAllProducts(): List<Product>
 

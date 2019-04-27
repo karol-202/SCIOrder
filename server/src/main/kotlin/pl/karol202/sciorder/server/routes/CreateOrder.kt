@@ -7,18 +7,49 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import pl.karol202.sciorder.model.Order
+import pl.karol202.sciorder.model.Product
 import pl.karol202.sciorder.server.dao.Dao
+import pl.karol202.sciorder.server.util.newStringId
 
-fun Route.createOrder(dao: Dao) = post("createOrder") {
-	val entries = call.receive<Array<Order.Entry>>().toList()
-	if(!validateEntries(dao, entries)) return@post call.respond(HttpStatusCode.BadRequest)
-	dao.createOrder(entries)
-
+fun Route.createOrder(dao: Dao) = post("addOrder") {
+	val order = call.receive<Order>().override()
+	if(!order.isValid(dao)) return@post call.respond(HttpStatusCode.BadRequest)
+	dao.addOrder(order)
 	call.respond(HttpStatusCode.Created)
 }
 
-private suspend fun validateEntries(dao: Dao, entries: List<Order.Entry>) =
-		entries.all {
-			val product = dao.getProductOfId(it.productId)
-			product?.available == true
-		}
+private fun Order.override() = copy(_id = newStringId<Order>(), status = Order.Status.WAITING)
+
+private suspend fun Order.isValid(dao: Dao) = entries.all { it.isValid(dao) }
+
+private suspend fun Order.Entry.isValid(dao: Dao): Boolean
+{
+	val product = dao.getProductOfId(productId) ?: return false
+	return product.available && isParamsListValid(product)
+}
+
+private fun Order.Entry.isParamsListValid(product: Product) =
+	product.parameters.map { it.name }.equalsIgnoreOrder(parameters.keys) && parameters.all { it.toPair().isParamValid(product) }
+
+private fun <T : Comparable<T>> Collection<T>.equalsIgnoreOrder(other: Collection<T>) = sorted() == other.sorted()
+
+private fun Pair<String, String>.isParamValid(product: Product): Boolean
+{
+	fun Product.Parameter.valueRange(): ClosedFloatingPointRange<Float>
+	{
+		val minValue = attributes.minimalValue ?: Float.MIN_VALUE
+		val maxValue = attributes.maximalValue ?: Float.MAX_VALUE
+		return minValue..maxValue
+	}
+
+	val (name, value) = this
+	val productParameter = product.parameters.singleOrNull { it.name == name }
+	return when(productParameter?.type)
+	{
+		Product.Parameter.Type.TEXT, Product.Parameter.Type.BOOLEAN -> true
+		Product.Parameter.Type.DECIMAL -> value.toIntOrNull()?.toFloat()?.let { it in productParameter.valueRange() } ?: false
+		Product.Parameter.Type.FLOAT -> value.toFloatOrNull()?.let { it in productParameter.valueRange() } ?: false
+		Product.Parameter.Type.ENUM -> value in (productParameter.attributes.enumValues ?: listOf())
+		null -> false
+	}
+}
