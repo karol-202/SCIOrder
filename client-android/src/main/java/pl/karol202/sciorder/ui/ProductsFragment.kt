@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,13 +15,18 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_products.*
 import pl.karol202.sciorder.R
 import pl.karol202.sciorder.extensions.act
-import pl.karol202.sciorder.viewmodel.ProductsViewModel
+import pl.karol202.sciorder.model.Product
+import pl.karol202.sciorder.viewmodel.OrderViewModel
+import pl.karol202.sciorder.viewmodel.ProductViewModel
 
-class ProductsFragment : Fragment()
+class ProductsFragment : Fragment(), OnProductOrderListener
 {
-	private val productsViewModel by lazy { ViewModelProviders.of(act).get<ProductsViewModel>() }
+	private val productViewModel by lazy { ViewModelProviders.of(act).get<ProductViewModel>() }
+	private val orderViewModel by lazy { ViewModelProviders.of(act).get<OrderViewModel>() }
 
-	private val adapter = ProductAdapter()
+	private val adapter = ProductAdapter().apply {
+		onProductSelectListener = { product -> showProductOrderDialog(product) }
+	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
 			inflater.inflate(R.layout.fragment_products, container, false)
@@ -31,7 +37,9 @@ class ProductsFragment : Fragment()
 		initRefreshLayout()
 
 		observeProducts()
-		observeState()
+		observeLoading()
+		observeProductError()
+		observeOrderError()
 	}
 
 	private fun initRecycler()
@@ -43,33 +51,45 @@ class ProductsFragment : Fragment()
 
 	private fun initRefreshLayout()
 	{
-		refreshLayoutProducts.setOnRefreshListener { productsViewModel.refreshProducts() }
+		refreshLayoutProducts.setOnRefreshListener { productViewModel.refreshProducts() }
 	}
 
 	private fun observeProducts()
 	{
-		productsViewModel.productsLiveData.observe(viewLifecycleOwner, Observer { productsList ->
+		productViewModel.productsLiveData.observe(viewLifecycleOwner, Observer { productsList ->
 			productsList?.let { adapter.products = it }
 		})
 	}
 
-	private fun observeState()
+	private fun observeLoading()
 	{
-		productsViewModel.stateLiveData.observe(viewLifecycleOwner, Observer { state ->
-			when(state)
-			{
-				is ProductsViewModel.State.Loaded -> refreshLayoutProducts.isRefreshing = false
-				is ProductsViewModel.State.Loading -> refreshLayoutProducts.isRefreshing = true
-				is ProductsViewModel.State.Error -> {
-					refreshLayoutProducts.isRefreshing = false
-					showErrorSnackbar()
-				}
-			}
+		productViewModel.loadingLiveData.observe(viewLifecycleOwner, Observer { loading ->
+			refreshLayoutProducts.isRefreshing = loading
 		})
 	}
 
-	private fun showErrorSnackbar()
+	private fun observeProductError()
 	{
-		Snackbar.make(view ?: return, R.string.text_error, Snackbar.LENGTH_LONG).show()
+		productViewModel.errorEventLiveData.observe(viewLifecycleOwner, Observer { event ->
+			if(event.getIfNotConsumed() == Unit) showErrorSnackbar(R.string.text_products_loading_error)
+		})
 	}
+
+	private fun observeOrderError()
+	{
+		orderViewModel.errorEventLiveData.observe(viewLifecycleOwner, Observer { event ->
+			if(event.getIfNotConsumed() == Unit) showErrorSnackbar(R.string.text_order_error)
+		})
+	}
+
+	private fun showErrorSnackbar(@StringRes message: Int)
+	{
+		Snackbar.make(view ?: return, message, Snackbar.LENGTH_LONG).show()
+	}
+
+	private fun showProductOrderDialog(product: Product) =
+			fragmentManager?.let { ProductOrderDialogFragment.create(product, this).show(it) }
+
+	override fun onProductOrder(product: Product, quantity: Int, parameters: Map<String, String>) =
+			orderViewModel.orderProduct(product, quantity, parameters)
 }

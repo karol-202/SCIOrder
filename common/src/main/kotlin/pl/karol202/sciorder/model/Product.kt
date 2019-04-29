@@ -1,9 +1,11 @@
 package pl.karol202.sciorder.model
 
+import java.io.Serializable
+
 data class Product(val _id: String,
 				   val name: String,
 				   val available: Boolean,
-				   val parameters: List<Parameter>)
+				   val parameters: List<Parameter>) : Serializable
 {
 	data class Parameter(val name: String,
 	                     val type: Type,

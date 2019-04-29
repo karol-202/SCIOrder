@@ -4,6 +4,8 @@ data class Order(val _id: String,
                  val entries: List<Entry>,
                  val status: Status)
 {
+	companion object;
+
 	data class Entry(val productId: String,
 	                 val quantity: Int,
 	                 val parameters: Map<String, String>)

@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.util
+package pl.karol202.sciorder.repository
 
 import android.os.SystemClock
 import java.util.concurrent.TimeUnit

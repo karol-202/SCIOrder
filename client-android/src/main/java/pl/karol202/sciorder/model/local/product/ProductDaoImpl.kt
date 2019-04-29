@@ -12,6 +12,12 @@ private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) :
 	ProductDao
 {
 	@WorkerThread
+	override fun clearProducts()
+	{
+		productEntityDao.clearProducts()
+	}
+
+	@WorkerThread
 	override fun insertProducts(products: List<Product>)
 	{
 		productEntityDao.insertProducts(products.map { it.toProductEntity() })

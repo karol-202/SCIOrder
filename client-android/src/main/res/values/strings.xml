@@ -3,13 +3,17 @@
 
     <string name="fragment_products">Produkty</string>
 
-	<string name="text_error">Błąd ładowania</string>
+	<string name="text_products_loading_error">Błąd ładowania</string>
+	<string name="text_order_error">Błąd zamówienia</string>
 	<string name="text_product_param_int_range_closed">Od %d do %d</string>
-	<string name="text_product_param_int_range_left_closed">Od %d</string>
-	<string name="text_product_param_int_range_right_closed">Do %d</string>
-	<string name="text_product_param_float_range_closed">Od %f do %f</string>
-	<string name="text_product_param_float_range_left_closed">Od %f</string>
-	<string name="text_product_param_float_range_right_closed">Do %f</string>
+	<string name="text_product_param_int_range_left_closed">Większe od %d</string>
+	<string name="text_product_param_int_range_right_closed">Mniejsze oo %d</string>
+	<string name="text_product_param_float_range_closed">Od %.2f do %.2f</string>
+	<string name="text_product_param_float_range_left_closed">Większe od %.2f</string>
+	<string name="text_product_param_float_range_right_closed">Mniejsze oo %.2f</string>
+
+	<string name="action_order">Zamów</string>
+	<string name="action_cancel">Anuluj</string>
 
 	<string name="unknown">Nieznany</string>
 </resources>
