@@ -1,8 +1,7 @@
 package pl.karol202.sciorder.ui
 
-import android.text.Editable
+import android.content.Context
 import android.text.InputType
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +14,13 @@ import kotlinx.android.synthetic.main.item_product_param_bool.*
 import kotlinx.android.synthetic.main.item_product_param_enum.*
 import kotlinx.android.synthetic.main.item_product_param_text.*
 import pl.karol202.sciorder.R
+import pl.karol202.sciorder.extensions.addAfterTextChangedListener
 import pl.karol202.sciorder.extensions.ctx
+import pl.karol202.sciorder.extensions.setOnItemSelectedListener
 import pl.karol202.sciorder.model.Product
 
-class ProductParamAdapter(val product: Product) : RecyclerView.Adapter<ProductParamAdapter.ViewHolder>()
+class ProductParamAdapter(context: Context,
+                          product: Product) : RecyclerView.Adapter<ProductParamAdapter.ViewHolder>()
 {
 	abstract class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 	{
@@ -26,102 +28,131 @@ class ProductParamAdapter(val product: Product) : RecyclerView.Adapter<ProductPa
 
 		abstract val textName: TextView
 
-		open fun bind(param: Product.Parameter)
+		protected var param: Product.Parameter? = null
+		protected var onUpdateListener: ((Any?) -> Unit)? = null
+
+		open fun bind(param: Product.Parameter, onUpdateListener: (Any?) -> Unit)
 		{
+			this.param = param
+			this.onUpdateListener = onUpdateListener
+
 			textName.text = param.name
 		}
 	}
 
-	open class ViewHolderText(containerView: View) : ViewHolder(containerView)
+	class ViewHolderText(containerView: View) : ViewHolder(containerView)
 	{
 		override val textName: TextView = textProductParamTextName
+
+		init
+		{
+			editTextProductParamText.addAfterTextChangedListener { onUpdateListener?.invoke(it) }
+		}
 	}
 
-	abstract class ViewHolderNumber<N : Number>(containerView: View) : ViewHolderText(containerView)
+	abstract class ViewHolderNumber<T : Number>(containerView: View,
+	                                            inputType: Int) : ViewHolder(containerView)
 	{
-		override fun bind(param: Product.Parameter)
+		override val textName: TextView = textProductParamTextName
+
+		init
 		{
-			super.bind(param)
-			editTextProductParamText.inputType = getInputType()
-			editTextProductParamText.addTextChangedListener(object : TextWatcher {
-				override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-
-				override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-
-				override fun afterTextChanged(s: Editable?) = updateError(param)
-			})
-			updateError(param)
+			editTextProductParamText.inputType = inputType
+			editTextProductParamText.addAfterTextChangedListener {
+				updateError()
+				onUpdateListener?.invoke(param?.let { getValidValue(it) })
+			}
 		}
 
-		protected abstract fun getInputType(): Int
-
-		private fun updateError(param: Product.Parameter)
+		override fun bind(param: Product.Parameter, onUpdateListener: (Any?) -> Unit)
 		{
-			editLayoutProductParamText.error = if(!isValid(param)) param.attributes.getRangeText() else null
+			super.bind(param, onUpdateListener)
+			updateError()
 		}
 
-		private fun isValid(param: Product.Parameter) =
-			getValue()?.toFloat()?.let { it in param.attributes.getRange() } ?: false
-
-		private fun getValue() = editTextProductParamText.text?.toString()?.let { convertValue(it) }
-
-		protected abstract fun convertValue(string: String): N?
-
-		private fun Product.Parameter.Attributes.getRange(): ClosedFloatingPointRange<Float>
+		private fun updateError()
 		{
-			val minValue = minimalValue ?: Float.MIN_VALUE
-			val maxValue = maximalValue ?: Float.MAX_VALUE
-			return minValue..maxValue
+			editLayoutProductParamText.error = param?.let { if(getValidValue(it) == null) it.attributes.getErrorText() else null }
 		}
 
-		protected abstract fun Product.Parameter.Attributes.getRangeText(): String
+		private fun getValidValue(param: Product.Parameter): T?
+		{
+			val minValue = param.attributes.minimalValue ?: Float.MIN_VALUE
+			val maxValue = param.attributes.maximalValue ?: Float.MAX_VALUE
+			val range = minValue..maxValue
+
+			val value = editTextProductParamText.text?.toString()?.let { convertValue(it) }
+			return value?.takeIf { it.toFloat() in range }
+		}
+
+		protected abstract fun convertValue(string: String?): T?
+
+		protected abstract fun Product.Parameter.Attributes.getErrorText(): String
 	}
 
-	class ViewHolderInt(containerView: View) : ViewHolderNumber<Int>(containerView)
+	class ViewHolderInt(containerView: View) : ViewHolderNumber<Int>(containerView, INPUT_TYPE)
 	{
-		override fun getInputType() = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
+		companion object
+		{
+			private const val INPUT_TYPE = InputType.TYPE_CLASS_NUMBER or
+										   InputType.TYPE_NUMBER_FLAG_SIGNED
+		}
 
-		override fun convertValue(string: String) = string.toIntOrNull()
+		override fun convertValue(string: String?) = string?.toIntOrNull()
 
-		override fun Product.Parameter.Attributes.getRangeText(): String = when
+		override fun Product.Parameter.Attributes.getErrorText(): String = when
 		{
 			minimalValue != null && maximalValue != null ->
 				ctx.getString(R.string.text_product_param_int_range_closed, minimalValue?.toInt(), maximalValue?.toInt())
 			minimalValue != null -> ctx.getString(R.string.text_product_param_int_range_left_closed, minimalValue?.toInt())
 			maximalValue != null -> ctx.getString(R.string.text_product_param_int_range_right_closed, maximalValue?.toInt())
-			else -> ""
+			else -> ctx.getString(R.string.text_product_param_no_value)
 		}
 	}
 
-	class ViewHolderFloat(containerView: View) : ViewHolderNumber<Float>(containerView)
+	class ViewHolderFloat(containerView: View) : ViewHolderNumber<Float>(containerView, INPUT_TYPE)
 	{
-		override fun getInputType() =
-			InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_NUMBER_FLAG_DECIMAL
+		companion object
+		{
+			private const val INPUT_TYPE = InputType.TYPE_CLASS_NUMBER or
+										   InputType.TYPE_NUMBER_FLAG_SIGNED or
+										   InputType.TYPE_NUMBER_FLAG_DECIMAL
+		}
 
-		override fun convertValue(string: String) = string.toFloatOrNull()
+		override fun convertValue(string: String?) = string?.toFloatOrNull()
 
-		override fun Product.Parameter.Attributes.getRangeText(): String = when
+		override fun Product.Parameter.Attributes.getErrorText(): String = when
 		{
 			minimalValue != null && maximalValue != null ->
 				ctx.getString(R.string.text_product_param_float_range_closed, minimalValue, maximalValue)
 			minimalValue != null -> ctx.getString(R.string.text_product_param_float_range_left_closed, minimalValue)
 			maximalValue != null -> ctx.getString(R.string.text_product_param_float_range_right_closed, maximalValue)
-			else -> ""
+			else -> ctx.getString(R.string.text_product_param_no_value)
 		}
 	}
 
 	class ViewHolderBool(containerView: View) : ViewHolder(containerView)
 	{
 		override val textName: TextView = textProductParamBoolName
+
+		init
+		{
+			checkProductParamBool.setOnCheckedChangeListener { _, checked -> onUpdateListener?.invoke(checked) }
+		}
 	}
 
 	class ViewHolderEnum(containerView: View) : ViewHolder(containerView)
 	{
 		override val textName: TextView = textProductParamEnumName
 
-		override fun bind(param: Product.Parameter)
+		init
 		{
-			super.bind(param)
+			spinnerProductParamEnum.setOnItemSelectedListener { onUpdateListener?.invoke(it) }
+		}
+
+		override fun bind(param: Product.Parameter, onUpdateListener: (Any?) -> Unit)
+		{
+			super.bind(param, onUpdateListener)
 			spinnerProductParamEnum.adapter = ArrayAdapter<String>(ctx,
 																   R.layout.item_product_param_enum_value,
 																   R.id.textProductParamEnumValue,
@@ -145,6 +176,17 @@ class ProductParamAdapter(val product: Product) : RecyclerView.Adapter<ProductPa
 		}
 	}
 
+	private data class ParamWithValue(val param: Product.Parameter,
+	                                  var value: Any?) // Default value will be added
+
+	private val allParams = product.parameters + Product.Parameter(context.getString(R.string.text_quantity),
+	                                                               Product.Parameter.Type.INT,
+	                                                               Product.Parameter.Attributes(minimalValue = 1f))
+	private val items = allParams.map { ParamWithValue(it, null) }
+
+	val quantity get() = items.last().value as? Int
+	val params get() = items.dropLast(1).associate { it.param to it.value }
+
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
 	{
 		fun inflateView(@LayoutRes layout: Int) = LayoutInflater.from(parent.ctx).inflate(layout, parent, false)
@@ -153,12 +195,13 @@ class ProductParamAdapter(val product: Product) : RecyclerView.Adapter<ProductPa
 		return viewTypeEnum.viewHolderCreator(inflateView(viewTypeEnum.layout))
 	}
 
-	override fun getItemCount() = product.parameters.size
+	override fun getItemCount() = items.size
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
-		holder.bind(product.parameters[position])
+		val paramWithValue = items[position]
+		holder.bind(paramWithValue.param) { paramWithValue.value = it }
 	}
 
-	override fun getItemViewType(position: Int) = ViewType[product.parameters[position].type].ordinal
+	override fun getItemViewType(position: Int) = ViewType[items[position].param.type].ordinal
 }

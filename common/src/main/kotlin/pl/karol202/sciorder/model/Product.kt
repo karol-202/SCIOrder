@@ -16,8 +16,8 @@ data class Product(val _id: String,
 			TEXT, INT, FLOAT, BOOL, ENUM
 		}
 
-		data class Attributes(val minimalValue: Float?,
-		                      val maximalValue: Float?,
-		                      val enumValues: List<String>?)
+		data class Attributes(val minimalValue: Float? = null,
+		                      val maximalValue: Float? = null,
+		                      val enumValues: List<String>? = null)
 	}
 }

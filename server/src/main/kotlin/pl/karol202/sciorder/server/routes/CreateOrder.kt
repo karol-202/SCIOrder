@@ -25,7 +25,7 @@ private suspend fun Order.isValid(dao: Dao) = entries.all { it.isValid(dao) }
 private suspend fun Order.Entry.isValid(dao: Dao): Boolean
 {
 	val product = dao.getProductOfId(productId) ?: return false
-	return product.available && isParamsListValid(product)
+	return product.available && quantity > 0 && isParamsListValid(product)
 }
 
 private fun Order.Entry.isParamsListValid(product: Product) =
