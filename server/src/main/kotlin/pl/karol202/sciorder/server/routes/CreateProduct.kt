@@ -22,8 +22,12 @@ private fun Product.overrideId() = copy(_id = newStringId<Product>())
 
 private fun Product.isValid() = parameters.all { it.isValid() } && !parameters.hasDuplicates { it.name }
 
-private fun Product.Parameter.isValid() = when(type)
-{
-	Product.Parameter.Type.ENUM -> attributes.enumValues != null
-	else -> true
+private fun Product.Parameter.isValid() = with(attributes) {
+	when(type)
+	{
+		Product.Parameter.Type.INT -> defaultValue?.let { it.toIntOrNull() != null } ?: true
+		Product.Parameter.Type.FLOAT -> defaultValue?.let { it.toFloatOrNull() != null } ?: true
+		Product.Parameter.Type.ENUM -> !enumValues.isNullOrEmpty() && defaultValue?.let { it in enumValues!! } ?: true
+		else -> true
+	}
 }

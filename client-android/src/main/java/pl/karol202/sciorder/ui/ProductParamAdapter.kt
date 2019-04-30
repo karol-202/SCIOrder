@@ -40,10 +40,19 @@ class ProductParamAdapter(context: Context,
 		}
 	}
 
-	class ViewHolderText(containerView: View) : ViewHolder(containerView)
+	abstract class ViewHolderWithEditText(containerView: View) : ViewHolder(containerView)
 	{
 		override val textName: TextView = textProductParamTextName
 
+		override fun bind(param: Product.Parameter, onUpdateListener: (Any?) -> Unit)
+		{
+			super.bind(param, onUpdateListener)
+			editTextProductParamText.setText(param.attributes.defaultValue ?: "")
+		}
+	}
+
+	class ViewHolderText(containerView: View) : ViewHolderWithEditText(containerView)
+	{
 		init
 		{
 			editTextProductParamText.addAfterTextChangedListener { onUpdateListener?.invoke(it ?: "") }
@@ -51,10 +60,8 @@ class ProductParamAdapter(context: Context,
 	}
 
 	abstract class ViewHolderNumber<T : Number>(containerView: View,
-	                                            inputType: Int) : ViewHolder(containerView)
+	                                            inputType: Int) : ViewHolderWithEditText(containerView)
 	{
-		override val textName: TextView = textProductParamTextName
-
 		init
 		{
 			editTextProductParamText.inputType = inputType
@@ -139,6 +146,12 @@ class ProductParamAdapter(context: Context,
 		{
 			checkProductParamBool.setOnCheckedChangeListener { _, checked -> onUpdateListener?.invoke(checked) }
 		}
+
+		override fun bind(param: Product.Parameter, onUpdateListener: (Any?) -> Unit)
+		{
+			super.bind(param, onUpdateListener)
+			checkProductParamBool.isChecked = param.attributes.defaultValue?.toBoolean() ?: false
+		}
 	}
 
 	class ViewHolderEnum(containerView: View) : ViewHolder(containerView)
@@ -153,10 +166,12 @@ class ProductParamAdapter(context: Context,
 		override fun bind(param: Product.Parameter, onUpdateListener: (Any?) -> Unit)
 		{
 			super.bind(param, onUpdateListener)
+			val values = param.attributes.enumValues ?: emptyList()
 			spinnerProductParamEnum.adapter = ArrayAdapter<String>(ctx,
 																   R.layout.item_product_param_enum_value,
 																   R.id.textProductParamEnumValue,
-																   param.attributes.enumValues ?: emptyList())
+																   values)
+			spinnerProductParamEnum.setSelection(values.indexOf(param.attributes.defaultValue))
 		}
 	}
 
@@ -177,11 +192,12 @@ class ProductParamAdapter(context: Context,
 	}
 
 	private data class ParamWithValue(val param: Product.Parameter,
-	                                  var value: Any?) // Default value will be added
+	                                  var value: Any?)
 
 	private val allParams = product.parameters + Product.Parameter(context.getString(R.string.text_quantity),
 	                                                               Product.Parameter.Type.INT,
-	                                                               Product.Parameter.Attributes(minimalValue = 1f))
+	                                                               Product.Parameter.Attributes(minimalValue = 1f,
+	                                                                                            defaultValue = "1"))
 	private val items = allParams.map { ParamWithValue(it, null) }
 
 	val quantity get() = items.last().value as? Int

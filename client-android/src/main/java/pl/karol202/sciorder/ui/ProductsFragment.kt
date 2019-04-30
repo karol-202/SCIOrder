@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -113,7 +114,11 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 
 	private fun showErrorSnackbar(@StringRes message: Int)
 	{
-		Snackbar.make(view ?: return, message, Snackbar.LENGTH_LONG).show()
+		Snackbar.make(view ?: return, message, Snackbar.LENGTH_LONG).apply {
+			val layoutParams = view.layoutParams as CoordinatorLayout.LayoutParams
+			layoutParams.bottomMargin = resources.getDimensionPixelOffset(R.dimen.snackbar_over_bottom_sheet_margin)
+			show()
+		}
 	}
 
 	private fun showProductOrderDialog(product: Product) =

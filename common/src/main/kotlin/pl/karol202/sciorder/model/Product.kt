@@ -18,6 +18,7 @@ data class Product(val _id: String,
 
 		data class Attributes(val minimalValue: Float? = null,
 		                      val maximalValue: Float? = null,
-		                      val enumValues: List<String>? = null)
+		                      val enumValues: List<String>? = null,
+		                      val defaultValue: String? = null)
 	}
 }
