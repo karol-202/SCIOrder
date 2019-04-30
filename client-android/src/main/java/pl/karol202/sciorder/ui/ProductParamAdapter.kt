@@ -46,7 +46,7 @@ class ProductParamAdapter(context: Context,
 
 		init
 		{
-			editTextProductParamText.addAfterTextChangedListener { onUpdateListener?.invoke(it) }
+			editTextProductParamText.addAfterTextChangedListener { onUpdateListener?.invoke(it ?: "") }
 		}
 	}
 
@@ -77,8 +77,8 @@ class ProductParamAdapter(context: Context,
 
 		private fun getValidValue(param: Product.Parameter): T?
 		{
-			val minValue = param.attributes.minimalValue ?: Float.MIN_VALUE
-			val maxValue = param.attributes.maximalValue ?: Float.MAX_VALUE
+			val minValue = param.attributes.minimalValue ?: Float.NEGATIVE_INFINITY
+			val maxValue = param.attributes.maximalValue ?: Float.POSITIVE_INFINITY
 			val range = minValue..maxValue
 
 			val value = editTextProductParamText.text?.toString()?.let { convertValue(it) }

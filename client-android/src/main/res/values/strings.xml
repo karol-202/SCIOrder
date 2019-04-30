@@ -13,8 +13,16 @@
 	<string name="text_product_param_float_range_right_closed">Maksymalnie %.2f</string>
 	<string name="text_product_param_no_value">Podaj wartość</string>
 	<string name="text_quantity">Liczba</string>
+	<string name="text_ordered_product_quantity">x%d</string>
+
+	<plurals name="text_order_products">
+		<item quantity="one">%d produkt</item>
+		<item quantity="few">%d produkty</item>
+		<item quantity="other">%d produktów</item>
+	</plurals>
 
 	<string name="action_order">Zamów</string>
+	<string name="action_add_to_order">Dodaj do zamówienia</string>
 	<string name="action_cancel">Anuluj</string>
 
 	<string name="unknown">Nieznany</string>

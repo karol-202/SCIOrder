@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_products.*
 import pl.karol202.sciorder.R
 import pl.karol202.sciorder.extensions.act
+import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.Product
 import pl.karol202.sciorder.viewmodel.OrderViewModel
 import pl.karol202.sciorder.viewmodel.ProductViewModel
@@ -24,8 +25,11 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 	private val productViewModel by lazy { ViewModelProviders.of(act).get<ProductViewModel>() }
 	private val orderViewModel by lazy { ViewModelProviders.of(act).get<OrderViewModel>() }
 
-	private val adapter = ProductAdapter().apply {
+	private val productsAdapter = ProductAdapter().apply {
 		onProductSelectListener = { product -> showProductOrderDialog(product) }
+	}
+	private val orderAdapter = OrderAdapter().apply {
+		onProductRemoveListener = { product -> orderViewModel.removeFromOrder(product) }
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -33,20 +37,17 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
-		initRecycler()
 		initRefreshLayout()
+		initProductsRecycler()
+		initOrderRecycler()
+		initOrderButton()
 
 		observeProducts()
 		observeLoading()
 		observeProductError()
-		observeOrderError()
-	}
 
-	private fun initRecycler()
-	{
-		recyclerProducts.layoutManager = LinearLayoutManager(context)
-		recyclerProducts.adapter = adapter
-		recyclerProducts.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+		observeOrder()
+		observeOrderError()
 	}
 
 	private fun initRefreshLayout()
@@ -54,10 +55,29 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 		refreshLayoutProducts.setOnRefreshListener { productViewModel.refreshProducts() }
 	}
 
+	private fun initProductsRecycler()
+	{
+		recyclerProducts.layoutManager = LinearLayoutManager(context)
+		recyclerProducts.adapter = productsAdapter
+		recyclerProducts.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+	}
+
+	private fun initOrderRecycler()
+	{
+		recyclerOrderSheet.layoutManager = LinearLayoutManager(context)
+		recyclerOrderSheet.adapter = orderAdapter
+		recyclerOrderSheet.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+	}
+
+	private fun initOrderButton()
+	{
+		buttonOrderSheet.setOnClickListener { if(!orderViewModel.isOrderListEmpty()) orderViewModel.orderAll() }
+	}
+
 	private fun observeProducts()
 	{
 		productViewModel.productsLiveData.observe(viewLifecycleOwner, Observer { productsList ->
-			productsList?.let { adapter.products = it }
+			productsList?.let { productsAdapter.products = it }
 		})
 	}
 
@@ -72,6 +92,15 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 	{
 		productViewModel.errorEventLiveData.observe(viewLifecycleOwner, Observer { event ->
 			if(event.getIfNotConsumed() == Unit) showErrorSnackbar(R.string.text_products_loading_error)
+		})
+	}
+
+	private fun observeOrder()
+	{
+		orderViewModel.orderLiveData.observe(viewLifecycleOwner, Observer { products ->
+			textOrderSheetProducts.text = resources.getQuantityString(R.plurals.text_order_products, products.size, products.size)
+			orderAdapter.orderedProducts = products
+			buttonOrderSheet.isEnabled = products.isNotEmpty()
 		})
 	}
 
@@ -90,6 +119,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 	private fun showProductOrderDialog(product: Product) =
 			fragmentManager?.let { ProductOrderDialogFragment.create(product, this).show(it) }
 
-	override fun onProductOrder(product: Product, quantity: Int, parameters: Map<String, String>) =
-			orderViewModel.orderProduct(product, quantity, parameters)
+	override fun onProductOrder(orderedProduct: OrderedProduct) = orderViewModel.orderSingleProduct(orderedProduct)
+
+	override fun onProductAddToOrder(orderedProduct: OrderedProduct) = orderViewModel.addToOrder(orderedProduct)
 }

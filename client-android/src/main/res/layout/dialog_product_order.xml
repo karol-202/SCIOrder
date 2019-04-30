@@ -4,7 +4,7 @@
 		xmlns:app="http://schemas.android.com/apk/res-auto"
 		xmlns:tools="http://schemas.android.com/tools"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="wrap_content">
 
 	<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/recyclerProductOrderParams"
@@ -13,6 +13,26 @@
 			android:overScrollMode="never"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
+			app:layout_constraintTop_toTopOf="parent"/>
+	<Button
+			android:text="@string/action_order"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/buttonProductOrder"
+			android:layout_marginTop="8dp"
+			app:layout_constraintTop_toBottomOf="@+id/recyclerProductOrderParams"
+			app:layout_constraintEnd_toEndOf="parent"
+			android:layout_marginEnd="8dp"
+			style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"/>
+	<Button
+			android:text="@string/action_add_to_order"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/buttonProductAddToOrder"
+			app:layout_constraintEnd_toEndOf="parent"
+			android:layout_marginEnd="8dp"
+			app:layout_constraintTop_toBottomOf="@+id/buttonProductOrder"
+			style="@style/Widget.MaterialComponents.Button.TextButton.Dialog" android:layout_marginBottom="8dp"
+			app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
