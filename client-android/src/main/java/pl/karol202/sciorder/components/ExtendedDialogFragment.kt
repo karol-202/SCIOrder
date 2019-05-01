@@ -6,8 +6,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 
-abstract class ExtendedComponents : DialogFragment(),
-                                    ComponentWithArguments
+abstract class ExtendedDialogFragment : DialogFragment(),
+                                        ComponentWithArguments
 {
 	override var componentArguments: Bundle?
 		get() = arguments

@@ -20,7 +20,8 @@ import pl.karol202.sciorder.extensions.setOnItemSelectedListener
 import pl.karol202.sciorder.model.Product
 
 class ProductParamAdapter(context: Context,
-                          product: Product) : RecyclerView.Adapter<ProductParamAdapter.ViewHolder>()
+                          product: Product,
+                          initialQuantity: Int) : RecyclerView.Adapter<ProductParamAdapter.ViewHolder>()
 {
 	abstract class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 	{
@@ -197,7 +198,7 @@ class ProductParamAdapter(context: Context,
 	private val allParams = product.parameters + Product.Parameter(context.getString(R.string.text_quantity),
 	                                                               Product.Parameter.Type.INT,
 	                                                               Product.Parameter.Attributes(minimalValue = 1f,
-	                                                                                            defaultValue = "1"))
+	                                                                                            defaultValue = initialQuantity.toString()))
 	private val items = allParams.map { ParamWithValue(it, null) }
 
 	val quantity get() = items.last().value as? Int

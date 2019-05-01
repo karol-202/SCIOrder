@@ -21,6 +21,6 @@ operator fun Bundle.set(key: String, value: Any?)
 		is Bundle -> putBundle(key, value)
 		is Parcelable -> putParcelable(key, value)
 		is Serializable -> putSerializable(key, value)
-		else -> throw IllegalArgumentException("Type not supported.")
+		else -> throw IllegalArgumentException("Type not supported: ${value.javaClass.name}.")
 	}
 }

@@ -16,12 +16,14 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_products.*
 import pl.karol202.sciorder.R
 import pl.karol202.sciorder.extensions.act
+import pl.karol202.sciorder.extensions.alertDialog
+import pl.karol202.sciorder.extensions.ctx
 import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.Product
 import pl.karol202.sciorder.viewmodel.OrderViewModel
 import pl.karol202.sciorder.viewmodel.ProductViewModel
 
-class ProductsFragment : Fragment(), OnProductOrderListener
+class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener
 {
 	private val productViewModel by lazy { ViewModelProviders.of(act).get<ProductViewModel>() }
 	private val orderViewModel by lazy { ViewModelProviders.of(act).get<OrderViewModel>() }
@@ -30,7 +32,8 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 		onProductSelectListener = { product -> showProductOrderDialog(product) }
 	}
 	private val orderAdapter = OrderAdapter().apply {
-		onProductRemoveListener = { product -> orderViewModel.removeFromOrder(product) }
+		onProductEditListener = { showProductOrderEditDialog(it) }
+		onProductRemoveListener = { showProductRemoveDialog(it) }
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -124,7 +127,24 @@ class ProductsFragment : Fragment(), OnProductOrderListener
 	private fun showProductOrderDialog(product: Product) =
 			fragmentManager?.let { ProductOrderDialogFragment.create(product, this).show(it) }
 
+	private fun showProductOrderEditDialog(orderedProduct: OrderedProduct) =
+			fragmentManager?.let { ProductOrderEditDialogFragment.create(orderedProduct, this).show(it) }
+
+	private fun showProductRemoveDialog(product: OrderedProduct)
+	{
+		ctx.alertDialog {
+			setMessage(ctx.getString(R.string.dialog_ordered_product_remove, product.product.name))
+			setPositiveButton(R.string.action_remove) { _, _ -> orderViewModel.removeFromOrder(product) }
+			setNegativeButton(R.string.action_cancel, null)
+		}.show()
+	}
+
 	override fun onProductOrder(orderedProduct: OrderedProduct) = orderViewModel.orderSingleProduct(orderedProduct)
 
 	override fun onProductAddToOrder(orderedProduct: OrderedProduct) = orderViewModel.addToOrder(orderedProduct)
+
+	override fun onProductOrderEdit(oldProduct: OrderedProduct, newProduct: OrderedProduct)
+	{
+		orderViewModel.replaceInOrder(oldProduct, newProduct)
+	}
 }

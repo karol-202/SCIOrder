@@ -9,7 +9,7 @@ data class Product(val _id: String,
 {
 	data class Parameter(val name: String,
 	                     val type: Type,
-	                     val attributes: Attributes)
+	                     val attributes: Attributes) : Serializable
 	{
 		enum class Type
 		{
@@ -19,6 +19,6 @@ data class Product(val _id: String,
 		data class Attributes(val minimalValue: Float? = null,
 		                      val maximalValue: Float? = null,
 		                      val enumValues: List<String>? = null,
-		                      val defaultValue: String? = null)
+		                      val defaultValue: String? = null) : Serializable
 	}
 }

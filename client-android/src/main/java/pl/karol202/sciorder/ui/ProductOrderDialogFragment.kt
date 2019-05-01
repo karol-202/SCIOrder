@@ -2,14 +2,14 @@ package pl.karol202.sciorder.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import pl.karol202.sciorder.components.ExtendedComponents
+import pl.karol202.sciorder.components.ExtendedDialogFragment
 import pl.karol202.sciorder.extensions.ctx
 import pl.karol202.sciorder.extensions.setArguments
 import pl.karol202.sciorder.extensions.setTargetFragment
 import pl.karol202.sciorder.extensions.to
 import pl.karol202.sciorder.model.Product
 
-class ProductOrderDialogFragment : ExtendedComponents()
+class ProductOrderDialogFragment : ExtendedDialogFragment()
 {
 	companion object
 	{

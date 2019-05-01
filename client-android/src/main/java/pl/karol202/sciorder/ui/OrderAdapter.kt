@@ -13,25 +13,27 @@ import pl.karol202.sciorder.model.OrderedProduct
 
 class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>()
 {
-	class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+	inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 	{
 		private val ctx = containerView.ctx
 
-		fun bind(ordered: OrderedProduct, removeListener: () -> Unit)
+		fun bind(ordered: OrderedProduct)
 		{
 			textOrderedProductName.text = ordered.product.name
 			textOrderedProductQuantity.text = ctx.getString(R.string.text_ordered_product_quantity, ordered.quantity)
-			buttonOrderedProductRemove.setOnClickListener { removeListener() }
+			buttonOrderedProductEdit.setOnClickListener { onProductEditListener?.invoke(ordered) }
+			buttonOrderedProductRemove.setOnClickListener { onProductRemoveListener?.invoke(ordered) }
 		}
 	}
 
 	var orderedProducts = emptyList<OrderedProduct>()
 		set(value)
 		{
-			val result = DiffUtil.calculateDiff(StandardDiffCallback(field, value) { this })
+			val result = DiffUtil.calculateDiff(StandardDiffCallback(field, value) { id })
 			field = value
 			result.dispatchUpdatesTo(this)
 		}
+	var onProductEditListener: ((OrderedProduct) -> Unit)? = null
 	var onProductRemoveListener: ((OrderedProduct) -> Unit)? = null
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
@@ -45,6 +47,6 @@ class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>()
 	override fun onBindViewHolder(holder: ViewHolder, position: Int)
 	{
 		val product = orderedProducts[position]
-		holder.bind(product) { onProductRemoveListener?.invoke(product) }
+		holder.bind(product)
 	}
 }

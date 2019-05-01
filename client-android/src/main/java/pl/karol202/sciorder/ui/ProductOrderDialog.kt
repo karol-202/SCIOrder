@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_product_order.*
 import pl.karol202.sciorder.R
 import pl.karol202.sciorder.components.ExtendedAlertDialog
+import pl.karol202.sciorder.extensions.randomUUIDString
 import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.Product
+import java.util.*
 
 class ProductOrderDialog(context: Context,
                          private val product: Product,
@@ -20,7 +22,7 @@ class ProductOrderDialog(context: Context,
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_product_order, null)
 
-	private val adapter = ProductParamAdapter(context, product)
+	private val adapter = ProductParamAdapter(context, product, 1)
 
 	init
 	{
@@ -57,6 +59,6 @@ class ProductOrderDialog(context: Context,
 	private fun getValidProductOrder(): OrderedProduct?
 	{
 		val params = adapter.params.mapKeys { it.key.name }.mapValues { it.value?.toString() ?: return null }
-		return OrderedProduct(product, adapter.quantity ?: return null, params)
+		return OrderedProduct(randomUUIDString(), product, adapter.quantity ?: return null, params)
 	}
 }

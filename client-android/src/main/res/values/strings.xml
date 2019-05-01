@@ -3,6 +3,8 @@
 
     <string name="fragment_products">Produkty</string>
 
+	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
+
 	<string name="text_products_loading_error">Błąd ładowania</string>
 	<string name="text_order_error">Błąd zamówienia</string>
 	<string name="text_product_param_int_range_closed">Od %d do %d</string>
@@ -23,6 +25,8 @@
 
 	<string name="action_order">Zamów</string>
 	<string name="action_add_to_order">Dodaj do zamówienia</string>
+	<string name="action_order_edit">Zatwierdź</string>
+	<string name="action_remove">Usuń</string>
 	<string name="action_cancel">Anuluj</string>
 
 	<string name="unknown">Nieznany</string>

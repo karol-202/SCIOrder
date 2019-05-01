@@ -28,6 +28,13 @@ class OrderViewModel(application: Application) : AndroidViewModel(application)
 		_orderLiveData.postValue(oldProducts + orderedProduct)
 	}
 
+	fun replaceInOrder(oldProduct: OrderedProduct, newProduct: OrderedProduct)
+	{
+		val oldProducts = _orderLiveData.value ?: emptyList()
+		val newProducts = oldProducts.map { if(it == oldProduct) newProduct else it }
+		_orderLiveData.postValue(newProducts)
+	}
+
 	fun removeFromOrder(orderedProduct: OrderedProduct)
 	{
 		val oldProducts = _orderLiveData.value ?: emptyList()
