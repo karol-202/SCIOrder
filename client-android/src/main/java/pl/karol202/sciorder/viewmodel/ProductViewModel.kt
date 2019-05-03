@@ -1,36 +1,36 @@
 package pl.karol202.sciorder.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.*
-import kotlinx.coroutines.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import pl.karol202.sciorder.components.Event
 import pl.karol202.sciorder.model.Product
-import pl.karol202.sciorder.repository.ProductRepository
+import pl.karol202.sciorder.model.local.product.ProductDao
+import pl.karol202.sciorder.model.remote.product.ProductApi
 import pl.karol202.sciorder.repository.ResourceState
+import pl.karol202.sciorder.repository.product.ProductRepositoryImpl
 
-class ProductViewModel(application: Application) : AndroidViewModel(application)
+class ProductViewModel(productDao: ProductDao,
+                       productApi: ProductApi) : ViewModel()
 {
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)
 
-	private val productsRepository = ProductRepository.create(coroutineScope, application)
+	private val productsRepository = ProductRepositoryImpl(coroutineScope, productDao, productApi)
 	private val productsResource = productsRepository.getAllProducts()
 
 	val productsLiveData: LiveData<List<Product>> = Transformations.map(productsResource.asLiveData) { it.data }
 
-	private val _loadingLiveData = MediatorLiveData<Boolean>().apply {
-		addSource(productsResource.asLiveData) { resourceState ->
-			value = resourceState is ResourceState.Loading
-		}
-	}
-	val loadingLiveData: LiveData<Boolean> = _loadingLiveData
+	val loadingLiveData: LiveData<Boolean> = Transformations.map(productsResource.asLiveData) { it is ResourceState.Loading }
 
-	private val _errorEventLiveData = MediatorLiveData<Event<Unit>>().apply {
+	val errorEventLiveData: LiveData<Event<Unit>> = MediatorLiveData<Event<Unit>>().apply {
 		addSource(productsResource.asLiveData) { resourceState ->
 			if(resourceState is ResourceState.Failure) value = Event(Unit)
 		}
 	}
-	val errorEventLiveData: LiveData<Event<Unit>> = _errorEventLiveData
 
 	fun refreshProducts() = productsResource.reload()
 }

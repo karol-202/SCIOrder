@@ -5,6 +5,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import pl.karol202.sciorder.model.local.order.OrderEntity
+import pl.karol202.sciorder.model.local.order.OrderEntityDao
+import pl.karol202.sciorder.model.local.order.OrderEntriesListConverter
 import pl.karol202.sciorder.model.local.product.ProductEntity
 import pl.karol202.sciorder.model.local.product.ProductEntityDao
 import pl.karol202.sciorder.model.local.product.ProductParametersListConverter
@@ -15,8 +18,8 @@ private object DatabaseInfo
 	const val VERSION = 1
 }
 
-@Database(entities = [ProductEntity::class], version = DatabaseInfo.VERSION)
-@TypeConverters(ProductParametersListConverter::class)
+@Database(entities = [ProductEntity::class, OrderEntity::class], version = DatabaseInfo.VERSION)
+@TypeConverters(ProductParametersListConverter::class, OrderEntriesListConverter::class)
 abstract class LocalDatabase : RoomDatabase()
 {
 	companion object
@@ -25,4 +28,6 @@ abstract class LocalDatabase : RoomDatabase()
 	}
 
 	abstract fun productEntityDao(): ProductEntityDao
+
+	abstract fun orderEntityDao(): OrderEntityDao
 }

@@ -16,8 +16,7 @@ import pl.karol202.sciorder.ui.adapters.SimpleOrderAdapter
 
 class OrderDialog(context: Context,
                   private val case: OnOrderDetailsSetListener.Case,
-                  private val orderListener: OnOrderDetailsSetListener
-) : ExtendedAlertDialog(context)
+                  private val orderListener: OnOrderDetailsSetListener) : ExtendedAlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_order, null)

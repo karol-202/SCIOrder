@@ -1,10 +1,9 @@
 package pl.karol202.sciorder.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import pl.karol202.sciorder.components.Event
 import pl.karol202.sciorder.extensions.create
 import pl.karol202.sciorder.model.Order
@@ -12,10 +11,8 @@ import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.remote.ApiResponse
 import pl.karol202.sciorder.model.remote.order.OrderApi
 
-class OrderViewModel(application: Application) : AndroidViewModel(application)
+class OrderViewModel(private val orderApi: OrderApi) : ViewModel()
 {
-	private val orderApi = OrderApi.create()
-
 	private val _orderLiveData = MutableLiveData<List<OrderedProduct>>().apply { value = emptyList() }
 	val orderLiveData: LiveData<List<OrderedProduct>> = _orderLiveData
 

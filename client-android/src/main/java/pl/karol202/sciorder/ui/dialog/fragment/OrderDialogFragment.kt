@@ -24,6 +24,5 @@ class OrderDialogFragment : ExtendedDialogFragment()
 	private val case by argumentsOrThrow<OnOrderDetailsSetListener.Case>()
 	private val orderListener by lazy { targetFragment as OnOrderDetailsSetListener }
 
-	override fun onCreateDialog(savedInstanceState: Bundle?) =
-		OrderDialog(ctx, case, orderListener)
+	override fun onCreateDialog(savedInstanceState: Bundle?) = OrderDialog(ctx, case, orderListener)
 }

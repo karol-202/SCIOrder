@@ -17,17 +17,12 @@ import pl.karol202.sciorder.ui.adapters.ProductParamAdapter
 
 class ProductOrderEditDialog(context: Context,
                              private val orderedProduct: OrderedProduct,
-                             private val orderListener: OnProductOrderEditListener
-) : ExtendedAlertDialog(context)
+                             private val orderListener: OnProductOrderEditListener) : ExtendedAlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_product_order_edit, null)
 
-	private val adapter = ProductParamAdapter(
-		context,
-		orderedProduct.getFakeProduct(),
-		orderedProduct.quantity
-	)
+	private val adapter = ProductParamAdapter(context, orderedProduct.getFakeProduct(), orderedProduct.quantity)
 
 	init
 	{

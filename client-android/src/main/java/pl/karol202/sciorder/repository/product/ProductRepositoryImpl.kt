@@ -1,10 +1,12 @@
-package pl.karol202.sciorder.repository
+package pl.karol202.sciorder.repository.product
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pl.karol202.sciorder.model.Product
 import pl.karol202.sciorder.model.local.product.ProductDao
 import pl.karol202.sciorder.model.remote.product.ProductApi
+import pl.karol202.sciorder.repository.Resource
+import pl.karol202.sciorder.repository.UpdateTimeout
 import java.util.concurrent.TimeUnit
 
 class ProductRepositoryImpl(private val coroutineScope: CoroutineScope,
@@ -18,7 +20,7 @@ class ProductRepositoryImpl(private val coroutineScope: CoroutineScope,
 
 		override fun loadFromDatabase() = productDao.getAllProducts()
 
-		override fun loadFromNetwork() = productApi.getAllProducts()
+		override fun loadFromNetwork(oldData: List<Product>) = productApi.getAllProducts()
 
 		override fun saveToDatabase(data: List<Product>)
 		{

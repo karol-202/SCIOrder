@@ -39,18 +39,18 @@ abstract class Resource<T> @MainThread constructor() // LiveData can only be mod
 		liveData.addSource(databaseSource) { data ->
 			liveData.removeSource(databaseSource)
 			setLoading(data)
-		}
 
-		val networkSource = loadFromNetwork()
-		liveData.addSource(networkSource) { response ->
-			liveData.removeSource(networkSource)
-			liveData.removeSource(databaseSource)
-			when(response)
-			{
-				is ApiResponse.Success -> onNetworkFetchSuccess(response)
-				is ApiResponse.Error -> onNetworkFetchFailure(response)
+			val networkSource = loadFromNetwork(data)
+			liveData.addSource(networkSource) { response ->
+				liveData.removeSource(networkSource)
+				liveData.removeSource(databaseSource)
+				when(response)
+				{
+					is ApiResponse.Success -> onNetworkFetchSuccess(response)
+					is ApiResponse.Error -> onNetworkFetchFailure(response)
+				}
+				fetching = false
 			}
-			fetching = false
 		}
 	}
 
@@ -75,7 +75,8 @@ abstract class Resource<T> @MainThread constructor() // LiveData can only be mod
 
 	protected abstract fun loadFromDatabase(): LiveData<T>
 
-	protected abstract fun loadFromNetwork(): LiveData<ApiResponse<T>>
+	// oldData needed by OrderRepositoryImpl
+	protected abstract fun loadFromNetwork(oldData: T): LiveData<ApiResponse<T>>
 
 	protected abstract fun saveToDatabase(data: T)
 }

@@ -32,9 +32,7 @@ import pl.karol202.sciorder.ui.listeners.OnProductOrderListener
 import pl.karol202.sciorder.viewmodel.OrderViewModel
 import pl.karol202.sciorder.viewmodel.ProductViewModel
 
-class ProductsFragment : Fragment(), OnProductOrderListener,
-                         OnProductOrderEditListener,
-                         OnOrderDetailsSetListener
+class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {
 	private val productViewModel by lazy { ViewModelProviders.of(act).get<ProductViewModel>() }
 	private val orderViewModel by lazy { ViewModelProviders.of(act).get<OrderViewModel>() }
@@ -144,8 +142,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener,
 
 	private fun showProductOrderEditDialog(orderedProduct: OrderedProduct)
 	{
-		fragmentManager?.let { ProductOrderEditDialogFragment.create(orderedProduct, this)
-			.show(it) }
+		fragmentManager?.let { ProductOrderEditDialogFragment.create(orderedProduct, this).show(it) }
 	}
 
 	override fun onProductOrder(orderedProduct: OrderedProduct) = showSingleProductOrderDialog(orderedProduct)
