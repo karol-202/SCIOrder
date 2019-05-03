@@ -8,23 +8,24 @@ import io.ktor.routing.Route
 import io.ktor.routing.post
 import pl.karol202.sciorder.model.Order
 import pl.karol202.sciorder.model.Product
-import pl.karol202.sciorder.server.dao.Dao
+import pl.karol202.sciorder.server.dao.OrderDao
+import pl.karol202.sciorder.server.dao.ProductDao
 import pl.karol202.sciorder.server.util.newStringId
 
-fun Route.createOrder(dao: Dao) = post("addOrder") {
+fun Route.createOrder(productDao: ProductDao, orderDao: OrderDao) = post("orders") {
 	val order = call.receive<Order>().override()
-	if(!order.isValid(dao)) return@post call.respond(HttpStatusCode.BadRequest)
-	dao.addOrder(order)
+	if(!order.isValid(productDao)) return@post call.respond(HttpStatusCode.BadRequest)
+	orderDao.addOrder(order)
 	call.respond(HttpStatusCode.Created)
 }
 
 private fun Order.override() = copy(_id = newStringId<Order>(), status = Order.Status.WAITING)
 
-private suspend fun Order.isValid(dao: Dao) = entries.all { it.isValid(dao) }
+private suspend fun Order.isValid(productDao: ProductDao) = entries.all { it.isValid(productDao) }
 
-private suspend fun Order.Entry.isValid(dao: Dao): Boolean
+private suspend fun Order.Entry.isValid(productDao: ProductDao): Boolean
 {
-	val product = dao.getProductOfId(productId) ?: return false
+	val product = productDao.getProductById(productId) ?: return false
 	return product.available && quantity > 0 && isParamsListValid(product)
 }
 

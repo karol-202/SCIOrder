@@ -7,13 +7,12 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.routing.routing
-import pl.karol202.sciorder.server.dao.DatabaseDao
-import pl.karol202.sciorder.server.routes.createOrder
-import pl.karol202.sciorder.server.routes.createProduct
-import pl.karol202.sciorder.server.routes.getOrders
-import pl.karol202.sciorder.server.routes.getProducts
+import pl.karol202.sciorder.server.dao.DatabaseOrderDao
+import pl.karol202.sciorder.server.dao.DatabaseProductDao
+import pl.karol202.sciorder.server.routes.*
 
-val dao = DatabaseDao()
+val productDao = DatabaseProductDao()
+val orderDao = DatabaseOrderDao()
 
 fun Application.main()
 {
@@ -31,9 +30,9 @@ private fun Application.configure()
 }
 
 private fun Application.routing() = routing {
-    getOrders(dao)
-    createOrder(dao)
+    getOrders(orderDao)
+    createOrder(productDao, orderDao)
 
-    getProducts(dao)
-    createProduct(dao)
+    getProducts(productDao)
+    createProduct(productDao)
 }
