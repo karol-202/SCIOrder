@@ -4,15 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import pl.karol202.sciorder.components.Event
 import pl.karol202.sciorder.extensions.create
 import pl.karol202.sciorder.model.Order
 import pl.karol202.sciorder.model.OrderedProduct
+import pl.karol202.sciorder.model.local.order.OrderDao
 import pl.karol202.sciorder.model.remote.ApiResponse
 import pl.karol202.sciorder.model.remote.order.OrderApi
 
-class OrderViewModel(private val orderApi: OrderApi) : ViewModel()
+class OrderViewModel(private val orderDao: OrderDao,
+                     private val orderApi: OrderApi) : ViewModel()
 {
+	private val coroutineJob = Job()
+	private val coroutineScope = CoroutineScope(coroutineJob)
+
 	private val _orderLiveData = MutableLiveData<List<OrderedProduct>>().apply { value = emptyList() }
 	val orderLiveData: LiveData<List<OrderedProduct>> = _orderLiveData
 
@@ -58,14 +66,20 @@ class OrderViewModel(private val orderApi: OrderApi) : ViewModel()
 	private fun executeOrder(order: Order)
 	{
 		val liveData = orderApi.addOrder(order)
-		handleResponseLiveData(liveData)
+		handleOrderAddResponse(liveData)
 	}
 
-	private fun handleResponseLiveData(liveData: LiveData<ApiResponse<Unit>>)
+	private fun handleOrderAddResponse(liveData: LiveData<ApiResponse<Order>>)
 	{
 		_errorEventLiveData.addSource(liveData) { apiResponse ->
 			_errorEventLiveData.removeSource(liveData)
-			if(apiResponse is ApiResponse.Error) _errorEventLiveData.value = Event(Unit)
+			if(apiResponse is ApiResponse.Success) saveOrderLocally(apiResponse.data)
+			else _errorEventLiveData.value = Event(Unit)
 		}
+	}
+
+	private fun saveOrderLocally(order: Order)
+	{
+		coroutineScope.launch { orderDao.insertOrder(order) }
 	}
 }

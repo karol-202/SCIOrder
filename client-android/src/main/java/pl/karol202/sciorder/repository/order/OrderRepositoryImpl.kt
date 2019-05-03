@@ -26,7 +26,7 @@ class OrderRepositoryImpl(private val coroutineScope: CoroutineScope,
 		{
 			// It may be required for Dao not to be called on main thread
 			coroutineScope.launch {
-				orderDao.clearOrders()
+				orderDao.deleteOrders()
 				orderDao.insertOrders(data)
 			}
 		}

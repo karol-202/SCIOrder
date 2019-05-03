@@ -16,7 +16,7 @@ fun Route.createOrder(productDao: ProductDao, orderDao: OrderDao) = post("orders
 	val order = call.receive<Order>().override()
 	if(!order.isValid(productDao)) return@post call.respond(HttpStatusCode.BadRequest)
 	orderDao.addOrder(order)
-	call.respond(HttpStatusCode.Created)
+	call.respond(HttpStatusCode.Created, order)
 }
 
 private fun Order.override() = copy(_id = newStringId<Order>(), status = Order.Status.WAITING)

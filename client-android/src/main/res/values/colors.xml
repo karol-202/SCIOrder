@@ -6,4 +6,10 @@
 
     <color name="product_name_default">#FFFFFF</color>
     <color name="product_name_unavailable">#A0A0A0</color>
+
+    <color name="order_status_waiting">#FFEB3B</color>
+    <color name="order_status_in_progress">#FFEB3B</color>
+    <color name="order_status_delivering">#8BC34A</color>
+    <color name="order_status_done">#8BC34A</color>
+    <color name="order_status_rejected">#FF1500</color>
 </resources>

@@ -33,4 +33,6 @@ class ProductViewModel(productDao: ProductDao,
 	}
 
 	fun refreshProducts() = productsResource.reload()
+
+	fun findProductById(id: String) = productsLiveData.value?.find { it._id == id }
 }

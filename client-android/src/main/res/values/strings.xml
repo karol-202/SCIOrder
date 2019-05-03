@@ -2,11 +2,12 @@
     <string name="app_name">SCIOrder</string>
 
     <string name="fragment_products">Produkty</string>
+	<string name="fragment_order_track">Zamówienia</string>
 
 	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
 	<string name="dialog_order">Zamówienie</string>
 
-	<string name="text_products_loading_error">Błąd ładowania</string>
+	<string name="text_loading_error">Błąd ładowania</string>
 	<string name="text_order_error">Błąd zamówienia</string>
 	<string name="text_product_param_int_range_closed">Od %d do %d</string>
 	<string name="text_product_param_int_range_left_closed">Minimalnie %d</string>
@@ -19,6 +20,7 @@
 	<string name="text_ordered_product_quantity">x%d</string>
 	<string name="text_order_location">Miejsce dostawy</string>
 	<string name="text_order_recipient">Adresat</string>
+	<string name="text_status">Status:</string>
 
 	<plurals name="text_order_products">
 		<item quantity="one">%d produkt</item>
@@ -32,5 +34,12 @@
 	<string name="action_remove">Usuń</string>
 	<string name="action_cancel">Anuluj</string>
 
+	<string name="order_status_waiting">Oczekiwanie</string>
+	<string name="order_status_in_progress">Przygotowywanie</string>
+	<string name="order_status_delivering">Dostarczanie</string>
+	<string name="order_status_done">Dostarczono</string>
+	<string name="order_status_rejected">Odrzucono</string>
+
 	<string name="unknown">Nieznany</string>
+	<string name="unknown_product">Usunięty produkt</string>
 </resources>

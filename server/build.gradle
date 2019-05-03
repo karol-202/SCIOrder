@@ -10,7 +10,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "io.ktor:ktor-server-netty:$ktorVersion"
     implementation "io.ktor:ktor-gson:$ktorVersion"
-    implementation "org.slf4j:slf4j-simple:1.6.1"
+    implementation "ch.qos.logback:logback-classic:1.2.3"
     implementation "org.litote.kmongo:kmongo:3.10.0"
     implementation "org.litote.kmongo:kmongo-async:3.10.0"
     implementation "org.litote.kmongo:kmongo-coroutine:3.10.0"

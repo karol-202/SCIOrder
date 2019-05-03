@@ -7,9 +7,14 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import pl.karol202.sciorder.model.local.LocalDatabase
+import pl.karol202.sciorder.model.local.order.OrderDao
+import pl.karol202.sciorder.model.local.order.toOrderDao
+import pl.karol202.sciorder.model.local.product.ProductDao
+import pl.karol202.sciorder.model.local.product.toProductDao
 import pl.karol202.sciorder.model.remote.LiveDataCallAdapterFactory
 import pl.karol202.sciorder.model.remote.order.OrderApi
 import pl.karol202.sciorder.model.remote.product.ProductApi
+import pl.karol202.sciorder.viewmodel.OrderTrackViewModel
 import pl.karol202.sciorder.viewmodel.OrderViewModel
 import pl.karol202.sciorder.viewmodel.ProductViewModel
 import retrofit2.Retrofit
@@ -37,6 +42,9 @@ class SCIOrderApplication : Application()
 
 	private fun databaseModule() = module {
 		single { LocalDatabase.create(androidContext()) }
+
+		single { get<LocalDatabase>().productEntityDao().toProductDao() }
+		single { get<LocalDatabase>().orderEntityDao().toOrderDao() }
 	}
 
 	private fun networkingModule() = module {
@@ -61,6 +69,7 @@ class SCIOrderApplication : Application()
 
 	private fun viewModelsModule() = module {
 		viewModel { ProductViewModel(get(), get()) }
-		viewModel { OrderViewModel(get()) }
+		viewModel { OrderViewModel(get(), get()) }
+		viewModel { OrderTrackViewModel(get(), get()) }
 	}
 }

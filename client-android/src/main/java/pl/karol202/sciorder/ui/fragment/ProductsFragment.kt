@@ -8,14 +8,12 @@ import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_products.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.R
-import pl.karol202.sciorder.extensions.act
 import pl.karol202.sciorder.extensions.alertDialog
 import pl.karol202.sciorder.extensions.ctx
 import pl.karol202.sciorder.model.Order
@@ -34,8 +32,8 @@ import pl.karol202.sciorder.viewmodel.ProductViewModel
 
 class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {
-	private val productViewModel by lazy { ViewModelProviders.of(act).get<ProductViewModel>() }
-	private val orderViewModel by lazy { ViewModelProviders.of(act).get<OrderViewModel>() }
+	private val productViewModel by sharedViewModel<ProductViewModel>()
+	private val orderViewModel by sharedViewModel<OrderViewModel>()
 
 	private val productsAdapter = ProductAdapter().apply {
 		onProductSelectListener = { product -> showProductOrderDialog(product) }
@@ -106,7 +104,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 	private fun observeProductError()
 	{
 		productViewModel.errorEventLiveData.observe(viewLifecycleOwner, Observer { event ->
-			if(event.getIfNotConsumed() == Unit) showErrorSnackbar(R.string.text_products_loading_error)
+			if(event.getIfNotConsumed() == Unit) showErrorSnackbar(R.string.text_loading_error)
 		})
 	}
 

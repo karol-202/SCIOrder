@@ -9,7 +9,10 @@ import io.ktor.gson.gson
 import io.ktor.routing.routing
 import pl.karol202.sciorder.server.dao.DatabaseOrderDao
 import pl.karol202.sciorder.server.dao.DatabaseProductDao
-import pl.karol202.sciorder.server.routes.*
+import pl.karol202.sciorder.server.routes.createOrder
+import pl.karol202.sciorder.server.routes.createProduct
+import pl.karol202.sciorder.server.routes.getOrders
+import pl.karol202.sciorder.server.routes.getProducts
 
 val productDao = DatabaseProductDao()
 val orderDao = DatabaseOrderDao()

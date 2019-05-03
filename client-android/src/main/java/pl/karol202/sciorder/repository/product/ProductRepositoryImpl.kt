@@ -26,7 +26,7 @@ class ProductRepositoryImpl(private val coroutineScope: CoroutineScope,
 		{
 			// It may be required for Dao not to be called on main thread
 			coroutineScope.launch {
-				productDao.clearProducts()
+				productDao.deleteProducts()
 				productDao.insertProducts(data)
 			}
 		}

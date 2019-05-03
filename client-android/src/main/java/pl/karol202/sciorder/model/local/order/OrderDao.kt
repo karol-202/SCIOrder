@@ -5,9 +5,13 @@ import pl.karol202.sciorder.model.Order
 
 interface OrderDao
 {
-	fun clearOrders()
+	fun insertOrder(order: Order)
 
 	fun insertOrders(orders: List<Order>)
+
+	fun deleteOrder(order: Order)
+
+	fun deleteOrders()
 
 	fun getAllOrders(): LiveData<List<Order>>
 }

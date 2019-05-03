@@ -15,7 +15,7 @@ fun Route.createProduct(productDao: ProductDao) = post("products") {
 	val product = call.receive<Product>().overrideId()
 	if(!product.isValid()) return@post call.respond(HttpStatusCode.BadRequest)
 	productDao.addProduct(product)
-	call.respond(HttpStatusCode.Created)
+	call.respond(HttpStatusCode.Created, product)
 }
 
 private fun Product.overrideId() = copy(_id = newStringId<Product>())

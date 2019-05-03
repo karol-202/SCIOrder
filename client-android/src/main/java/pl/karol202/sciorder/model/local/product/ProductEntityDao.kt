@@ -8,12 +8,12 @@ import androidx.room.*
 interface ProductEntityDao
 {
 	@WorkerThread
-	@Query("DELETE FROM ${ProductEntity.TABLE_NAME}")
-	fun clearProducts()
-
-	@WorkerThread
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	fun insertProducts(products: List<ProductEntity>)
+
+	@WorkerThread
+	@Query("DELETE FROM ${ProductEntity.TABLE_NAME}")
+	fun deleteProducts()
 
     @Query("SELECT * FROM ${ProductEntity.TABLE_NAME}")
     fun getAllProducts(): LiveData<List<ProductEntity>>
