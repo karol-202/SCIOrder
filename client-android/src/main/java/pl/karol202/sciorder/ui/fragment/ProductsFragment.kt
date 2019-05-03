@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,10 +21,20 @@ import pl.karol202.sciorder.extensions.ctx
 import pl.karol202.sciorder.model.Order
 import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.Product
+import pl.karol202.sciorder.ui.adapters.OrderAdapter
+import pl.karol202.sciorder.ui.adapters.ProductAdapter
+import pl.karol202.sciorder.ui.dialog.fragment.OrderDialogFragment
+import pl.karol202.sciorder.ui.dialog.fragment.ProductOrderDialogFragment
+import pl.karol202.sciorder.ui.dialog.fragment.ProductOrderEditDialogFragment
+import pl.karol202.sciorder.ui.listeners.OnOrderDetailsSetListener
+import pl.karol202.sciorder.ui.listeners.OnProductOrderEditListener
+import pl.karol202.sciorder.ui.listeners.OnProductOrderListener
 import pl.karol202.sciorder.viewmodel.OrderViewModel
 import pl.karol202.sciorder.viewmodel.ProductViewModel
 
-class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
+class ProductsFragment : Fragment(), OnProductOrderListener,
+                         OnProductOrderEditListener,
+                         OnOrderDetailsSetListener
 {
 	private val productViewModel by lazy { ViewModelProviders.of(act).get<ProductViewModel>() }
 	private val orderViewModel by lazy { ViewModelProviders.of(act).get<OrderViewModel>() }
@@ -134,7 +144,8 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 
 	private fun showProductOrderEditDialog(orderedProduct: OrderedProduct)
 	{
-		fragmentManager?.let { ProductOrderEditDialogFragment.create(orderedProduct, this).show(it) }
+		fragmentManager?.let { ProductOrderEditDialogFragment.create(orderedProduct, this)
+			.show(it) }
 	}
 
 	override fun onProductOrder(orderedProduct: OrderedProduct) = showSingleProductOrderDialog(orderedProduct)

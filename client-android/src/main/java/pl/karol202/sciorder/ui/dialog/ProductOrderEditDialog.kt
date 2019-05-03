@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,21 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.dialog_product_order.*
 import kotlinx.android.synthetic.main.dialog_product_order_edit.*
 import pl.karol202.sciorder.R
 import pl.karol202.sciorder.components.ExtendedAlertDialog
 import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.Product
+import pl.karol202.sciorder.ui.listeners.OnProductOrderEditListener
+import pl.karol202.sciorder.ui.adapters.ProductParamAdapter
 
 class ProductOrderEditDialog(context: Context,
                              private val orderedProduct: OrderedProduct,
-                             private val orderListener: OnProductOrderEditListener) : ExtendedAlertDialog(context)
+                             private val orderListener: OnProductOrderEditListener
+) : ExtendedAlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_product_order_edit, null)
 
-	private val adapter = ProductParamAdapter(context, orderedProduct.getFakeProduct(), orderedProduct.quantity)
+	private val adapter = ProductParamAdapter(
+		context,
+		orderedProduct.getFakeProduct(),
+		orderedProduct.quantity
+	)
 
 	init
 	{

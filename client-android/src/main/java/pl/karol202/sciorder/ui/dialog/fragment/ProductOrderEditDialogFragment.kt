@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.dialog.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,8 @@ import pl.karol202.sciorder.extensions.setArguments
 import pl.karol202.sciorder.extensions.setTargetFragment
 import pl.karol202.sciorder.extensions.to
 import pl.karol202.sciorder.model.OrderedProduct
-import pl.karol202.sciorder.model.Product
+import pl.karol202.sciorder.ui.listeners.OnProductOrderEditListener
+import pl.karol202.sciorder.ui.dialog.ProductOrderEditDialog
 
 class ProductOrderEditDialogFragment : ExtendedDialogFragment()
 {
@@ -24,5 +25,6 @@ class ProductOrderEditDialogFragment : ExtendedDialogFragment()
 	private val orderedProduct by argumentsOrThrow<OrderedProduct>()
 	private val orderListener by lazy { targetFragment as OnProductOrderEditListener }
 
-	override fun onCreateDialog(savedInstanceState: Bundle?) = ProductOrderEditDialog(ctx, orderedProduct, orderListener)
+	override fun onCreateDialog(savedInstanceState: Bundle?) =
+		ProductOrderEditDialog(ctx, orderedProduct, orderListener)
 }

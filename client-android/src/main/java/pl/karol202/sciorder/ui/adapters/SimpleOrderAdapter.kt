@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View

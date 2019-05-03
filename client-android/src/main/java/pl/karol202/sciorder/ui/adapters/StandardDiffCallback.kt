@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.adapters
 
 import androidx.recyclerview.widget.DiffUtil
 

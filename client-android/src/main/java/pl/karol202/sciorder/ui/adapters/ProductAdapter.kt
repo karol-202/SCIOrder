@@ -1,14 +1,10 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_product.*
 import pl.karol202.sciorder.R

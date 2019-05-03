@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,11 +13,13 @@ import pl.karol202.sciorder.components.ExtendedAlertDialog
 import pl.karol202.sciorder.extensions.randomUUIDString
 import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.Product
-import java.util.*
+import pl.karol202.sciorder.ui.listeners.OnProductOrderListener
+import pl.karol202.sciorder.ui.adapters.ProductParamAdapter
 
 class ProductOrderDialog(context: Context,
                          private val product: Product,
-                         private val orderListener: OnProductOrderListener) : ExtendedAlertDialog(context)
+                         private val orderListener: OnProductOrderListener
+) : ExtendedAlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_product_order, null)

@@ -6,6 +6,6 @@
 
 	<fragment
 			android:id="@+id/productsFragment"
-			android:name="pl.karol202.sciorder.ui.ProductsFragment"
+			android:name="pl.karol202.sciorder.ui.fragment.ProductsFragment"
 			android:label="@string/fragment_products" />
 </navigation>

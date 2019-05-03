@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.adapters
 
 import android.content.Context
 import android.text.InputType
@@ -98,7 +98,9 @@ class ProductParamAdapter(context: Context,
 		protected abstract fun Product.Parameter.Attributes.getErrorText(): String
 	}
 
-	class ViewHolderInt(containerView: View) : ViewHolderNumber<Int>(containerView, INPUT_TYPE)
+	class ViewHolderInt(containerView: View) : ViewHolderNumber<Int>(containerView,
+	                                                                                                                      INPUT_TYPE
+	)
 	{
 		companion object
 		{
@@ -118,7 +120,9 @@ class ProductParamAdapter(context: Context,
 		}
 	}
 
-	class ViewHolderFloat(containerView: View) : ViewHolderNumber<Float>(containerView, INPUT_TYPE)
+	class ViewHolderFloat(containerView: View) : ViewHolderNumber<Float>(containerView,
+	                                                                                                                          INPUT_TYPE
+	)
 	{
 		companion object
 		{
@@ -178,13 +182,34 @@ class ProductParamAdapter(context: Context,
 
 	enum class ViewType(val parameterType: Product.Parameter.Type,
 	                    @LayoutRes val layout: Int,
-	                    val viewHolderCreator: (View) -> ViewHolder)
+	                    val viewHolderCreator: (View) -> ViewHolder
+	)
 	{
-		TYPE_TEXT(Product.Parameter.Type.TEXT, R.layout.item_product_param_text, { ViewHolderText(it) }),
-		TYPE_INT(Product.Parameter.Type.INT, R.layout.item_product_param_text, { ViewHolderInt(it) }),
-		TYPE_FLOAT(Product.Parameter.Type.FLOAT, R.layout.item_product_param_text, { ViewHolderFloat(it) }),
-		TYPE_BOOL(Product.Parameter.Type.BOOL, R.layout.item_product_param_bool, { ViewHolderBool(it) }),
-		TYPE_ENUM(Product.Parameter.Type.ENUM, R.layout.item_product_param_enum, { ViewHolderEnum(it) });
+		TYPE_TEXT(Product.Parameter.Type.TEXT, R.layout.item_product_param_text, {
+			ViewHolderText(
+				it
+			)
+		}),
+		TYPE_INT(Product.Parameter.Type.INT, R.layout.item_product_param_text, {
+			ViewHolderInt(
+				it
+			)
+		}),
+		TYPE_FLOAT(Product.Parameter.Type.FLOAT, R.layout.item_product_param_text, {
+			ViewHolderFloat(
+				it
+			)
+		}),
+		TYPE_BOOL(Product.Parameter.Type.BOOL, R.layout.item_product_param_bool, {
+			ViewHolderBool(
+				it
+			)
+		}),
+		TYPE_ENUM(Product.Parameter.Type.ENUM, R.layout.item_product_param_enum, {
+			ViewHolderEnum(
+				it
+			)
+		});
 
 		companion object
 		{

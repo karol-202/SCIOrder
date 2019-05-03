@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.ui
+package pl.karol202.sciorder.ui.dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,10 +11,13 @@ import kotlinx.android.synthetic.main.dialog_order.*
 import pl.karol202.sciorder.R
 import pl.karol202.sciorder.components.ExtendedAlertDialog
 import pl.karol202.sciorder.model.Order
+import pl.karol202.sciorder.ui.listeners.OnOrderDetailsSetListener
+import pl.karol202.sciorder.ui.adapters.SimpleOrderAdapter
 
 class OrderDialog(context: Context,
                   private val case: OnOrderDetailsSetListener.Case,
-                  private val orderListener: OnOrderDetailsSetListener) : ExtendedAlertDialog(context)
+                  private val orderListener: OnOrderDetailsSetListener
+) : ExtendedAlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_order, null)
