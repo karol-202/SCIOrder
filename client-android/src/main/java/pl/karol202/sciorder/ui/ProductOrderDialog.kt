@@ -17,7 +17,7 @@ import java.util.*
 
 class ProductOrderDialog(context: Context,
                          private val product: Product,
-                         private val orderListener: OnProductOrderListener?) : ExtendedAlertDialog(context)
+                         private val orderListener: OnProductOrderListener) : ExtendedAlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_product_order, null)
@@ -46,13 +46,13 @@ class ProductOrderDialog(context: Context,
 
 	private fun tryToOrder()
 	{
-		orderListener?.onProductOrder(getValidProductOrder() ?: return)
+		orderListener.onProductOrder(getValidProductOrder() ?: return)
 		dismiss()
 	}
 
 	private fun tryToAddToOrder()
 	{
-		orderListener?.onProductAddToOrder(getValidProductOrder() ?: return)
+		orderListener.onProductAddToOrder(getValidProductOrder() ?: return)
 		dismiss()
 	}
 

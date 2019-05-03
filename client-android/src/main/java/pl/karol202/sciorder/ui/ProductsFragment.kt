@@ -18,12 +18,13 @@ import pl.karol202.sciorder.R
 import pl.karol202.sciorder.extensions.act
 import pl.karol202.sciorder.extensions.alertDialog
 import pl.karol202.sciorder.extensions.ctx
+import pl.karol202.sciorder.model.Order
 import pl.karol202.sciorder.model.OrderedProduct
 import pl.karol202.sciorder.model.Product
 import pl.karol202.sciorder.viewmodel.OrderViewModel
 import pl.karol202.sciorder.viewmodel.ProductViewModel
 
-class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener
+class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {
 	private val productViewModel by lazy { ViewModelProviders.of(act).get<ProductViewModel>() }
 	private val orderViewModel by lazy { ViewModelProviders.of(act).get<OrderViewModel>() }
@@ -75,7 +76,9 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 
 	private fun initOrderButton()
 	{
-		buttonOrderSheet.setOnClickListener { if(!orderViewModel.isOrderListEmpty()) orderViewModel.orderAll() }
+		buttonOrderSheet.setOnClickListener {
+			showAllProductsOrderDialog(orderViewModel.getProductsInOrder() ?: return@setOnClickListener)
+		}
 	}
 
 	private fun observeProducts()
@@ -124,11 +127,24 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 		}
 	}
 
-	private fun showProductOrderDialog(product: Product) =
-			fragmentManager?.let { ProductOrderDialogFragment.create(product, this).show(it) }
+	private fun showProductOrderDialog(product: Product)
+	{
+		fragmentManager?.let { ProductOrderDialogFragment.create(product, this).show(it) }
+	}
 
-	private fun showProductOrderEditDialog(orderedProduct: OrderedProduct) =
-			fragmentManager?.let { ProductOrderEditDialogFragment.create(orderedProduct, this).show(it) }
+	private fun showProductOrderEditDialog(orderedProduct: OrderedProduct)
+	{
+		fragmentManager?.let { ProductOrderEditDialogFragment.create(orderedProduct, this).show(it) }
+	}
+
+	override fun onProductOrder(orderedProduct: OrderedProduct) = showSingleProductOrderDialog(orderedProduct)
+
+	override fun onProductAddToOrder(orderedProduct: OrderedProduct) = orderViewModel.addToOrder(orderedProduct)
+
+	override fun onProductOrderEdit(oldProduct: OrderedProduct, newProduct: OrderedProduct)
+	{
+		orderViewModel.replaceInOrder(oldProduct, newProduct)
+	}
 
 	private fun showProductRemoveDialog(product: OrderedProduct)
 	{
@@ -139,12 +155,20 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 		}.show()
 	}
 
-	override fun onProductOrder(orderedProduct: OrderedProduct) = orderViewModel.orderSingleProduct(orderedProduct)
+	private fun showAllProductsOrderDialog(orderedProducts: List<OrderedProduct>) =
+		showOrderDialog(OnOrderDetailsSetListener.Case.OrderAll(orderedProducts))
 
-	override fun onProductAddToOrder(orderedProduct: OrderedProduct) = orderViewModel.addToOrder(orderedProduct)
+	private fun showSingleProductOrderDialog(orderedProduct: OrderedProduct) =
+		showOrderDialog(OnOrderDetailsSetListener.Case.OrderSingle(orderedProduct))
 
-	override fun onProductOrderEdit(oldProduct: OrderedProduct, newProduct: OrderedProduct)
+	private fun showOrderDialog(case: OnOrderDetailsSetListener.Case)
 	{
-		orderViewModel.replaceInOrder(oldProduct, newProduct)
+		fragmentManager?.let { OrderDialogFragment.create(case, this).show(it) }
+	}
+
+	override fun onOrderDetailsSet(case: OnOrderDetailsSetListener.Case, details: Order.Details) = when(case)
+	{
+		is OnOrderDetailsSetListener.Case.OrderSingle -> orderViewModel.orderSingleProduct(case.orderedProduct, details)
+		is OnOrderDetailsSetListener.Case.OrderAll -> orderViewModel.orderAll(details)
 	}
 }

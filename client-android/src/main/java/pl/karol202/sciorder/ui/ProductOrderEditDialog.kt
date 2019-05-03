@@ -16,7 +16,7 @@ import pl.karol202.sciorder.model.Product
 
 class ProductOrderEditDialog(context: Context,
                              private val orderedProduct: OrderedProduct,
-                             private val orderListener: OnProductOrderEditListener?) : ExtendedAlertDialog(context)
+                             private val orderListener: OnProductOrderEditListener) : ExtendedAlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_product_order_edit, null)
@@ -53,7 +53,7 @@ class ProductOrderEditDialog(context: Context,
 
 	private fun tryToApply()
 	{
-		orderListener?.onProductOrderEdit(orderedProduct, getValidProductOrder() ?: return)
+		orderListener.onProductOrderEdit(orderedProduct, getValidProductOrder() ?: return)
 		dismiss()
 	}
 

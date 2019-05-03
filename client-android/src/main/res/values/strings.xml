@@ -4,6 +4,7 @@
     <string name="fragment_products">Produkty</string>
 
 	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
+	<string name="dialog_order">Zamówienie</string>
 
 	<string name="text_products_loading_error">Błąd ładowania</string>
 	<string name="text_order_error">Błąd zamówienia</string>
@@ -16,6 +17,8 @@
 	<string name="text_product_param_no_value">Podaj wartość</string>
 	<string name="text_quantity">Liczba</string>
 	<string name="text_ordered_product_quantity">x%d</string>
+	<string name="text_order_location">Miejsce dostawy</string>
+	<string name="text_order_recipient">Adresat</string>
 
 	<plurals name="text_order_products">
 		<item quantity="one">%d produkt</item>

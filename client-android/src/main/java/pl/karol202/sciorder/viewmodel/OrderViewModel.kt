@@ -41,21 +41,21 @@ class OrderViewModel(application: Application) : AndroidViewModel(application)
 		_orderLiveData.postValue(oldProducts - orderedProduct)
 	}
 
-	fun isOrderListEmpty() = _orderLiveData.value?.isEmpty() ?: true
+	fun getProductsInOrder() = _orderLiveData.value?.takeIf { it.isNotEmpty() }
 
-	fun orderAll()
+	fun orderAll(details: Order.Details)
 	{
-		val products = _orderLiveData.value?.takeIf { it.isNotEmpty() } ?: throw IllegalStateException()
+		val products = getProductsInOrder() ?: return
 		val entries = products.map { with(it) { Order.Entry(product._id, quantity, parameters) } }
-		executeOrder(Order.create(entries))
+		executeOrder(Order.create(entries, details))
 
 		_orderLiveData.postValue(emptyList())
 	}
 
-	fun orderSingleProduct(orderedProduct: OrderedProduct)
+	fun orderSingleProduct(orderedProduct: OrderedProduct, details: Order.Details)
 	{
 		val entry = with(orderedProduct) { Order.Entry(product._id, quantity, parameters) }
-		executeOrder(Order.create(listOf(entry)))
+		executeOrder(Order.create(listOf(entry), details))
 	}
 
 	private fun executeOrder(order: Order)
