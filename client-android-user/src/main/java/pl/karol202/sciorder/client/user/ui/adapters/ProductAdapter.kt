@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_product.*
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.extensions.ctx
-import pl.karol202.sciorder.client.user.extensions.getColorCompat
+import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.common.extensions.getColorCompat
 import pl.karol202.sciorder.common.model.Product
 
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>()

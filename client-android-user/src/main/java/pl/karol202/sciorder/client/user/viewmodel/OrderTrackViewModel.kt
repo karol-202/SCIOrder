@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import pl.karol202.sciorder.client.user.components.Event
+import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.client.user.model.local.order.OrderDao
-import pl.karol202.sciorder.client.user.model.remote.order.OrderApi
-import pl.karol202.sciorder.client.user.repository.ResourceState
-import pl.karol202.sciorder.client.user.repository.order.OrderRepositoryImpl
+import pl.karol202.sciorder.client.common.model.local.order.OrderDao
+import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
+import pl.karol202.sciorder.client.common.repository.ResourceState
+import pl.karol202.sciorder.client.common.repository.order.OrderRepositoryImpl
 
 class OrderTrackViewModel(private val orderDao: OrderDao,
                           orderApi: OrderApi) : ViewModel()

@@ -30,6 +30,8 @@ android {
 dependencies {
     api project(':common')
     api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     //Android
     api "androidx.core:core-ktx:1.0.1"
@@ -44,10 +46,19 @@ dependencies {
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
     api "android.arch.lifecycle:extensions:$lifecycleVersion"
 
+    //Room
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    kapt           "android.arch.persistence.room:compiler:$roomVersion"
+
     //Koin
     api "org.koin:koin-core:$koinVersion"
     api "org.koin:koin-android:$koinVersion"
     api "org.koin:koin-androidx-viewmodel:$koinVersion"
+
+    implementation "com.squareup.moshi:moshi:1.8.0"
+    implementation "com.squareup.retrofit2:retrofit:2.5.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
+    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

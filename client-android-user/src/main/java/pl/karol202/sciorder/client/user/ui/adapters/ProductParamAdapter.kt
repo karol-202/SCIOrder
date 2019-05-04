@@ -14,9 +14,9 @@ import kotlinx.android.synthetic.main.item_product_param_bool.*
 import kotlinx.android.synthetic.main.item_product_param_enum.*
 import kotlinx.android.synthetic.main.item_product_param_text.*
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.extensions.addAfterTextChangedListener
-import pl.karol202.sciorder.client.user.extensions.ctx
-import pl.karol202.sciorder.client.user.extensions.setOnItemSelectedListener
+import pl.karol202.sciorder.client.common.extensions.addAfterTextChangedListener
+import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.common.extensions.setOnItemSelectedListener
 import pl.karol202.sciorder.common.model.Product
 
 class ProductParamAdapter(context: Context,

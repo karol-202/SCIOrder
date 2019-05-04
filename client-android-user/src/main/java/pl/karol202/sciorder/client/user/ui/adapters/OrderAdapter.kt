@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_ordered_product.*
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.extensions.ctx
-import pl.karol202.sciorder.client.user.model.OrderedProduct
+import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.common.model.OrderedProduct
 
 class OrderAdapter : RecyclerView.Adapter<OrderAdapter.ViewHolder>()
 {

@@ -35,17 +35,6 @@ androidExtensions {
 
 dependencies {
     implementation project(':client-android')
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-
-    //Room
-    implementation "android.arch.persistence.room:runtime:$roomVersion"
-    kapt           "android.arch.persistence.room:compiler:$roomVersion"
-
-    implementation "com.squareup.moshi:moshi:1.8.0"
-    implementation "com.squareup.retrofit2:retrofit:2.5.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
-    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

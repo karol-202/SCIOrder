@@ -14,9 +14,9 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.extensions.alertDialog
-import pl.karol202.sciorder.client.user.extensions.ctx
-import pl.karol202.sciorder.client.user.model.OrderedProduct
+import pl.karol202.sciorder.client.common.extensions.alertDialog
+import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.user.ui.adapters.OrderAdapter
 import pl.karol202.sciorder.client.user.ui.adapters.ProductAdapter
 import pl.karol202.sciorder.client.user.ui.dialog.fragment.OrderDialogFragment

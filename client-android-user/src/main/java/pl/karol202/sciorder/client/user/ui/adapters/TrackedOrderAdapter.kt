@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_tracked_order.*
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.extensions.*
-import pl.karol202.sciorder.client.user.model.OrderedProduct
+import pl.karol202.sciorder.client.common.extensions.*
+import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Product
 

@@ -2,12 +2,12 @@ package pl.karol202.sciorder.client.user.ui.dialog.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import pl.karol202.sciorder.client.user.components.ExtendedDialogFragment
-import pl.karol202.sciorder.client.user.extensions.ctx
-import pl.karol202.sciorder.client.user.extensions.setArguments
-import pl.karol202.sciorder.client.user.extensions.setTargetFragment
-import pl.karol202.sciorder.client.user.extensions.to
-import pl.karol202.sciorder.client.user.model.OrderedProduct
+import pl.karol202.sciorder.client.common.components.ExtendedDialogFragment
+import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.common.extensions.setArguments
+import pl.karol202.sciorder.client.common.extensions.setTargetFragment
+import pl.karol202.sciorder.client.common.extensions.to
+import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.user.ui.listeners.OnProductOrderEditListener
 import pl.karol202.sciorder.client.user.ui.dialog.ProductOrderEditDialog
 

@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.user.ui.listeners
 
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.client.user.model.OrderedProduct
+import pl.karol202.sciorder.client.common.model.OrderedProduct
 import java.io.Serializable
 
 interface OnOrderDetailsSetListener

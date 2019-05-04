@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">SCIOrder</string>
+    <string name="app_name_user">SCIOrder</string>
+	<string name="app_name_admin">SCIOrder Admin</string>
 
     <string name="fragment_products">Produkty</string>
 	<string name="fragment_order_track">Zamówienia</string>

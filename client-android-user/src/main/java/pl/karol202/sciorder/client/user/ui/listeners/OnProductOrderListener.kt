@@ -1,6 +1,6 @@
 package pl.karol202.sciorder.client.user.ui.listeners
 
-import pl.karol202.sciorder.client.user.model.OrderedProduct
+import pl.karol202.sciorder.client.common.model.OrderedProduct
 
 interface OnProductOrderListener
 {
