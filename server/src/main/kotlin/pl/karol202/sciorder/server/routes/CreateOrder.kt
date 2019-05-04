@@ -6,8 +6,8 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
-import pl.karol202.sciorder.model.Order
-import pl.karol202.sciorder.model.Product
+import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.dao.OrderDao
 import pl.karol202.sciorder.server.dao.ProductDao
 import pl.karol202.sciorder.server.util.newStringId

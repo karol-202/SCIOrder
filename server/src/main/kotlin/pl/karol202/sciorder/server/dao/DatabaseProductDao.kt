@@ -1,6 +1,6 @@
 package pl.karol202.sciorder.server.dao
 
-import pl.karol202.sciorder.model.Product
+import pl.karol202.sciorder.common.model.Product
 
 class DatabaseProductDao : ProductDao
 {

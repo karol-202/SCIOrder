@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.server.dao
 
 import org.litote.kmongo.`in`
-import pl.karol202.sciorder.model.Order
+import pl.karol202.sciorder.common.model.Order
 
 class DatabaseOrderDao : OrderDao
 {

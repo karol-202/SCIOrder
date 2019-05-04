@@ -2,5 +2,5 @@ rootProject.name = 'sciorder'
 
 include ':common'
 include ':server'
-include 'client-android'
+include 'client-android-user'
 

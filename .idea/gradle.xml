@@ -8,11 +8,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/client-android" />
+            <option value="$PROJECT_DIR$/client-android-user" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/server" />
           </set>
         </option>
+        <option name="resolveModulePerSourceSet" value="false" />
         <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
