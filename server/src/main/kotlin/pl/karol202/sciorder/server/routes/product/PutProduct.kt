@@ -1,19 +1,20 @@
-package pl.karol202.sciorder.server.routes
+package pl.karol202.sciorder.server.routes.product
 
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.routing.post
+import io.ktor.routing.put
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.dao.ProductDao
+import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.hasDuplicates
 import pl.karol202.sciorder.server.util.newStringId
 
-fun Route.createProduct(productDao: ProductDao) = post("products") {
+fun Route.putProduct(productDao: ProductDao) = put {
 	val product = call.receive<Product>().overrideId()
-	if(!product.isValid()) return@post call.respond(HttpStatusCode.BadRequest)
+	if(!product.isValid()) return@put badRequest()
 	productDao.addProduct(product)
 	call.respond(HttpStatusCode.Created, product)
 }

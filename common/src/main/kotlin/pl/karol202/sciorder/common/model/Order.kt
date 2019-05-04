@@ -18,6 +18,11 @@ data class Order(val _id: String,
 
 	enum class Status
 	{
-		WAITING, IN_PROGRESS, DELIVERING, DONE, REJECTED
+		WAITING, IN_PROGRESS, DELIVERING, DONE, REJECTED;
+
+		companion object
+		{
+			fun getByName(name: String) = values().find { it.name == name }
+		}
 	}
 }

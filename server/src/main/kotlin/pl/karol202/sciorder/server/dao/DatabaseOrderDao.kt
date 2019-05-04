@@ -1,6 +1,8 @@
 package pl.karol202.sciorder.server.dao
 
 import org.litote.kmongo.`in`
+import org.litote.kmongo.eq
+import org.litote.kmongo.set
 import pl.karol202.sciorder.common.model.Order
 
 class DatabaseOrderDao : OrderDao
@@ -11,6 +13,10 @@ class DatabaseOrderDao : OrderDao
 	{
 		ordersCollection.insertOne(order)
 	}
+
+	override suspend fun updateOrderStatus(id: String, status: Order.Status) =
+		ordersCollection.updateOne(Order::_id eq id, set(Order::status, status))
+			.let { it.wasAcknowledged() && it.modifiedCount > 0 }
 
 	override suspend fun getAllOrders() = ordersCollection.find().toList()
 

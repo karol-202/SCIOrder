@@ -7,9 +7,15 @@ import retrofit2.http.*
 
 interface OrderApi
 {
-	@POST("orders")
+	@PUT("orders")
 	fun addOrder(@Body order: Order): LiveData<ApiResponse<Order>>
 
-	@GET("ordersById")
+	@POST("orders/{id}/status")
+	fun updateOrderStatus(@Path("id") id: String, @Query("status") status: Order.Status): LiveData<ApiResponse<Unit>>
+
+	@GET("orders?all=true")
+	fun getAllOrders(): LiveData<ApiResponse<List<Order>>>
+
+	@GET("orders")
 	fun getOrdersById(@Query("id") ids: List<String>): LiveData<ApiResponse<List<Order>>>
 }

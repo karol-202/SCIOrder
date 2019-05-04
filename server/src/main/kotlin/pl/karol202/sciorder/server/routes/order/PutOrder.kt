@@ -1,20 +1,21 @@
-package pl.karol202.sciorder.server.routes
+package pl.karol202.sciorder.server.routes.order
 
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.routing.post
+import io.ktor.routing.put
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.dao.OrderDao
 import pl.karol202.sciorder.server.dao.ProductDao
+import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.newStringId
 
-fun Route.createOrder(productDao: ProductDao, orderDao: OrderDao) = post("orders") {
+fun Route.putOrder(productDao: ProductDao, orderDao: OrderDao) = put {
 	val order = call.receive<Order>().override()
-	if(!order.isValid(productDao)) return@post call.respond(HttpStatusCode.BadRequest)
+	if(!order.isValid(productDao)) return@put badRequest()
 	orderDao.addOrder(order)
 	call.respond(HttpStatusCode.Created, order)
 }

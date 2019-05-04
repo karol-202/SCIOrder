@@ -6,10 +6,15 @@ import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
+import io.ktor.routing.route
 import io.ktor.routing.routing
 import pl.karol202.sciorder.server.dao.DatabaseOrderDao
 import pl.karol202.sciorder.server.dao.DatabaseProductDao
-import pl.karol202.sciorder.server.routes.*
+import pl.karol202.sciorder.server.routes.order.getOrders
+import pl.karol202.sciorder.server.routes.order.postOrderStatus
+import pl.karol202.sciorder.server.routes.order.putOrder
+import pl.karol202.sciorder.server.routes.product.getProducts
+import pl.karol202.sciorder.server.routes.product.putProduct
 
 val productDao = DatabaseProductDao()
 val orderDao = DatabaseOrderDao()
@@ -30,10 +35,16 @@ private fun Application.configure()
 }
 
 private fun Application.routing() = routing {
-    getOrders(orderDao)
-    getOrdersById(orderDao)
-    createOrder(productDao, orderDao)
+	route("products") {
+		getProducts(productDao)
+		putProduct(productDao)
+	}
+	route("orders") {
+		getOrders(orderDao)
+		putOrder(productDao, orderDao)
 
-    getProducts(productDao)
-    createProduct(productDao)
+		route("{id}/status") {
+			postOrderStatus(orderDao)
+		}
+	}
 }
