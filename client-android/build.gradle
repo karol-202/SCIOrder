@@ -29,6 +29,25 @@ android {
 
 dependencies {
     api project(':common')
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    //Android
+    api "androidx.core:core-ktx:1.0.1"
+    api "androidx.fragment:fragment-ktx:1.0.0"
+    api "androidx.appcompat:appcompat:1.1.0-alpha04"
+    api "androidx.constraintlayout:constraintlayout:2.0.0-alpha3"
+    api "androidx.preference:preference:1.0.0"
+    api "com.google.android.material:material:1.0.0"
+    api 'androidx.recyclerview:recyclerview:1.0.0'
+
+    //Lifecycle
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    api "android.arch.lifecycle:extensions:$lifecycleVersion"
+
+    //Koin
+    api "org.koin:koin-core:$koinVersion"
+    api "org.koin:koin-android:$koinVersion"
+    api "org.koin:koin-androidx-viewmodel:$koinVersion"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
