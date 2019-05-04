@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/client-android/client-android.iml" filepath="$PROJECT_DIR$/client-android/client-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/client-android-user/client-android-user.iml" filepath="$PROJECT_DIR$/client-android-user/client-android-user.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/sciorder.iml" filepath="$PROJECT_DIR$/sciorder.iml" />
