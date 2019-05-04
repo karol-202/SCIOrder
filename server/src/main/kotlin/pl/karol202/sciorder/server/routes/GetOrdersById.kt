@@ -6,6 +6,8 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import pl.karol202.sciorder.server.dao.OrderDao
 
-fun Route.getOrders(orderDao: OrderDao) = get("orders") {
-	call.respond(orderDao.getAllOrders())
+fun Route.getOrdersById(orderDao: OrderDao) = get("ordersById") {
+	val ids = call.parameters.getAll("id") ?: emptyList()
+	val orders = orderDao.getOrdersById(ids)
+	call.respond(orders)
 }

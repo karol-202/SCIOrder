@@ -20,7 +20,7 @@ class OrderRepositoryImpl(private val coroutineScope: CoroutineScope,
 
 		override fun loadFromDatabase() = orderDao.getAllOrders()
 
-		override fun loadFromNetwork(oldData: List<Order>) = orderApi.getOrders(oldData.map { it._id })
+		override fun loadFromNetwork(oldData: List<Order>) = orderApi.getOrdersById(oldData.map { it._id })
 
 		override fun saveToDatabase(data: List<Order>)
 		{
