@@ -13,3 +13,19 @@ fun <T> LiveData<T>.observeNonNull(lifecycleOwner: LifecycleOwner, observer: (T)
 
 fun <T> LiveData<Event<T>>.observeEvent(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) =
 		observe(lifecycleOwner) { it?.getIfNotConsumed()?.let(observer) }
+
+private class DisposableObserver<T>(private val liveData: LiveData<T>,
+                                    private val observer: (T?) -> Boolean) : Observer<T>
+{
+	fun plug() = liveData.observeForever(this)
+
+	override fun onChanged(value: T?)
+	{
+		if(observer(value)) liveData.removeObserver(this)
+	}
+}
+
+// Waits for first non-null value and then stops observing
+fun <T> LiveData<T>.observeOnceNonNull(observer: (T) -> Unit) =
+		DisposableObserver(this) { value -> if(value != null) true.also { observer(value) } else false }.plug()
+

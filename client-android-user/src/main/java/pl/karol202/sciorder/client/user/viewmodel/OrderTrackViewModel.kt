@@ -37,6 +37,6 @@ class OrderTrackViewModel(private val orderDao: OrderDao,
 
 	fun removeOrder(order: Order)
 	{
-		coroutineScope.launch { orderDao.deleteOrders(listOf(order)) }
+		coroutineScope.launch { orderDao.delete(listOf(order)) }
 	}
 }

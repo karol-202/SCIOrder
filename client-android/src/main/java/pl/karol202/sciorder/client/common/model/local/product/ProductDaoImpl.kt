@@ -10,23 +10,16 @@ fun ProductEntityDao.toProductDao(): ProductDao = ProductDaoImpl(this)
 private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) : ProductDao
 {
 	@WorkerThread
-	override fun insertProducts(products: List<Product>) =
-			productEntityDao.insertProducts(products.map { it.toProductEntity() })
+	override fun insert(items: List<Product>) = productEntityDao.insert(items.map { it.toProductEntity() })
 
 	@WorkerThread
-	override fun updateProducts(products: List<Product>) =
-			productEntityDao.updateProducts(products.map { it.toProductEntity() })
+	override fun update(items: List<Product>) = productEntityDao.update(items.map { it.toProductEntity() })
 
 	@WorkerThread
-	override fun deleteProducts() =
-			productEntityDao.deleteProducts()
+	override fun delete(items: List<Product>) = productEntityDao.delete(items.map { it.toProductEntity() })
 
-	@WorkerThread
-	override fun deleteProducts(products: List<Product>) =
-			productEntityDao.deleteProducts(products.map { it.toProductEntity() })
-
-	override fun getAllProducts(): LiveData<List<Product>> =
-			Transformations.map(productEntityDao.getAllProducts()) { entities -> entities.map { it.toProduct() } }
+	override fun getAll(): LiveData<List<Product>> =
+			Transformations.map(productEntityDao.getAll()) { entities -> entities.map { it.toProduct() } }
 
 	private fun ProductEntity.toProduct() = Product(id, name, available, parameters)
 

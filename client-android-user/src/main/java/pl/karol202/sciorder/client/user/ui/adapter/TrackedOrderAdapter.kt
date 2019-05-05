@@ -60,5 +60,5 @@ class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : Dy
 
 	override fun createViewHolder(view: View, viewType: Int) = ViewHolder(view)
 
-	override fun getItemId(item: Order) = item._id
+	override fun getItemId(item: Order) = item.id
 }

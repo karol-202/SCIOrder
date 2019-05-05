@@ -5,7 +5,7 @@ import java.io.Serializable
 data class Order(val _id: String,
                  val entries: List<Entry>,
                  val details: Details,
-                 val status: Status) : Serializable
+                 val status: Status) : Serializable, IdProvider
 {
 	companion object;
 
@@ -25,4 +25,6 @@ data class Order(val _id: String,
 			fun getByName(name: String) = values().find { it.name == name }
 		}
 	}
+
+	override val id = _id
 }

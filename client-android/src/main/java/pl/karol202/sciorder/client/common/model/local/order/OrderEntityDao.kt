@@ -10,24 +10,20 @@ interface OrderEntityDao
 {
 	@WorkerThread
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	fun insertOrders(orders: List<OrderEntity>)
+	fun insert(orders: List<OrderEntity>)
 
 	@WorkerThread
 	@Update
-	fun updateOrders(orders: List<OrderEntity>)
+	fun update(orders: List<OrderEntity>)
 
 	@WorkerThread
 	@Query("UPDATE ${OrderEntity.TABLE_NAME} SET status = :status WHERE id = :id")
-	fun updateOrderStatus(id: String, status: Order.Status)
+	fun updateStatus(id: String, status: Order.Status)
 
 	@WorkerThread
 	@Delete
-	fun deleteOrders(orders: List<OrderEntity>)
-
-	@WorkerThread
-	@Query("DELETE FROM ${OrderEntity.TABLE_NAME}")
-	fun deleteOrders()
+	fun delete(orders: List<OrderEntity>)
 
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME}")
-	fun getAllOrders(): LiveData<List<OrderEntity>>
+	fun getAll(): LiveData<List<OrderEntity>>
 }

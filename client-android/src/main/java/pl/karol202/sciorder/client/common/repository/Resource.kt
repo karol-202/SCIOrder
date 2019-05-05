@@ -5,11 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 
-abstract class Resource<T> @MainThread constructor() // LiveData can only be modified from main thread
+abstract class Resource<T> @MainThread constructor(protected val databaseSource: LiveData<T>) // LiveData can only be modified from main thread
 {
-	@Suppress("LeakingThis")
-	private val databaseSource = loadFromDatabase()
-
 	private val liveData = MediatorLiveData<ResourceState<T>>().apply { value = ResourceState.Loading(null) }
 	val asLiveData: LiveData<ResourceState<T>> = liveData
 
@@ -72,8 +69,6 @@ abstract class Resource<T> @MainThread constructor() // LiveData can only be mod
 	private fun setFailure(data: T?, message: String) = liveData.postValue(ResourceState.Failure(data, message))
 
 	protected abstract fun shouldFetchFromNetwork(data: T): Boolean
-
-	protected abstract fun loadFromDatabase(): LiveData<T>
 
 	// oldData needed by OrderRepositoryImpl
 	protected abstract fun loadFromNetwork(oldData: T): LiveData<ApiResponse<T>>

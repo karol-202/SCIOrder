@@ -1,19 +1,18 @@
 package pl.karol202.sciorder.client.common.model.local.order
 
 import androidx.lifecycle.LiveData
+import pl.karol202.sciorder.client.common.model.local.CrudDao
 import pl.karol202.sciorder.common.model.Order
 
-interface OrderDao
+interface OrderDao : CrudDao<Order>
 {
-	fun insertOrders(orders: List<Order>)
+	override fun insert(items: List<Order>)
 
-	fun updateOrders(orders: List<Order>)
+	override fun update(items: List<Order>)
 
-	fun updateOrderStatus(id: String, status: Order.Status)
+	fun updateStatus(id: String, status: Order.Status)
 
-	fun deleteOrders(orders: List<Order>)
+	override fun delete(items: List<Order>)
 
-	fun deleteOrders()
-
-	fun getAllOrders(): LiveData<List<Order>>
+	override fun getAll(): LiveData<List<Order>>
 }

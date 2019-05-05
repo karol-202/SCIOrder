@@ -9,20 +9,16 @@ interface ProductEntityDao
 {
 	@WorkerThread
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
-	fun insertProducts(products: List<ProductEntity>)
+	fun insert(products: List<ProductEntity>)
 
 	@WorkerThread
 	@Update
-	fun updateProducts(products: List<ProductEntity>)
-
-	@WorkerThread
-	@Query("DELETE FROM ${ProductEntity.TABLE_NAME}")
-	fun deleteProducts()
+	fun update(products: List<ProductEntity>)
 
 	@WorkerThread
 	@Delete
-	fun deleteProducts(products: List<ProductEntity>)
+	fun delete(products: List<ProductEntity>)
 
     @Query("SELECT * FROM ${ProductEntity.TABLE_NAME}")
-    fun getAllProducts(): LiveData<List<ProductEntity>>
+    fun getAll(): LiveData<List<ProductEntity>>
 }

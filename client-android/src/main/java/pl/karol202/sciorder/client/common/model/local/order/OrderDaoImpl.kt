@@ -10,24 +10,21 @@ fun OrderEntityDao.toOrderDao(): OrderDao = OrderDaoImpl(this)
 class OrderDaoImpl(private val orderEntityDao: OrderEntityDao) : OrderDao
 {
 	@WorkerThread
-	override fun insertOrders(orders: List<Order>) =
-		orderEntityDao.insertOrders(orders.map { it.toOrderEntity() })
+	override fun insert(items: List<Order>) = orderEntityDao.insert(items.map { it.toOrderEntity() })
 
 	@WorkerThread
-	override fun updateOrders(orders: List<Order>) = orderEntityDao.updateOrders(orders.map { it.toOrderEntity() })
-
-	override fun updateOrderStatus(id: String, status: Order.Status) = orderEntityDao.updateOrderStatus(id, status)
+	override fun update(items: List<Order>) = orderEntityDao.update(items.map { it.toOrderEntity() })
 
 	@WorkerThread
-	override fun deleteOrders(orders: List<Order>) = orderEntityDao.deleteOrders(orders.map { it.toOrderEntity() })
+	override fun updateStatus(id: String, status: Order.Status) = orderEntityDao.updateStatus(id, status)
 
 	@WorkerThread
-	override fun deleteOrders() = orderEntityDao.deleteOrders()
+	override fun delete(items: List<Order>) = orderEntityDao.delete(items.map { it.toOrderEntity() })
 
-	override fun getAllOrders(): LiveData<List<Order>> =
-		Transformations.map(orderEntityDao.getAllOrders()) { entities -> entities.map { it.toOrder() } }
+	override fun getAll(): LiveData<List<Order>> =
+		Transformations.map(orderEntityDao.getAll()) { entities -> entities.map { it.toOrder() } }
 
 	private fun OrderEntity.toOrder() = Order(id, entries, details, status)
 
-	private fun Order.toOrderEntity() = OrderEntity(_id, entries, details, status)
+	private fun Order.toOrderEntity() = OrderEntity(id, entries, details, status)
 }

@@ -38,7 +38,7 @@ class OrderViewModel(private val orderDao: OrderDao,
 
 	fun updateOrderStatus(order: Order, status: Order.Status)
 	{
-		val liveData = orderApi.updateOrderStatus(order._id, status)
+		val liveData = orderApi.updateOrderStatus(order.id, status)
 		handleOrderUpdateResponse(order, status, liveData)
 	}
 
@@ -53,6 +53,6 @@ class OrderViewModel(private val orderDao: OrderDao,
 
 	private fun updateOrderLocally(order: Order, status: Order.Status)
 	{
-		coroutineScope.launch { orderDao.updateOrderStatus(order._id, status) }
+		coroutineScope.launch { orderDao.updateStatus(order.id, status) }
 	}
 }
