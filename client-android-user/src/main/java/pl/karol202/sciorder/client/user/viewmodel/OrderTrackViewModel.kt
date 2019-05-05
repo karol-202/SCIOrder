@@ -12,7 +12,7 @@ import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.client.common.model.local.order.OrderDao
 import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
 import pl.karol202.sciorder.client.common.repository.ResourceState
-import pl.karol202.sciorder.client.common.repository.order.OrderRepositoryImpl
+import pl.karol202.sciorder.client.user.repository.order.OrderRepositoryImpl
 
 class OrderTrackViewModel(private val orderDao: OrderDao,
                           orderApi: OrderApi) : ViewModel()
@@ -37,6 +37,6 @@ class OrderTrackViewModel(private val orderDao: OrderDao,
 
 	fun removeOrder(order: Order)
 	{
-		coroutineScope.launch { orderDao.deleteOrder(order) }
+		coroutineScope.launch { orderDao.deleteOrders(listOf(order)) }
 	}
 }

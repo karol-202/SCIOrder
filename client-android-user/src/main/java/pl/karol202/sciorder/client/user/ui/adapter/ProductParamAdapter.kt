@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.user.ui.adapters
+package pl.karol202.sciorder.client.user.ui.adapter
 
 import android.content.Context
 import android.text.InputType
@@ -103,7 +103,7 @@ class ProductParamAdapter(context: Context,
 		companion object
 		{
 			private const val INPUT_TYPE = InputType.TYPE_CLASS_NUMBER or
-										   InputType.TYPE_NUMBER_FLAG_SIGNED
+					InputType.TYPE_NUMBER_FLAG_SIGNED
 		}
 
 		override fun convertValue(string: String?) = string?.toIntOrNull()
@@ -123,8 +123,8 @@ class ProductParamAdapter(context: Context,
 		companion object
 		{
 			private const val INPUT_TYPE = InputType.TYPE_CLASS_NUMBER or
-										   InputType.TYPE_NUMBER_FLAG_SIGNED or
-										   InputType.TYPE_NUMBER_FLAG_DECIMAL
+					InputType.TYPE_NUMBER_FLAG_SIGNED or
+					InputType.TYPE_NUMBER_FLAG_DECIMAL
 		}
 
 		override fun convertValue(string: String?) = string?.toFloatOrNull()
@@ -169,9 +169,9 @@ class ProductParamAdapter(context: Context,
 			super.bind(param, onUpdateListener)
 			val values = param.attributes.enumValues ?: emptyList()
 			spinnerProductParamEnum.adapter = ArrayAdapter<String>(ctx,
-																   R.layout.item_product_param_enum_value,
-																   R.id.textProductParamEnumValue,
-																   values)
+			                                                       R.layout.item_product_param_enum_value,
+			                                                       R.id.textProductParamEnumValue,
+			                                                       values)
 			spinnerProductParamEnum.setSelection(values.indexOf(param.attributes.defaultValue))
 		}
 	}

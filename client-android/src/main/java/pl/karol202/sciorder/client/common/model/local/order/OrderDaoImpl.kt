@@ -10,14 +10,16 @@ fun OrderEntityDao.toOrderDao(): OrderDao = OrderDaoImpl(this)
 class OrderDaoImpl(private val orderEntityDao: OrderEntityDao) : OrderDao
 {
 	@WorkerThread
-	override fun insertOrder(order: Order) = orderEntityDao.insertOrder(order.toOrderEntity())
-
-	@WorkerThread
 	override fun insertOrders(orders: List<Order>) =
 		orderEntityDao.insertOrders(orders.map { it.toOrderEntity() })
 
 	@WorkerThread
-	override fun deleteOrder(order: Order) = orderEntityDao.deleteOrder(order.toOrderEntity())
+	override fun updateOrders(orders: List<Order>) = orderEntityDao.updateOrders(orders.map { it.toOrderEntity() })
+
+	override fun updateOrderStatus(id: String, status: Order.Status) = orderEntityDao.updateOrderStatus(id, status)
+
+	@WorkerThread
+	override fun deleteOrders(orders: List<Order>) = orderEntityDao.deleteOrders(orders.map { it.toOrderEntity() })
 
 	@WorkerThread
 	override fun deleteOrders() = orderEntityDao.deleteOrders()

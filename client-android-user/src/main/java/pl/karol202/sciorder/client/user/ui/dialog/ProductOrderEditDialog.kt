@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.dialog_product_order_edit.*
 import pl.karol202.sciorder.client.user.R
 import pl.karol202.sciorder.client.common.components.ExtendedAlertDialog
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.user.ui.adapters.ProductParamAdapter
-import pl.karol202.sciorder.client.user.ui.listeners.OnProductOrderEditListener
+import pl.karol202.sciorder.client.user.ui.adapter.ProductParamAdapter
+import pl.karol202.sciorder.client.user.ui.listener.OnProductOrderEditListener
 import pl.karol202.sciorder.common.model.Product
 
 class ProductOrderEditDialog(context: Context,

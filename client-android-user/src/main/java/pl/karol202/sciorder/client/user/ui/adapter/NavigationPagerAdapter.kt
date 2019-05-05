@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.user.ui.adapters
+package pl.karol202.sciorder.client.user.ui.adapter
 
 import android.content.Context
 import androidx.fragment.app.FragmentManager
@@ -19,7 +19,7 @@ class NavigationPagerAdapter(private val context: Context,
 
 	override fun getCount() = 2
 
-	override fun getPageTitle(position: Int) = when(position)
+	override fun getPageTitle(position: Int): String = when(position)
 	{
 		0 -> context.getString(R.string.fragment_products)
 		1 -> context.getString(R.string.fragment_order_track)

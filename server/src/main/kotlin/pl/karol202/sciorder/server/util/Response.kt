@@ -7,5 +7,3 @@ import io.ktor.response.respond
 import io.ktor.util.pipeline.PipelineContext
 
 suspend fun PipelineContext<*, ApplicationCall>.badRequest() = call.respond(HttpStatusCode.BadRequest)
-
-suspend fun PipelineContext<*, ApplicationCall>.notFound() = call.respond(HttpStatusCode.NotFound)

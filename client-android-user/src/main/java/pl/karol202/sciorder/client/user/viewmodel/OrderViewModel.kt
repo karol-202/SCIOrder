@@ -80,6 +80,6 @@ class OrderViewModel(private val orderDao: OrderDao,
 
 	private fun saveOrderLocally(order: Order)
 	{
-		coroutineScope.launch { orderDao.insertOrder(order) }
+		coroutineScope.launch { orderDao.insertOrders(listOf(order)) }
 	}
 }

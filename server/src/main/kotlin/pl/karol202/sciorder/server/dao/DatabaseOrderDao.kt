@@ -16,7 +16,7 @@ class DatabaseOrderDao : OrderDao
 
 	override suspend fun updateOrderStatus(id: String, status: Order.Status) =
 		ordersCollection.updateOne(Order::_id eq id, set(Order::status, status))
-			.let { it.wasAcknowledged() && it.modifiedCount > 0 }
+			.let { it.wasAcknowledged() && it.matchedCount > 0 }
 
 	override suspend fun getAllOrders() = ordersCollection.find().toList()
 

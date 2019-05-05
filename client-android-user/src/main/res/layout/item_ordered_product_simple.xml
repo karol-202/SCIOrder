@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textOrderedProductSimpleQuantity"
-            android:text="@string/text_ordered_product_quantity"
+            android:text="@string/text_quantity_value"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@+id/textOrderedProductSimpleName"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -4,26 +4,32 @@
 
     <string name="fragment_products">Produkty</string>
 	<string name="fragment_order_track">Zamówienia</string>
+	<string name="fragment_orders">Zamówienia</string>
 
 	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
 	<string name="dialog_order">Zamówienie</string>
 
-	<string name="text_loading_error">Błąd ładowania</string>
-	<string name="text_order_error">Błąd zamówienia</string>
-	<string name="text_product_param_int_range_closed">Od %d do %d</string>
-	<string name="text_product_param_int_range_left_closed">Minimalnie %d</string>
-	<string name="text_product_param_int_range_right_closed">Maksymalnie %d</string>
-	<string name="text_product_param_float_range_closed">Od %.2f do %.2f</string>
-	<string name="text_product_param_float_range_left_closed">Minimalnie %.2f</string>
-	<string name="text_product_param_float_range_right_closed">Maksymalnie %.2f</string>
-	<string name="text_product_param_no_value">Podaj wartość</string>
-	<string name="text_quantity">Liczba</string>
-	<string name="text_ordered_product_quantity">x%d</string>
-	<string name="text_order_location">Miejsce dostawy</string>
-	<string name="text_order_recipient">Adresat</string>
-	<string name="text_status">Status:</string>
+    <string name="text_status">Status</string>
+	<string name="text_location">Miejsce dostawy</string>
+	<string name="text_recipient">Adresat</string>
+    <string name="text_quantity">Liczba</string>
+    <string name="text_quantity_value">x%d</string>
 
-	<plurals name="text_order_products">
+    <string name="text_product_param_int_range_closed">Od %d do %d</string>
+    <string name="text_product_param_int_range_left_closed">Minimalnie %d</string>
+    <string name="text_product_param_int_range_right_closed">Maksymalnie %d</string>
+    <string name="text_product_param_float_range_closed">Od %.2f do %.2f</string>
+    <string name="text_product_param_float_range_left_closed">Minimalnie %.2f</string>
+    <string name="text_product_param_float_range_right_closed">Maksymalnie %.2f</string>
+    <string name="text_product_param_no_value">Podaj wartość</string>
+    <string name="text_product_param_true">Tak</string>
+    <string name="text_product_param_false">Nie</string>
+
+    <string name="text_loading_error">Błąd ładowania</string>
+    <string name="text_order_error">Błąd zamówienia</string>
+	<string name="text_update_error">Błąd aktualizacji</string>
+
+	<plurals name="text_products">
 		<item quantity="one">%d produkt</item>
 		<item quantity="few">%d produkty</item>
 		<item quantity="other">%d produktów</item>
@@ -43,4 +49,5 @@
 
 	<string name="unknown">Nieznany</string>
 	<string name="unknown_product">Usunięty produkt</string>
+	<string name="no_param_value">-</string>
 </resources>

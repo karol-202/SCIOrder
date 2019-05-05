@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_order.*
 import pl.karol202.sciorder.client.user.R
 import pl.karol202.sciorder.client.common.components.ExtendedAlertDialog
-import pl.karol202.sciorder.client.user.ui.adapters.SimpleOrderAdapter
-import pl.karol202.sciorder.client.user.ui.listeners.OnOrderDetailsSetListener
+import pl.karol202.sciorder.client.user.ui.adapter.SimpleOrderedProductAdapter
+import pl.karol202.sciorder.client.user.ui.listener.OnOrderDetailsSetListener
 import pl.karol202.sciorder.common.model.Order
 
 class OrderDialog(context: Context,
@@ -31,7 +31,7 @@ class OrderDialog(context: Context,
 	{
 		super.onCreate(savedInstanceState)
 		recyclerOrder.layoutManager = LinearLayoutManager(context)
-		recyclerOrder.adapter = SimpleOrderAdapter(case.orderedProducts)
+		recyclerOrder.adapter = SimpleOrderedProductAdapter(case.orderedProducts)
 		recyclerOrder.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
 		buttonOrderOrder.setOnClickListener { order() }

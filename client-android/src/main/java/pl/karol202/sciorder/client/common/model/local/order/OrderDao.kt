@@ -5,11 +5,13 @@ import pl.karol202.sciorder.common.model.Order
 
 interface OrderDao
 {
-	fun insertOrder(order: Order)
-
 	fun insertOrders(orders: List<Order>)
 
-	fun deleteOrder(order: Order)
+	fun updateOrders(orders: List<Order>)
+
+	fun updateOrderStatus(id: String, status: Order.Status)
+
+	fun deleteOrders(orders: List<Order>)
 
 	fun deleteOrders()
 

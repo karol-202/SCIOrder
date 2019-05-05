@@ -7,7 +7,11 @@ interface ProductDao
 {
 	fun insertProducts(products: List<Product>)
 
+	fun updateProducts(products: List<Product>)
+
 	fun deleteProducts()
+
+	fun deleteProducts(products: List<Product>)
 
 	fun getAllProducts(): LiveData<List<Product>>
 }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.ui.adapters.NavigationPagerAdapter
+import pl.karol202.sciorder.client.user.ui.adapter.NavigationPagerAdapter
 
 class MainActivity : AppCompatActivity()
 {

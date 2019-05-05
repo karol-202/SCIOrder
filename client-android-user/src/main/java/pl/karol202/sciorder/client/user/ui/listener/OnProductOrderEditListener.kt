@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.user.ui.listeners
+package pl.karol202.sciorder.client.user.ui.listener
 
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 

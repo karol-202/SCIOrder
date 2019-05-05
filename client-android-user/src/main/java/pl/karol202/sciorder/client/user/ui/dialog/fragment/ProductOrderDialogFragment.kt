@@ -8,7 +8,7 @@ import pl.karol202.sciorder.client.common.extensions.setArguments
 import pl.karol202.sciorder.client.common.extensions.setTargetFragment
 import pl.karol202.sciorder.client.common.extensions.to
 import pl.karol202.sciorder.common.model.Product
-import pl.karol202.sciorder.client.user.ui.listeners.OnProductOrderListener
+import pl.karol202.sciorder.client.user.ui.listener.OnProductOrderListener
 import pl.karol202.sciorder.client.user.ui.dialog.ProductOrderDialog
 
 class ProductOrderDialogFragment : ExtendedDialogFragment()

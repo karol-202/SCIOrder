@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_order_track.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import pl.karol202.sciorder.client.common.extensions.observeEvent
+import pl.karol202.sciorder.client.common.extensions.observeNonNull
+import pl.karol202.sciorder.client.common.extensions.showSnackbar
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.ui.adapters.TrackedOrderAdapter
+import pl.karol202.sciorder.client.user.ui.adapter.TrackedOrderAdapter
 import pl.karol202.sciorder.client.user.viewmodel.OrderTrackViewModel
 import pl.karol202.sciorder.client.user.viewmodel.ProductViewModel
 
@@ -21,8 +24,7 @@ class OrderTrackFragment : Fragment()
 	private val productViewModel by sharedViewModel<ProductViewModel>()
 	private val orderTrackViewModel by sharedViewModel<OrderTrackViewModel>()
 
-	private val adapter = TrackedOrderAdapter(productSupplier = { id -> productViewModel.findProductById(id) },
-	                                          orderRemoveListener = { order -> orderTrackViewModel.removeOrder(order) })
+	private val adapter = TrackedOrderAdapter { order -> orderTrackViewModel.removeOrder(order) }
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
 		inflater.inflate(R.layout.fragment_order_track, container, false)
@@ -33,13 +35,17 @@ class OrderTrackFragment : Fragment()
 		initRecycler()
 
 		observeOrders()
+		observeProducts()
 		observeLoading()
 		observeOrdersError()
 	}
 
 	private fun initRefreshLayout()
 	{
-		refreshLayoutOrderTrack.setOnRefreshListener { orderTrackViewModel.refreshOrders() }
+		refreshLayoutOrderTrack.setOnRefreshListener {
+			productViewModel.refreshProducts()
+			orderTrackViewModel.refreshOrders()
+		}
 	}
 
 	private fun initRecycler()
@@ -48,29 +54,15 @@ class OrderTrackFragment : Fragment()
 		recyclerOrderTrack.adapter = adapter
 	}
 
-	private fun observeOrders()
-	{
-		orderTrackViewModel.ordersLiveData.observe(viewLifecycleOwner, Observer { orders ->
-			orders?.let { adapter.orders = it }
-		})
-	}
+	private fun observeOrders() =
+			orderTrackViewModel.ordersLiveData.observeNonNull(viewLifecycleOwner) { adapter.items = it }
 
-	private fun observeLoading()
-	{
-		orderTrackViewModel.loadingLiveData.observe(viewLifecycleOwner, Observer { loading ->
-			refreshLayoutOrderTrack.isRefreshing = loading
-		})
-	}
+	private fun observeProducts() =
+			productViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.products = it }
 
-	private fun observeOrdersError()
-	{
-		orderTrackViewModel.errorEventLiveData.observe(viewLifecycleOwner, Observer { event ->
-			if(event.getIfNotConsumed() == Unit) showErrorSnackbar(R.string.text_loading_error)
-		})
-	}
+	private fun observeLoading() =
+			orderTrackViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutOrderTrack.isRefreshing = it }
 
-	private fun showErrorSnackbar(@StringRes message: Int)
-	{
-		Snackbar.make(view ?: return, message, Snackbar.LENGTH_LONG).show()
-	}
+	private fun observeOrdersError() =
+			orderTrackViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }
 }

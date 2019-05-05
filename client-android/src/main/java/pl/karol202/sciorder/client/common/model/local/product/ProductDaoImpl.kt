@@ -11,10 +11,19 @@ private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) : P
 {
 	@WorkerThread
 	override fun insertProducts(products: List<Product>) =
-		productEntityDao.insertProducts(products.map { it.toProductEntity() })
+			productEntityDao.insertProducts(products.map { it.toProductEntity() })
 
 	@WorkerThread
-	override fun deleteProducts() = productEntityDao.deleteProducts()
+	override fun updateProducts(products: List<Product>) =
+			productEntityDao.updateProducts(products.map { it.toProductEntity() })
+
+	@WorkerThread
+	override fun deleteProducts() =
+			productEntityDao.deleteProducts()
+
+	@WorkerThread
+	override fun deleteProducts(products: List<Product>) =
+			productEntityDao.deleteProducts(products.map { it.toProductEntity() })
 
 	override fun getAllProducts(): LiveData<List<Product>> =
 			Transformations.map(productEntityDao.getAllProducts()) { entities -> entities.map { it.toProduct() } }

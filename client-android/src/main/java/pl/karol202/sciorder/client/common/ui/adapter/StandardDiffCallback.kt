@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.user.ui.adapters
+package pl.karol202.sciorder.client.common.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 

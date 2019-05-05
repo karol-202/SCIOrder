@@ -13,7 +13,10 @@ abstract class ExtendedDialogFragment : DialogFragment(),
 		get() = arguments
 		set(value) { arguments = value }
 
-	fun show(fragmentManager: FragmentManager) = show(fragmentManager, javaClass.name)
+	fun show(fragmentManager: FragmentManager?)
+	{
+		fragmentManager?.let { show(it, javaClass.name) }
+	}
 }
 
 abstract class ExtendedAlertDialog : AlertDialog,
