@@ -1,7 +1,6 @@
 package pl.karol202.sciorder.client.admin.ui.adapter
 
 import android.view.View
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_order.*
 import pl.karol202.sciorder.client.admin.R
@@ -28,13 +27,13 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 
 		override fun bind(item: Order)
 		{
-			spinnerOrderStatus.setSelection(item.status.ordinal)
 			spinnerOrderStatus.setOnItemSelectedListener {
 				val newStatus = it as Order.Status
 				if(newStatus == item.status) return@setOnItemSelectedListener
 				orderStatusUpdateListener(item, newStatus)
 				spinnerOrderStatus.setSelection(item.status.ordinal)
 			}
+			spinnerOrderStatus.setSelection(item.status.ordinal)
 
 			textOrderLocationValue.text = item.details.location
 
@@ -48,16 +47,30 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 		}
 	}
 
+	var orders = emptyList<Order>()
+		set(value)
+		{
+			field = value
+			updateItems()
+		}
 	var products = emptyList<Product>()
 		set(value)
 		{
 			val addedProducts = value - field
 			val removedProducts = field - value
 			val affectedIds = (addedProducts + removedProducts).map { it._id }.distinct()
+
 			field = value
+
 			items.withIndex().filter { (_, order) ->
 				order.entries.any { entry -> entry.productId in affectedIds }
 			}.forEach { notifyItemChanged(it.index) }
+		}
+	var orderFilter = emptySet<Order.Status>()
+		set(value)
+		{
+			field = value
+			updateItems()
 		}
 
 	override fun getLayout(viewType: Int) = R.layout.item_order
@@ -65,4 +78,9 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 	override fun createViewHolder(view: View, viewType: Int) = ViewHolder(view)
 
 	override fun getItemId(item: Order) = item.id
+
+	private fun updateItems()
+	{
+		items = orders.filter { it.status in orderFilter }
+	}
 }

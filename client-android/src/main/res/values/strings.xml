@@ -8,6 +8,9 @@
 
 	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
 	<string name="dialog_order">Zamówienie</string>
+	<string name="dialog_order_filter">Filtruj zamówienia</string>
+
+	<string name="menu_item_order_filter">Filtruj zamówienia</string>
 
     <string name="text_status">Status</string>
 	<string name="text_location">Miejsce dostawy</string>
@@ -38,6 +41,7 @@
 	<string name="action_order">Zamów</string>
 	<string name="action_add_to_order">Dodaj do zamówienia</string>
 	<string name="action_order_edit">Zatwierdź</string>
+	<string name="action_filter_edit">Zatwierdź</string>
 	<string name="action_remove">Usuń</string>
 	<string name="action_cancel">Anuluj</string>
 

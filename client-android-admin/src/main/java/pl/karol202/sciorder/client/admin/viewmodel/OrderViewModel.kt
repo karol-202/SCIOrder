@@ -1,9 +1,6 @@
 package pl.karol202.sciorder.client.admin.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -31,8 +28,18 @@ class OrderViewModel(private val orderDao: OrderDao,
 			if(resourceState is ResourceState.Failure) value = Event(Unit)
 		}
 	}
+
 	private val _updateErrorEventLiveData = MediatorLiveData<Event<Unit>>()
 	val updateErrorEventLiveData: LiveData<Event<Unit>> = _updateErrorEventLiveData
+
+	private val _orderFilterLiveData = MutableLiveData<Set<Order.Status>>().apply {
+		value = Order.Status.values().toSet() - Order.Status.DONE
+	}
+	val orderFilterLiveData: LiveData<Set<Order.Status>> = _orderFilterLiveData
+
+	var orderFilter: Set<Order.Status>
+		get() = _orderFilterLiveData.value ?: emptySet()
+		set(value) = _orderFilterLiveData.postValue(value)
 
 	fun refreshOrders() = ordersResource.reload()
 
