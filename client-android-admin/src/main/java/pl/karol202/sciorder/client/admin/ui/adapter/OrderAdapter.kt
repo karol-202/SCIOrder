@@ -42,7 +42,7 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 			recyclerOrder.adapter = OrderEntryAdapter(item.entries.map { it.toOrderedProduct() })
 		}
 
-		private fun Order.Entry.toOrderedProduct() = products.find { it._id == productId }?.let { product ->
+		private fun Order.Entry.toOrderedProduct() = products.find { it.id == productId }?.let { product ->
 			OrderedProduct(randomUUIDString(), product, quantity, parameters)
 		}
 	}
@@ -58,7 +58,7 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 		{
 			val addedProducts = value - field
 			val removedProducts = field - value
-			val affectedIds = (addedProducts + removedProducts).map { it._id }.distinct()
+			val affectedIds = (addedProducts + removedProducts).map { it.id }.distinct()
 
 			field = value
 

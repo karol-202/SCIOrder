@@ -12,8 +12,8 @@ import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
 import pl.karol202.sciorder.client.common.repository.ResourceState
 import pl.karol202.sciorder.common.model.Order
 
-class OrderViewModel(private val orderDao: OrderDao,
-                     private val orderApi: OrderApi) : ViewModel()
+class OrdersViewModel(private val orderDao: OrderDao,
+                      private val orderApi: OrderApi) : ViewModel()
 {
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)

@@ -13,8 +13,8 @@ import pl.karol202.sciorder.client.common.model.remote.product.ProductApi
 import pl.karol202.sciorder.client.common.repository.ResourceState
 import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryImpl
 
-class ProductViewModel(productDao: ProductDao,
-                       productApi: ProductApi) : ViewModel()
+class ProductsViewModel(productDao: ProductDao,
+                        productApi: ProductApi) : ViewModel()
 {
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)

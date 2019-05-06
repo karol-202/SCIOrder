@@ -13,7 +13,9 @@ import pl.karol202.sciorder.server.dao.DatabaseProductDao
 import pl.karol202.sciorder.server.routes.order.getOrders
 import pl.karol202.sciorder.server.routes.order.postOrderStatus
 import pl.karol202.sciorder.server.routes.order.putOrder
+import pl.karol202.sciorder.server.routes.product.deleteProduct
 import pl.karol202.sciorder.server.routes.product.getProducts
+import pl.karol202.sciorder.server.routes.product.postProduct
 import pl.karol202.sciorder.server.routes.product.putProduct
 
 val productDao = DatabaseProductDao()
@@ -38,6 +40,11 @@ private fun Application.routing() = routing {
 	route("products") {
 		getProducts(productDao)
 		putProduct(productDao)
+		postProduct(productDao)
+
+		route("{id}") {
+			deleteProduct(productDao)
+		}
 	}
 	route("orders") {
 		getOrders(orderDao)

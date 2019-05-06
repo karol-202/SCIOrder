@@ -6,9 +6,10 @@
 	<string name="fragment_order_track">Zamówienia</string>
 	<string name="fragment_orders">Zamówienia</string>
 
-	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
 	<string name="dialog_order">Zamówienie</string>
 	<string name="dialog_order_filter">Filtruj zamówienia</string>
+	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
+	<string name="dialog_product_remove">Na pewno chcesz usunąć %s z listy produktów?</string>
 
 	<string name="menu_item_order_filter">Filtruj zamówienia</string>
 

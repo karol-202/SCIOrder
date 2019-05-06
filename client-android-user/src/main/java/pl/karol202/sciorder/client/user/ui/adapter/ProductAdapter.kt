@@ -30,5 +30,5 @@ class ProductAdapter : DynamicAdapter<Product>()
 
 	override fun createViewHolder(view: View, viewType: Int) = ViewHolder(view)
 
-	override fun getItemId(item: Product) = item._id
+	override fun getItemId(item: Product) = item.id
 }

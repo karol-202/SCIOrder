@@ -15,8 +15,8 @@ import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
 import pl.karol202.sciorder.common.model.Order
 
-class OrderViewModel(private val orderDao: OrderDao,
-                     private val orderApi: OrderApi) : ViewModel()
+class OrdersViewModel(private val orderDao: OrderDao,
+                      private val orderApi: OrderApi) : ViewModel()
 {
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)
@@ -51,7 +51,7 @@ class OrderViewModel(private val orderDao: OrderDao,
 	fun orderAll(details: Order.Details)
 	{
 		val products = getProductsInOrder() ?: return
-		val entries = products.map { with(it) { Order.Entry(product._id, quantity, parameters) } }
+		val entries = products.map { with(it) { Order.Entry(product.id, quantity, parameters) } }
 		executeOrder(Order.create(entries, details))
 
 		_orderLiveData.postValue(emptyList())
@@ -59,7 +59,7 @@ class OrderViewModel(private val orderDao: OrderDao,
 
 	fun orderSingleProduct(orderedProduct: OrderedProduct, details: Order.Details)
 	{
-		val entry = with(orderedProduct) { Order.Entry(product._id, quantity, parameters) }
+		val entry = with(orderedProduct) { Order.Entry(product.id, quantity, parameters) }
 		executeOrder(Order.create(listOf(entry), details))
 	}
 

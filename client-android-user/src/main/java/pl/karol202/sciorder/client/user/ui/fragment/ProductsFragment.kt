@@ -22,15 +22,15 @@ import pl.karol202.sciorder.client.user.ui.dialog.fragment.ProductOrderEditDialo
 import pl.karol202.sciorder.client.user.ui.listener.OnOrderDetailsSetListener
 import pl.karol202.sciorder.client.user.ui.listener.OnProductOrderEditListener
 import pl.karol202.sciorder.client.user.ui.listener.OnProductOrderListener
-import pl.karol202.sciorder.client.user.viewmodel.OrderViewModel
-import pl.karol202.sciorder.client.user.viewmodel.ProductViewModel
+import pl.karol202.sciorder.client.user.viewmodel.OrdersViewModel
+import pl.karol202.sciorder.client.user.viewmodel.ProductsViewModel
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Product
 
 class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {
-	private val productViewModel by sharedViewModel<ProductViewModel>()
-	private val orderViewModel by sharedViewModel<OrderViewModel>()
+	private val productsViewModel by sharedViewModel<ProductsViewModel>()
+	private val ordersViewModel by sharedViewModel<OrdersViewModel>()
 
 	private val productsAdapter = ProductAdapter().apply {
 		onProductSelectListener = { product -> showProductOrderDialog(product) }
@@ -60,7 +60,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 
 	private fun initRefreshLayout()
 	{
-		refreshLayoutProducts.setOnRefreshListener { productViewModel.refreshProducts() }
+		refreshLayoutProducts.setOnRefreshListener { productsViewModel.refreshProducts() }
 	}
 
 	private fun initProductsRecycler()
@@ -80,28 +80,28 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 	private fun initOrderButton()
 	{
 		buttonOrderSheet.setOnClickListener {
-			showAllProductsOrderDialog(orderViewModel.getProductsInOrder() ?: return@setOnClickListener)
+			showAllProductsOrderDialog(ordersViewModel.getProductsInOrder() ?: return@setOnClickListener)
 		}
 	}
 
 	private fun observeProducts() =
-			productViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { productsAdapter.items = it }
+			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { productsAdapter.items = it }
 
 	private fun observeLoading() =
-			productViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutProducts.isRefreshing = it }
+			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutProducts.isRefreshing = it }
 
 	private fun observeProductError() =
-			productViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showErrorSnackbar(R.string.text_loading_error) }
+			productsViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showErrorSnackbar(R.string.text_loading_error) }
 
 	private fun observeOrder() =
-			orderViewModel.orderLiveData.observeNonNull(viewLifecycleOwner) { products ->
+			ordersViewModel.orderLiveData.observeNonNull(viewLifecycleOwner) { products ->
 				textOrderSheetProducts.text = resources.getQuantityString(R.plurals.text_products, products.size, products.size)
 				orderAdapter.items = products
 				buttonOrderSheet.isEnabled = products.isNotEmpty()
 			}
 
 	private fun observeOrderError() =
-			orderViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showErrorSnackbar(R.string.text_order_error) }
+			ordersViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showErrorSnackbar(R.string.text_order_error) }
 
 	private fun showErrorSnackbar(@StringRes message: Int)
 	{
@@ -121,7 +121,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 	{
 		ctx.alertDialog {
 			setMessage(ctx.getString(R.string.dialog_ordered_product_remove, product.product.name))
-			setPositiveButton(R.string.action_remove) { _, _ -> orderViewModel.removeFromOrder(product) }
+			setPositiveButton(R.string.action_remove) { _, _ -> ordersViewModel.removeFromOrder(product) }
 			setNegativeButton(R.string.action_cancel, null)
 		}.show()
 	}
@@ -137,14 +137,14 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 
 	override fun onProductOrder(orderedProduct: OrderedProduct) = showSingleProductOrderDialog(orderedProduct)
 
-	override fun onProductAddToOrder(orderedProduct: OrderedProduct) = orderViewModel.addToOrder(orderedProduct)
+	override fun onProductAddToOrder(orderedProduct: OrderedProduct) = ordersViewModel.addToOrder(orderedProduct)
 
 	override fun onProductOrderEdit(oldProduct: OrderedProduct, newProduct: OrderedProduct) =
-			orderViewModel.replaceInOrder(oldProduct, newProduct)
+			ordersViewModel.replaceInOrder(oldProduct, newProduct)
 
 	override fun onOrderDetailsSet(case: OnOrderDetailsSetListener.Case, details: Order.Details) = when(case)
 	{
-		is OnOrderDetailsSetListener.Case.OrderSingle -> orderViewModel.orderSingleProduct(case.orderedProduct, details)
-		is OnOrderDetailsSetListener.Case.OrderAll -> orderViewModel.orderAll(details)
+		is OnOrderDetailsSetListener.Case.OrderSingle -> ordersViewModel.orderSingleProduct(case.orderedProduct, details)
+		is OnOrderDetailsSetListener.Case.OrderAll -> ordersViewModel.orderAll(details)
 	}
 }

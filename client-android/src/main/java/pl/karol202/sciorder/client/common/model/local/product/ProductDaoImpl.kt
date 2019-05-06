@@ -23,5 +23,5 @@ private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) : P
 
 	private fun ProductEntity.toProduct() = Product(id, name, available, parameters)
 
-	private fun Product.toProductEntity() = ProductEntity(_id, name, available, parameters)
+	private fun Product.toProductEntity() = ProductEntity(id, name, available, parameters)
 }

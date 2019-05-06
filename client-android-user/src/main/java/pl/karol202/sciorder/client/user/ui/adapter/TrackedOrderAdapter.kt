@@ -36,7 +36,7 @@ class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : Dy
 
 		private fun Order.Entry.getOrderedProduct() =
 				OrderedProduct(randomUUIDString(),
-				               products.find { it._id == productId } ?: createPlaceholderProduct(),
+				               products.find { it.id == productId } ?: createPlaceholderProduct(),
 				               quantity,
 				               parameters)
 
@@ -49,7 +49,7 @@ class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : Dy
 		{
 			val addedProducts = value - field
 			val removedProducts = field - value
-			val affectedIds = (addedProducts + removedProducts).map { it._id }.distinct()
+			val affectedIds = (addedProducts + removedProducts).map { it.id }.distinct()
 			field = value
 			items.withIndex().filter { (_, order) ->
 				order.entries.any { entry -> entry.productId in affectedIds }
