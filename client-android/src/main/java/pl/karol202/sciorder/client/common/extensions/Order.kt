@@ -3,7 +3,7 @@ package pl.karol202.sciorder.client.common.extensions
 import pl.karol202.sciorder.client.common.R
 import pl.karol202.sciorder.common.model.Order
 
-// Status could be whatever, will be ignored by the server
+// Status and id could be whatever, will be ignored by the server
 fun Order.Companion.create(entries: List<Order.Entry>, details: Order.Details) =
 		Order("", entries, details, Order.Status.WAITING)
 

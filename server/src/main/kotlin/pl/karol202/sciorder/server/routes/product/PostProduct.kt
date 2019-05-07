@@ -8,9 +8,12 @@ import io.ktor.routing.Route
 import io.ktor.routing.post
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.dao.ProductDao
+import pl.karol202.sciorder.server.extensions.isValid
+import pl.karol202.sciorder.server.util.badRequest
 
 fun Route.postProduct(productDao: ProductDao) = post {
 	val product = call.receive<Product>()
+	if(!product.isValid()) return@post badRequest()
 	val success = productDao.updateProduct(product)
 	call.respond(if(success) HttpStatusCode.OK else HttpStatusCode.NotFound)
 }

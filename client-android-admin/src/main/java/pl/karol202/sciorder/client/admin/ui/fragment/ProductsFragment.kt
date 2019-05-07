@@ -56,7 +56,7 @@ class ProductsFragment : Fragment()
 	}
 
 	private fun observeProducts() =
-			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.items = it }
+			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.products = it }
 
 	private fun observeLoading() =
 			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutProducts.isRefreshing = it }
@@ -65,7 +65,9 @@ class ProductsFragment : Fragment()
 			productsViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }
 
 	private fun observeUpdateError() =
-			productsViewModel.updateErrorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_update_error) }
+			productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
+				if(it == ProductsViewModel.UpdateResult.FAILURE) showSnackbar(R.string.text_update_error)
+			}
 
 	private fun navigateToProductEditFragment(product: Product?)
 	{

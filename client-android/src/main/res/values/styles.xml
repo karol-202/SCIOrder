@@ -4,6 +4,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="colorControlNormal">@color/color_control_normal_toolbar</item>
+
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 

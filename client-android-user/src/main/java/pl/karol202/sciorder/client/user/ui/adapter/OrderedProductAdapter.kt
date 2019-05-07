@@ -20,6 +20,9 @@ class OrderedProductAdapter : DynamicAdapter<OrderedProduct>()
 		}
 	}
 
+	var orderedProducts: List<OrderedProduct>
+		get() = items
+		set(value) { items = value }
 	var onProductEditListener: ((OrderedProduct) -> Unit)? = null
 	var onProductRemoveListener: ((OrderedProduct) -> Unit)? = null
 

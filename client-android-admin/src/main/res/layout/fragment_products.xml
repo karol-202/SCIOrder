@@ -7,13 +7,13 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/refreshLayoutProducts"
-            android:paddingBottom="88dp">
+            android:id="@+id/refreshLayoutProducts">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerProducts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:paddingBottom="88dp"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

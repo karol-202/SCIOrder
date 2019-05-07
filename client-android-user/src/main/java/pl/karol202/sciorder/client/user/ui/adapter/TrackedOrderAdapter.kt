@@ -44,6 +44,9 @@ class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : Dy
 				Product(randomUUIDString(), ctx.getString(R.string.unknown_product), false, emptyList())
 	}
 
+	var orders: List<Order>
+		get() = items
+		set(value) { items = value }
 	var products = emptyList<Product>()
 		set(value)
 		{

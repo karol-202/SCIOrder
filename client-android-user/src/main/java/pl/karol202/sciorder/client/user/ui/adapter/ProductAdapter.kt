@@ -24,6 +24,9 @@ class ProductAdapter : DynamicAdapter<Product>()
 		}
 	}
 
+	var products: List<Product>
+		get() = items
+		set(value) { items = value }
 	var onProductSelectListener: ((Product) -> Unit)? = null
 
 	override fun getLayout(viewType: Int) = R.layout.item_product

@@ -18,6 +18,11 @@ import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryIm
 class ProductsViewModel(private val productDao: ProductDao,
                         private val productApi: ProductApi) : ViewModel()
 {
+	enum class UpdateResult
+	{
+		SUCCESS, FAILURE
+	}
+
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)
 
@@ -34,28 +39,42 @@ class ProductsViewModel(private val productDao: ProductDao,
 		}
 	}
 
-	private val _updateErrorEventLiveData = MediatorLiveData<Event<Unit>>()
-	val updateErrorEventLiveData: LiveData<Event<Unit>> = _updateErrorEventLiveData
+	private val _updateEventLiveData = MediatorLiveData<Event<UpdateResult>>()
+	val updateEventLiveData: LiveData<Event<UpdateResult>> = _updateEventLiveData
 
 	fun refreshProducts() = productsResource.reload()
 
+	fun addProduct(product: Product)
+	{
+		fun addProductLocally(product: Product) = coroutineScope.launch { productDao.insert(listOf(product)) }
+
+		productApi.addProduct(product).handleResponse { addProductLocally(it) }
+	}
+
+	fun updateProduct(product: Product)
+	{
+		fun updateProductLocally(product: Product) = coroutineScope.launch { productDao.update(listOf(product)) }
+
+		productApi.updateProduct(product).handleResponse { updateProductLocally(product) }
+	}
+
 	fun removeProduct(product: Product)
 	{
-		val liveData = productApi.removeProduct(product.id)
-		handleProductRemoveResponse(product, liveData)
+		fun removeProductLocally(product: Product) = coroutineScope.launch { productDao.delete(listOf(product)) }
+
+		productApi.removeProduct(product.id).handleResponse { removeProductLocally(product) }
 	}
 
-	private fun handleProductRemoveResponse(product: Product, liveData: LiveData<ApiResponse<Unit>>)
+	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit)
 	{
-		_updateErrorEventLiveData.addSource(liveData) { apiResponse ->
-			_updateErrorEventLiveData.removeSource(liveData)
-			if(apiResponse is ApiResponse.Success) removeProductLocally(product)
-			else _updateErrorEventLiveData.value = Event(Unit)
+		_updateEventLiveData.addSource(this) { apiResponse ->
+			_updateEventLiveData.removeSource(this)
+			if(apiResponse is ApiResponse.Success)
+			{
+				_updateEventLiveData.value = Event(UpdateResult.SUCCESS)
+				successListener(apiResponse.data)
+			}
+			else _updateEventLiveData.value = Event(UpdateResult.FAILURE)
 		}
-	}
-
-	private fun removeProductLocally(product: Product)
-	{
-		coroutineScope.launch { productDao.delete(listOf(product)) }
 	}
 }

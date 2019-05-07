@@ -85,7 +85,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 	}
 
 	private fun observeProducts() =
-			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { productsAdapter.items = it }
+			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { productsAdapter.products = it }
 
 	private fun observeLoading() =
 			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutProducts.isRefreshing = it }
@@ -96,7 +96,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 	private fun observeOrder() =
 			ordersViewModel.orderLiveData.observeNonNull(viewLifecycleOwner) { products ->
 				textOrderSheetProducts.text = resources.getQuantityString(R.plurals.text_products, products.size, products.size)
-				orderAdapter.items = products
+				orderAdapter.orderedProducts = products
 				buttonOrderSheet.isEnabled = products.isNotEmpty()
 			}
 

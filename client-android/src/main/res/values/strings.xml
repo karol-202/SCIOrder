@@ -5,6 +5,7 @@
     <string name="fragment_products">Produkty</string>
 	<string name="fragment_order_track">Zamówienia</string>
 	<string name="fragment_orders">Zamówienia</string>
+	<string name="fragment_product_edit">Edytuj produkt</string>
 
 	<string name="dialog_order">Zamówienie</string>
 	<string name="dialog_order_filter">Filtruj zamówienia</string>
@@ -19,6 +20,15 @@
     <string name="text_quantity">Liczba</string>
     <string name="text_quantity_value">x%d</string>
 
+    <string name="text_product_edit_name">Nazwa</string>
+    <string name="text_product_edit_name_no_value">Podaj nazwę</string>
+    <string name="text_product_edit_available">Dostępny</string>
+    <string name="text_product_edit_params">Parametry</string>
+    <string name="text_product_edit_param_new">Nowy parametr</string>
+    <string name="text_product_edit_param_name">Nazwa</string>
+    <string name="text_product_edit_param_type">Typ</string>
+    <string name="text_product_edit_param_name_no_value">Podaj nazwę</string>
+
     <string name="text_product_param_int_range_closed">Od %d do %d</string>
     <string name="text_product_param_int_range_left_closed">Minimalnie %d</string>
     <string name="text_product_param_int_range_right_closed">Maksymalnie %d</string>
@@ -32,6 +42,7 @@
     <string name="text_loading_error">Błąd ładowania</string>
     <string name="text_order_error">Błąd zamówienia</string>
 	<string name="text_update_error">Błąd aktualizacji</string>
+	<string name="text_product_edit_error">Produkt zawiera błędy</string>
 
 	<plurals name="text_products">
 		<item quantity="one">%d produkt</item>
@@ -45,6 +56,12 @@
 	<string name="action_filter_edit">Zatwierdź</string>
 	<string name="action_remove">Usuń</string>
 	<string name="action_cancel">Anuluj</string>
+
+    <string name="product_param_type_text">Tekst</string>
+    <string name="product_param_type_int">Liczba całkowita</string>
+    <string name="product_param_type_float">Liczba rzeczywista</string>
+    <string name="product_param_type_bool">Logiczny</string>
+    <string name="product_param_type_enum">Wyliczeniowy</string>
 
 	<string name="order_status_waiting">Oczekiwanie</string>
 	<string name="order_status_in_progress">Przygotowywanie</string>

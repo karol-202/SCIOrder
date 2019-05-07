@@ -22,6 +22,10 @@ class ProductAdapter(private val productEditListener: (Product) -> Unit,
 		}
 	}
 
+	var products: List<Product>
+		get() = items
+		set(value) { items = value }
+
 	override fun getLayout(viewType: Int) = R.layout.item_product
 
 	override fun createViewHolder(view: View, viewType: Int) = ViewHolder(view)

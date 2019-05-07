@@ -26,5 +26,5 @@ data class Order(val _id: String,
 		}
 	}
 
-	override val id = _id
+	override val id get() = _id
 }

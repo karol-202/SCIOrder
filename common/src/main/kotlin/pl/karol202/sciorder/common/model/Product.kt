@@ -7,6 +7,8 @@ data class Product(val _id: String,
 				   val available: Boolean,
 				   val parameters: List<Parameter>) : Serializable, IdProvider
 {
+	companion object;
+
 	data class Parameter(val name: String,
 	                     val type: Type,
 	                     val attributes: Attributes) : Serializable
@@ -22,5 +24,5 @@ data class Product(val _id: String,
 		                      val defaultValue: String? = null) : Serializable
 	}
 
-	override val id = _id
+	override val id get() = _id
 }

@@ -52,7 +52,7 @@ class OrderTrackFragment : Fragment()
 	}
 
 	private fun observeOrders() =
-			ordersTrackViewModel.ordersLiveData.observeNonNull(viewLifecycleOwner) { adapter.items = it }
+			ordersTrackViewModel.ordersLiveData.observeNonNull(viewLifecycleOwner) { adapter.orders = it }
 
 	private fun observeProducts() =
 			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.products = it }
