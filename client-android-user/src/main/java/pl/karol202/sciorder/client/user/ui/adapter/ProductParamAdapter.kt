@@ -145,14 +145,19 @@ class ProductParamAdapter(context: Context,
 
 		init
 		{
-			checkProductParamBool.setOnCheckedChangeListener { _, checked -> onUpdateListener?.invoke(checked) }
+			checkProductParamBool.setOnCheckedChangeListener { _, checked -> invokeListener(checked) }
 		}
 
 		override fun bind(param: Product.Parameter, onUpdateListener: (Any?) -> Unit)
 		{
 			super.bind(param, onUpdateListener)
-			checkProductParamBool.isChecked = param.attributes.defaultValue?.toBoolean() ?: false
+			val value = param.attributes.defaultValue?.toBoolean() ?: false
+
+			checkProductParamBool.isChecked = value
+			invokeListener(value)
 		}
+
+		private fun invokeListener(value: Boolean) = onUpdateListener?.invoke(value)
 	}
 
 	class ViewHolderEnum(containerView: View) : ViewHolder(containerView)

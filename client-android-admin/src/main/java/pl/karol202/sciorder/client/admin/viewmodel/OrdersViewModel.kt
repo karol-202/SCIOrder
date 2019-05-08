@@ -33,7 +33,7 @@ class OrdersViewModel(private val orderDao: OrderDao,
 	val updateErrorEventLiveData: LiveData<Event<Unit>> = _updateErrorEventLiveData
 
 	private val _orderFilterLiveData = MutableLiveData<Set<Order.Status>>().apply {
-		value = Order.Status.values().toSet() - Order.Status.DONE
+		value = Order.Status.values().toSet() - Order.Status.DONE - Order.Status.REJECTED
 	}
 	val orderFilterLiveData: LiveData<Set<Order.Status>> = _orderFilterLiveData
 

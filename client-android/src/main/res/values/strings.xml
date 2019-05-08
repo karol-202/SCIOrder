@@ -11,6 +11,7 @@
 	<string name="dialog_order_filter">Filtruj zamówienia</string>
 	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
 	<string name="dialog_product_remove">Na pewno chcesz usunąć %s z listy produktów?</string>
+	<string name="dialog_product_edit_param_attr_enum_new_value">Podaj nazwę</string>
 
 	<string name="menu_item_order_filter">Filtruj zamówienia</string>
 
@@ -25,9 +26,14 @@
     <string name="text_product_edit_available">Dostępny</string>
     <string name="text_product_edit_params">Parametry</string>
     <string name="text_product_edit_param_new">Nowy parametr</string>
-    <string name="text_product_edit_param_name">Nazwa</string>
+	<string name="text_product_edit_param_name">Nazwa</string>
+	<string name="text_product_edit_param_name_no_value">Podaj nazwę</string>
     <string name="text_product_edit_param_type">Typ</string>
-    <string name="text_product_edit_param_name_no_value">Podaj nazwę</string>
+    <string name="text_product_edit_param_attr_default">Domyślna wartość</string>
+	<string name="text_product_edit_param_attr_min">Minimum</string>
+	<string name="text_product_edit_param_attr_max">Maksimum</string>
+	<string name="text_product_edit_param_attr_enum">Wartości</string>
+	<string name="text_product_edit_param_attr_enum_value_new">Nowa wartość</string>
 
     <string name="text_product_param_int_range_closed">Od %d do %d</string>
     <string name="text_product_param_int_range_left_closed">Minimalnie %d</string>
@@ -54,6 +60,7 @@
 	<string name="action_add_to_order">Dodaj do zamówienia</string>
 	<string name="action_order_edit">Zatwierdź</string>
 	<string name="action_filter_edit">Zatwierdź</string>
+	<string name="action_enum_value_add">Dodaj</string>
 	<string name="action_remove">Usuń</string>
 	<string name="action_cancel">Anuluj</string>
 

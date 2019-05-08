@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.client.admin.ui.adapter
 
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_product_param.*
 import kotlinx.android.synthetic.main.item_product_param_null.*
 import pl.karol202.sciorder.client.admin.R
@@ -11,7 +12,8 @@ import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.common.model.Product
 
-class ProductParamAdapter : DynamicAdapter<ProductParamAdapter.ParameterWithId?>()
+class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parameter>) -> Unit) :
+		DynamicAdapter<ProductParamAdapter.ParameterWithId?>()
 {
 	data class ParameterWithId(val id: String,
 	                           var parameter: Product.Parameter)
@@ -41,6 +43,8 @@ class ProductParamAdapter : DynamicAdapter<ProductParamAdapter.ParameterWithId?>
 			editTextProductEditParamName.addAfterTextChangedListener { onNameChanged(it) }
 
 			spinnerProductEditParamType.adapter = ProductParamTypeAdapter()
+
+			recyclerProductEditParamAttrs.layoutManager = LinearLayoutManager(ctx)
 		}
 
 		override fun bind(item: ParameterWithId?)
@@ -53,12 +57,20 @@ class ProductParamAdapter : DynamicAdapter<ProductParamAdapter.ParameterWithId?>
 			spinnerProductEditParamType.setSelection(item.type.ordinal)
 
 			buttonProductEditParamRemove.setOnClickListener { removeParam(item) }
+
+			updateAttrsAdapter(item.parameter)
+		}
+
+		private fun updateAttrsAdapter(parameter: Product.Parameter)
+		{
+			recyclerProductEditParamAttrs.adapter = ProductParamAttrAdapter.fromParam(parameter) { onAttributesChanged(it) }
 		}
 
 		private fun onNameChanged(name: String?)
 		{
 			item?.name = name ?: ""
 			updateNameError(name)
+			onParamsUpdate()
 		}
 
 		private fun updateNameError(name: String?)
@@ -70,6 +82,14 @@ class ProductParamAdapter : DynamicAdapter<ProductParamAdapter.ParameterWithId?>
 		private fun onTypeChanged(type: Product.Parameter.Type)
 		{
 			item?.type = type
+			item?.parameter?.let { updateAttrsAdapter(it) }
+			onParamsUpdate()
+		}
+
+		private fun onAttributesChanged(attributes: Product.Parameter.Attributes)
+		{
+			item?.attributes = attributes
+			onParamsUpdate()
 		}
 	}
 
@@ -90,11 +110,13 @@ class ProductParamAdapter : DynamicAdapter<ProductParamAdapter.ParameterWithId?>
 	var parameters: List<Product.Parameter>
 		get() = items.mapNotNull { it?.parameter }
 		set(value) { items = value.map { it.withId() } + ParameterWithId.NULL }
-
-	init
-	{
-		parameters = emptyList() // Invokes setter in order for NULL item to be added
-	}
+	override var items: List<ParameterWithId?>
+		get() = super.items
+		set(value)
+		{
+			super.items = value
+			onParamsUpdate()
+		}
 
 	private fun Product.Parameter.withId(id: String = randomUUIDString()) = ParameterWithId(id, this)
 
@@ -126,4 +148,6 @@ class ProductParamAdapter : DynamicAdapter<ProductParamAdapter.ParameterWithId?>
 	{
 		items = items - param
 	}
+
+	private fun onParamsUpdate() = paramsUpdateListener(parameters)
 }

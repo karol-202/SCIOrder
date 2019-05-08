@@ -4,7 +4,33 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+
+abstract class ExtendedFragment : Fragment(),
+                                  ComponentWithInstanceState,
+                                  ComponentWithArguments
+{
+	override var componentArguments: Bundle?
+		get() = arguments
+		set(value) { arguments = value }
+
+	override val instanceState = InstanceState()
+
+	override fun onViewStateRestored(savedInstanceState: Bundle?)
+	{
+		super.onViewStateRestored(savedInstanceState)
+		instanceState.onRestoreInstanceState(savedInstanceState)
+		onRestoreInstanceState()
+	}
+
+	open fun onRestoreInstanceState() { }
+
+	override fun onSaveInstanceState(outState: Bundle)
+	{
+		instanceState.onSaveInstanceState(outState)
+	}
+}
 
 abstract class ExtendedDialogFragment : DialogFragment(),
                                         ComponentWithArguments
@@ -19,14 +45,10 @@ abstract class ExtendedDialogFragment : DialogFragment(),
 	}
 }
 
-abstract class ExtendedAlertDialog : AlertDialog,
-                                     ComponentWithInstanceState
+abstract class ExtendedAlertDialog(context: Context) : AlertDialog(context),
+                                                       ComponentWithInstanceState
 {
 	override val instanceState = InstanceState()
-
-	constructor(context: Context) : super(context)
-
-	constructor(context: Context, themeResId: Int) : super(context, themeResId)
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{

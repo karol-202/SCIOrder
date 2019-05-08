@@ -12,17 +12,20 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.admin.R
 import pl.karol202.sciorder.client.admin.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.admin.viewmodel.ProductsViewModel
+import pl.karol202.sciorder.client.common.components.ExtendedFragment
 import pl.karol202.sciorder.client.common.extensions.*
 import pl.karol202.sciorder.common.model.Product
 
-class ProductEditFragment : Fragment()
+class ProductEditFragment : ExtendedFragment()
 {
 	private val productsViewModel by sharedViewModel<ProductsViewModel>()
 
 	private val arguments by navArgs<ProductEditFragmentArgs>()
 	private val productId by lazy { arguments.productId }
 
-	private val adapter = ProductParamAdapter()
+	private val adapter = ProductParamAdapter { savedParameters = it }
+
+	private var savedParameters by instanceState<List<Product.Parameter>>()
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
 			inflater.inflate(R.layout.fragment_product_edit, container, false)
@@ -53,6 +56,7 @@ class ProductEditFragment : Fragment()
 	private fun initParamsRecycler()
 	{
 		recyclerProductEditParams.layoutManager = LinearLayoutManager(ctx)
+		recyclerProductEditParams.isNestedScrollingEnabled = false
 		recyclerProductEditParams.adapter = adapter
 	}
 
@@ -84,6 +88,11 @@ class ProductEditFragment : Fragment()
 		checkProductEditAvailable.isChecked = product.available
 
 		adapter.parameters = product.parameters
+	}
+
+	override fun onRestoreInstanceState()
+	{
+		savedParameters?.let { adapter.parameters = it }
 	}
 
 	private fun apply()

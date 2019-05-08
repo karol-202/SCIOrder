@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 
 abstract class DynamicAdapter<T> : BasicAdapter<T>()
 {
-	protected var items = emptyList<T>()
+	protected open var items = emptyList<T>()
 		set(value)
 		{
 			val result = DiffUtil.calculateDiff(StandardDiffCallback(field, value) { getItemId(this) })

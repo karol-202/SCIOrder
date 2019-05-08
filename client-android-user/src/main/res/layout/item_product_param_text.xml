@@ -19,7 +19,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="12dp"
-			android:layout_marginEnd="24dp">
+			android:layout_marginEnd="24dp" app:hintEnabled="false">
 
 		<com.google.android.material.textfield.TextInputEditText
 				android:id="@+id/editTextProductParamText"

@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.admin.R
+import pl.karol202.sciorder.client.admin.ui.DividerItemDecorationWithoutLast
 import pl.karol202.sciorder.client.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.admin.viewmodel.ProductsViewModel
 import pl.karol202.sciorder.client.common.extensions.*
@@ -46,8 +48,9 @@ class ProductsFragment : Fragment()
 
 	private fun initRecycler()
 	{
-		recyclerProducts.layoutManager = LinearLayoutManager(context)
+		recyclerProducts.layoutManager = LinearLayoutManager(ctx)
 		recyclerProducts.adapter = adapter
+		recyclerProducts.addItemDecoration(DividerItemDecoration(ctx, DividerItemDecoration.VERTICAL))
 	}
 
 	private fun initAddButton()
