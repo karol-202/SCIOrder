@@ -4,6 +4,9 @@ plugins {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    //Koin
+    api "org.koin:koin-core:$koinVersion"
 }
 
 compileKotlin {

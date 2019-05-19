@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.server.dao
+package pl.karol202.sciorder.server.database
 
 import pl.karol202.sciorder.common.model.Product
 

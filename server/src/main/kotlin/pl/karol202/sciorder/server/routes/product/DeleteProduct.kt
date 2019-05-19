@@ -5,7 +5,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
-import pl.karol202.sciorder.server.dao.ProductDao
+import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.util.badRequest
 
 fun Route.deleteProduct(productDao: ProductDao) = delete {

@@ -1,9 +1,3 @@
-buildscript {
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
-    }
-}
-
 plugins {
     id 'kotlin'
     id 'application'
@@ -15,12 +9,20 @@ mainClassName = 'io.ktor.server.netty.EngineMain'
 dependencies {
     implementation project(':common')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+
+    // Ktor
     implementation "io.ktor:ktor-server-netty:$ktorVersion"
     implementation "io.ktor:ktor-gson:$ktorVersion"
-    implementation "ch.qos.logback:logback-classic:1.2.3"
-    implementation "org.litote.kmongo:kmongo:3.10.0"
-    implementation "org.litote.kmongo:kmongo-async:3.10.0"
-    implementation "org.litote.kmongo:kmongo-coroutine:3.10.0"
+
+    // KMongo
+    implementation "org.litote.kmongo:kmongo:$kmongoVersion"
+    implementation "org.litote.kmongo:kmongo-async:$kmongoVersion"
+    implementation "org.litote.kmongo:kmongo-coroutine:$kmongoVersion"
+
+    // Koin
+    implementation "org.koin:koin-ktor:$koinVersion"
+
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 compileKotlin {

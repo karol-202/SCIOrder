@@ -6,7 +6,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.util.pipeline.PipelineContext
-import pl.karol202.sciorder.server.dao.OrderDao
+import pl.karol202.sciorder.server.database.OrderDao
 
 fun Route.getOrders(orderDao: OrderDao) = get {
 	val all = call.parameters["all"] == "true"

@@ -1,13 +1,13 @@
-package pl.karol202.sciorder.server.dao
+package pl.karol202.sciorder.server.database
 
 import org.litote.kmongo.`in`
 import org.litote.kmongo.eq
 import org.litote.kmongo.set
 import pl.karol202.sciorder.common.model.Order
 
-class DatabaseOrderDao : OrderDao
+class DatabaseOrderDao(database: KMongoDatabase) : OrderDao
 {
-    private val ordersCollection = Database.getCollection<Order>()
+    private val ordersCollection = database.getCollection<Order>()
 
 	override suspend fun addOrder(order: Order)
 	{

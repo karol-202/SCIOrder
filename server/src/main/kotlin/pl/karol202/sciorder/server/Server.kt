@@ -8,8 +8,11 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.routing.route
 import io.ktor.routing.routing
-import pl.karol202.sciorder.server.dao.DatabaseOrderDao
-import pl.karol202.sciorder.server.dao.DatabaseProductDao
+import io.ktor.util.KtorExperimentalAPI
+import org.koin.ktor.ext.Koin
+import org.koin.ktor.ext.inject
+import pl.karol202.sciorder.server.database.OrderDao
+import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.routes.order.getOrders
 import pl.karol202.sciorder.server.routes.order.postOrderStatus
 import pl.karol202.sciorder.server.routes.order.putOrder
@@ -17,16 +20,18 @@ import pl.karol202.sciorder.server.routes.product.deleteProduct
 import pl.karol202.sciorder.server.routes.product.getProducts
 import pl.karol202.sciorder.server.routes.product.postProduct
 import pl.karol202.sciorder.server.routes.product.putProduct
+import pl.karol202.sciorder.server.util.propertiesByKtorEnvironment
 
-val productDao = DatabaseProductDao()
-val orderDao = DatabaseOrderDao()
+const val ARG_MONGODB = "mongodb.uri"
 
+@KtorExperimentalAPI
 fun Application.main()
 {
     configure()
     routing()
 }
 
+@KtorExperimentalAPI
 private fun Application.configure()
 {
     install(DefaultHeaders)
@@ -34,9 +39,16 @@ private fun Application.configure()
     install(ContentNegotiation) {
         gson()
     }
+	install(Koin) {
+		propertiesByKtorEnvironment(environment, ARG_MONGODB)
+		modules(KoinModules.databaseModule())
+	}
 }
 
 private fun Application.routing() = routing {
+	val productDao by inject<ProductDao>()
+	val orderDao by inject<OrderDao>()
+
 	route("products") {
 		getProducts(productDao)
 		putProduct(productDao)

@@ -7,10 +7,9 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.put
 import pl.karol202.sciorder.common.model.Product
-import pl.karol202.sciorder.server.dao.ProductDao
+import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.extensions.isValid
 import pl.karol202.sciorder.server.util.badRequest
-import pl.karol202.sciorder.server.util.hasDuplicates
 import pl.karol202.sciorder.server.util.newStringId
 
 fun Route.putProduct(productDao: ProductDao) = put {

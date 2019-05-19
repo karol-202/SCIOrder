@@ -11,7 +11,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -33,34 +32,29 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    //Android
-    api "androidx.core:core-ktx:1.0.1"
-    api "androidx.fragment:fragment-ktx:1.0.0"
-    api "androidx.appcompat:appcompat:1.1.0-alpha04"
-    api "androidx.constraintlayout:constraintlayout:2.0.0-alpha3"
-    api "androidx.preference:preference:1.0.0"
-    api "com.google.android.material:material:1.0.0"
-    api 'androidx.recyclerview:recyclerview:1.0.0'
-
-    //Lifecycle
-    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    // Android
+    api "androidx.appcompat:appcompat:$appCompatVersion"
+    api "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    api "androidx.preference:preference:$preferenceVersion"
+    api "com.google.android.material:material:$materialVersion"
+    api "androidx.recyclerview:recyclerview:$recyclerViewVersion"
     api "android.arch.lifecycle:extensions:$lifecycleVersion"
 
-    //Room
+    // KTX
+    api "androidx.core:core-ktx:$ktxCoreVersion"
+    api "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModel"
+
+    // Room
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     kapt           "android.arch.persistence.room:compiler:$roomVersion"
 
-    //Koin
-    api "org.koin:koin-core:$koinVersion"
+    // Koin
     api "org.koin:koin-android:$koinVersion"
     api "org.koin:koin-androidx-viewmodel:$koinVersion"
 
-    implementation "com.squareup.moshi:moshi:1.8.0"
-    implementation "com.squareup.retrofit2:retrofit:2.5.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
-    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
 }

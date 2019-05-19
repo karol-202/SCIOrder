@@ -1,11 +1,11 @@
-package pl.karol202.sciorder.server.dao
+package pl.karol202.sciorder.server.database
 
 import org.litote.kmongo.coroutine.updateOne
 import pl.karol202.sciorder.common.model.Product
 
-class DatabaseProductDao : ProductDao
+class DatabaseProductDao(database: KMongoDatabase) : ProductDao
 {
-    private val productsCollection = Database.getCollection<Product>()
+    private val productsCollection = database.getCollection<Product>()
 
 	override suspend fun addProduct(product: Product)
 	{

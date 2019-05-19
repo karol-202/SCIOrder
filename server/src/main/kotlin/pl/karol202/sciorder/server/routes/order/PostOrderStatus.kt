@@ -6,7 +6,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.server.dao.OrderDao
+import pl.karol202.sciorder.server.database.OrderDao
 import pl.karol202.sciorder.server.util.badRequest
 
 fun Route.postOrderStatus(orderDao: OrderDao) = post {
