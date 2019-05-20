@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 
 object KoinCommon
 {
-	private const val SERVER_URL = "http://192.168.0.12:8080/"
+	private const val SERVER_URL = "https://sciorder.herokuapp.com"
 
 	fun loadModules() = loadKoinModules(databaseModule(),
 	                                    networkingModule())

@@ -10,5 +10,6 @@
             android:id="@+id/editProductEditParamAttrEnumNewValue"
             android:inputType="text"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"/>
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="8dp"/>
 </LinearLayout>

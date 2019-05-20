@@ -92,7 +92,7 @@ class ProductEditFragment : ExtendedFragment()
 
 	override fun onRestoreInstanceState()
 	{
-		savedParameters?.let { adapter.parameters = it }
+		adapter.parameters = savedParameters ?: emptyList()
 	}
 
 	private fun apply()
