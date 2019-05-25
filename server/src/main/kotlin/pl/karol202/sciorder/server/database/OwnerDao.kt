@@ -1,0 +1,14 @@
+package pl.karol202.sciorder.server.database
+
+import pl.karol202.sciorder.common.model.Owner
+
+interface OwnerDao
+{
+	suspend fun insertOwner(owner: Owner)
+
+	suspend fun updateOwnerHash(id: String, hash: String): Boolean
+
+	suspend fun getOwnerByName(name: String): Owner?
+
+	suspend fun getOwnerByNameAndHash(name: String, hash: String): Owner?
+}

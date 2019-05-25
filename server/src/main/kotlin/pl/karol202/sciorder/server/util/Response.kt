@@ -6,6 +6,14 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.util.pipeline.PipelineContext
 
-suspend fun PipelineContext<*, ApplicationCall>.ok() = call.respond(HttpStatusCode.OK)
+private typealias Context = PipelineContext<*, ApplicationCall>
 
-suspend fun PipelineContext<*, ApplicationCall>.badRequest() = call.respond(HttpStatusCode.BadRequest)
+suspend fun Context.ok() = call.respond(HttpStatusCode.OK)
+
+suspend fun Context.ok(message: Any) = call.respond(HttpStatusCode.OK, message)
+
+suspend fun Context.created(message: Any) = call.respond(HttpStatusCode.Created, message)
+
+suspend fun Context.badRequest() = call.respond(HttpStatusCode.BadRequest)
+
+suspend fun Context.notFound() = call.respond(HttpStatusCode.NotFound)

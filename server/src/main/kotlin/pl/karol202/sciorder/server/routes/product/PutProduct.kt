@@ -10,13 +10,16 @@ import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.extensions.isValid
 import pl.karol202.sciorder.server.util.badRequest
+import pl.karol202.sciorder.server.util.created
 import pl.karol202.sciorder.server.util.newStringId
 
 fun Route.putProduct(productDao: ProductDao) = put {
-	val product = call.receive<Product>().overrideId()
+	val ownerId = call.parameters["ownerId"] ?: return@put badRequest()
+	val product = call.receive<Product>().overrideId(ownerId)
 	if(!product.isValid()) return@put badRequest()
-	productDao.addProduct(product)
-	call.respond(HttpStatusCode.Created, product)
+	productDao.insertProduct(product)
+	created(product)
 }
 
-private fun Product.overrideId() = copy(_id = newStringId<Product>())
+private fun Product.overrideId(ownerId: String) = copy(_id = newStringId<Product>(),
+                                                       ownerId = ownerId)

@@ -7,9 +7,12 @@ import io.ktor.routing.Route
 import io.ktor.routing.delete
 import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.util.badRequest
+import pl.karol202.sciorder.server.util.notFound
+import pl.karol202.sciorder.server.util.ok
 
 fun Route.deleteProduct(productDao: ProductDao) = delete {
-	val productId = call.parameters["id"] ?: return@delete badRequest()
-	val success = productDao.removeProduct(productId)
-	call.respond(if(success) HttpStatusCode.OK else HttpStatusCode.NotFound)
+	val ownerId = call.parameters["ownerId"] ?: return@delete badRequest()
+	val productId = call.parameters["productId"] ?: return@delete badRequest()
+	val success = productDao.deleteProduct(ownerId, productId)
+	if(success) ok() else notFound()
 }

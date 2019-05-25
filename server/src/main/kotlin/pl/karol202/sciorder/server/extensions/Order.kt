@@ -4,11 +4,11 @@ import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.database.ProductDao
 
-suspend fun Order.isValid(productDao: ProductDao) = entries.all { it.isValid(productDao) }
+suspend fun Order.isValid(productDao: ProductDao) = entries.all { it.isValid(productDao, ownerId) }
 
-private suspend fun Order.Entry.isValid(productDao: ProductDao): Boolean
+private suspend fun Order.Entry.isValid(productDao: ProductDao, ownerId: String): Boolean
 {
-	val product = productDao.getProductById(productId) ?: return false
+	val product = productDao.getProductById(ownerId, productId) ?: return false
 	return product.available && quantity > 0 && isParamsListValid(product)
 }
 

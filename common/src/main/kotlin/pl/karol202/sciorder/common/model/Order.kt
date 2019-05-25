@@ -3,6 +3,7 @@ package pl.karol202.sciorder.common.model
 import java.io.Serializable
 
 data class Order(val _id: String,
+                 val ownerId: String,
                  val entries: List<Entry>,
                  val details: Details,
                  val status: Status) : Serializable, IdProvider

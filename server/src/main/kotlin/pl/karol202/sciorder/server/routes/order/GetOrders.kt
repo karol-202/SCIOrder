@@ -7,20 +7,23 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.util.pipeline.PipelineContext
 import pl.karol202.sciorder.server.database.OrderDao
+import pl.karol202.sciorder.server.util.badRequest
+import pl.karol202.sciorder.server.util.ok
 
 fun Route.getOrders(orderDao: OrderDao) = get {
+	val ownerId = call.parameters["ownerId"] ?: return@get badRequest()
 	val all = call.parameters["all"] == "true"
-	if(all) getAllOrders(orderDao)
-	else getOrdersById(orderDao)
+	if(all) getAllOrders(orderDao, ownerId)
+	else getOrdersById(orderDao, ownerId)
 }
 
-private suspend fun PipelineContext<*, ApplicationCall>.getAllOrders(orderDao: OrderDao)
+private suspend fun PipelineContext<*, ApplicationCall>.getAllOrders(orderDao: OrderDao, ownerId: String)
 {
-	call.respond(orderDao.getAllOrders())
+	ok(orderDao.getOrdersByOwner(ownerId))
 }
 
-private suspend fun PipelineContext<*, ApplicationCall>.getOrdersById(orderDao: OrderDao)
+private suspend fun PipelineContext<*, ApplicationCall>.getOrdersById(orderDao: OrderDao, ownerId: String)
 {
 	val ids = call.parameters.getAll("id") ?: emptyList()
-	call.respond(orderDao.getOrdersById(ids))
+	ok(orderDao.getOrdersById(ownerId, ids))
 }

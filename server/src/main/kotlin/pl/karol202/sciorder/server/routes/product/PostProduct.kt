@@ -10,10 +10,13 @@ import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.extensions.isValid
 import pl.karol202.sciorder.server.util.badRequest
+import pl.karol202.sciorder.server.util.notFound
+import pl.karol202.sciorder.server.util.ok
 
 fun Route.postProduct(productDao: ProductDao) = post {
+	val ownerId = call.parameters["ownerId"] ?: return@post badRequest()
 	val product = call.receive<Product>()
-	if(!product.isValid()) return@post badRequest()
-	val success = productDao.updateProduct(product)
-	call.respond(if(success) HttpStatusCode.OK else HttpStatusCode.NotFound)
+	if(!product.isValid() || product.ownerId != ownerId) return@post badRequest()
+	val success = productDao.updateProduct(ownerId, product)
+	if(success) ok() else notFound()
 }

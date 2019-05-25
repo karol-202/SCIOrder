@@ -5,7 +5,10 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import pl.karol202.sciorder.server.database.ProductDao
+import pl.karol202.sciorder.server.util.badRequest
+import pl.karol202.sciorder.server.util.ok
 
 fun Route.getProducts(productDao: ProductDao) = get {
-	call.respond(productDao.getAllProducts())
+	val ownerId = call.parameters["ownerId"] ?: return@get badRequest()
+	ok(productDao.getProductsByOwner(ownerId))
 }

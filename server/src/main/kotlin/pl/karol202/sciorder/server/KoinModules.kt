@@ -7,6 +7,7 @@ object KoinModules
 {
 	fun databaseModule() = module {
 		single { KMongoDatabase(getProperty(ARG_MONGODB)) }
+		single<OwnerDao> { DatabaseOwnerDao(get()) }
 		single<ProductDao> { DatabaseProductDao(get()) }
 		single<OrderDao> { DatabaseOrderDao(get()) }
 	}

@@ -4,13 +4,13 @@ import pl.karol202.sciorder.common.model.Order
 
 interface OrderDao
 {
-	suspend fun addOrder(order: Order)
+	suspend fun insertOrder(order: Order)
 
-	suspend fun updateOrderStatus(id: String, status: Order.Status): Boolean
+	suspend fun updateOrderStatus(ownerId: String, id: String, status: Order.Status): Boolean
 
-	suspend fun removeAllOrders()
+	suspend fun deleteOrdersByOwner(ownerId: String)
 
-	suspend fun getAllOrders(): List<Order>
+	suspend fun getOrdersByOwner(ownerId: String): List<Order>
 
-	suspend fun getOrdersById(ids: List<String>): List<Order>
+	suspend fun getOrdersById(ownerId: String, ids: List<String>): List<Order>
 }

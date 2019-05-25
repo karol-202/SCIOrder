@@ -4,13 +4,13 @@ import pl.karol202.sciorder.common.model.Product
 
 interface ProductDao
 {
-	suspend fun addProduct(product: Product)
+	suspend fun insertProduct(product: Product)
 
-	suspend fun updateProduct(product: Product): Boolean
+	suspend fun updateProduct(ownerId: String, product: Product): Boolean
 
-	suspend fun removeProduct(id: String): Boolean
+	suspend fun deleteProduct(ownerId: String, id: String): Boolean
 
-	suspend fun getAllProducts(): List<Product>
+	suspend fun getProductsByOwner(ownerId: String): List<Product>
 
-	suspend fun getProductById(id: String): Product?
+	suspend fun getProductById(ownerId: String, id: String): Product?
 }

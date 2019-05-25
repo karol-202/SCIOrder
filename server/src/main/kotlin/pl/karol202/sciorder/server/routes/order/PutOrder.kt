@@ -11,13 +11,17 @@ import pl.karol202.sciorder.server.database.OrderDao
 import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.extensions.isValid
 import pl.karol202.sciorder.server.util.badRequest
+import pl.karol202.sciorder.server.util.created
 import pl.karol202.sciorder.server.util.newStringId
 
 fun Route.putOrder(productDao: ProductDao, orderDao: OrderDao) = put {
-	val order = call.receive<Order>().override()
+	val ownerId = call.parameters["ownerId"] ?: return@put badRequest()
+	val order = call.receive<Order>().override(ownerId)
 	if(!order.isValid(productDao)) return@put badRequest()
-	orderDao.addOrder(order)
-	call.respond(HttpStatusCode.Created, order)
+	orderDao.insertOrder(order)
+	created(order)
 }
 
-private fun Order.override() = copy(_id = newStringId<Order>(), status = Order.Status.WAITING)
+private fun Order.override(ownerId: String) = copy(_id = newStringId<Order>(),
+                                                   ownerId = ownerId,
+                                                   status = Order.Status.WAITING)
