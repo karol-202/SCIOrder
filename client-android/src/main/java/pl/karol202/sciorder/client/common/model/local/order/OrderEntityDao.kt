@@ -24,6 +24,10 @@ interface OrderEntityDao
 	@Delete
 	fun delete(orders: List<OrderEntity>)
 
+	@WorkerThread
+	@Query("DELETE FROM ${OrderEntity.TABLE_NAME}")
+	fun deleteAll()
+
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME}")
 	fun getAll(): LiveData<List<OrderEntity>>
 }

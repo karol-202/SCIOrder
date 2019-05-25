@@ -13,6 +13,9 @@ interface OrderApi
 	@POST("orders/{id}/status")
 	fun updateOrderStatus(@Path("id") id: String, @Query("status") status: Order.Status): LiveData<ApiResponse<Unit>>
 
+	@DELETE("orders")
+	fun removeAllOrders(): LiveData<ApiResponse<Unit>>
+
 	@GET("orders?all=true")
 	fun getAllOrders(): LiveData<ApiResponse<List<Order>>>
 

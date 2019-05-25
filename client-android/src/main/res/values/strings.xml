@@ -9,11 +9,14 @@
 
 	<string name="dialog_order">Zamówienie</string>
 	<string name="dialog_order_filter">Filtruj zamówienia</string>
+	<string name="dialog_orders_remove">Na pewno chcesz usunąć wszystkie zamówienia?</string>
+	<string name="dialog_orders_remove_message">Użytkownicy stracą możliwość śledzenia zamówień</string>
 	<string name="dialog_ordered_product_remove">Na pewno chcesz usunąć %s z zamówienia?</string>
 	<string name="dialog_product_remove">Na pewno chcesz usunąć %s z listy produktów?</string>
 	<string name="dialog_product_edit_param_attr_enum_new_value">Podaj nazwę</string>
 
 	<string name="menu_item_order_filter">Filtruj zamówienia</string>
+	<string name="menu_item_orders_remove">Usuń wszystkie zamówienia</string>
 
     <string name="text_status">Status</string>
 	<string name="text_location">Miejsce dostawy</string>

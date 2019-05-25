@@ -6,6 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import pl.karol202.sciorder.client.admin.repository.order.OrderRepositoryImpl
 import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.common.extensions.handleResponse
 import pl.karol202.sciorder.client.common.model.local.order.OrderDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
@@ -45,21 +46,21 @@ class OrdersViewModel(private val orderDao: OrderDao,
 
 	fun updateOrderStatus(order: Order, status: Order.Status)
 	{
-		val liveData = orderApi.updateOrderStatus(order.id, status)
-		handleOrderUpdateResponse(order, status, liveData)
+		fun updateOrderLocally(order: Order, status: Order.Status) =
+				coroutineScope.launch { orderDao.updateStatus(order.id, status) }
+
+		orderApi.updateOrderStatus(order.id, status).handleResponse { updateOrderLocally(order, status) }
 	}
 
-	private fun handleOrderUpdateResponse(order: Order, status: Order.Status, liveData: LiveData<ApiResponse<Unit>>)
+	fun removeAllOrders()
 	{
-		_updateErrorEventLiveData.addSource(liveData) { apiResponse ->
-			_updateErrorEventLiveData.removeSource(liveData)
-			if(apiResponse is ApiResponse.Success) updateOrderLocally(order, status)
-			else _updateErrorEventLiveData.value = Event(Unit)
-		}
+		fun removeOrdersLocally() = coroutineScope.launch { orderDao.deleteAll() }
+
+		orderApi.removeAllOrders().handleResponse { removeOrdersLocally() }
 	}
 
-	private fun updateOrderLocally(order: Order, status: Order.Status)
-	{
-		coroutineScope.launch { orderDao.updateStatus(order.id, status) }
-	}
+	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =
+			handleResponse(_updateErrorEventLiveData,
+			               successListener = successListener,
+			               failureListener = { _updateErrorEventLiveData.value = Event(Unit) })
 }

@@ -13,6 +13,7 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import pl.karol202.sciorder.server.database.OrderDao
 import pl.karol202.sciorder.server.database.ProductDao
+import pl.karol202.sciorder.server.routes.order.deleteOrders
 import pl.karol202.sciorder.server.routes.order.getOrders
 import pl.karol202.sciorder.server.routes.order.postOrderStatus
 import pl.karol202.sciorder.server.routes.order.putOrder
@@ -61,6 +62,7 @@ private fun Application.routing() = routing {
 	route("orders") {
 		getOrders(orderDao)
 		putOrder(productDao, orderDao)
+		deleteOrders(orderDao)
 
 		route("{id}/status") {
 			postOrderStatus(orderDao)

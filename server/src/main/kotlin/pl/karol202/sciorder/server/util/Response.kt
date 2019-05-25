@@ -6,4 +6,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.util.pipeline.PipelineContext
 
+suspend fun PipelineContext<*, ApplicationCall>.ok() = call.respond(HttpStatusCode.OK)
+
 suspend fun PipelineContext<*, ApplicationCall>.badRequest() = call.respond(HttpStatusCode.BadRequest)

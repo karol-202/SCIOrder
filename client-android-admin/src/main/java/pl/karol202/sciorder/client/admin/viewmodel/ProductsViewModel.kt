@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.common.extensions.handleResponse
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.client.common.model.local.product.ProductDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
@@ -65,16 +66,11 @@ class ProductsViewModel(private val productDao: ProductDao,
 		productApi.removeProduct(product.id).handleResponse { removeProductLocally(product) }
 	}
 
-	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit)
-	{
-		_updateEventLiveData.addSource(this) { apiResponse ->
-			_updateEventLiveData.removeSource(this)
-			if(apiResponse is ApiResponse.Success)
-			{
-				_updateEventLiveData.value = Event(UpdateResult.SUCCESS)
-				successListener(apiResponse.data)
-			}
-			else _updateEventLiveData.value = Event(UpdateResult.FAILURE)
-		}
-	}
+	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =
+			handleResponse(_updateEventLiveData,
+			               successListener = {
+				               _updateEventLiveData.value = Event(UpdateResult.SUCCESS)
+				               successListener(it)
+			               },
+			               failureListener = { _updateEventLiveData.value = Event(UpdateResult.FAILURE) })
 }

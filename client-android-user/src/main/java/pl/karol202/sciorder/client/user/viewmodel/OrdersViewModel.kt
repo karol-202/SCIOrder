@@ -9,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.create
+import pl.karol202.sciorder.client.common.extensions.handleResponse
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.local.order.OrderDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
@@ -65,21 +66,13 @@ class OrdersViewModel(private val orderDao: OrderDao,
 
 	private fun executeOrder(order: Order)
 	{
-		val liveData = orderApi.addOrder(order)
-		handleOrderAddResponse(liveData)
+		fun saveOrderLocally(order: Order) = coroutineScope.launch { orderDao.insert(listOf(order)) }
+
+		orderApi.addOrder(order).handleResponse { saveOrderLocally(order) }
 	}
 
-	private fun handleOrderAddResponse(liveData: LiveData<ApiResponse<Order>>)
-	{
-		_errorEventLiveData.addSource(liveData) { apiResponse ->
-			_errorEventLiveData.removeSource(liveData)
-			if(apiResponse is ApiResponse.Success) saveOrderLocally(apiResponse.data)
-			else _errorEventLiveData.value = Event(Unit)
-		}
-	}
-
-	private fun saveOrderLocally(order: Order)
-	{
-		coroutineScope.launch { orderDao.insert(listOf(order)) }
-	}
+	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =
+			handleResponse(_errorEventLiveData,
+			               successListener = successListener,
+			               failureListener = { _errorEventLiveData.value = Event(Unit) })
 }

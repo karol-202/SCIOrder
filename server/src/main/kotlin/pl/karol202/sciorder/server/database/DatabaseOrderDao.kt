@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.server.database
 
+import org.litote.kmongo.EMPTY_BSON
 import org.litote.kmongo.`in`
 import org.litote.kmongo.eq
 import org.litote.kmongo.set
@@ -17,6 +18,11 @@ class DatabaseOrderDao(database: KMongoDatabase) : OrderDao
 	override suspend fun updateOrderStatus(id: String, status: Order.Status) =
 		ordersCollection.updateOne(Order::_id eq id, set(Order::status, status))
 			.let { it.wasAcknowledged() && it.matchedCount > 0 }
+
+	override suspend fun removeAllOrders()
+	{
+		ordersCollection.deleteMany(EMPTY_BSON)
+	}
 
 	override suspend fun getAllOrders() = ordersCollection.find().toList()
 

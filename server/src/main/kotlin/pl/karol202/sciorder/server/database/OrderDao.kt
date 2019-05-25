@@ -8,6 +8,8 @@ interface OrderDao
 
 	suspend fun updateOrderStatus(id: String, status: Order.Status): Boolean
 
+	suspend fun removeAllOrders()
+
 	suspend fun getAllOrders(): List<Order>
 
 	suspend fun getOrdersById(ids: List<String>): List<Order>

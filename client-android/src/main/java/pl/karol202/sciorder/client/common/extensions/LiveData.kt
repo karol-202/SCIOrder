@@ -2,8 +2,10 @@ package pl.karol202.sciorder.client.common.extensions
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 
 fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, observer: (T?) -> Unit) =
 		observe(lifecycleOwner, Observer<T> { observer(it) })
@@ -29,3 +31,13 @@ private class DisposableObserver<T>(private val liveData: LiveData<T>,
 fun <T> LiveData<T>.observeOnceNonNull(observer: (T) -> Unit) =
 		DisposableObserver(this) { value -> if(value != null) true.also { observer(value) } else false }.plug()
 
+fun <T> LiveData<ApiResponse<T>>.handleResponse(targetLiveData: MediatorLiveData<*>,
+                                                successListener: (T) -> Unit,
+                                                failureListener: () -> Unit)
+{
+	targetLiveData.addSource(this) { apiResponse ->
+		targetLiveData.removeSource(this)
+		if(apiResponse is ApiResponse.Success) successListener(apiResponse.data)
+		else failureListener()
+	}
+}

@@ -72,17 +72,28 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 	private fun observeOrderFilter() =
 			ordersViewModel.orderFilterLiveData.observeNonNull(viewLifecycleOwner) { adapter.orderFilter = it }
 
+	override fun onMenuItemSelected(itemId: Int) = when(itemId)
+	{
+		R.id.item_orders_remove -> showOrdersRemoveDialog()
+		R.id.item_order_filter -> showOrderFilterDialog()
+		else -> null
+	}
+
+	private fun showOrdersRemoveDialog()
+	{
+		ctx.alertDialog {
+			setTitle(R.string.dialog_orders_remove)
+			setMessage(R.string.dialog_orders_remove_message)
+			setPositiveButton(R.string.action_remove) { _, _ -> ordersViewModel.removeAllOrders() }
+			setNegativeButton(R.string.action_cancel, null)
+		}.show()
+	}
+
 	private fun showOrderFilterDialog() =
 			OrderFilterDialogFragment.create(ordersViewModel.orderFilter, this).show(fragmentManager)
 
 	override fun onOrderFilterSet(filter: Set<Order.Status>)
 	{
 		ordersViewModel.orderFilter = filter
-	}
-
-	override fun onMenuItemSelected(itemId: Int) = when(itemId)
-	{
-		R.id.item_order_filter -> showOrderFilterDialog()
-		else -> null
 	}
 }

@@ -21,6 +21,9 @@ class OrderDaoImpl(private val orderEntityDao: OrderEntityDao) : OrderDao
 	@WorkerThread
 	override fun delete(items: List<Order>) = orderEntityDao.delete(items.map { it.toOrderEntity() })
 
+	@WorkerThread
+	override fun deleteAll() = orderEntityDao.deleteAll()
+
 	override fun getAll(): LiveData<List<Order>> =
 		Transformations.map(orderEntityDao.getAll()) { entities -> entities.map { it.toOrder() } }
 
