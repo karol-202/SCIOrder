@@ -1,14 +1,15 @@
-package pl.karol202.sciorder.client.common.repository
+package pl.karol202.sciorder.client.common.repository.resource
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import pl.karol202.sciorder.client.common.extensions.MediatorLiveData
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 
-abstract class Resource<T> @MainThread constructor(protected val databaseSource: LiveData<T>) // LiveData can only be modified from main thread
+// LiveData can only be modified from main thread
+abstract class MixedResource<T> @MainThread constructor(protected val databaseSource: LiveData<T>) : Resource<T>
 {
-	private val liveData = MediatorLiveData<ResourceState<T>>().apply { value = ResourceState.Loading(null) }
-	val asLiveData: LiveData<ResourceState<T>> = liveData
+	private val liveData = MediatorLiveData<ResourceState<T>>(ResourceState.Loading(null))
+	override val asLiveData: LiveData<ResourceState<T>> = liveData
 
 	private var fetching = false
 
@@ -22,7 +23,7 @@ abstract class Resource<T> @MainThread constructor(protected val databaseSource:
 	}
 
 	@MainThread // LiveData can only be modified from main thread
-	fun reload()
+	override fun reload()
 	{
 		if(fetching) return
 		liveData.removeSource(databaseSource)

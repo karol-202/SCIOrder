@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.admin.ui.fragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_orders.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -22,10 +22,8 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 
 	private val adapter = OrderAdapter { order, status -> ordersViewModel.updateOrderStatus(order, status) }
 
+	override val layoutRes = R.layout.fragment_orders
 	override val menuRes = R.menu.menu_fragment_orders
-
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-		inflater.inflate(R.layout.fragment_orders, container, false)
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{

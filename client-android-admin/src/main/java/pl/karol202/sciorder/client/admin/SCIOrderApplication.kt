@@ -6,6 +6,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import pl.karol202.sciorder.client.admin.viewmodel.OrdersViewModel
+import pl.karol202.sciorder.client.admin.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.admin.viewmodel.ProductsViewModel
 import pl.karol202.sciorder.client.common.KoinCommon
 
@@ -22,7 +23,8 @@ class SCIOrderApplication : Application()
 	}
 
 	private fun viewModelsModule() = module {
-		viewModel { ProductsViewModel(get(), get()) }
-		viewModel { OrdersViewModel(get(), get()) }
+		viewModel { OwnerViewModel(get(), get()) }
+		viewModel { ProductsViewModel(get(), get(), get()) }
+		viewModel { OrdersViewModel(get(), get(), get()) }
 	}
 }

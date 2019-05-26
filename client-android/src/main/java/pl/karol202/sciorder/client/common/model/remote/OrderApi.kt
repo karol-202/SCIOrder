@@ -2,7 +2,6 @@ package pl.karol202.sciorder.client.common.model.remote
 
 import androidx.lifecycle.LiveData
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import retrofit2.http.*
 
 interface OrderApi
@@ -27,7 +26,7 @@ interface OrderApi
 			LiveData<ApiResponse<List<Order>>>
 
 	@GET("owner/{ownerId}/orders")
-	fun getOrdersById(@Path("ownerId") ownerId: String,
-	                  @Query("orderId") ids: List<String>):
+	fun getOrdersByIds(@Path("ownerId") ownerId: String,
+	                   @Query("orderId") ids: List<String>):
 			LiveData<ApiResponse<List<Order>>>
 }

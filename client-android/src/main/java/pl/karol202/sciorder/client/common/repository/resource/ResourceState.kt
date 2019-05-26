@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.common.repository
+package pl.karol202.sciorder.client.common.repository.resource
 
 sealed class ResourceState<T>(open val data: T?)
 {

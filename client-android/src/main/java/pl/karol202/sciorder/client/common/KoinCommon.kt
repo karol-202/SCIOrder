@@ -10,6 +10,7 @@ import pl.karol202.sciorder.client.common.model.local.product.toProductDao
 import pl.karol202.sciorder.client.common.model.remote.LiveDataCallAdapterFactory
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.common.model.remote.ProductApi
+import pl.karol202.sciorder.client.common.settings.Settings
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -20,7 +21,8 @@ object KoinCommon
 	private const val SERVER_URL = "https://sciorder.herokuapp.com"
 
 	fun loadModules() = loadKoinModules(databaseModule(),
-	                                    networkingModule())
+	                                    networkingModule(),
+	                                    settingsModule())
 
 	private fun databaseModule() = module {
 		single { LocalDatabase.create(androidContext()) }
@@ -47,5 +49,9 @@ object KoinCommon
 
 		single { get<Retrofit>().create<ProductApi>() }
 		single { get<Retrofit>().create<OrderApi>() }
+	}
+
+	private fun settingsModule() = module {
+		single { Settings.createPreferencesSettings(androidContext()) }
 	}
 }

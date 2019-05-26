@@ -1,19 +1,17 @@
 package pl.karol202.sciorder.client.user.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import pl.karol202.sciorder.client.common.components.InflatedFragment
 import pl.karol202.sciorder.client.common.extensions.*
-import pl.karol202.sciorder.client.user.R
 import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.user.R
 import pl.karol202.sciorder.client.user.ui.adapter.OrderedProductAdapter
 import pl.karol202.sciorder.client.user.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.user.ui.dialog.fragment.OrderDialogFragment
@@ -27,7 +25,7 @@ import pl.karol202.sciorder.client.user.viewmodel.ProductsViewModel
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Product
 
-class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
+class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {
 	private val productsViewModel by sharedViewModel<ProductsViewModel>()
 	private val ordersViewModel by sharedViewModel<OrdersViewModel>()
@@ -40,8 +38,7 @@ class ProductsFragment : Fragment(), OnProductOrderListener, OnProductOrderEditL
 		onProductRemoveListener = { showProductRemoveDialog(it) }
 	}
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-			inflater.inflate(R.layout.fragment_products, container, false)
+	override val layoutRes = R.layout.fragment_products
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{

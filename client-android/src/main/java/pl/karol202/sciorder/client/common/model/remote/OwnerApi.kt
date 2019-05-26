@@ -6,6 +6,11 @@ import retrofit2.http.*
 
 interface OwnerApi
 {
+	companion object
+	{
+		const val RESPONSE_CONFLICT = 409
+	}
+
 	@POST("owner")
 	fun addOwner(owner: Owner): LiveData<ApiResponse<Owner>>
 
@@ -15,5 +20,6 @@ interface OwnerApi
 			LiveData<ApiResponse<Unit>>
 
 	@GET("owner")
-	fun getOwnerByName(@Query("name") name: String): LiveData<ApiResponse<Owner>>
+	fun getOwnerByName(@Query("name") name: String,
+	                   @Query("hash") hash: String? = null): LiveData<ApiResponse<Owner>>
 }

@@ -1,23 +1,20 @@
 package pl.karol202.sciorder.client.admin.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.admin.R
-import pl.karol202.sciorder.client.admin.ui.DividerItemDecorationWithoutLast
 import pl.karol202.sciorder.client.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.admin.viewmodel.ProductsViewModel
+import pl.karol202.sciorder.client.common.components.InflatedFragment
 import pl.karol202.sciorder.client.common.extensions.*
 import pl.karol202.sciorder.common.model.Product
 
-class ProductsFragment : Fragment()
+class ProductsFragment : InflatedFragment()
 {
 	private val productsViewModel by sharedViewModel<ProductsViewModel>()
 
@@ -26,8 +23,7 @@ class ProductsFragment : Fragment()
 	private val adapter = ProductAdapter(productEditListener = { navigateToProductEditFragment(it) },
 	                                     productRemoveListener = { showProductRemoveDialog(it) })
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-			inflater.inflate(R.layout.fragment_products, container, false)
+	override val layoutRes = R.layout.fragment_products
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{

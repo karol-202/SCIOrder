@@ -41,7 +41,7 @@ class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : Dy
 				               parameters)
 
 		private fun createPlaceholderProduct() =
-				Product(randomUUIDString(), ctx.getString(R.string.unknown_product), false, emptyList())
+				Product(randomUUIDString(), "", ctx.getString(R.string.unknown_product), false, emptyList())
 	}
 
 	var orders: List<Order>

@@ -1,12 +1,12 @@
-package pl.karol202.sciorder.client.admin.ui.fragment
+package pl.karol202.sciorder.client.user.ui.fragment
 
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_main.*
-import pl.karol202.sciorder.client.admin.R
-import pl.karol202.sciorder.client.admin.ui.adapter.NavigationPagerAdapter
 import pl.karol202.sciorder.client.common.components.InflatedFragment
 import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.user.R
+import pl.karol202.sciorder.client.user.ui.adapter.NavigationPagerAdapter
 
 class MainFragment : InflatedFragment()
 {

@@ -2,6 +2,7 @@
     <string name="app_name_user">SCIOrder</string>
 	<string name="app_name_admin">SCIOrder Admin</string>
 
+	<string name="fragment_login">Logowanie</string>
     <string name="fragment_products">Produkty</string>
 	<string name="fragment_order_track">Zamówienia</string>
 	<string name="fragment_orders">Zamówienia</string>
@@ -18,6 +19,8 @@
 	<string name="menu_item_order_filter">Filtruj zamówienia</string>
 	<string name="menu_item_orders_remove">Usuń wszystkie zamówienia</string>
 
+	<string name="text_login_owner">Nazwa</string>
+	<string name="text_login_password">Hasło</string>
     <string name="text_status">Status</string>
 	<string name="text_location">Miejsce dostawy</string>
 	<string name="text_recipient">Adresat</string>
@@ -48,6 +51,8 @@
     <string name="text_product_param_true">Tak</string>
     <string name="text_product_param_false">Nie</string>
 
+	<string name="text_login_error">Błąd logowania</string>
+	<string name="text_login_error_name_busy">Nazwa zajęta</string>
     <string name="text_loading_error">Błąd ładowania</string>
     <string name="text_order_error">Błąd zamówienia</string>
 	<string name="text_update_error">Błąd aktualizacji</string>
@@ -64,6 +69,8 @@
 	<string name="action_order_edit">Zatwierdź</string>
 	<string name="action_filter_edit">Zatwierdź</string>
 	<string name="action_enum_value_add">Dodaj</string>
+	<string name="action_login">Zaloguj</string>
+	<string name="action_register">Zarejestruj</string>
 	<string name="action_remove">Usuń</string>
 	<string name="action_cancel">Anuluj</string>
 

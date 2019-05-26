@@ -1,13 +1,11 @@
 package pl.karol202.sciorder.client.user.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_order_track.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import pl.karol202.sciorder.client.common.components.InflatedFragment
 import pl.karol202.sciorder.client.common.extensions.observeEvent
 import pl.karol202.sciorder.client.common.extensions.observeNonNull
 import pl.karol202.sciorder.client.common.extensions.showSnackbar
@@ -16,15 +14,14 @@ import pl.karol202.sciorder.client.user.ui.adapter.TrackedOrderAdapter
 import pl.karol202.sciorder.client.user.viewmodel.OrdersTrackViewModel
 import pl.karol202.sciorder.client.user.viewmodel.ProductsViewModel
 
-class OrderTrackFragment : Fragment()
+class OrderTrackFragment : InflatedFragment()
 {
 	private val productsViewModel by sharedViewModel<ProductsViewModel>()
 	private val ordersTrackViewModel by sharedViewModel<OrdersTrackViewModel>()
 
 	private val adapter = TrackedOrderAdapter { order -> ordersTrackViewModel.removeOrder(order) }
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-		inflater.inflate(R.layout.fragment_order_track, container, false)
+	override val layoutRes = R.layout.fragment_order_track
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{

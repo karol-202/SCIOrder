@@ -8,6 +8,7 @@ import org.koin.dsl.module
 import pl.karol202.sciorder.client.common.KoinCommon
 import pl.karol202.sciorder.client.user.viewmodel.OrdersTrackViewModel
 import pl.karol202.sciorder.client.user.viewmodel.OrdersViewModel
+import pl.karol202.sciorder.client.user.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.user.viewmodel.ProductsViewModel
 
 class SCIOrderApplication : Application()
@@ -23,8 +24,9 @@ class SCIOrderApplication : Application()
 	}
 
 	private fun viewModelsModule() = module {
-		viewModel { ProductsViewModel(get(), get()) }
-		viewModel { OrdersViewModel(get(), get()) }
-		viewModel { OrdersTrackViewModel(get(), get()) }
+		viewModel { OwnerViewModel(get(), get()) }
+		viewModel { ProductsViewModel(get(), get(), get()) }
+		viewModel { OrdersViewModel(get(), get(), get()) }
+		viewModel { OrdersTrackViewModel(get(), get(), get()) }
 	}
 }

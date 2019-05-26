@@ -1,10 +1,7 @@
 package pl.karol202.sciorder.client.admin.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_product_edit.*
@@ -27,8 +24,7 @@ class ProductEditFragment : ExtendedFragment()
 
 	private var savedParameters by instanceState<List<Product.Parameter>>()
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-			inflater.inflate(R.layout.fragment_product_edit, container, false)
+	override val layoutRes = R.layout.fragment_orders
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
@@ -107,7 +103,7 @@ class ProductEditFragment : ExtendedFragment()
 		val name = getName() ?: return null
 		val available = getAvailable()
 		val parameters = getParameters() ?: return null
-		return Product(productId ?: "", name, available, parameters)
+		return Product(productId ?: "", "", name, available, parameters)
 	}
 
 	private fun getName() = editTextProductEditName.text?.toString()?.takeIf { it.isNotBlank() }

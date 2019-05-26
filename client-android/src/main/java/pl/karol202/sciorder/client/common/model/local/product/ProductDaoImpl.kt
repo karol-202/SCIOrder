@@ -21,7 +21,7 @@ private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) : P
 	override fun getAll(): LiveData<List<Product>> =
 			Transformations.map(productEntityDao.getAll()) { entities -> entities.map { it.toProduct() } }
 
-	private fun ProductEntity.toProduct() = Product(id, name, available, parameters)
+	private fun ProductEntity.toProduct() = Product(id, "", name, available, parameters)
 
 	private fun Product.toProductEntity() = ProductEntity(id, name, available, parameters)
 }

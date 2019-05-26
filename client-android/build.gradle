@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdkVersion 28
@@ -48,6 +49,10 @@ dependencies {
     // Room
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     kapt           "android.arch.persistence.room:compiler:$roomVersion"
+
+    //Navigation
+    api "android.arch.navigation:navigation-fragment-ktx:$navigationVersion"
+    api "android.arch.navigation:navigation-ui-ktx:$navigationVersion"
 
     // Koin
     api "org.koin:koin-android:$koinVersion"

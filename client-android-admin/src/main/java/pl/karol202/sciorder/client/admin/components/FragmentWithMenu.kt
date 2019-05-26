@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
+import pl.karol202.sciorder.client.common.components.InflatedFragment
 
-abstract class FragmentWithMenu : Fragment()
+abstract class FragmentWithMenu : InflatedFragment()
 {
 	abstract val menuRes: Int
 
