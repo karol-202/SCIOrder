@@ -12,7 +12,7 @@ import pl.karol202.sciorder.client.common.extensions.handleResponse
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.client.common.model.local.product.ProductDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.common.model.remote.product.ProductApi
+import pl.karol202.sciorder.client.common.model.remote.ProductApi
 import pl.karol202.sciorder.client.common.repository.ResourceState
 import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryImpl
 

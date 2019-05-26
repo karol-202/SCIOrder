@@ -5,6 +5,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import pl.karol202.sciorder.server.database.OwnerDao
 import pl.karol202.sciorder.server.util.badRequest
+import pl.karol202.sciorder.server.util.notFound
 import pl.karol202.sciorder.server.util.ok
 
 fun Route.getOwner(ownerDao: OwnerDao) = get {
@@ -13,4 +14,5 @@ fun Route.getOwner(ownerDao: OwnerDao) = get {
 	val owner = if(hash != null) ownerDao.getOwnerByNameAndHash(name, hash)
 				else ownerDao.getOwnerByName(name)
 	if(owner != null) ok(owner)
+	else notFound()
 }

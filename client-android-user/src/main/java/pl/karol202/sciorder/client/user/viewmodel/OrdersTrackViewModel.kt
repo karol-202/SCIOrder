@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.client.common.model.local.order.OrderDao
-import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
+import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.common.repository.ResourceState
 import pl.karol202.sciorder.client.user.repository.order.OrderRepositoryImpl
 

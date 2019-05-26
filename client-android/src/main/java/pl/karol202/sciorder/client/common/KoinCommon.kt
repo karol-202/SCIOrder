@@ -8,8 +8,8 @@ import pl.karol202.sciorder.client.common.model.local.LocalDatabase
 import pl.karol202.sciorder.client.common.model.local.order.toOrderDao
 import pl.karol202.sciorder.client.common.model.local.product.toProductDao
 import pl.karol202.sciorder.client.common.model.remote.LiveDataCallAdapterFactory
-import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
-import pl.karol202.sciorder.client.common.model.remote.product.ProductApi
+import pl.karol202.sciorder.client.common.model.remote.OrderApi
+import pl.karol202.sciorder.client.common.model.remote.ProductApi
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create

@@ -4,7 +4,7 @@ import pl.karol202.sciorder.common.model.Owner
 
 interface OwnerDao
 {
-	suspend fun insertOwner(owner: Owner)
+	suspend fun insertOwner(owner: Owner): Boolean
 
 	suspend fun updateOwnerHash(id: String, hash: String): Boolean
 

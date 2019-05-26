@@ -24,6 +24,6 @@ private suspend fun PipelineContext<*, ApplicationCall>.getAllOrders(orderDao: O
 
 private suspend fun PipelineContext<*, ApplicationCall>.getOrdersById(orderDao: OrderDao, ownerId: String)
 {
-	val ids = call.parameters.getAll("id") ?: emptyList()
+	val ids = call.parameters.getAll("orderId") ?: emptyList()
 	ok(orderDao.getOrdersById(ownerId, ids))
 }
