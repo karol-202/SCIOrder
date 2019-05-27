@@ -18,7 +18,7 @@ class OwnerViewModel(private val ownerApi: OwnerApi,
 {
 	enum class Error
 	{
-		NAME_BUSY, OTHER
+		NOT_FOUND, NAME_BUSY, OTHER
 	}
 
 	private val _ownerIdSettingLiveData = settings.liveString("ownerId", null)
@@ -41,7 +41,10 @@ class OwnerViewModel(private val ownerApi: OwnerApi,
 			               successListener = successListener,
 			               failureListener = { _errorEventLiveData.value = Event(it.toError()) })
 
-	private fun ApiResponse.Error<*>.toError() =
-			if(code == OwnerApi.RESPONSE_CONFLICT) Error.NAME_BUSY
-			else Error.OTHER
+	private fun ApiResponse.Error<*>.toError() = when(code)
+	{
+		OwnerApi.RESPONSE_NOT_FOUND -> Error.NOT_FOUND
+		OwnerApi.RESPONSE_CONFLICT -> Error.NAME_BUSY
+		else -> Error.OTHER
+	}
 }

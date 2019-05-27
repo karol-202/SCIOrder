@@ -9,6 +9,7 @@ import pl.karol202.sciorder.client.common.model.local.order.toOrderDao
 import pl.karol202.sciorder.client.common.model.local.product.toProductDao
 import pl.karol202.sciorder.client.common.model.remote.LiveDataCallAdapterFactory
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
+import pl.karol202.sciorder.client.common.model.remote.OwnerApi
 import pl.karol202.sciorder.client.common.model.remote.ProductApi
 import pl.karol202.sciorder.client.common.settings.Settings
 import retrofit2.Retrofit
@@ -47,11 +48,12 @@ object KoinCommon
 		single { okHttp() }
 		single { retrofit(get()) }
 
+		single { get<Retrofit>().create<OwnerApi>() }
 		single { get<Retrofit>().create<ProductApi>() }
 		single { get<Retrofit>().create<OrderApi>() }
 	}
 
 	private fun settingsModule() = module {
-		single { Settings.createPreferencesSettings(androidContext()) }
+		single<Settings> { Settings.createPreferencesSettings(androidContext()) }
 	}
 }

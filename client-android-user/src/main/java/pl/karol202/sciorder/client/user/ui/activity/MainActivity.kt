@@ -11,7 +11,7 @@ import pl.karol202.sciorder.client.user.R
 class MainActivity : AppCompatActivity()
 {
 	private val navController by lazy { findNavController(R.id.fragmentNavHost) }
-	private val appBarConfiguration by lazy { AppBarConfiguration(navController.graph) }
+	private val appBarConfiguration by lazy { AppBarConfiguration(setOf(R.id.loginFragment, R.id.mainFragment)) }
 
 	override fun onCreate(savedInstanceState: Bundle?)
 	{

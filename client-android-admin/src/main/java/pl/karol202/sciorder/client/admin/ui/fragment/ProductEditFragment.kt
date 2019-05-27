@@ -24,7 +24,7 @@ class ProductEditFragment : ExtendedFragment()
 
 	private var savedParameters by instanceState<List<Product.Parameter>>()
 
-	override val layoutRes = R.layout.fragment_orders
+	override val layoutRes = R.layout.fragment_product_edit
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
