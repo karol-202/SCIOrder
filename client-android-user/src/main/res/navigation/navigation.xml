@@ -17,6 +17,5 @@
     </fragment>
 
     <fragment android:id="@+id/mainFragment"
-              android:name="pl.karol202.sciorder.client.user.ui.fragment.MainFragment"
-              android:label="@string/app_name_user"/>
+              android:name="pl.karol202.sciorder.client.user.ui.fragment.MainFragment"/>
 </navigation>

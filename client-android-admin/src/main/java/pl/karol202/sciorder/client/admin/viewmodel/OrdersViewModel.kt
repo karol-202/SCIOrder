@@ -10,30 +10,25 @@ import pl.karol202.sciorder.client.admin.repository.order.OrderRepositoryImpl
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.*
 import pl.karol202.sciorder.client.common.model.local.order.OrderDao
+import pl.karol202.sciorder.client.common.model.local.owner.OwnerDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.common.repository.resource.EmptyResource
 import pl.karol202.sciorder.client.common.repository.resource.ResourceState
-import pl.karol202.sciorder.client.common.settings.Settings
-import pl.karol202.sciorder.client.common.settings.liveString
 import pl.karol202.sciorder.common.model.Order
 
-class OrdersViewModel(private val orderDao: OrderDao,
-                      private val orderApi: OrderApi,
-                      settings: Settings) : ViewModel()
+class OrdersViewModel(ownerDao: OwnerDao,
+                      private val orderDao: OrderDao,
+                      private val orderApi: OrderApi) : ViewModel()
 {
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)
 	private val ordersRepository = OrderRepositoryImpl(coroutineScope, orderDao, orderApi)
 
-	private val _ownerIdSettingLiveData = settings.liveString("ownerId", null)
-	private val _hashSettingLiveData = settings.liveString("hash", null)
-	private val ownerId get() = _ownerIdSettingLiveData.value
-	private val hash get() = _hashSettingLiveData.value
+	private val ownerLiveData = ownerDao.get()
+	private val owner get() = ownerLiveData.value
 
-	private val ordersResourceLiveData = (_ownerIdSettingLiveData.nonNull() + _hashSettingLiveData.nonNull()).map {
-		(ownerId, hash) -> ordersRepository.getAllOrders(ownerId, hash)
-	}
+	private val ordersResourceLiveData = ownerLiveData.nonNull().map { ordersRepository.getAllOrders(it.id, it.hash) }
 	private val ordersResourceAsLiveData = ordersResourceLiveData.switchMap { it.asLiveData }
 	private val ordersResource get() = ordersResourceLiveData.value ?: EmptyResource<List<Order>>()
 
@@ -57,18 +52,16 @@ class OrdersViewModel(private val orderDao: OrderDao,
 		fun updateOrderLocally(order: Order, status: Order.Status) =
 				coroutineScope.launch { orderDao.updateStatus(order.id, status) }
 
-		val ownerId = ownerId ?: return
-		val hash = hash ?: return
-		orderApi.updateOrderStatus(ownerId, order.id, hash, status).handleResponse { updateOrderLocally(order, status) }
+		val owner = owner ?: return
+		orderApi.updateOrderStatus(owner.id, order.id, owner.hash, status).handleResponse { updateOrderLocally(order, status) }
 	}
 
 	fun removeAllOrders()
 	{
 		fun removeOrdersLocally() = coroutineScope.launch { orderDao.deleteAll() }
 
-		val ownerId = ownerId ?: return
-		val hash = hash ?: return
-		orderApi.removeAllOrders(ownerId, hash).handleResponse { removeOrdersLocally() }
+		val owner = owner ?: return
+		orderApi.removeAllOrders(owner.id, owner.hash).handleResponse { removeOrdersLocally() }
 	}
 
 	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =

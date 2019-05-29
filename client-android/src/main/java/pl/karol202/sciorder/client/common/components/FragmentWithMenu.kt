@@ -1,10 +1,9 @@
-package pl.karol202.sciorder.client.admin.components
+package pl.karol202.sciorder.client.common.components
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import pl.karol202.sciorder.client.common.components.InflatedFragment
 
 abstract class FragmentWithMenu : InflatedFragment()
 {

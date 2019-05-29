@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_orders.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.admin.R
-import pl.karol202.sciorder.client.admin.components.FragmentWithMenu
 import pl.karol202.sciorder.client.admin.ui.adapter.OrderAdapter
 import pl.karol202.sciorder.client.admin.ui.dialog.fragment.OrderFilterDialogFragment
 import pl.karol202.sciorder.client.admin.ui.listener.OnOrderFilterSetListener
 import pl.karol202.sciorder.client.admin.viewmodel.OrdersViewModel
 import pl.karol202.sciorder.client.admin.viewmodel.ProductsViewModel
+import pl.karol202.sciorder.client.common.components.FragmentWithMenu
 import pl.karol202.sciorder.client.common.extensions.*
 import pl.karol202.sciorder.common.model.Order
 

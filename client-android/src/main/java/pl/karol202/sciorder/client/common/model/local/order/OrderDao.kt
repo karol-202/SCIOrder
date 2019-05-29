@@ -5,7 +5,7 @@ import pl.karol202.sciorder.common.model.Order
 
 interface OrderDao : CrudDao<Order>
 {
-	fun updateStatus(id: String, status: Order.Status)
+	suspend fun updateStatus(id: String, status: Order.Status)
 
-	fun deleteAll()
+	suspend fun deleteAll()
 }

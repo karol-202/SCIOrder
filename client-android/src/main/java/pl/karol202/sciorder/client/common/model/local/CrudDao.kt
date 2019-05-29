@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 
 interface CrudDao<T>
 {
-	fun insert(items: List<T>)
+	suspend fun insert(items: List<T>)
 
-	fun update(items: List<T>)
+	suspend fun update(items: List<T>)
 
-	fun delete(items: List<T>)
+	suspend fun delete(items: List<T>)
 
 	fun getAll(): LiveData<List<T>>
 }

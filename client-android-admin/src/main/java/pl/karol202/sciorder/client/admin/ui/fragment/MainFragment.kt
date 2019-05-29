@@ -1,21 +1,10 @@
 package pl.karol202.sciorder.client.admin.ui.fragment
 
-import android.os.Bundle
-import android.view.View
-import kotlinx.android.synthetic.main.fragment_main.*
-import pl.karol202.sciorder.client.admin.R
 import pl.karol202.sciorder.client.admin.ui.adapter.NavigationPagerAdapter
-import pl.karol202.sciorder.client.common.components.InflatedFragment
 import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.common.ui.fragment.MainFragment
 
-class MainFragment : InflatedFragment()
+class MainFragment : MainFragment()
 {
-	override val layoutRes = R.layout.fragment_main
-
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-	{
-		viewPagerMain.adapter = NavigationPagerAdapter(ctx, childFragmentManager)
-
-		tabLayoutMain.setupWithViewPager(viewPagerMain)
-	}
+	override fun createNavigationPagerAdapter() = NavigationPagerAdapter(ctx, childFragmentManager)
 }

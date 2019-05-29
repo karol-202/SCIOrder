@@ -6,11 +6,11 @@ import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.admin.R
-import pl.karol202.sciorder.client.admin.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.common.components.InflatedFragment
 import pl.karol202.sciorder.client.common.extensions.observeEvent
 import pl.karol202.sciorder.client.common.extensions.observeNonNull
 import pl.karol202.sciorder.client.common.extensions.showSnackbar
+import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 
 class LoginFragment : InflatedFragment()
 {
@@ -25,7 +25,7 @@ class LoginFragment : InflatedFragment()
 		initLoginButton()
 		initRegisterButton()
 
-		observeOwnerId()
+		observeOwner()
 		observeError()
 	}
 
@@ -36,11 +36,11 @@ class LoginFragment : InflatedFragment()
 
 	private fun initRegisterButton()
 	{
-		buttonLogin.setOnClickListener { register() }
+		buttonRegister.setOnClickListener { register() }
 	}
 
-	private fun observeOwnerId() =
-			ownerViewModel.ownerIdSettingLiveData.observeNonNull(viewLifecycleOwner) { navigateToMainFragment() }
+	private fun observeOwner() =
+			ownerViewModel.ownerLiveData.observeNonNull(viewLifecycleOwner) { navigateToMainFragment() }
 
 	private fun observeError() =
 			ownerViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) {

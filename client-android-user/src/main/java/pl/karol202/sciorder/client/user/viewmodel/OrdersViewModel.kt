@@ -10,23 +10,22 @@ import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.MutableLiveData
 import pl.karol202.sciorder.client.common.extensions.create
 import pl.karol202.sciorder.client.common.extensions.handleResponse
+import pl.karol202.sciorder.client.common.extensions.observeOnceNonNull
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.local.order.OrderDao
+import pl.karol202.sciorder.client.common.model.local.owner.OwnerDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
-import pl.karol202.sciorder.client.common.settings.Settings
-import pl.karol202.sciorder.client.common.settings.liveString
 import pl.karol202.sciorder.common.model.Order
 
-class OrdersViewModel(private val orderDao: OrderDao,
-                      private val orderApi: OrderApi,
-                      settings: Settings) : ViewModel()
+class OrdersViewModel(ownerDao: OwnerDao,
+                      private val orderDao: OrderDao,
+                      private val orderApi: OrderApi) : ViewModel()
 {
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)
 
-	private val _ownerIdSettingLiveData = settings.liveString("ownerId", null)
-	private val ownerId get() = _ownerIdSettingLiveData.value
+	private val ownerLiveData = ownerDao.get()
 
 	private val _orderLiveData = MutableLiveData<List<OrderedProduct>>(emptyList())
 	val orderLiveData: LiveData<List<OrderedProduct>> = _orderLiveData
@@ -74,8 +73,9 @@ class OrdersViewModel(private val orderDao: OrderDao,
 	{
 		fun saveOrderLocally(order: Order) = coroutineScope.launch { orderDao.insert(listOf(order)) }
 
-		val ownerId = ownerId ?: return
-		orderApi.addOrder(ownerId, order).handleResponse { saveOrderLocally(it) }
+		ownerLiveData.observeOnceNonNull { owner ->
+			orderApi.addOrder(owner.id, order).handleResponse { saveOrderLocally(it) }
+		}
 	}
 
 	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =

@@ -33,7 +33,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:passwordToggleEnabled="false"
+            app:passwordToggleEnabled="true"
             app:hintEnabled="true"
             android:hint="@string/text_login_password"
             app:layout_constraintStart_toStartOf="parent"

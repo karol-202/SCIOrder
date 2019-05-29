@@ -9,8 +9,8 @@ import pl.karol202.sciorder.client.common.components.InflatedFragment
 import pl.karol202.sciorder.client.common.extensions.observeEvent
 import pl.karol202.sciorder.client.common.extensions.observeNonNull
 import pl.karol202.sciorder.client.common.extensions.showSnackbar
+import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.user.R
-import pl.karol202.sciorder.client.user.viewmodel.OwnerViewModel
 
 class LoginFragment : InflatedFragment()
 {
@@ -24,7 +24,7 @@ class LoginFragment : InflatedFragment()
 	{
 		initLoginButton()
 
-		observeOwnerId()
+		observeOwner()
 		observeError()
 	}
 
@@ -33,8 +33,8 @@ class LoginFragment : InflatedFragment()
 		buttonLogin.setOnClickListener { login() }
 	}
 
-	private fun observeOwnerId() =
-			ownerViewModel.ownerIdSettingLiveData.observeNonNull(viewLifecycleOwner) { navigateToMainFragment() }
+	private fun observeOwner() =
+			ownerViewModel.ownerLiveData.observeNonNull(viewLifecycleOwner) { navigateToMainFragment() }
 
 	private fun observeError() =
 			ownerViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_login_error) }

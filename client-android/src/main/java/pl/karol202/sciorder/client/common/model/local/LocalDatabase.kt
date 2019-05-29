@@ -9,6 +9,8 @@ import pl.karol202.sciorder.client.common.model.local.order.OrderEntity
 import pl.karol202.sciorder.client.common.model.local.order.OrderEntityDao
 import pl.karol202.sciorder.client.common.model.local.order.OrderEntriesListConverter
 import pl.karol202.sciorder.client.common.model.local.order.OrderStatusConverter
+import pl.karol202.sciorder.client.common.model.local.owner.OwnerEntity
+import pl.karol202.sciorder.client.common.model.local.owner.OwnerEntityDao
 import pl.karol202.sciorder.client.common.model.local.product.ProductEntity
 import pl.karol202.sciorder.client.common.model.local.product.ProductEntityDao
 import pl.karol202.sciorder.client.common.model.local.product.ProductParametersListConverter
@@ -16,10 +18,12 @@ import pl.karol202.sciorder.client.common.model.local.product.ProductParametersL
 private object DatabaseInfo
 {
 	const val NAME = "local"
-	const val VERSION = 2
+	const val VERSION = 3
 }
 
-@Database(entities = [ProductEntity::class, OrderEntity::class], version = DatabaseInfo.VERSION)
+@Database(entities = [ProductEntity::class, OrderEntity::class, OwnerEntity::class],
+          version = DatabaseInfo.VERSION,
+          exportSchema = false)
 @TypeConverters(ProductParametersListConverter::class, OrderEntriesListConverter::class, OrderStatusConverter::class)
 abstract class LocalDatabase : RoomDatabase()
 {
@@ -34,4 +38,6 @@ abstract class LocalDatabase : RoomDatabase()
 	abstract fun productEntityDao(): ProductEntityDao
 
 	abstract fun orderEntityDao(): OrderEntityDao
+
+	abstract fun ownerEntityDao(): OwnerEntityDao
 }

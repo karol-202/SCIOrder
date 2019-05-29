@@ -2,16 +2,18 @@ package pl.karol202.sciorder.client.common
 
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import pl.karol202.sciorder.client.common.model.local.LocalDatabase
 import pl.karol202.sciorder.client.common.model.local.order.toOrderDao
+import pl.karol202.sciorder.client.common.model.local.owner.toOwnerDao
 import pl.karol202.sciorder.client.common.model.local.product.toProductDao
 import pl.karol202.sciorder.client.common.model.remote.LiveDataCallAdapterFactory
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.common.model.remote.OwnerApi
 import pl.karol202.sciorder.client.common.model.remote.ProductApi
-import pl.karol202.sciorder.client.common.settings.Settings
+import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -23,13 +25,14 @@ object KoinCommon
 
 	fun loadModules() = loadKoinModules(databaseModule(),
 	                                    networkingModule(),
-	                                    settingsModule())
+	                                    viewModelsModule())
 
 	private fun databaseModule() = module {
 		single { LocalDatabase.create(androidContext()) }
 
 		single { get<LocalDatabase>().productEntityDao().toProductDao() }
 		single { get<LocalDatabase>().orderEntityDao().toOrderDao() }
+		single { get<LocalDatabase>().ownerEntityDao().toOwnerDao() }
 	}
 
 	private fun networkingModule() = module {
@@ -53,7 +56,7 @@ object KoinCommon
 		single { get<Retrofit>().create<OrderApi>() }
 	}
 
-	private fun settingsModule() = module {
-		single<Settings> { Settings.createPreferencesSettings(androidContext()) }
+	private fun viewModelsModule() = module {
+		viewModel { OwnerViewModel(get(), get()) }
 	}
 }

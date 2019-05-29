@@ -17,8 +17,7 @@
     </fragment>
 
     <fragment android:id="@+id/mainFragment"
-              android:name="pl.karol202.sciorder.client.admin.ui.fragment.MainFragment"
-              android:label="@string/app_name_admin">
+              android:name="pl.karol202.sciorder.client.admin.ui.fragment.MainFragment">
 
         <action android:id="@+id/action_mainFragment_to_productEditFragment"
                 app:destination="@id/productEditFragment"

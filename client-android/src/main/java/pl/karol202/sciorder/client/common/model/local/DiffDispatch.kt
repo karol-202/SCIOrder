@@ -2,7 +2,7 @@ package pl.karol202.sciorder.client.common.model.local
 
 import pl.karol202.sciorder.common.model.IdProvider
 
-fun <T : IdProvider> CrudDao<T>.dispatchDiff(oldData: List<T>, newData: List<T>)
+suspend fun <T : IdProvider> CrudDao<T>.dispatchDiff(oldData: List<T>, newData: List<T>)
 {
 	insert(newData.filterNot { it.id in oldData.ids })
 	update(newData.filter { it.id in oldData.ids && it !in oldData })
