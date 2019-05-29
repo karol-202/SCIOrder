@@ -17,7 +17,8 @@ interface OwnerApi
 
 	@PUT("owner/{ownerId}/hash")
 	fun updateOwnerHash(@Path("ownerId") ownerId: String,
-	                    @Query("hash") hash: String):
+	                    @Query("hash") hash: String,
+	                    @Query("newHash") newHash: String):
 			LiveData<ApiResponse<Unit>>
 
 	@GET("owner")

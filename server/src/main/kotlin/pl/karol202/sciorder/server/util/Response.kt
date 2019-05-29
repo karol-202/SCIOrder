@@ -16,6 +16,8 @@ suspend fun Context.created(message: Any) = call.respond(HttpStatusCode.Created,
 
 suspend fun Context.badRequest() = call.respond(HttpStatusCode.BadRequest)
 
+suspend fun Context.forbidden() = call.respond(HttpStatusCode.Forbidden)
+
 suspend fun Context.notFound() = call.respond(HttpStatusCode.NotFound)
 
 suspend fun Context.conflict() = call.respond(HttpStatusCode.Conflict)

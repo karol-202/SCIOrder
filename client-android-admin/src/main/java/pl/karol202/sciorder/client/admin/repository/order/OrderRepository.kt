@@ -5,5 +5,5 @@ import pl.karol202.sciorder.common.model.Order
 
 interface OrderRepository
 {
-	fun getAllOrders(ownerId: String): MixedResource<List<Order>>
+	fun getAllOrders(ownerId: String, hash: String): MixedResource<List<Order>>
 }

@@ -58,6 +58,21 @@ fun <X, Y> LiveData<X>.switchMap(switchFunction: (X) -> LiveData<Y>): LiveData<Y
 	}
 }
 
+operator fun <X, Y> LiveData<X>.plus(second: LiveData<Y>): LiveData<Pair<X, Y>> = MediatorLiveData<Pair<X, Y>>().apply {
+	addSource(this@plus) { x: X ->
+		val y = second.value ?: return@addSource
+		value = x to y
+	}
+	addSource(second) { y: Y ->
+		val x = this@plus.value ?: return@addSource
+		value = x to y
+	}
+}
+
+fun <T : Any> LiveData<T?>.nonNull(): LiveData<T> = MediatorLiveData<T>().apply {
+	addSource(this@nonNull) { t -> t?.let { value = it } }
+}
+
 fun <T> LiveData<ApiResponse<T>>.handleResponse(targetLiveData: MediatorLiveData<*>,
                                                 successListener: (T) -> Unit,
                                                 failureListener: (ApiResponse.Error<T>) -> Unit)

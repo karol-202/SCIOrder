@@ -27,14 +27,25 @@ class OwnerViewModel(private val ownerApi: OwnerApi,
 		get() = _ownerIdSettingLiveData.value
 		set(value) = _ownerIdSettingLiveData.postValue(value)
 
+	private val _hashSettingLiveData = settings.liveString("hash", null)
+	private var hash: String?
+		get() = _hashSettingLiveData.value
+		set(value) = _hashSettingLiveData.postValue(value)
+
 	private val _errorEventLiveData = MediatorLiveData<Event<Error>>()
 	val errorEventLiveData: LiveData<Event<Error>> = _errorEventLiveData
 
 	fun login(name: String, password: String) =
-			ownerApi.getOwnerByName(name, password.sha1()).handleResponse { ownerId = it.id }
+			ownerApi.getOwnerByName(name, password.sha1()).handleResponse { saveOwner(it) }
 
 	fun register(name: String, password: String) =
-			ownerApi.addOwner(Owner.create(name, password.sha1())).handleResponse { ownerId = it.id }
+			ownerApi.addOwner(Owner.create(name, password.sha1())).handleResponse { saveOwner(it) }
+
+	private fun saveOwner(owner: Owner)
+	{
+		ownerId = owner.id
+		hash = owner.hash
+	}
 
 	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =
 			handleResponse(_errorEventLiveData,

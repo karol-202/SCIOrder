@@ -27,13 +27,15 @@ class OrdersViewModel(private val orderDao: OrderDao,
 	private val ordersRepository = OrderRepositoryImpl(coroutineScope, orderDao, orderApi)
 
 	private val _ownerIdSettingLiveData = settings.liveString("ownerId", null)
+	private val _hashSettingLiveData = settings.liveString("hash", null)
 	private val ownerId get() = _ownerIdSettingLiveData.value
+	private val hash get() = _hashSettingLiveData.value
 
-	private val ordersResourceLiveData = _ownerIdSettingLiveData.map { ownerId ->
-		ownerId?.let { ordersRepository.getAllOrders(it) } ?: EmptyResource<List<Order>>()
+	private val ordersResourceLiveData = (_ownerIdSettingLiveData.nonNull() + _hashSettingLiveData.nonNull()).map {
+		(ownerId, hash) -> ordersRepository.getAllOrders(ownerId, hash)
 	}
 	private val ordersResourceAsLiveData = ordersResourceLiveData.switchMap { it.asLiveData }
-	private val ordersResource get() = ordersResourceLiveData.value ?: EmptyResource()
+	private val ordersResource get() = ordersResourceLiveData.value ?: EmptyResource<List<Order>>()
 
 	val ordersLiveData = ordersResourceAsLiveData.map { it.data }
 	val loadingLiveData = ordersResourceAsLiveData.map { it is ResourceState.Loading }
@@ -56,7 +58,8 @@ class OrdersViewModel(private val orderDao: OrderDao,
 				coroutineScope.launch { orderDao.updateStatus(order.id, status) }
 
 		val ownerId = ownerId ?: return
-		orderApi.updateOrderStatus(ownerId, order.id, status).handleResponse { updateOrderLocally(order, status) }
+		val hash = hash ?: return
+		orderApi.updateOrderStatus(ownerId, order.id, hash, status).handleResponse { updateOrderLocally(order, status) }
 	}
 
 	fun removeAllOrders()
@@ -64,7 +67,8 @@ class OrdersViewModel(private val orderDao: OrderDao,
 		fun removeOrdersLocally() = coroutineScope.launch { orderDao.deleteAll() }
 
 		val ownerId = ownerId ?: return
-		orderApi.removeAllOrders(ownerId).handleResponse { removeOrdersLocally() }
+		val hash = hash ?: return
+		orderApi.removeAllOrders(ownerId, hash).handleResponse { removeOrdersLocally() }
 	}
 
 	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =

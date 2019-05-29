@@ -10,7 +10,7 @@ import pl.karol202.sciorder.server.util.ok
 
 fun Route.putOwnerHash(ownerDao: OwnerDao) = put {
 	val ownerId = call.parameters["ownerId"] ?: return@put badRequest()
-	val hash = call.parameters["hash"] ?: return@put badRequest()
+	val hash = call.parameters["newHash"] ?: return@put badRequest()
 	val success = ownerDao.updateOwnerHash(ownerId, hash)
 	if(success) ok() else notFound()
 }

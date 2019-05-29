@@ -75,7 +75,7 @@ class OrdersViewModel(private val orderDao: OrderDao,
 		fun saveOrderLocally(order: Order) = coroutineScope.launch { orderDao.insert(listOf(order)) }
 
 		val ownerId = ownerId ?: return
-		orderApi.addOrder(ownerId, order).handleResponse { saveOrderLocally(order) }
+		orderApi.addOrder(ownerId, order).handleResponse { saveOrderLocally(it) }
 	}
 
 	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =

@@ -5,7 +5,6 @@ import org.litote.kmongo.ascendingIndex
 import org.litote.kmongo.eq
 import org.litote.kmongo.set
 import pl.karol202.sciorder.common.model.Owner
-import java.lang.Exception
 
 class DatabaseOwnerDao(database: KMongoDatabase): OwnerDao
 {
@@ -29,6 +28,9 @@ class DatabaseOwnerDao(database: KMongoDatabase): OwnerDao
 	override suspend fun updateOwnerHash(id: String, hash: String) =
 			ownersCollection.updateOne(Owner::_id eq id, set(Owner::hash, hash))
 					.let { it.wasAcknowledged() && it.matchedCount > 0 }
+
+	override suspend fun getOwnerById(id: String) =
+			ownersCollection.findOneById(id)
 
 	override suspend fun getOwnerByName(name: String) =
 			ownersCollection.findOne(Owner::name eq name)

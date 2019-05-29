@@ -6,6 +6,7 @@ import kotlinx.coroutines.Job
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.map
 import pl.karol202.sciorder.client.common.extensions.mapNotNull
+import pl.karol202.sciorder.client.common.extensions.nonNull
 import pl.karol202.sciorder.client.common.extensions.switchMap
 import pl.karol202.sciorder.client.common.model.local.product.ProductDao
 import pl.karol202.sciorder.client.common.model.remote.ProductApi
@@ -26,11 +27,9 @@ class ProductsViewModel(productDao: ProductDao,
 
 	private val _ownerIdSettingLiveData = settings.liveString("ownerId", null)
 
-	private val productsResourceLiveData = _ownerIdSettingLiveData.map { ownerId ->
-		ownerId?.let { productsRepository.getAllProducts(it) } ?: EmptyResource<List<Product>>()
-	}
+	private val productsResourceLiveData = _ownerIdSettingLiveData.nonNull().map { productsRepository.getAllProducts(it) }
 	private val productsResourceAsLiveData = productsResourceLiveData.switchMap { it.asLiveData }
-	private val productsResource get() = productsResourceLiveData.value ?: EmptyResource()
+	private val productsResource get() = productsResourceLiveData.value ?: EmptyResource<List<Product>>()
 
 	val productsLiveData = productsResourceAsLiveData.map { it.data }
 	val loadingLiveData = productsResourceAsLiveData.map { it is ResourceState.Loading }

@@ -14,15 +14,18 @@ interface OrderApi
 	@PUT("owner/{ownerId}/orders/{orderId}/status")
 	fun updateOrderStatus(@Path("ownerId") ownerId: String,
 	                      @Path("orderId") orderId: String,
+	                      @Query("hash") hash: String,
 	                      @Query("status") status: Order.Status):
 			LiveData<ApiResponse<Unit>>
 
 	@DELETE("owner/{ownerId}/orders")
-	fun removeAllOrders(@Path("ownerId") ownerId: String):
+	fun removeAllOrders(@Path("ownerId") ownerId: String,
+	                    @Query("hash") hash: String):
 			LiveData<ApiResponse<Unit>>
 
 	@GET("owner/{ownerId}/orders?all=true")
-	fun getAllOrders(@Path("ownerId") ownerId: String):
+	fun getAllOrders(@Path("ownerId") ownerId: String,
+	                 @Query("hash") hash: String):
 			LiveData<ApiResponse<List<Order>>>
 
 	@GET("owner/{ownerId}/orders")
