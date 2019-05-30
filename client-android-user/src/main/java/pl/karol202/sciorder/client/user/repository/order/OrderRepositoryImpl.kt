@@ -14,9 +14,10 @@ class OrderRepositoryImpl(private val coroutineScope: CoroutineScope,
 {
 	private val updateTimeout = UpdateTimeout(10, TimeUnit.SECONDS)
 
-	override fun getTrackedOrders(ownerId: String) = object : RoomResource<Order>(coroutineScope, orderDao) {
-		override fun shouldFetchFromNetwork(data: List<Order>) = data.isNotEmpty() && updateTimeout.shouldUpdate()
+	override fun getTrackedOrders(ownerId: String) =
+			object : RoomResource<Order>(coroutineScope, orderDao, orderDao.getByOwnerId(ownerId)) {
+				override fun shouldFetchFromNetwork(data: List<Order>) = data.isNotEmpty() && updateTimeout.shouldUpdate()
 
-		override fun loadFromNetwork(oldData: List<Order>) = orderApi.getOrdersByIds(ownerId, oldData.map { it.id })
-	}
+				override fun loadFromNetwork(oldData: List<Order>) = orderApi.getOrdersByIds(ownerId, oldData.map { it.id })
+			}
 }

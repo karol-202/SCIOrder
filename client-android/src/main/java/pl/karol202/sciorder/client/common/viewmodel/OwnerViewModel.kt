@@ -13,8 +13,8 @@ import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.OwnerApi
 import pl.karol202.sciorder.common.model.Owner
 
-class OwnerViewModel(private val ownerDao: OwnerDao,
-                     private val ownerApi: OwnerApi) : CoroutineViewModel()
+abstract class OwnerViewModel(private val ownerDao: OwnerDao,
+                              private val ownerApi: OwnerApi) : CoroutineViewModel()
 {
 	enum class Error
 	{
@@ -28,8 +28,6 @@ class OwnerViewModel(private val ownerDao: OwnerDao,
 
 	private val _errorEventLiveData = MediatorLiveData<Event<Error>>()
 	val errorEventLiveData: LiveData<Event<Error>> = _errorEventLiveData
-
-	fun logout() = run { owner = null }
 
 	fun login(name: String, password: String? = null) =
 			ownerApi.getOwnerByName(name, password?.sha1()).handleResponse { owner = it }
@@ -48,4 +46,12 @@ class OwnerViewModel(private val ownerDao: OwnerDao,
 		OwnerApi.RESPONSE_CONFLICT -> Error.NAME_BUSY
 		else -> Error.OTHER
 	}
+
+	fun logout()
+	{
+		owner = null
+		onLogout()
+	}
+
+	open fun onLogout() {}
 }

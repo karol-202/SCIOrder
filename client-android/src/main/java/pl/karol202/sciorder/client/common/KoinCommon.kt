@@ -2,7 +2,6 @@ package pl.karol202.sciorder.client.common
 
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import pl.karol202.sciorder.client.common.model.local.LocalDatabase
@@ -13,7 +12,6 @@ import pl.karol202.sciorder.client.common.model.remote.LiveDataCallAdapterFactor
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.common.model.remote.OwnerApi
 import pl.karol202.sciorder.client.common.model.remote.ProductApi
-import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -24,8 +22,7 @@ object KoinCommon
 	private const val SERVER_URL = "https://sciorder.herokuapp.com"
 
 	fun loadModules() = loadKoinModules(databaseModule(),
-	                                    networkingModule(),
-	                                    viewModelsModule())
+	                                    networkingModule())
 
 	private fun databaseModule() = module {
 		single { LocalDatabase.create(androidContext()) }
@@ -54,9 +51,5 @@ object KoinCommon
 		single { get<Retrofit>().create<OwnerApi>() }
 		single { get<Retrofit>().create<ProductApi>() }
 		single { get<Retrofit>().create<OrderApi>() }
-	}
-
-	private fun viewModelsModule() = module {
-		viewModel { OwnerViewModel(get(), get()) }
 	}
 }

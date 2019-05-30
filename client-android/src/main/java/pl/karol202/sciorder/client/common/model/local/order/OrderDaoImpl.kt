@@ -20,7 +20,10 @@ class OrderDaoImpl(private val orderEntityDao: OrderEntityDao) : OrderDao
 
 	override fun getAll(): LiveData<List<Order>> = orderEntityDao.getAll().map { entities -> entities.map { it.toOrder() } }
 
-	private fun OrderEntity.toOrder() = Order(id, "", entries, details, status)
+	override fun getByOwnerId(ownerId: String): LiveData<List<Order>> =
+			orderEntityDao.getByOwnerId(ownerId).map { entities -> entities.map { it.toOrder() } }
 
-	private fun Order.toOrderEntity() = OrderEntity(id, entries, details, status)
+	private fun OrderEntity.toOrder() = Order(id, ownerId, entries, details, status)
+
+	private fun Order.toOrderEntity() = OrderEntity(id, ownerId, entries, details, status)
 }

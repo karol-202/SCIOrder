@@ -20,7 +20,7 @@
 	<string name="menu_item_orders_remove">Usuń wszystkie zamówienia</string>
 	<string name="menu_item_logout">Wyloguj</string>
 
-	<string name="text_login_owner">Nazwa</string>
+	<string name="text_login_owner">Konto</string>
 	<string name="text_login_password">Hasło</string>
     <string name="text_status">Status</string>
 	<string name="text_location">Miejsce dostawy</string>

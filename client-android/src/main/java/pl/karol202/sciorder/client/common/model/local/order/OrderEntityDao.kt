@@ -24,4 +24,7 @@ interface OrderEntityDao
 
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME}")
 	fun getAll(): LiveData<List<OrderEntity>>
+
+	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME} WHERE ownerId = :ownerId")
+	fun getByOwnerId(ownerId: String): LiveData<List<OrderEntity>>
 }

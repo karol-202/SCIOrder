@@ -59,7 +59,7 @@ class ProductsViewModel(ownerDao: OwnerDao,
 		fun updateProductLocally(product: Product) = coroutineScope.launch { productDao.update(listOf(product)) }
 
 		val owner = owner ?: return
-		productApi.updateProduct(owner.id, owner.hash, product.id, product).handleResponse { updateProductLocally(product) }
+		productApi.updateProduct(owner.id, product.id, owner.hash, product).handleResponse { updateProductLocally(product) }
 	}
 
 	fun removeProduct(product: Product)
@@ -67,7 +67,7 @@ class ProductsViewModel(ownerDao: OwnerDao,
 		fun removeProductLocally(product: Product) = coroutineScope.launch { productDao.delete(listOf(product)) }
 
 		val owner = owner ?: return
-		productApi.removeProduct(owner.id, owner.hash, product.id).handleResponse { removeProductLocally(product) }
+		productApi.removeProduct(owner.id, product.id, owner.hash).handleResponse { removeProductLocally(product) }
 	}
 
 	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =

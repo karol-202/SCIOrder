@@ -15,6 +15,9 @@ interface ProductEntityDao
 	@Delete
 	suspend fun delete(products: List<ProductEntity>)
 
+	@Query("DELETE FROM ${ProductEntity.TABLE_NAME}")
+	suspend fun deleteAll()
+
     @Query("SELECT * FROM ${ProductEntity.TABLE_NAME}")
     fun getAll(): LiveData<List<ProductEntity>>
 }

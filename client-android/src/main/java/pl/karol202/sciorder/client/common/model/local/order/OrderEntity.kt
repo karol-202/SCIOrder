@@ -7,6 +7,7 @@ import pl.karol202.sciorder.common.model.Order
 
 @Entity(tableName = OrderEntity.TABLE_NAME)
 data class OrderEntity(@PrimaryKey val id: String,
+                       val ownerId: String,
                        val entries: List<Order.Entry>,
                        @Embedded val details: Order.Details,
                        val status: Order.Status)

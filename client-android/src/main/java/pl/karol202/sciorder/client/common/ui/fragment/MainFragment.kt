@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.common.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.PagerAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -9,6 +10,7 @@ import pl.karol202.sciorder.client.common.R
 import pl.karol202.sciorder.client.common.components.FragmentWithMenu
 import pl.karol202.sciorder.client.common.extensions.observe
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
+import pl.karol202.sciorder.common.model.Owner
 
 abstract class MainFragment : FragmentWithMenu()
 {
@@ -33,9 +35,17 @@ abstract class MainFragment : FragmentWithMenu()
 	abstract fun createNavigationPagerAdapter(): PagerAdapter
 
 	private fun observeOwner() =
-			ownerViewModel.ownerLiveData.observe(viewLifecycleOwner) { if(it == null) navigateBack() }
+			ownerViewModel.ownerLiveData.observe(viewLifecycleOwner) {
+				if(it == null) navigateBack()
+				else updateTitle(it)
+			}
 
 	private fun navigateBack() = fragmentManager?.popBackStack()
+
+	private fun updateTitle(owner: Owner)
+	{
+		(activity as? AppCompatActivity)?.supportActionBar?.title = owner.name
+	}
 
 	override fun onMenuItemSelected(itemId: Int) = when(itemId)
 	{

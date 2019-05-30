@@ -14,6 +14,8 @@ private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) : P
 
 	override suspend fun delete(items: List<Product>) = productEntityDao.delete(items.map { it.toProductEntity() })
 
+	override suspend fun deleteAll() = productEntityDao.deleteAll()
+
 	override fun getAll(): LiveData<List<Product>> =
 			productEntityDao.getAll().map { entities -> entities.map { it.toProduct() } }
 
