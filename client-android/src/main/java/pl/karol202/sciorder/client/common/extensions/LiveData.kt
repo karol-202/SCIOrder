@@ -22,8 +22,9 @@ fun <T> MutableLiveData(initialValue: T) = androidx.lifecycle.MutableLiveData<T>
 
 fun <T> MediatorLiveData(initialValue: T) = MediatorLiveData<T>().apply { value = initialValue }
 
-fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, observer: (T?) -> Unit) =
-		observe(lifecycleOwner, Observer<T> { observer(it) })
+fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, observer: (T?) -> Unit) = apply {
+	observe(lifecycleOwner, Observer<T> { observer(it) })
+}
 
 fun <T : Any> LiveData<out T?>.observeNonNull(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) =
 		observe(lifecycleOwner) { it?.let(observer) }
@@ -32,8 +33,9 @@ fun <T> LiveData<Event<T>>.observeEvent(lifecycleOwner: LifecycleOwner, observer
 		observe(lifecycleOwner) { it?.getIfNotConsumed()?.let(observer) }
 
 // Waits for first non-null value and then stops observing
-fun <T : Any> LiveData<out T?>.observeOnceNonNull(observer: (T) -> Unit) =
-		DisposableObserver(this) { value -> if(value != null) true.also { observer(value) } else false }.plug()
+fun <T : Any> LiveData<out T?>.observeOnceNonNull(observer: (T) -> Unit) = apply {
+	DisposableObserver(this) { value -> if(value != null) true.also { observer(value) } else false }.plug()
+}
 
 // Works same as Transformations.map
 // Rewritten in order to ensure null safety
@@ -58,27 +60,13 @@ fun <X, Y> LiveData<X>.switchMap(switchFunction: (X) -> LiveData<Y>): LiveData<Y
 	}
 }
 
-operator fun <X, Y> LiveData<X>.plus(second: LiveData<Y>): LiveData<Pair<X, Y>> = MediatorLiveData<Pair<X, Y>>().apply {
-	addSource(this@plus) { x: X ->
-		val y = second.value ?: return@addSource
-		value = x to y
-	}
-	addSource(second) { y: Y ->
-		val x = this@plus.value ?: return@addSource
-		value = x to y
-	}
-}
-
 fun <T : Any> LiveData<T?>.nonNull(): LiveData<T> = MediatorLiveData<T>().apply {
 	addSource(this@nonNull) { t -> t?.let { value = it } }
 }
 
-fun <T> LiveData<ApiResponse<T>>.handleResponse(targetLiveData: MediatorLiveData<*>,
-                                                successListener: (T) -> Unit,
-                                                failureListener: (ApiResponse.Error<T>) -> Unit)
-{
-	targetLiveData.addSource(this) { apiResponse ->
-		targetLiveData.removeSource(this)
+fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit = { },
+                                                failureListener: (ApiResponse.Error<T>) -> Unit = { }) = apply {
+	observeOnceNonNull { apiResponse ->
 		when(apiResponse)
 		{
 			is ApiResponse.Success -> successListener(apiResponse.data)
@@ -86,3 +74,7 @@ fun <T> LiveData<ApiResponse<T>>.handleResponse(targetLiveData: MediatorLiveData
 		}
 	}
 }
+
+fun <T> LiveData<ApiResponse<T>>.doOnSuccess(onSuccess: (T) -> Unit) = handleResponse(successListener = onSuccess)
+
+fun <T> LiveData<ApiResponse<T>>.doOnFailure(onFailure: (ApiResponse.Error<T>) -> Unit) = handleResponse(failureListener = onFailure)

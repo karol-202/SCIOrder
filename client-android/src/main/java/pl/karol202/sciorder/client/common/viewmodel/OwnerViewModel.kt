@@ -2,43 +2,38 @@ package pl.karol202.sciorder.client.common.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import kotlinx.coroutines.launch
 import pl.karol202.sciorder.client.common.components.CoroutineViewModel
 import pl.karol202.sciorder.client.common.components.Event
-import pl.karol202.sciorder.client.common.extensions.create
-import pl.karol202.sciorder.client.common.extensions.handleResponse
+import pl.karol202.sciorder.client.common.extensions.doOnFailure
 import pl.karol202.sciorder.client.common.extensions.sha1
 import pl.karol202.sciorder.client.common.model.local.owner.OwnerDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.OwnerApi
-import pl.karol202.sciorder.common.model.Owner
+import pl.karol202.sciorder.client.common.repository.owner.OwnerRepositoryImpl
 
-abstract class OwnerViewModel(private val ownerDao: OwnerDao,
-                              private val ownerApi: OwnerApi) : CoroutineViewModel()
+abstract class OwnerViewModel(ownerDao: OwnerDao,
+                              ownerApi: OwnerApi) : CoroutineViewModel()
 {
 	enum class Error
 	{
 		NOT_FOUND, NAME_BUSY, OTHER
 	}
 
-	val ownerLiveData = ownerDao.get()
-	private var owner: Owner?
-		get() = ownerLiveData.value
-		set(value) { launch { ownerDao.set(value) } }
+	private val ownerRepository = OwnerRepositoryImpl(coroutineScope, ownerDao, ownerApi)
+
+	val ownerLiveData = ownerRepository.getOwner()
 
 	private val _errorEventLiveData = MediatorLiveData<Event<Error>>()
 	val errorEventLiveData: LiveData<Event<Error>> = _errorEventLiveData
 
 	fun login(name: String, password: String? = null) =
-			ownerApi.getOwnerByName(name, password?.sha1()).handleResponse { owner = it }
+			ownerRepository.login(name, password?.sha1()).handleResponse()
 
 	fun register(name: String, password: String) =
-			ownerApi.addOwner(Owner.create(name, password.sha1())).handleResponse { owner = it }
+			ownerRepository.register(name, password.sha1()).handleResponse()
 
-	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =
-			handleResponse(_errorEventLiveData,
-			               successListener = successListener,
-			               failureListener = { _errorEventLiveData.value = Event(it.toError()) })
+	private fun <T> LiveData<ApiResponse<T>>.handleResponse() =
+			doOnFailure { _errorEventLiveData.value = Event(it.toError()) }
 
 	private fun ApiResponse.Error<*>.toError() = when(code)
 	{
@@ -49,7 +44,7 @@ abstract class OwnerViewModel(private val ownerDao: OwnerDao,
 
 	fun logout()
 	{
-		owner = null
+		ownerRepository.logout()
 		onLogout()
 	}
 

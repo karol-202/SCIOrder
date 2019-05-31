@@ -2,10 +2,7 @@ package pl.karol202.sciorder.client.user.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import pl.karol202.sciorder.client.common.components.CoroutineViewModel
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.MutableLiveData
 import pl.karol202.sciorder.client.common.extensions.create
@@ -16,21 +13,25 @@ import pl.karol202.sciorder.client.common.model.local.order.OrderDao
 import pl.karol202.sciorder.client.common.model.local.owner.OwnerDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
+import pl.karol202.sciorder.client.common.model.remote.OwnerApi
+import pl.karol202.sciorder.client.common.repository.owner.OwnerRepositoryImpl
+import pl.karol202.sciorder.client.user.repository.order.OrderRepositoryImpl
 import pl.karol202.sciorder.common.model.Order
 
 class OrdersViewModel(ownerDao: OwnerDao,
-                      private val orderDao: OrderDao,
-                      private val orderApi: OrderApi) : ViewModel()
+                      ownerApi: OwnerApi,
+                      orderDao: OrderDao,
+                      orderApi: OrderApi) : CoroutineViewModel()
 {
 	enum class OrderResult
 	{
 		SUCCESS, FAILURE
 	}
 
-	private val coroutineJob = Job()
-	private val coroutineScope = CoroutineScope(coroutineJob)
+	private val ownerRepository = OwnerRepositoryImpl(coroutineScope, ownerDao, ownerApi)
+	private val orderRepository = OrderRepositoryImpl(coroutineScope, orderDao, orderApi)
 
-	private val ownerLiveData = ownerDao.get()
+	private val ownerLiveData = ownerRepository.getOwner()
 
 	private val _orderLiveData = MutableLiveData<List<OrderedProduct>>(emptyList())
 	val orderLiveData: LiveData<List<OrderedProduct>> = _orderLiveData
@@ -76,18 +77,12 @@ class OrdersViewModel(ownerDao: OwnerDao,
 
 	private fun executeOrder(order: Order)
 	{
-		fun saveOrderLocally(order: Order) = coroutineScope.launch { orderDao.insert(listOf(order)) }
-
 		ownerLiveData.observeOnceNonNull { owner ->
-			orderApi.addOrder(owner.id, order).handleResponse { saveOrderLocally(it) }
+			orderRepository.executeOrder(owner, order).handleResponse()
 		}
 	}
 
-	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =
-			handleResponse(_errorEventLiveData,
-			               successListener = {
-				               _errorEventLiveData.value = Event(OrderResult.SUCCESS)
-				               successListener(it)
-			               },
+	private fun <T> LiveData<ApiResponse<T>>.handleResponse() =
+			handleResponse(successListener = { _errorEventLiveData.value = Event(OrderResult.SUCCESS) },
 			               failureListener = { _errorEventLiveData.value = Event(OrderResult.FAILURE) })
 }
