@@ -88,7 +88,7 @@ class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOr
 			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutProducts.isRefreshing = it }
 
 	private fun observeProductError() =
-			productsViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showErrorSnackbar(R.string.text_loading_error) }
+			productsViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }
 
 	private fun observeOrder() =
 			ordersViewModel.orderLiveData.observeNonNull(viewLifecycleOwner) { products ->
@@ -98,9 +98,12 @@ class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOr
 			}
 
 	private fun observeOrderError() =
-			ordersViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showErrorSnackbar(R.string.text_order_error) }
+			ordersViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) {
+				if(it == OrdersViewModel.OrderResult.SUCCESS) showSnackbar(R.string.text_order_success)
+				else showSnackbar(R.string.text_order_error)
+			}
 
-	private fun showErrorSnackbar(@StringRes message: Int)
+	private fun showSnackbar(@StringRes message: Int)
 	{
 		showSnackbar(message) {
 			val layoutParams = view.layoutParams as CoordinatorLayout.LayoutParams

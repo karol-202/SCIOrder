@@ -22,6 +22,11 @@ class OrdersViewModel(ownerDao: OwnerDao,
                       private val orderDao: OrderDao,
                       private val orderApi: OrderApi) : ViewModel()
 {
+	enum class OrderResult
+	{
+		SUCCESS, FAILURE
+	}
+
 	private val coroutineJob = Job()
 	private val coroutineScope = CoroutineScope(coroutineJob)
 
@@ -30,8 +35,8 @@ class OrdersViewModel(ownerDao: OwnerDao,
 	private val _orderLiveData = MutableLiveData<List<OrderedProduct>>(emptyList())
 	val orderLiveData: LiveData<List<OrderedProduct>> = _orderLiveData
 
-	private val _errorEventLiveData = MediatorLiveData<Event<Unit>>()
-	val errorEventLiveData: LiveData<Event<Unit>> = _errorEventLiveData
+	private val _errorEventLiveData = MediatorLiveData<Event<OrderResult>>()
+	val errorEventLiveData: LiveData<Event<OrderResult>> = _errorEventLiveData
 
 	fun addToOrder(orderedProduct: OrderedProduct)
 	{
@@ -80,6 +85,9 @@ class OrdersViewModel(ownerDao: OwnerDao,
 
 	private fun <T> LiveData<ApiResponse<T>>.handleResponse(successListener: (T) -> Unit) =
 			handleResponse(_errorEventLiveData,
-			               successListener = successListener,
-			               failureListener = { _errorEventLiveData.value = Event(Unit) })
+			               successListener = {
+				               _errorEventLiveData.value = Event(OrderResult.SUCCESS)
+				               successListener(it)
+			               },
+			               failureListener = { _errorEventLiveData.value = Event(OrderResult.FAILURE) })
 }
