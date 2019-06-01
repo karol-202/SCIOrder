@@ -8,7 +8,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        applicationId "pl.karol202.sciorder.client.admin"
+        applicationId "pl.karol202.sciorder.client.android.admin"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 1

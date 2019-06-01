@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pl.karol202.sciorder.client.admin.ui.view.InterceptingView
+<pl.karol202.sciorder.client.android.admin.ui.view.InterceptingView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -45,4 +45,4 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</pl.karol202.sciorder.client.admin.ui.view.InterceptingView>
+</pl.karol202.sciorder.client.android.admin.ui.view.InterceptingView>

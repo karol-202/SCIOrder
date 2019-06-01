@@ -3,9 +3,5 @@
 .idea/caches
 .idea/workspace.xml
 
-client-android/build
-common/build
-server/build
-
 local.properties
 *.iml

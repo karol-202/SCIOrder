@@ -5,7 +5,7 @@
             app:startDestination="@id/loginFragment">
 
     <fragment android:id="@+id/loginFragment"
-              android:name="pl.karol202.sciorder.client.user.ui.fragment.LoginFragment"
+              android:name="pl.karol202.sciorder.client.android.user.ui.fragment.LoginFragment"
               android:label="@string/fragment_login">
 
         <action android:id="@+id/action_loginFragment_to_mainFragment"
@@ -17,5 +17,5 @@
     </fragment>
 
     <fragment android:id="@+id/mainFragment"
-              android:name="pl.karol202.sciorder.client.user.ui.fragment.MainFragment"/>
+              android:name="pl.karol202.sciorder.client.android.user.ui.fragment.MainFragment"/>
 </navigation>

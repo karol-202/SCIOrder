@@ -5,7 +5,7 @@
             app:startDestination="@id/loginFragment">
 
     <fragment android:id="@+id/loginFragment"
-              android:name="pl.karol202.sciorder.client.admin.ui.fragment.LoginFragment"
+              android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.LoginFragment"
               android:label="@string/fragment_login">
 
         <action android:id="@+id/action_loginFragment_to_mainFragment"
@@ -17,7 +17,7 @@
     </fragment>
 
     <fragment android:id="@+id/mainFragment"
-              android:name="pl.karol202.sciorder.client.admin.ui.fragment.MainFragment">
+              android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.MainFragment">
 
         <action android:id="@+id/action_mainFragment_to_productEditFragment"
                 app:destination="@id/productEditFragment"
@@ -28,7 +28,7 @@
     </fragment>
 
     <fragment android:id="@+id/productEditFragment"
-              android:name="pl.karol202.sciorder.client.admin.ui.fragment.ProductEditFragment"
+              android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.ProductEditFragment"
               android:label="@string/fragment_product_edit">
 
         <argument android:name="productId" app:argType="string" app:nullable="true"/>
