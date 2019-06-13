@@ -1,6 +1,5 @@
 package pl.karol202.sciorder.client.android.common.model.local.product
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -19,5 +18,5 @@ interface ProductEntityDao
 	suspend fun deleteAll()
 
     @Query("SELECT * FROM ${ProductEntity.TABLE_NAME}")
-    fun getAll(): LiveData<List<ProductEntity>>
+    suspend fun getAll(): List<ProductEntity>
 }

@@ -2,11 +2,9 @@ package pl.karol202.sciorder.client.android.user.repository.order
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import pl.karol202.sciorder.client.android.common.extensions.doOnSuccess
-import pl.karol202.sciorder.client.android.common.model.local.order.OrderDao
-import pl.karol202.sciorder.client.android.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.android.common.repository.resource.RoomResource
 import pl.karol202.sciorder.client.android.common.repository.resource.UpdateTimeout
+import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Owner
 import java.util.concurrent.TimeUnit

@@ -1,12 +1,11 @@
 package pl.karol202.sciorder.client.android.common.model.local.product
 
-import androidx.lifecycle.LiveData
-import pl.karol202.sciorder.client.android.common.extensions.map
+import pl.karol202.sciorder.client.common.model.local.ProductDao
 import pl.karol202.sciorder.common.model.Product
 
-fun ProductEntityDao.toProductDao(): ProductDao = ProductDaoImpl(this)
+fun ProductEntityDao.toProductDao(): ProductDao = RoomProductDao(this)
 
-private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) : ProductDao
+private class RoomProductDao(private val productEntityDao: ProductEntityDao) : ProductDao
 {
 	override suspend fun insert(items: List<Product>) = productEntityDao.insert(items.map { it.toProductEntity() })
 
@@ -16,8 +15,7 @@ private class ProductDaoImpl(private val productEntityDao: ProductEntityDao) : P
 
 	override suspend fun deleteAll() = productEntityDao.deleteAll()
 
-	override fun getAll(): LiveData<List<Product>> =
-			productEntityDao.getAll().map { entities -> entities.map { it.toProduct() } }
+	override suspend fun getAll() = productEntityDao.getAll().map { it.toProduct() }
 
 	private fun ProductEntity.toProduct() = Product(id, "", name, available, parameters)
 

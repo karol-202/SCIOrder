@@ -6,10 +6,8 @@ import pl.karol202.sciorder.client.android.common.components.CoroutineViewModel
 import pl.karol202.sciorder.client.android.common.components.Event
 import pl.karol202.sciorder.client.android.common.extensions.doOnFailure
 import pl.karol202.sciorder.client.android.common.extensions.sha1
-import pl.karol202.sciorder.client.android.common.model.local.owner.OwnerDao
-import pl.karol202.sciorder.client.android.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.android.common.model.remote.OwnerApi
 import pl.karol202.sciorder.client.android.common.repository.owner.OwnerRepositoryImpl
+import pl.karol202.sciorder.client.common.model.remote.OwnerApi
 
 abstract class OwnerViewModel(ownerDao: OwnerDao,
                               ownerApi: OwnerApi) : CoroutineViewModel()

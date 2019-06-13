@@ -3,10 +3,6 @@ package pl.karol202.sciorder.client.android.common.extensions
 import pl.karol202.sciorder.client.android.common.R
 import pl.karol202.sciorder.common.model.Order
 
-// Status and id could be whatever, will be ignored by the server
-fun Order.Companion.create(entries: List<Order.Entry>, details: Order.Details) =
-		Order("", "", entries, details, Order.Status.WAITING)
-
 val Order.Status.visibleName get() = when(this)
 {
 	Order.Status.WAITING -> R.string.order_status_waiting
@@ -24,5 +20,3 @@ val Order.Status.color get() = when(this)
 	Order.Status.DONE -> R.color.order_status_done
 	Order.Status.REJECTED -> R.color.order_status_rejected
 }
-
-val Order.Status.Companion.DEFAULTS get() = Order.Status.values().toSet() - Order.Status.DONE - Order.Status.REJECTED

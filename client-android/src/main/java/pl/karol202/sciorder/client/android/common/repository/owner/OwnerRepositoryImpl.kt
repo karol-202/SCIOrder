@@ -3,11 +3,8 @@ package pl.karol202.sciorder.client.android.common.repository.owner
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import pl.karol202.sciorder.client.android.common.extensions.create
 import pl.karol202.sciorder.client.android.common.extensions.doOnSuccess
-import pl.karol202.sciorder.client.android.common.model.local.owner.OwnerDao
-import pl.karol202.sciorder.client.android.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.android.common.model.remote.OwnerApi
+import pl.karol202.sciorder.client.common.model.remote.OwnerApi
 import pl.karol202.sciorder.common.model.Owner
 
 class OwnerRepositoryImpl(private val coroutineScope: CoroutineScope,

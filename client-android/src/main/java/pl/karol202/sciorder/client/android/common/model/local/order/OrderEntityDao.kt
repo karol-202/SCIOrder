@@ -1,6 +1,5 @@
 package pl.karol202.sciorder.client.android.common.model.local.order
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import pl.karol202.sciorder.common.model.Order
 
@@ -23,8 +22,8 @@ interface OrderEntityDao
 	suspend fun deleteAll()
 
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME}")
-	fun getAll(): LiveData<List<OrderEntity>>
+	suspend fun getAll(): List<OrderEntity>
 
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME} WHERE ownerId = :ownerId")
-	fun getByOwnerId(ownerId: String): LiveData<List<OrderEntity>>
+	suspend fun getByOwnerId(ownerId: String): List<OrderEntity>
 }

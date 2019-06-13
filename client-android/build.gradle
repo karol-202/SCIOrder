@@ -54,8 +54,6 @@ dependencies {
     implementation "androidx.room:room-ktx:$roomVersion"
 
     //Navigation
-    api "androidx.navigation:navigation-fragment:$navigationVersion"
-    api "androidx.navigation:navigation-ui:$navigationVersion"
     api "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     api "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 

@@ -2,18 +2,12 @@ package pl.karol202.sciorder.client.android.user.viewmodel
 
 import pl.karol202.sciorder.client.android.common.components.CoroutineViewModel
 import pl.karol202.sciorder.client.android.common.components.Event
-import pl.karol202.sciorder.client.android.common.extensions.map
-import pl.karol202.sciorder.client.android.common.extensions.mapNotNull
-import pl.karol202.sciorder.client.android.common.extensions.nonNull
-import pl.karol202.sciorder.client.android.common.extensions.switchMap
-import pl.karol202.sciorder.client.android.common.model.local.owner.OwnerDao
-import pl.karol202.sciorder.client.android.common.model.local.product.ProductDao
-import pl.karol202.sciorder.client.android.common.model.remote.OwnerApi
-import pl.karol202.sciorder.client.android.common.model.remote.ProductApi
 import pl.karol202.sciorder.client.android.common.repository.owner.OwnerRepositoryImpl
 import pl.karol202.sciorder.client.android.common.repository.product.ProductRepositoryImpl
 import pl.karol202.sciorder.client.android.common.repository.resource.EmptyResource
 import pl.karol202.sciorder.client.android.common.repository.resource.ResourceState
+import pl.karol202.sciorder.client.common.model.remote.OwnerApi
+import pl.karol202.sciorder.client.common.model.remote.ProductApi
 import pl.karol202.sciorder.common.model.Product
 
 class ProductsViewModel(ownerDao: OwnerDao,

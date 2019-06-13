@@ -1,7 +1,7 @@
 buildscript {
     ext {
         // Common
-        androidBuildToolsVersion = '3.4.0'
+        androidBuildToolsVersion = '3.4.1'
         kotlinVersion = '1.3.31'
         koinVersion = '2.0.0-rc-2'
 

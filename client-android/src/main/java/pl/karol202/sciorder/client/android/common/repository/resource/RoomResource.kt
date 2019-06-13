@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pl.karol202.sciorder.client.android.common.extensions.observeOnceNonNull
-import pl.karol202.sciorder.client.android.common.model.local.CrudDao
-import pl.karol202.sciorder.client.android.common.model.local.dispatchDiff
 import pl.karol202.sciorder.common.model.IdProvider
 
 abstract class RoomResource<T : IdProvider> @MainThread constructor(private val coroutineScope: CoroutineScope,

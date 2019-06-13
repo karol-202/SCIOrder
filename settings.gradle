@@ -4,6 +4,7 @@ include ':common'
 include ':server'
 
 if (HEROKU != "true") {
+    include ':client'
     include ':client-android'
     include ':client-android-user'
     include ':client-android-admin'

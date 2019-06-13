@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.android.common.model.local
+package pl.karol202.sciorder.client.common.model.local
 
 import pl.karol202.sciorder.common.model.IdProvider
 

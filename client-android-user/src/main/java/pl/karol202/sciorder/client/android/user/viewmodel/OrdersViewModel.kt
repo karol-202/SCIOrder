@@ -5,17 +5,12 @@ import androidx.lifecycle.MediatorLiveData
 import pl.karol202.sciorder.client.android.common.components.CoroutineViewModel
 import pl.karol202.sciorder.client.android.common.components.Event
 import pl.karol202.sciorder.client.android.common.extensions.MutableLiveData
-import pl.karol202.sciorder.client.android.common.extensions.create
 import pl.karol202.sciorder.client.android.common.extensions.handleResponse
-import pl.karol202.sciorder.client.android.common.extensions.observeOnceNonNull
 import pl.karol202.sciorder.client.android.common.model.OrderedProduct
-import pl.karol202.sciorder.client.android.common.model.local.order.OrderDao
-import pl.karol202.sciorder.client.android.common.model.local.owner.OwnerDao
-import pl.karol202.sciorder.client.android.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.android.common.model.remote.OrderApi
-import pl.karol202.sciorder.client.android.common.model.remote.OwnerApi
 import pl.karol202.sciorder.client.android.common.repository.owner.OwnerRepositoryImpl
 import pl.karol202.sciorder.client.android.user.repository.order.OrderRepositoryImpl
+import pl.karol202.sciorder.client.common.model.remote.OrderApi
+import pl.karol202.sciorder.client.common.model.remote.OwnerApi
 import pl.karol202.sciorder.common.model.Order
 
 class OrdersViewModel(ownerDao: OwnerDao,

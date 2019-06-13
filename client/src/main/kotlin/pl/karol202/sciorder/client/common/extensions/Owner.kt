@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.android.common.extensions
+package pl.karol202.sciorder.client.common.extensions
 
 import pl.karol202.sciorder.common.model.Owner
 
