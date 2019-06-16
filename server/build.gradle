@@ -20,6 +20,7 @@ dependencies {
     implementation "org.litote.kmongo:kmongo-coroutine:$kmongoVersion"
 
     // Koin
+    implementation "org.koin:koin-core:$koinVersion"
     implementation "org.koin:koin-ktor:$koinVersion"
 
     implementation "ch.qos.logback:logback-classic:$logbackVersion"

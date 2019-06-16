@@ -5,9 +5,9 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_order_entry.*
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.android.common.model.OrderedProduct
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
+import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.common.ui.adapter.StaticAdapter
 
 class OrderEntryAdapter(entries: List<OrderedProduct?>) : StaticAdapter<OrderedProduct?>(entries)
 {

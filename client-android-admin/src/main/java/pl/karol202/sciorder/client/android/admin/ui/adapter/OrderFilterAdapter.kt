@@ -3,9 +3,9 @@ package pl.karol202.sciorder.client.android.admin.ui.adapter
 import android.view.View
 import kotlinx.android.synthetic.main.item_order_filter.*
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.android.common.extensions.visibleName
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.client.common.extensions.visibleName
+import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.common.Order
 
 class OrderFilterAdapter(filter: Set<Order.Status>) : BasicAdapter<OrderFilterAdapter.FilterEntry>()
 {

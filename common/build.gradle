@@ -1,18 +1,19 @@
-plugins {
-    id 'kotlin'
-}
+apply plugin: 'kotlin-multiplatform'
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+kotlin {
+    jvm()
 
-    //Koin
-    api "org.koin:koin-core:$koinVersion"
-}
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion"
+            }
+        }
 
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+        jvmMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+            }
+        }
+    }
 }

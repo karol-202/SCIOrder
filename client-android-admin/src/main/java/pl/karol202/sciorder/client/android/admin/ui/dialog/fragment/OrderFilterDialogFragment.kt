@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import pl.karol202.sciorder.client.android.admin.ui.dialog.OrderFilterDialog
 import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetListener
-import pl.karol202.sciorder.client.android.common.components.ExtendedDialogFragment
-import pl.karol202.sciorder.client.android.common.extensions.ctx
-import pl.karol202.sciorder.client.android.common.extensions.setArguments
-import pl.karol202.sciorder.client.android.common.extensions.setTargetFragment
-import pl.karol202.sciorder.client.android.common.extensions.to
-import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.client.common.components.ExtendedDialogFragment
+import pl.karol202.sciorder.client.common.extensions.ctx
+import pl.karol202.sciorder.client.common.extensions.setArguments
+import pl.karol202.sciorder.client.common.extensions.setTargetFragment
+import pl.karol202.sciorder.client.common.extensions.to
+import pl.karol202.sciorder.common.Order
 
 class OrderFilterDialogFragment : ExtendedDialogFragment()
 {

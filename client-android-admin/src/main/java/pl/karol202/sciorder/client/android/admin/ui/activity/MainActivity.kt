@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.admin.ui.activity
 
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.android.common.ui.activity.MainActivity
+import pl.karol202.sciorder.client.common.ui.activity.MainActivity
 
 class MainActivity : MainActivity()
 {

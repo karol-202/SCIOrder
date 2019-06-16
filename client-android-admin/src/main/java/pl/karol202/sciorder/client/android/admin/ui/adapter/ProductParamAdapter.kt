@@ -5,12 +5,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_product_param.*
 import kotlinx.android.synthetic.main.item_product_param_null.*
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.android.common.extensions.addAfterTextChangedListener
-import pl.karol202.sciorder.client.android.common.extensions.randomUUIDString
-import pl.karol202.sciorder.client.android.common.extensions.setOnItemSelectedListener
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
-import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.client.common.extensions.addAfterTextChangedListener
+import pl.karol202.sciorder.client.common.extensions.randomUUIDString
+import pl.karol202.sciorder.client.common.extensions.setOnItemSelectedListener
+import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.common.Product
 
 class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parameter>) -> Unit) :
 		DynamicAdapter<ProductParamAdapter.ParameterWithId?>()

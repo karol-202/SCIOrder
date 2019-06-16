@@ -1,12 +1,9 @@
 package pl.karol202.sciorder.server.routes.order
 
 import io.ktor.application.call
-import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
 import io.ktor.routing.Route
-import io.ktor.routing.post
 import io.ktor.routing.put
-import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.server.database.OrderDao
 import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.notFound

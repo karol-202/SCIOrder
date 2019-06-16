@@ -3,8 +3,8 @@ package pl.karol202.sciorder.server.database
 import org.litote.kmongo.`in`
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
-import org.litote.kmongo.set
-import pl.karol202.sciorder.common.model.Order
+import org.litote.kmongo.setValue
+import pl.karol202.sciorder.common.Order
 
 class DatabaseOrderDao(database: KMongoDatabase) : OrderDao
 {
@@ -17,7 +17,7 @@ class DatabaseOrderDao(database: KMongoDatabase) : OrderDao
 
 	override suspend fun updateOrderStatus(ownerId: String, id: String, status: Order.Status) =
 		ordersCollection.updateOne(and(Order::ownerId eq ownerId, Order::_id eq id),
-		                           set(Order::status, status))
+		                           setValue(Order::status, status))
 			.let { it.wasAcknowledged() && it.matchedCount > 0 }
 
 	override suspend fun deleteOrdersByOwner(ownerId: String)

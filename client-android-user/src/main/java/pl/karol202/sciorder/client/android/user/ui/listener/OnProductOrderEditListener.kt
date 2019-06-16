@@ -1,6 +1,6 @@
 package pl.karol202.sciorder.client.android.user.ui.listener
 
-import pl.karol202.sciorder.client.android.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.model.OrderedProduct
 
 interface OnProductOrderEditListener
 {

@@ -3,8 +3,8 @@ package pl.karol202.sciorder.server.database
 import com.mongodb.client.model.IndexOptions
 import org.litote.kmongo.ascendingIndex
 import org.litote.kmongo.eq
-import org.litote.kmongo.set
-import pl.karol202.sciorder.common.model.Owner
+import org.litote.kmongo.setValue
+import pl.karol202.sciorder.common.Owner
 
 class DatabaseOwnerDao(database: KMongoDatabase): OwnerDao
 {
@@ -26,7 +26,7 @@ class DatabaseOwnerDao(database: KMongoDatabase): OwnerDao
 	}
 
 	override suspend fun updateOwnerHash(id: String, hash: String) =
-			ownersCollection.updateOne(Owner::_id eq id, set(Owner::hash, hash))
+			ownersCollection.updateOne(Owner::_id eq id, setValue(Owner::hash, hash))
 					.let { it.wasAcknowledged() && it.matchedCount > 0 }
 
 	override suspend fun getOwnerById(id: String) =

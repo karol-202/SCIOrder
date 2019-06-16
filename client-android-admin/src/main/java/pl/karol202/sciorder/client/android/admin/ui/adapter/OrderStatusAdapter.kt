@@ -3,11 +3,11 @@ package pl.karol202.sciorder.client.android.admin.ui.adapter
 import android.view.View
 import kotlinx.android.synthetic.main.item_order_status.*
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.android.common.extensions.color
-import pl.karol202.sciorder.client.android.common.extensions.getColorCompat
-import pl.karol202.sciorder.client.android.common.extensions.visibleName
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicSpinnerAdapter
-import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.client.common.extensions.color
+import pl.karol202.sciorder.client.common.extensions.getColorCompat
+import pl.karol202.sciorder.client.common.extensions.visibleName
+import pl.karol202.sciorder.client.common.ui.adapter.BasicSpinnerAdapter
+import pl.karol202.sciorder.common.Order
 
 class OrderStatusAdapter : BasicSpinnerAdapter<Order.Status>()
 {

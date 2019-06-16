@@ -2,10 +2,10 @@ package pl.karol202.sciorder.client.android.user.ui.adapter
 
 import android.view.View
 import kotlinx.android.synthetic.main.item_ordered_product_simple.*
-import pl.karol202.sciorder.client.android.common.model.OrderedProduct
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
 import pl.karol202.sciorder.client.android.user.R
+import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.common.ui.adapter.StaticAdapter
 
 class SimpleOrderedProductAdapter(products: List<OrderedProduct>) : StaticAdapter<OrderedProduct>(products)
 {

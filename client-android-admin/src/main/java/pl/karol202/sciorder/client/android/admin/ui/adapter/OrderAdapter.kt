@@ -5,13 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_order.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithoutLast
-import pl.karol202.sciorder.client.android.common.extensions.randomUUIDString
-import pl.karol202.sciorder.client.android.common.extensions.setOnItemSelectedListener
-import pl.karol202.sciorder.client.android.common.model.OrderedProduct
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
-import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.client.common.extensions.randomUUIDString
+import pl.karol202.sciorder.client.common.extensions.setOnItemSelectedListener
+import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.Product
 
 class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) -> Unit) : DynamicAdapter<Order>()
 {

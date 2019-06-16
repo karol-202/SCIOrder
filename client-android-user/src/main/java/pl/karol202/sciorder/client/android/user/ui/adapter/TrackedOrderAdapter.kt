@@ -3,16 +3,16 @@ package pl.karol202.sciorder.client.android.user.ui.adapter
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_tracked_order.*
-import pl.karol202.sciorder.client.android.common.extensions.color
-import pl.karol202.sciorder.client.android.common.extensions.getColorCompat
-import pl.karol202.sciorder.client.android.common.extensions.randomUUIDString
-import pl.karol202.sciorder.client.android.common.extensions.visibleName
-import pl.karol202.sciorder.client.android.common.model.OrderedProduct
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.user.R
-import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.client.common.extensions.color
+import pl.karol202.sciorder.client.common.extensions.getColorCompat
+import pl.karol202.sciorder.client.common.extensions.randomUUIDString
+import pl.karol202.sciorder.client.common.extensions.visibleName
+import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.Product
 
 class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : DynamicAdapter<Order>()
 {

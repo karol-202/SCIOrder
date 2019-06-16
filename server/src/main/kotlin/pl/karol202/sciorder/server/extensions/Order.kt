@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.server.extensions
 
-import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.Product
 import pl.karol202.sciorder.server.database.ProductDao
 
 suspend fun Order.isValid(productDao: ProductDao) = entries.all { it.isValid(productDao, ownerId) }

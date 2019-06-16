@@ -2,10 +2,10 @@ package pl.karol202.sciorder.client.android.user.ui.adapter
 
 import android.view.View
 import kotlinx.android.synthetic.main.item_ordered_product.*
-import pl.karol202.sciorder.client.android.common.model.OrderedProduct
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.user.R
+import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
 
 class OrderedProductAdapter : DynamicAdapter<OrderedProduct>()
 {

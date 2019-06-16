@@ -28,6 +28,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    // Workaround for "More than one file was found with OS independent path 'META-INF/kotlinx-coroutines-core.kotlin_module'"
+    packagingOptions {
+        exclude 'META-INF/kotlinx-coroutines-core.kotlin_module'
+    }
 }
 
 androidExtensions {
@@ -35,5 +40,5 @@ androidExtensions {
 }
 
 dependencies {
-    implementation project(':client-android')
+    implementation project(':client')
 }

@@ -5,7 +5,8 @@ include ':server'
 
 if (HEROKU != "true") {
     include ':client'
-    include ':client-android'
     include ':client-android-user'
     include ':client-android-admin'
 }
+
+enableFeaturePreview("GRADLE_METADATA")

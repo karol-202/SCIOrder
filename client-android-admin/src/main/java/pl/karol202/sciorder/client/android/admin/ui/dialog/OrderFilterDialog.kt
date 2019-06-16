@@ -9,8 +9,8 @@ import kotlinx.android.synthetic.main.dialog_order_filter.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.OrderFilterAdapter
 import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetListener
-import pl.karol202.sciorder.client.android.common.components.ExtendedAlertDialog
-import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.client.common.components.ExtendedAlertDialog
+import pl.karol202.sciorder.common.Order
 
 class OrderFilterDialog(context: Context,
                         filter: Set<Order.Status>,

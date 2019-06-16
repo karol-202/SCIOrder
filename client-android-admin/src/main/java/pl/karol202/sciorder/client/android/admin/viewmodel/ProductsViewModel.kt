@@ -2,59 +2,55 @@ package pl.karol202.sciorder.client.android.admin.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import pl.karol202.sciorder.client.android.common.components.CoroutineViewModel
-import pl.karol202.sciorder.client.android.common.components.Event
-import pl.karol202.sciorder.client.android.common.extensions.handleResponse
-import pl.karol202.sciorder.client.android.common.repository.owner.OwnerRepositoryImpl
-import pl.karol202.sciorder.client.android.common.repository.product.ProductRepositoryImpl
-import pl.karol202.sciorder.client.android.common.repository.resource.EmptyResource
-import pl.karol202.sciorder.client.android.common.repository.resource.ResourceState
-import pl.karol202.sciorder.client.common.model.remote.OwnerApi
-import pl.karol202.sciorder.client.common.model.remote.ProductApi
-import pl.karol202.sciorder.common.model.Product
+import kotlinx.coroutines.flow.*
+import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.common.model.remote.ApiResponse
+import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
+import pl.karol202.sciorder.client.common.repository.product.ProductRepository
+import pl.karol202.sciorder.client.common.repository.resource.Resource
+import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
+import pl.karol202.sciorder.common.Product
 
-class ProductsViewModel(ownerDao: OwnerDao,
-                        ownerApi: OwnerApi,
-                        productDao: ProductDao,
-                        productApi: ProductApi) : CoroutineViewModel()
+class ProductsViewModel(ownerRepository: OwnerRepository,
+                        private val productRepository: ProductRepository) : CoroutineViewModel()
 {
 	enum class UpdateResult
 	{
 		SUCCESS, FAILURE
 	}
 
-	private val ownerRepository = OwnerRepositoryImpl(coroutineScope, ownerDao, ownerApi)
-	private val productRepository = ProductRepositoryImpl(coroutineScope, productDao, productApi)
+	private val ownerFlow = ownerRepository.getOwner().conflate()
 
-	private val ownerLiveData = ownerRepository.getOwner()
-	private val owner get() = ownerLiveData.value
+	private val productsResourceFlow = ownerFlow.filterNotNull().map { productRepository.getAllProducts(it.id) }.conflate()
+	private val productsResourceAsFlow = productsResourceFlow.switchMap { it.asFlow }
 
-	private val productsResourceLiveData = ownerLiveData.nonNull().map { productRepository.getAllProducts(it.id) }
-	private val productsResourceAsLiveData = productsResourceLiveData.switchMap { it.asLiveData }
-	private val productsResource get() = productsResourceLiveData.value ?: EmptyResource<List<Product>>()
-
-	val productsLiveData = productsResourceAsLiveData.map { it.data }
-	val loadingLiveData = productsResourceAsLiveData.map { it is ResourceState.Loading }
-	val loadingErrorEventLiveData = productsResourceAsLiveData.mapNotNull { if(it is ResourceState.Failure) Event(Unit) else null }
+	val productsLiveData = productsResourceAsFlow.map { it.data }.asLiveData()
+	val loadingLiveData = productsResourceAsFlow.map { it is Resource.State.Loading }.asLiveData()
+	val loadingErrorEventLiveData = productsResourceAsFlow.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
+														  .asLiveData()
 
 	private val _updateEventLiveData = MediatorLiveData<Event<UpdateResult>>()
 	val updateEventLiveData: LiveData<Event<UpdateResult>> = _updateEventLiveData
 
-	fun refreshProducts() = productsResource.reload()
+	fun refreshProducts() = launch { productsResourceFlow.first().reload() }
 
-	fun addProduct(product: Product) = owner?.let { owner ->
+	fun addProduct(product: Product) = launch {
+		val owner = ownerFlow.first() ?: return@launch
 		productRepository.addProduct(owner, product).handleResponse()
+
 	}
 
-	fun updateProduct(product: Product) = owner?.let { owner ->
+	fun updateProduct(product: Product) = launch {
+		val owner = ownerFlow.first() ?: return@launch
 		productRepository.updateProduct(owner, product).handleResponse()
 	}
 
-	fun removeProduct(product: Product) = owner?.let { owner ->
+	fun removeProduct(product: Product) = launch {
+		val owner = ownerFlow.first() ?: return@launch
 		productRepository.removeProduct(owner, product).handleResponse()
 	}
 
-	private fun <T> LiveData<ApiResponse<T>>.handleResponse() =
-			handleResponse(successListener = { _updateEventLiveData.value = Event(UpdateResult.SUCCESS) },
-			               failureListener = { _updateEventLiveData.value = Event(UpdateResult.FAILURE) })
+	private suspend fun <T> ApiResponse<T>.handleResponse() =
+			fold(onSuccess = { _updateEventLiveData.value = Event(UpdateResult.SUCCESS) },
+			     onError = { _updateEventLiveData.value = Event(UpdateResult.FAILURE) })
 }
