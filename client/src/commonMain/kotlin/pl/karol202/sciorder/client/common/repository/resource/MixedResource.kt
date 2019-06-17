@@ -40,9 +40,10 @@ abstract class MixedResource<T>(protected val databaseSource: Flow<T>) : Resourc
 
 	private var fetchingMutex = Mutex()
 
-	private val stateFlow = ConflatedBroadcastChannel<State>(State.Loading)
-	override val asFlow = databaseSource.combineLatest(stateFlow.asFlow()) { data, state -> state.toResourceState(data) }
-										.onEach { if(shouldFetchFromNetwork(databaseSource.first())) reload() }
+	private val stateFlow = ConflatedBroadcastChannel<State>(State.Success)
+	override val asFlow = databaseSource.onEach { if(shouldFetchFromNetwork(databaseSource.first())) reload() }
+										.combineLatest(stateFlow.asFlow()) { data, state -> state.toResourceState(data) }
+
 
 	override suspend fun reload()
 	{

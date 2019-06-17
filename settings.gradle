@@ -8,5 +8,3 @@ if (HEROKU != "true") {
     include ':client-android-user'
     include ':client-android-admin'
 }
-
-enableFeaturePreview("GRADLE_METADATA")

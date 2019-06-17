@@ -10,10 +10,7 @@ import pl.karol202.sciorder.client.common.model.local.LocalDatabase
 import pl.karol202.sciorder.client.common.model.local.order.toOrderDao
 import pl.karol202.sciorder.client.common.model.local.owner.toOwnerDao
 import pl.karol202.sciorder.client.common.model.local.product.toProductDao
-import pl.karol202.sciorder.client.common.model.remote.ApiResponseCallAdapter
-import pl.karol202.sciorder.client.common.model.remote.OrderApi
-import pl.karol202.sciorder.client.common.model.remote.OwnerApi
-import pl.karol202.sciorder.client.common.model.remote.ProductApi
+import pl.karol202.sciorder.client.common.model.remote.*
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepositoryImpl
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
@@ -23,6 +20,7 @@ import pl.karol202.sciorder.client.common.repository.owner.OwnerRepositoryImpl
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryImpl
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import java.util.concurrent.TimeUnit
 
@@ -61,15 +59,16 @@ abstract class SCIOrderApplication : Application()
 		fun retrofit(httpClient: OkHttpClient) = Retrofit.Builder()
 				.baseUrl(SERVER_URL)
 				.client(httpClient)
+				.addConverterFactory(MoshiConverterFactory.create())
 				.addCallAdapterFactory(ApiResponseCallAdapter.Factory())
 				.build()
 
 		single { okHttp() }
 		single { retrofit(get()) }
 
-		single { get<Retrofit>().create<OwnerApi>() }
-		single { get<Retrofit>().create<ProductApi>() }
-		single { get<Retrofit>().create<OrderApi>() }
+		single { get<Retrofit>().create<RetrofitOwnerApi>().asOwnerApi() }
+		single { get<Retrofit>().create<RetrofitProductApi>().asProductApi() }
+		single { get<Retrofit>().create<RetrofitOrderApi>().asOrderApi() }
 	}
 
 	private fun repositoryModule() = module {
