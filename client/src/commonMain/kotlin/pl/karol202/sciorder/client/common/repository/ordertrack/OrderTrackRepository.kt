@@ -7,7 +7,7 @@ import pl.karol202.sciorder.common.Owner
 
 interface OrderTrackRepository
 {
-	fun getTrackedOrders(ownerId: String): Resource<List<Order>>
+	fun getTrackedOrdersResource(ownerId: String): Resource<List<Order>>
 
 	suspend fun executeOrder(owner: Owner, order: Order): ApiResponse<Order>
 

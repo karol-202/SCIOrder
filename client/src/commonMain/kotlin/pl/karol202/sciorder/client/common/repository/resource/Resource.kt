@@ -7,12 +7,12 @@ interface Resource<T>
 {
 	sealed class State<T>(open val data: T?)
 	{
-		class Success<T>(override val data: T) : State<T>(data)
+		data class Success<T>(override val data: T) : State<T>(data)
 
-		class Loading<T>(data: T?) : State<T>(data)
+		data class Loading<T>(override val data: T?) : State<T>(data)
 
-		class Failure<T>(data: T?,
-		                 val type: Type) : State<T>(data)
+		data class Failure<T>(override val data: T?,
+		                      val type: Type) : State<T>(data)
 		{
 			enum class Type
 			{

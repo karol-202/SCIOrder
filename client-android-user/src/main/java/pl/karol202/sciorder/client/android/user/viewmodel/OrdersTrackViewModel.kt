@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.android.user.viewmodel
 
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.common.extensions.shareIn
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
@@ -11,9 +12,10 @@ import pl.karol202.sciorder.common.Order
 class OrdersTrackViewModel(ownerRepository: OwnerRepository,
                            private val orderRepository: OrderTrackRepository) : CoroutineViewModel()
 {
-	private val ownerFlow = ownerRepository.getOwner().conflate()
+	private val ownerFlow = ownerRepository.getOwnerFlow().conflate().shareIn(coroutineScope)
 
-	private val ordersResourceFlow = ownerFlow.filterNotNull().map { orderRepository.getTrackedOrders(it.id) }
+	private val ordersResourceFlow = ownerFlow.filterNotNull().map { orderRepository.getTrackedOrdersResource(it.id) }
+											  .conflate().shareIn(coroutineScope)
 	private val ordersResourceAsLiveData = ordersResourceFlow.switchMap { it.asFlow }
 
 	val ordersLiveData = ordersResourceAsLiveData.map { it.data }.asLiveData()

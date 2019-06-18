@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.first
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.create
+import pl.karol202.sciorder.client.common.extensions.shareIn
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
@@ -22,7 +23,7 @@ class OrdersViewModel(ownerRepository: OwnerRepository,
 		SUCCESS, FAILURE
 	}
 
-	private val ownerFlow = ownerRepository.getOwner().conflate()
+	private val ownerFlow = ownerRepository.getOwnerFlow().conflate().shareIn(coroutineScope)
 
 	private val orderBroadcastChannel = ConflatedBroadcastChannel<List<OrderedProduct>>(emptyList())
 	val orderLiveData = orderBroadcastChannel.asLiveData()

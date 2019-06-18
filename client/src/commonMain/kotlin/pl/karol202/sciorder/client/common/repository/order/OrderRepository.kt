@@ -7,7 +7,7 @@ import pl.karol202.sciorder.common.Owner
 
 interface OrderRepository
 {
-	fun getAllOrders(ownerId: String, hash: String): Resource<List<Order>>
+	fun getOrdersResource(ownerId: String, hash: String): Resource<List<Order>>
 
 	suspend fun updateOrderStatus(owner: Owner, order: Order, status: Order.Status): ApiResponse<Unit>
 

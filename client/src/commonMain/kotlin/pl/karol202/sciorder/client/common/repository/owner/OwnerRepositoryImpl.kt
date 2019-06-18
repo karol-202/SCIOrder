@@ -9,7 +9,7 @@ import pl.karol202.sciorder.common.Owner
 class OwnerRepositoryImpl(private val ownerDao: OwnerDao,
                           private val ownerApi: OwnerApi) : OwnerRepository
 {
-	override fun getOwner() = ownerDao.get()
+	override fun getOwnerFlow() = ownerDao.get()
 
 	override suspend fun login(name: String, hash: String?) = ownerApi.getOwnerByName(name, hash).saveIfSuccess()
 

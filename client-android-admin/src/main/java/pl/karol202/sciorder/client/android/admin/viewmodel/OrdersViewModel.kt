@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.DEFAULT_FILTER
 import pl.karol202.sciorder.client.common.extensions.MutableLiveData
+import pl.karol202.sciorder.client.common.extensions.shareIn
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
@@ -16,9 +17,10 @@ import pl.karol202.sciorder.common.Order
 class OrdersViewModel(ownerRepository: OwnerRepository,
                       private val orderRepository: OrderRepository) : CoroutineViewModel()
 {
-	private val ownerFlow = ownerRepository.getOwner().conflate()
+	private val ownerFlow = ownerRepository.getOwnerFlow().conflate().shareIn(coroutineScope)
 
-	private val ordersResourceFlow = ownerFlow.filterNotNull().map { orderRepository.getAllOrders(it.id, it.hash) }.conflate()
+	private val ordersResourceFlow = ownerFlow.filterNotNull().map { orderRepository.getOrdersResource(it.id, it.hash) }
+											  .conflate().shareIn(coroutineScope)
 	private val ordersResourceAsFlow = ordersResourceFlow.switchMap { it.asFlow }
 
 	val ordersLiveData = ordersResourceAsFlow.map { it.data }.asLiveData()

@@ -13,7 +13,7 @@ class OrderRepositoryImpl(private val orderDao: OrderDao,
 {
 	private val updateTimeout = UpdateTimeout(10, TimeUnit.SECONDS)
 
-	override fun getAllOrders(ownerId: String, hash: String) = object : DaoMixedResource<Order>(orderDao) {
+	override fun getOrdersResource(ownerId: String, hash: String) = object : DaoMixedResource<Order>(orderDao) {
 		override fun shouldFetchFromNetwork(data: List<Order>) = updateTimeout.shouldUpdate()
 
 		override suspend fun loadFromNetwork(oldData: List<Order>) = orderApi.getAllOrders(ownerId, hash)

@@ -7,7 +7,7 @@ import pl.karol202.sciorder.common.Product
 
 interface ProductRepository
 {
-	fun getAllProducts(ownerId: String): Resource<List<Product>>
+	fun getProductsResource(ownerId: String): Resource<List<Product>>
 
 	suspend fun addProduct(owner: Owner, product: Product): ApiResponse<Product>
 

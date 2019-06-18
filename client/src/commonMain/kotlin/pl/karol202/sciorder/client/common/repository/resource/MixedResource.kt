@@ -21,7 +21,7 @@ abstract class MixedResource<T>(protected val databaseSource: Flow<T>) : Resourc
 			override fun <T> toResourceState(data: T) = Resource.State.Loading(data)
 		}
 
-		class Failure(val type: Resource.State.Failure.Type) : State()
+		data class Failure(val type: Resource.State.Failure.Type) : State()
 		{
 			override fun <T> toResourceState(data: T) = Resource.State.Failure(data, type)
 		}
@@ -44,14 +44,15 @@ abstract class MixedResource<T>(protected val databaseSource: Flow<T>) : Resourc
 	override val asFlow = databaseSource.onEach { if(shouldFetchFromNetwork(databaseSource.first())) reload() }
 										.combineLatest(stateFlow.asFlow()) { data, state -> state.toResourceState(data) }
 
-
 	override suspend fun reload()
 	{
+		println("$this@reload")
 		fetchingMutex.tryWithLockSuspend { executeReload() }
 	}
 
 	private suspend fun executeReload()
 	{
+		println("$this@executeReload")
 		stateFlow.send(State.Loading)
 		val response = loadFromNetwork(databaseSource.first())
 		response.ifSuccess { saveToDatabase(it) }

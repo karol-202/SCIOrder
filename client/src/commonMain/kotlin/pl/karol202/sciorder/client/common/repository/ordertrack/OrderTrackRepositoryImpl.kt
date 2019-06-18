@@ -13,7 +13,7 @@ class OrderTrackRepositoryImpl(private val orderDao: OrderDao,
 {
 	private val updateTimeout = UpdateTimeout(10, TimeUnit.SECONDS)
 
-	override fun getTrackedOrders(ownerId: String) = object : DaoMixedResource<Order>(orderDao, orderDao.getByOwnerId(ownerId)) {
+	override fun getTrackedOrdersResource(ownerId: String) = object : DaoMixedResource<Order>(orderDao, orderDao.getByOwnerId(ownerId)) {
 		override fun shouldFetchFromNetwork(data: List<Order>) = data.isNotEmpty() && updateTimeout.shouldUpdate()
 
 		override suspend fun loadFromNetwork(oldData: List<Order>) = orderApi.getOrdersByIds(ownerId, oldData.map { it.id })

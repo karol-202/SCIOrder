@@ -6,7 +6,7 @@ import pl.karol202.sciorder.common.Owner
 
 interface OwnerRepository
 {
-	fun getOwner(): Flow<Owner?>
+	fun getOwnerFlow(): Flow<Owner?>
 
 	suspend fun login(name: String, hash: String?): ApiResponse<Owner>
 

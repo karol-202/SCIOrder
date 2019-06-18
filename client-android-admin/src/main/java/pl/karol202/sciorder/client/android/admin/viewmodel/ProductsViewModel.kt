@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.common.extensions.shareIn
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
@@ -19,9 +20,10 @@ class ProductsViewModel(ownerRepository: OwnerRepository,
 		SUCCESS, FAILURE
 	}
 
-	private val ownerFlow = ownerRepository.getOwner().conflate()
+	private val ownerFlow = ownerRepository.getOwnerFlow().conflate().shareIn(coroutineScope)
 
-	private val productsResourceFlow = ownerFlow.filterNotNull().map { productRepository.getAllProducts(it.id) }.conflate()
+	private val productsResourceFlow = ownerFlow.filterNotNull().map { productRepository.getProductsResource(it.id) }
+												.conflate().shareIn(coroutineScope)
 	private val productsResourceAsFlow = productsResourceFlow.switchMap { it.asFlow }
 
 	val productsLiveData = productsResourceAsFlow.map { it.data }.asLiveData()
@@ -37,7 +39,6 @@ class ProductsViewModel(ownerRepository: OwnerRepository,
 	fun addProduct(product: Product) = launch {
 		val owner = ownerFlow.first() ?: return@launch
 		productRepository.addProduct(owner, product).handleResponse()
-
 	}
 
 	fun updateProduct(product: Product) = launch {

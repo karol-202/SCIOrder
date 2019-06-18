@@ -13,7 +13,7 @@ class ProductRepositoryImpl(private val productDao: ProductDao,
 {
 	private val updateTimeout = UpdateTimeout(10, TimeUnit.MINUTES)
 
-	override fun getAllProducts(ownerId: String) = object : DaoMixedResource<Product>(productDao) {
+	override fun getProductsResource(ownerId: String) = object : DaoMixedResource<Product>(productDao) {
 		override fun shouldFetchFromNetwork(data: List<Product>) = data.isEmpty() || updateTimeout.shouldUpdate()
 
 		override suspend fun loadFromNetwork(oldData: List<Product>) = productApi.getAllProducts(ownerId)
