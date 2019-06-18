@@ -17,9 +17,7 @@ import pl.karol202.sciorder.common.Order
 class OrdersViewModel(ownerRepository: OwnerRepository,
                       private val orderRepository: OrderRepository) : CoroutineViewModel()
 {
-	private val ownerFlow = ownerRepository.getOwnerFlow().conflate().shareIn(coroutineScope)
-
-	private val ordersResourceFlow = ownerFlow.filterNotNull().map { orderRepository.getOrdersResource(it.id, it.hash) }
+	private val ordersResourceFlow = ownerRepository.getOwnerFlow().filterNotNull().map { orderRepository.getOrdersResource(it.id, it.hash) }
 											  .conflate().shareIn(coroutineScope)
 	private val ordersResourceAsFlow = ordersResourceFlow.switchMap { it.asFlow }
 

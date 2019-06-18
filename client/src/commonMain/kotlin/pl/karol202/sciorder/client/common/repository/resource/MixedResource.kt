@@ -7,7 +7,7 @@ import pl.karol202.sciorder.client.common.extensions.tryWithLockSuspend
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 
 // LiveData can only be modified from main thread
-abstract class MixedResource<T>(protected val databaseSource: Flow<T>) : Resource<T>
+abstract class MixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<T>
 {
 	private sealed class State
 	{
@@ -38,25 +38,33 @@ abstract class MixedResource<T>(protected val databaseSource: Flow<T>) : Resourc
 		abstract fun <T> toResourceState(data: T): Resource.State<T>
 	}
 
-	private var fetchingMutex = Mutex()
+	private var reloadMutex = Mutex()
 
 	private val stateFlow = ConflatedBroadcastChannel<State>(State.Success)
-	override val asFlow = databaseSource.onEach { if(shouldFetchFromNetwork(databaseSource.first())) reload() }
+	override val asFlow = databaseFlow.onEach { reloadIfOutdated(it) }
 										.combineLatest(stateFlow.asFlow()) { data, state -> state.toResourceState(data) }
+
+	private suspend fun reloadIfOutdated(data: T)
+	{
+		if(shouldFetchFromNetwork(data)) reload()
+	}
 
 	override suspend fun reload()
 	{
-		println("$this@reload")
-		fetchingMutex.tryWithLockSuspend { executeReload() }
+		reloadMutex.tryWithLockSuspend { executeReload() }
 	}
 
 	private suspend fun executeReload()
 	{
-		println("$this@executeReload")
 		stateFlow.send(State.Loading)
-		val response = loadFromNetwork(databaseSource.first())
+		val response = loadFromNetwork(databaseFlow.first())
 		response.ifSuccess { saveToDatabase(it) }
 		stateFlow.send(State.fromApiResponse(response))
+	}
+
+	override fun close()
+	{
+		stateFlow.close()
 	}
 
 	protected abstract fun shouldFetchFromNetwork(data: T): Boolean

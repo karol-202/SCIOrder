@@ -10,5 +10,5 @@ abstract class DaoMixedResource<T : IdProvider>(private val dao: CrudDao<T>,
                                                 databaseSource: Flow<List<T>> = dao.getAll()) :
 		MixedResource<List<T>>(databaseSource)
 {
-	override suspend fun saveToDatabase(data: List<T>) = dao.dispatchDiff(databaseSource.first(), data)
+	override suspend fun saveToDatabase(data: List<T>) = dao.dispatchDiff(databaseFlow.first(), data)
 }

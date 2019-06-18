@@ -37,4 +37,6 @@ interface Resource<T>
 	val asFlow: Flow<State<T>>
 
 	suspend fun reload()
+
+	fun close()
 }

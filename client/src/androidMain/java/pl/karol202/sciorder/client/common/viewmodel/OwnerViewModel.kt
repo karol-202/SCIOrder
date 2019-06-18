@@ -15,7 +15,7 @@ abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : Co
 		NOT_FOUND, NAME_BUSY, OTHER
 	}
 
-	val ownerLiveData = ownerRepository.getOwner().asLiveData()
+	val ownerLiveData = ownerRepository.getOwnerFlow().asLiveData()
 
 	private val _errorEventLiveData = MutableLiveData<Event<Error>>()
 	val errorEventLiveData: LiveData<Event<Error>> = _errorEventLiveData
