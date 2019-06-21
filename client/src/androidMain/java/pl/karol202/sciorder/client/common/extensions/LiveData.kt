@@ -4,24 +4,35 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import pl.karol202.sciorder.client.common.components.Event
+
+private class FlowLiveData<T>(private val flow: Flow<T>,
+                              private val coroutineScope: CoroutineScope) : LiveData<T>()
+{
+	private var collectJob: Job? = null
+
+	override fun onActive()
+	{
+		collectJob = coroutineScope.launch {
+			flow.collect { postValue(it) }
+		}
+	}
+
+	override fun onInactive()
+	{
+		collectJob?.cancel()
+	}
+}
 
 // LiveData creation
 
 fun <T> MutableLiveData(initialValue: T) = androidx.lifecycle.MutableLiveData<T>().apply { value = initialValue }
 
-fun <T> Flow<T>.asLiveData(coroutineScope: CoroutineScope) = androidx.lifecycle.MutableLiveData<T>().apply {
-	coroutineScope.launch {
-		collect { postValue(it) }
-	}
-}
-
-fun <T> BroadcastChannel<T>.asLiveData(coroutineScope: CoroutineScope) = asFlow().asLiveData(coroutineScope)
+fun <T> Flow<T>.asLiveData(coroutineScope: CoroutineScope): LiveData<T> = FlowLiveData(this, coroutineScope)
 
 // LiveData observing
 

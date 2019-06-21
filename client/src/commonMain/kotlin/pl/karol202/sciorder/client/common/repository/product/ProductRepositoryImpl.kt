@@ -1,20 +1,18 @@
 package pl.karol202.sciorder.client.common.repository.product
 
-import pl.karol202.sciorder.client.common.extensions.TimeUnit
+import kotlinx.coroutines.delay
+import pl.karol202.sciorder.client.common.extensions.minutes
 import pl.karol202.sciorder.client.common.model.local.ProductDao
 import pl.karol202.sciorder.client.common.model.remote.ProductApi
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
-import pl.karol202.sciorder.client.common.repository.resource.UpdateTimeout
 import pl.karol202.sciorder.common.Owner
 import pl.karol202.sciorder.common.Product
 
 class ProductRepositoryImpl(private val productDao: ProductDao,
                             private val productApi: ProductApi) : ProductRepository
 {
-	private val updateTimeout = UpdateTimeout(10, TimeUnit.MINUTES)
-
 	override fun getProductsResource(ownerId: String) = object : DaoMixedResource<Product>(productDao) {
-		override fun shouldFetchFromNetwork(data: List<Product>) = data.isEmpty() || updateTimeout.shouldUpdate()
+		override suspend fun waitForNextUpdate() = delay(5.minutes)
 
 		override suspend fun loadFromNetwork(oldData: List<Product>) = productApi.getAllProducts(ownerId)
 	}

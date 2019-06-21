@@ -12,9 +12,6 @@ interface OwnerEntityDao
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun set(owner: OwnerEntity)
 
-	@Query("DELETE FROM ${OwnerEntity.TABLE_NAME}")
-	suspend fun delete()
-
 	@Query("SELECT * FROM ${OwnerEntity.TABLE_NAME}")
-	fun get(): Flowable<OwnerEntity?>
+	fun get(): Flowable<OwnerEntity>
 }

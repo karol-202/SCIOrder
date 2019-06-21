@@ -18,7 +18,7 @@ import pl.karol202.sciorder.client.common.model.local.product.ProductParametersL
 private object DatabaseInfo
 {
 	const val NAME = "local"
-	const val VERSION = 4
+	const val VERSION = 5
 }
 
 @Database(entities = [ProductEntity::class, OrderEntity::class, OwnerEntity::class],

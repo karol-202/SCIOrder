@@ -1,20 +1,19 @@
 package pl.karol202.sciorder.client.common.repository.order
 
-import pl.karol202.sciorder.client.common.extensions.TimeUnit
+import kotlinx.coroutines.delay
+import pl.karol202.sciorder.client.common.extensions.seconds
 import pl.karol202.sciorder.client.common.model.local.OrderDao
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
-import pl.karol202.sciorder.client.common.repository.resource.UpdateTimeout
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 
 class OrderRepositoryImpl(private val orderDao: OrderDao,
                           private val orderApi: OrderApi) : OrderRepository
 {
-	private val updateTimeout = UpdateTimeout(10, TimeUnit.SECONDS)
-
 	override fun getOrdersResource(ownerId: String, hash: String) = object : DaoMixedResource<Order>(orderDao) {
-		override fun shouldFetchFromNetwork(data: List<Order>) = updateTimeout.shouldUpdate()
+
+		override suspend fun waitForNextUpdate() = delay(10.seconds)
 
 		override suspend fun loadFromNetwork(oldData: List<Order>) = orderApi.getAllOrders(ownerId, hash)
 	}

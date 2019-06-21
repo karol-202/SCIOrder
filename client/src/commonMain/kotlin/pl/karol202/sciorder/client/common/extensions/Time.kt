@@ -1,12 +1,13 @@
+@file:JvmName("TimeAndroidKt")
+
 package pl.karol202.sciorder.client.common.extensions
 
-enum class TimeUnit(val millis: Long)
-{
-	MILLIS(1),
-	SECONDS(1000),
-	MINUTES(60 * TimeUnit.SECONDS.millis),
-	HOURS(60 * TimeUnit.MINUTES.millis),
-	DAYS(24 * TimeUnit.HOURS.millis)
-}
+import kotlin.jvm.JvmName
+
+val Int.millis get() = toLong()
+val Int.seconds get() = 1000 * millis
+val Int.minutes get() = 60 * seconds
+val Int.hours get() = 60 * minutes
+val Int.days get() = 24 * hours
 
 expect fun currentTimeMillis(): Long

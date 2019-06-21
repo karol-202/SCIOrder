@@ -2,10 +2,9 @@ package pl.karol202.sciorder.client.common.extensions
 
 import kotlinx.coroutines.sync.Mutex
 
-suspend fun Mutex.tryWithLockSuspend(owner: Any? = null, action: suspend () -> Unit): Boolean
+suspend fun Mutex.tryDoLocking(owner: Any? = null, action: suspend () -> Unit)
 {
-	if(!tryLock(owner)) return false
+	if(!tryLock(owner)) return
 	try { action() }
 	finally { unlock(owner) }
-	return true
 }

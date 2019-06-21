@@ -34,7 +34,10 @@ class LoginFragment : InflatedFragment()
 	}
 
 	private fun observeOwner() =
-			ownerViewModel.ownerLiveData.observeNonNull(viewLifecycleOwner) { navigateToMainFragment() }
+			ownerViewModel.ownerLiveData.observeNonNull(viewLifecycleOwner) {
+				clearLoginData()
+				navigateToMainFragment()
+			}
 
 	private fun observeError() =
 			ownerViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_login_error) }
@@ -43,6 +46,11 @@ class LoginFragment : InflatedFragment()
 	{
 		val owner = editTextLoginOwner.text?.toString() ?: ""
 		ownerViewModel.login(owner)
+	}
+
+	private fun clearLoginData()
+	{
+		editTextLoginOwner.text = null
 	}
 
 	private fun navigateToMainFragment()

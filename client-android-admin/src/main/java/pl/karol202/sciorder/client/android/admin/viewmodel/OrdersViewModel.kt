@@ -6,25 +6,40 @@ import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.DEFAULT_FILTER
 import pl.karol202.sciorder.client.common.extensions.MutableLiveData
-import pl.karol202.sciorder.client.common.extensions.shareIn
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.Owner
 
 class OrdersViewModel(ownerRepository: OwnerRepository,
                       private val orderRepository: OrderRepository) : CoroutineViewModel()
 {
-	private val ordersResourceFlow = ownerRepository.getOwnerFlow().filterNotNull().map { orderRepository.getOrdersResource(it.id, it.hash) }
-											  .conflate().shareIn(coroutineScope)
-	private val ordersResourceAsFlow = ordersResourceFlow.switchMap { it.asFlow }
+	private var owner: Owner? = null
+	private var ordersResource: Resource<List<Order>>? = null
+		set(value)
+		{
+			field?.close()
+			field = value
+		}
 
-	val ordersLiveData = ordersResourceAsFlow.map { it.data }.asLiveData()
-	val loadingLiveData = ordersResourceAsFlow.map { it is Resource.State.Loading }.asLiveData()
-	val loadingErrorEventLiveData = ordersResourceAsFlow.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
-														.asLiveData()
+	private val ordersResourceAsBroadcastChannel = ownerRepository.getOwnerFlow()
+													              .onEach { owner = it }
+													              .filterNotNull()
+													              .map { orderRepository.getOrdersResource(it.id, it.hash) }
+													              .onEach { it.autoReloadIn(coroutineScope) }
+													              .onEach { ordersResource = it }
+													              .switchMap { it.asFlow }
+																  .conflate()
+													              .broadcastIn(coroutineScope)
+
+	val ordersLiveData = ordersResourceAsBroadcastChannel.asFlow().map { it.data }.asLiveData()
+	val loadingLiveData = ordersResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }.asLiveData()
+	val loadingErrorEventLiveData = ordersResourceAsBroadcastChannel.asFlow()
+																	.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
+																	.asLiveData()
 
 	private val _updateErrorEventLiveData = MutableLiveData<Event<Unit>>()
 	val updateErrorEventLiveData: LiveData<Event<Unit>> = _updateErrorEventLiveData
@@ -35,17 +50,22 @@ class OrdersViewModel(ownerRepository: OwnerRepository,
 		get() = _orderFilterLiveData.value ?: emptySet()
 		set(value) = _orderFilterLiveData.postValue(value)
 
-	fun refreshOrders() = launch { ordersResourceFlow.first().reload() }
+	fun refreshOrders() = launch { ordersResource?.reload() }
 
 	fun updateOrderStatus(order: Order, status: Order.Status) = launch {
-		val owner = ownerFlow.first() ?: return@launch
-		orderRepository.updateOrderStatus(owner, order, status).handleResponse()
+		orderRepository.updateOrderStatus(owner ?: return@launch, order, status).handleResponse()
 	}
 
 	fun removeAllOrders() = launch {
-		val owner = ownerFlow.first() ?: return@launch
-		orderRepository.removeAllOrders(owner).handleResponse()
+		orderRepository.removeAllOrders(owner ?: return@launch).handleResponse()
 	}
 
-	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { _updateErrorEventLiveData.value = Event(Unit) }
+	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { _updateErrorEventLiveData.postValue(Event(Unit)) }
+
+	override fun onCleared()
+	{
+		super.onCleared()
+		ordersResource?.close()
+		ordersResourceAsBroadcastChannel.cancel()
+	}
 }

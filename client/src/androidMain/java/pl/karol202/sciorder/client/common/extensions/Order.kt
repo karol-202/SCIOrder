@@ -1,4 +1,4 @@
-@file:JvmName("OrderAndroid")
+@file:JvmName("OrderAndroidKt")
 
 package pl.karol202.sciorder.client.common.extensions
 

@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.client.common.repository.resource
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 
@@ -35,6 +36,8 @@ interface Resource<T>
 	}
 
 	val asFlow: Flow<State<T>>
+
+	suspend fun autoReloadIn(coroutineScope: CoroutineScope)
 
 	suspend fun reload()
 

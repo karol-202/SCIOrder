@@ -59,7 +59,7 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.products = it }
 
 	private fun observeLoading() =
-			ordersViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutOrders.isRefreshing = it }
+			ordersViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { if(!it) refreshLayoutOrders.isRefreshing = false }
 
 	private fun observeLoadingError() =
 			ordersViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }

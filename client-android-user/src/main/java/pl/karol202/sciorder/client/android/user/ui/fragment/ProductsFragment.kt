@@ -85,7 +85,7 @@ class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOr
 			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { productsAdapter.products = it }
 
 	private fun observeLoading() =
-			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutProducts.isRefreshing = it }
+			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { if(!it) refreshLayoutProducts.isRefreshing = false }
 
 	private fun observeProductError() =
 			productsViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 // Table stores at most one owner
 @Entity(tableName = OwnerEntity.TABLE_NAME)
-data class OwnerEntity(val id: String,
+data class OwnerEntity(val id: String?, // Null id indicates absence of owner
                        val name: String,
                        val hash: String)
 {

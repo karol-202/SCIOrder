@@ -18,8 +18,6 @@ abstract class CoroutineViewModel private constructor(private val job: Job,
 
 	protected fun <T> Flow<T>.asLiveData() = asLiveData(coroutineScope)
 
-	protected fun <T> BroadcastChannel<T>.asLiveData() = asLiveData(coroutineScope)
-
 	protected fun launch(block: suspend CoroutineScope.() -> Unit)
 	{
 		coroutineScope.launch { block() }

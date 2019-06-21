@@ -3,19 +3,19 @@ package pl.karol202.sciorder.client.android.user.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
 import pl.karol202.sciorder.client.common.components.Event
 import pl.karol202.sciorder.client.common.extensions.create
-import pl.karol202.sciorder.client.common.extensions.shareIn
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.Owner
 
-class OrdersViewModel(ownerRepository: OwnerRepository,
+class OrdersViewModel(private val ownerRepository: OwnerRepository,
                       private val orderTrackRepository: OrderTrackRepository) : CoroutineViewModel()
 {
 	enum class OrderResult
@@ -23,13 +23,22 @@ class OrdersViewModel(ownerRepository: OwnerRepository,
 		SUCCESS, FAILURE
 	}
 
-	private val ownerFlow = ownerRepository.getOwnerFlow().conflate().shareIn(coroutineScope)
+	private var owner: Owner? = null
 
 	private val orderBroadcastChannel = ConflatedBroadcastChannel<List<OrderedProduct>>(emptyList())
-	val orderLiveData = orderBroadcastChannel.asLiveData()
+	val orderLiveData = orderBroadcastChannel.asFlow().asLiveData()
 
 	private val _errorEventLiveData = MediatorLiveData<Event<OrderResult>>()
 	val errorEventLiveData: LiveData<Event<OrderResult>> = _errorEventLiveData
+
+	init
+	{
+		collectOwner()
+	}
+
+	private fun collectOwner() = launch {
+		ownerRepository.getOwnerFlow().collect { owner = it }
+	}
 
 	fun addToOrder(orderedProduct: OrderedProduct)
 	{
@@ -68,11 +77,16 @@ class OrdersViewModel(ownerRepository: OwnerRepository,
 	}
 
 	private fun executeOrder(order: Order) = launch {
-		val owner = ownerFlow.first() ?: return@launch
-		orderTrackRepository.executeOrder(owner, order).handleResponse()
+		orderTrackRepository.executeOrder(owner ?: return@launch, order).handleResponse()
 	}
 
 	private suspend fun <T> ApiResponse<T>.handleResponse() =
-			fold(onSuccess = { _errorEventLiveData.value = Event(OrderResult.SUCCESS) },
-			     onError = { _errorEventLiveData.value = Event(OrderResult.FAILURE) })
+			fold(onSuccess = { _errorEventLiveData.postValue(Event(OrderResult.SUCCESS)) },
+			     onError = { _errorEventLiveData.postValue(Event(OrderResult.FAILURE)) })
+
+	override fun onCleared()
+	{
+		super.onCleared()
+		orderBroadcastChannel.cancel()
+	}
 }

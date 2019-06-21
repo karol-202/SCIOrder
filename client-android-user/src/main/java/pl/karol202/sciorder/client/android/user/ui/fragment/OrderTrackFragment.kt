@@ -55,7 +55,7 @@ class OrderTrackFragment : InflatedFragment()
 			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.products = it }
 
 	private fun observeLoading() =
-			ordersTrackViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { refreshLayoutOrderTrack.isRefreshing = it }
+			ordersTrackViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { if(!it) refreshLayoutOrderTrack.isRefreshing = false }
 
 	private fun observeOrdersError() =
 			ordersTrackViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }

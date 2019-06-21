@@ -28,7 +28,7 @@ abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : Co
 		ownerRepository.register(name, password.sha1()).handleResponse()
 	}
 
-	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { _errorEventLiveData.value = Event(it.toError()) }
+	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { _errorEventLiveData.postValue(Event(it.toError())) }
 
 	private fun ApiResponse.Error.toError() = when(type)
 	{
