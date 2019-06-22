@@ -19,7 +19,7 @@ import pl.karol202.sciorder.client.android.user.ui.dialog.fragment.ProductOrderE
 import pl.karol202.sciorder.client.android.user.ui.listener.OnOrderDetailsSetListener
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderEditListener
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
-import pl.karol202.sciorder.client.android.user.viewmodel.OrdersViewModel
+import pl.karol202.sciorder.client.android.user.viewmodel.OrderComposeViewModel
 import pl.karol202.sciorder.client.android.user.viewmodel.ProductsViewModel
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.common.Order
@@ -28,7 +28,7 @@ import pl.karol202.sciorder.common.Product
 class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {
 	private val productsViewModel by sharedViewModel<ProductsViewModel>()
-	private val ordersViewModel by sharedViewModel<OrdersViewModel>()
+	private val ordersViewModel by sharedViewModel<OrderComposeViewModel>()
 
 	private val productsAdapter = ProductAdapter().apply {
 		onProductSelectListener = { product -> showProductOrderDialog(product) }
@@ -88,7 +88,7 @@ class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOr
 			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { if(!it) refreshLayoutProducts.isRefreshing = false }
 
 	private fun observeProductError() =
-			productsViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }
+			productsViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }
 
 	private fun observeOrder() =
 			ordersViewModel.orderLiveData.observeNonNull(viewLifecycleOwner) { products ->
@@ -99,7 +99,7 @@ class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOr
 
 	private fun observeOrderError() =
 			ordersViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) {
-				if(it == OrdersViewModel.OrderResult.SUCCESS) showSnackbar(R.string.text_order_success)
+				if(it == OrderComposeViewModel.OrderResult.SUCCESS) showSnackbar(R.string.text_order_success)
 				else showSnackbar(R.string.text_order_error)
 			}
 

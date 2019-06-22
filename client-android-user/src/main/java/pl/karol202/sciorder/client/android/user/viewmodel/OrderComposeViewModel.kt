@@ -15,8 +15,8 @@ import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 
-class OrdersViewModel(private val ownerRepository: OwnerRepository,
-                      private val orderTrackRepository: OrderTrackRepository) : CoroutineViewModel()
+class OrderComposeViewModel(private val ownerRepository: OwnerRepository,
+                            private val orderTrackRepository: OrderTrackRepository) : CoroutineViewModel()
 {
 	enum class OrderResult
 	{
