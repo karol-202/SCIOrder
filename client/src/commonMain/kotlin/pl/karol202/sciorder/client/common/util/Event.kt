@@ -1,4 +1,6 @@
-package pl.karol202.sciorder.client.android.common.util
+package pl.karol202.sciorder.client.common.util
+
+import kotlin.jvm.Synchronized
 
 class Event<T>(private val content: T)
 {

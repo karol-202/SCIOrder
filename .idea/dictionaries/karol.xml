@@ -7,6 +7,8 @@
       <w>mongo</w>
       <w>moshi</w>
       <w>snackbar</w>
+      <w>typealiasing</w>
+      <w>viewmodels</w>
     </words>
   </dictionary>
 </component>

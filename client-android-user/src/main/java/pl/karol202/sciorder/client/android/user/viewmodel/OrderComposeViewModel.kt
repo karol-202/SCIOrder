@@ -5,13 +5,14 @@ import androidx.lifecycle.MediatorLiveData
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import pl.karol202.sciorder.client.android.common.util.Event
-import pl.karol202.sciorder.client.android.common.viewmodel.CoroutineViewModel
+import pl.karol202.sciorder.client.android.common.extension.asLiveData
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
+import pl.karol202.sciorder.client.common.util.Event
+import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 
@@ -26,7 +27,7 @@ class OrderComposeViewModel(private val ownerRepository: OwnerRepository,
 	private var owner: Owner? = null
 
 	private val orderBroadcastChannel = ConflatedBroadcastChannel<List<OrderedProduct>>(emptyList())
-	val orderLiveData = orderBroadcastChannel.asFlow().asLiveData()
+	val orderLiveData = orderBroadcastChannel.asFlow().asLiveData(coroutineScope)
 
 	private val _errorEventLiveData = MediatorLiveData<Event<OrderResult>>()
 	val errorEventLiveData: LiveData<Event<OrderResult>> = _errorEventLiveData

@@ -8,7 +8,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import pl.karol202.sciorder.client.android.common.util.Event
+import pl.karol202.sciorder.client.common.util.Event
 
 private class FlowLiveData<T>(private val flow: Flow<T>,
                               private val coroutineScope: CoroutineScope) : LiveData<T>()

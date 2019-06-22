@@ -48,7 +48,6 @@ dependencies {
 
     // Lifecycle
     api "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
 
     // Room
     implementation "androidx.room:room-runtime:$roomVersion"

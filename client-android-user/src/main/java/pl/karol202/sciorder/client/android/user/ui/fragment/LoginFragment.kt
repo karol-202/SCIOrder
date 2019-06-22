@@ -9,8 +9,8 @@ import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.extension.observeEvent
 import pl.karol202.sciorder.client.android.common.extension.observeNonNull
 import pl.karol202.sciorder.client.android.common.extension.showSnackbar
-import pl.karol202.sciorder.client.android.common.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.android.user.R
+import pl.karol202.sciorder.client.android.user.viewmodel.OwnerViewModel
 
 class LoginFragment : InflatedFragment()
 {

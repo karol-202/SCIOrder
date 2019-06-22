@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.android.common.extension.MutableLiveData
-import pl.karol202.sciorder.client.android.common.util.Event
-import pl.karol202.sciorder.client.android.common.viewmodel.CoroutineViewModel
+import pl.karol202.sciorder.client.android.common.extension.asLiveData
 import pl.karol202.sciorder.client.common.model.DEFAULT_FILTER
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
+import pl.karol202.sciorder.client.common.util.Event
+import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 
@@ -35,11 +36,11 @@ class OrdersViewModel(ownerRepository: OwnerRepository,
 																  .conflate()
 													              .broadcastIn(coroutineScope)
 
-	val ordersLiveData = ordersResourceAsBroadcastChannel.asFlow().map { it.data }.asLiveData()
-	val loadingLiveData = ordersResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }.asLiveData()
+	val ordersLiveData = ordersResourceAsBroadcastChannel.asFlow().map { it.data }.asLiveData(coroutineScope)
+	val loadingLiveData = ordersResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }.asLiveData(coroutineScope)
 	val loadingErrorEventLiveData = ordersResourceAsBroadcastChannel.asFlow()
 																	.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
-																	.asLiveData()
+																	.asLiveData(coroutineScope)
 
 	private val _updateErrorEventLiveData = MutableLiveData<Event<Unit>>()
 	val updateErrorEventLiveData: LiveData<Event<Unit>> = _updateErrorEventLiveData
