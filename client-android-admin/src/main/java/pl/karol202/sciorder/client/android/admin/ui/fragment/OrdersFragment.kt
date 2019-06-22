@@ -11,8 +11,8 @@ import pl.karol202.sciorder.client.android.admin.ui.dialog.fragment.OrderFilterD
 import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetListener
 import pl.karol202.sciorder.client.android.admin.viewmodel.OrdersViewModel
 import pl.karol202.sciorder.client.android.admin.viewmodel.ProductsViewModel
-import pl.karol202.sciorder.client.common.components.FragmentWithMenu
-import pl.karol202.sciorder.client.common.extensions.*
+import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
+import pl.karol202.sciorder.client.android.common.extension.*
 import pl.karol202.sciorder.common.Order
 
 class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener

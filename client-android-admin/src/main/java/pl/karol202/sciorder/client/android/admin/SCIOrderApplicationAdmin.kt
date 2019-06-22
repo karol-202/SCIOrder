@@ -5,8 +5,8 @@ import org.koin.dsl.module
 import pl.karol202.sciorder.client.android.admin.viewmodel.OrdersViewModel
 import pl.karol202.sciorder.client.android.admin.viewmodel.OwnerViewModelAdmin
 import pl.karol202.sciorder.client.android.admin.viewmodel.ProductsViewModel
-import pl.karol202.sciorder.client.common.SCIOrderApplication
-import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
+import pl.karol202.sciorder.client.android.common.SCIOrderApplication
+import pl.karol202.sciorder.client.android.common.viewmodel.OwnerViewModel
 
 class SCIOrderApplicationAdmin : SCIOrderApplication()
 {

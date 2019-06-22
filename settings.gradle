@@ -1,6 +1,6 @@
 rootProject.name = 'sciorder'
 
-include ':common'
+include ':common', ':client-android'
 include ':server'
 
 if (HEROKU != "true") {

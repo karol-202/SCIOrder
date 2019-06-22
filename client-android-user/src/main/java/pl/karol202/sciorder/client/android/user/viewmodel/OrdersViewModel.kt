@@ -5,13 +5,13 @@ import androidx.lifecycle.MediatorLiveData
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import pl.karol202.sciorder.client.common.components.Event
-import pl.karol202.sciorder.client.common.extensions.create
+import pl.karol202.sciorder.client.android.common.util.Event
+import pl.karol202.sciorder.client.android.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
-import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 

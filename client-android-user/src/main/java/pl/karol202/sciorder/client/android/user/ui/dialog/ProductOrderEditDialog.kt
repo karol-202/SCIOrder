@@ -8,10 +8,10 @@ import android.view.View
 import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_product_order_edit.*
+import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderEditListener
-import pl.karol202.sciorder.client.common.components.ExtendedAlertDialog
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.common.Product
 

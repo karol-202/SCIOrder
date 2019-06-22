@@ -3,12 +3,12 @@ package pl.karol202.sciorder.client.android.admin.ui.adapter
 import android.view.View
 import kotlinx.android.synthetic.main.item_order_entry_param.*
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.common.ui.adapter.StaticAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
 import pl.karol202.sciorder.common.Product
 
 class OrderEntryParamAdapter(parameters: List<Pair<Product.Parameter, String?>>) :
-	StaticAdapter<Pair<Product.Parameter, String?>>(parameters)
+		StaticAdapter<Pair<Product.Parameter, String?>>(parameters)
 {
 	class ViewHolder(view: View) : BasicAdapter.ViewHolder<Pair<Product.Parameter, String?>>(view)
 	{

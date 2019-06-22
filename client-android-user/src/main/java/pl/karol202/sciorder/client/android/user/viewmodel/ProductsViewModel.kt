@@ -1,11 +1,11 @@
 package pl.karol202.sciorder.client.android.user.viewmodel
 
 import kotlinx.coroutines.flow.*
-import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.android.common.util.Event
+import pl.karol202.sciorder.client.android.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
-import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Product
 
 class ProductsViewModel(ownerRepository: OwnerRepository,

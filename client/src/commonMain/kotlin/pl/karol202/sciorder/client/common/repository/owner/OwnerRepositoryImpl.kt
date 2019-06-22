@@ -1,6 +1,6 @@
 package pl.karol202.sciorder.client.common.repository.owner
 
-import pl.karol202.sciorder.client.common.extensions.create
+import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.local.OwnerDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.model.remote.OwnerApi

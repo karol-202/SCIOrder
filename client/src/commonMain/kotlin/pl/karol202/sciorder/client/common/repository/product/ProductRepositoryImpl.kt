@@ -1,10 +1,10 @@
 package pl.karol202.sciorder.client.common.repository.product
 
 import kotlinx.coroutines.delay
-import pl.karol202.sciorder.client.common.extensions.minutes
 import pl.karol202.sciorder.client.common.model.local.ProductDao
 import pl.karol202.sciorder.client.common.model.remote.ProductApi
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
+import pl.karol202.sciorder.client.common.util.minutes
 import pl.karol202.sciorder.common.Owner
 import pl.karol202.sciorder.common.Product
 

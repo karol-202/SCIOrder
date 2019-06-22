@@ -8,10 +8,10 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_order.*
+import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.SimpleOrderedProductAdapter
 import pl.karol202.sciorder.client.android.user.ui.listener.OnOrderDetailsSetListener
-import pl.karol202.sciorder.client.common.components.ExtendedAlertDialog
 import pl.karol202.sciorder.common.Order
 
 class OrderDialog(context: Context,

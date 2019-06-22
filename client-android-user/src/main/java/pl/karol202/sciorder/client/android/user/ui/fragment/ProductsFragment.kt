@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import pl.karol202.sciorder.client.android.common.component.InflatedFragment
+import pl.karol202.sciorder.client.android.common.extension.*
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.OrderedProductAdapter
 import pl.karol202.sciorder.client.android.user.ui.adapter.ProductAdapter
@@ -19,8 +21,6 @@ import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderEditLi
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
 import pl.karol202.sciorder.client.android.user.viewmodel.OrdersViewModel
 import pl.karol202.sciorder.client.android.user.viewmodel.ProductsViewModel
-import pl.karol202.sciorder.client.common.components.InflatedFragment
-import pl.karol202.sciorder.client.common.extensions.*
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Product

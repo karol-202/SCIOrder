@@ -3,11 +3,14 @@ package pl.karol202.sciorder.client.common.repository.resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.combineLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import pl.karol202.sciorder.client.common.extensions.tryDoLocking
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
+import pl.karol202.sciorder.client.common.util.tryDoLocking
 
 abstract class MixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<T>
 {

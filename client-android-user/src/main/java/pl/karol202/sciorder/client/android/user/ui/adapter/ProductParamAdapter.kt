@@ -13,10 +13,10 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_product_param_bool.*
 import kotlinx.android.synthetic.main.item_product_param_enum.*
 import kotlinx.android.synthetic.main.item_product_param_text.*
+import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
+import pl.karol202.sciorder.client.android.common.ui.ctx
+import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
 import pl.karol202.sciorder.client.android.user.R
-import pl.karol202.sciorder.client.common.extensions.addAfterTextChangedListener
-import pl.karol202.sciorder.client.common.extensions.ctx
-import pl.karol202.sciorder.client.common.extensions.setOnItemSelectedListener
 import pl.karol202.sciorder.common.Product
 
 class ProductParamAdapter(context: Context,

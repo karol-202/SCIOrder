@@ -18,11 +18,11 @@ kotlin {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -49,43 +49,4 @@ android {
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutinesVersion"
-
-    // Android
-    api "androidx.appcompat:appcompat:$appCompatVersion"
-    api "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    api "androidx.recyclerview:recyclerview:$recyclerViewVersion"
-    api "androidx.preference:preference:$preferenceVersion"
-    api "com.google.android.material:material:$materialVersion"
-
-    // KTX
-    api "androidx.core:core-ktx:$ktxCoreVersion"
-    api "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
-
-    // Lifecycle
-    api "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-
-    // Room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt           "androidx.room:room-compiler:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    implementation "androidx.room:room-rxjava2:$roomVersion"
-
-    // Navigation
-    api "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
-    api "androidx.navigation:navigation-ui-ktx:$navigationVersion"
-
-    // Koin
-    api "org.koin:koin-core:$koinVersion"
-    api "org.koin:koin-android:$koinVersion"
-    api "org.koin:koin-androidx-viewmodel:$koinVersion"
-
-    // RX
-    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-
-    implementation "com.squareup.moshi:moshi:$moshiVersion"
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
 }

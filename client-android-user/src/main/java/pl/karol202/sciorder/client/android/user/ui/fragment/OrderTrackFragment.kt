@@ -5,14 +5,14 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_order_track.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import pl.karol202.sciorder.client.android.common.component.InflatedFragment
+import pl.karol202.sciorder.client.android.common.extension.observeEvent
+import pl.karol202.sciorder.client.android.common.extension.observeNonNull
+import pl.karol202.sciorder.client.android.common.extension.showSnackbar
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.TrackedOrderAdapter
 import pl.karol202.sciorder.client.android.user.viewmodel.OrdersTrackViewModel
 import pl.karol202.sciorder.client.android.user.viewmodel.ProductsViewModel
-import pl.karol202.sciorder.client.common.components.InflatedFragment
-import pl.karol202.sciorder.client.common.extensions.observeEvent
-import pl.karol202.sciorder.client.common.extensions.observeNonNull
-import pl.karol202.sciorder.client.common.extensions.showSnackbar
 
 class OrderTrackFragment : InflatedFragment()
 {

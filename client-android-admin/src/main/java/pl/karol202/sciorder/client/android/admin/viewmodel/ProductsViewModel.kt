@@ -3,12 +3,12 @@ package pl.karol202.sciorder.client.android.admin.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import kotlinx.coroutines.flow.*
-import pl.karol202.sciorder.client.common.components.Event
+import pl.karol202.sciorder.client.android.common.util.Event
+import pl.karol202.sciorder.client.android.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
-import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Owner
 import pl.karol202.sciorder.common.Product
 

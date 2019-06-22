@@ -9,10 +9,10 @@ import kotlinx.android.synthetic.main.item_product_param_attr_enum.*
 import kotlinx.android.synthetic.main.item_product_param_attr_range.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithoutLast
-import pl.karol202.sciorder.client.common.extensions.addAfterTextChangedListener
-import pl.karol202.sciorder.client.common.extensions.randomUUIDString
-import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.common.ui.adapter.StaticAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
+import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
+import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.common.Product
 
 class ProductParamAttrAdapter(private val attrs: List<Attr>,

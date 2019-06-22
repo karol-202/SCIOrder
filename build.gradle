@@ -13,7 +13,7 @@ buildscript {
         ktxFragmentVersion = '1.0.0'
         ktxViewModel = '2.0.0'
         appCompatVersion = '1.1.0-beta01'
-        constraintLayoutVersion = '2.0.0-beta1'
+        constraintLayoutVersion = '2.0.0-beta2'
         preferenceVersion = '1.0.0'
         materialVersion = '1.0.0'
         recyclerViewVersion = '1.0.0'

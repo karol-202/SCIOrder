@@ -5,9 +5,9 @@ import android.view.View
 import kotlinx.android.synthetic.main.item_product_param_attr_enum_value.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.dialog.ProductParamAttrEnumNewValueDialog
-import pl.karol202.sciorder.client.common.extensions.randomUUIDString
-import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 
 class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
                                         private val valuesUpdateListener: (values: List<String>, default: String?) -> Unit) :

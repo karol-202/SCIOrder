@@ -10,8 +10,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.android.admin.viewmodel.ProductsViewModel
-import pl.karol202.sciorder.client.common.components.InflatedFragment
-import pl.karol202.sciorder.client.common.extensions.*
+import pl.karol202.sciorder.client.android.common.component.InflatedFragment
+import pl.karol202.sciorder.client.android.common.extension.*
 import pl.karol202.sciorder.common.Product
 
 class ProductsFragment : InflatedFragment()

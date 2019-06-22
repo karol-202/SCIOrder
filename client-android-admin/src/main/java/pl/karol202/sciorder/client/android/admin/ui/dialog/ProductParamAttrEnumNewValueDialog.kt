@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import kotlinx.android.synthetic.main.dialog_product_param_attr_enum_new_value.*
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.common.components.ExtendedAlertDialog
+import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
 
 class ProductParamAttrEnumNewValueDialog(context: Context,
                                          private val valueSetListener: (String) -> Unit) : ExtendedAlertDialog(context)

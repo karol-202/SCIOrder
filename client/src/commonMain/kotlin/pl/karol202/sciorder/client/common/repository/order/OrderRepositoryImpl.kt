@@ -1,10 +1,10 @@
 package pl.karol202.sciorder.client.common.repository.order
 
 import kotlinx.coroutines.delay
-import pl.karol202.sciorder.client.common.extensions.seconds
 import pl.karol202.sciorder.client.common.model.local.OrderDao
 import pl.karol202.sciorder.client.common.model.remote.OrderApi
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
+import pl.karol202.sciorder.client.common.util.seconds
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 

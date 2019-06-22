@@ -2,11 +2,11 @@ package pl.karol202.sciorder.client.android.user.ui.adapter
 
 import android.view.View
 import kotlinx.android.synthetic.main.item_product.*
+import pl.karol202.sciorder.client.android.common.extension.getColorCompat
+import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.client.android.common.ui.ctx
 import pl.karol202.sciorder.client.android.user.R
-import pl.karol202.sciorder.client.common.extensions.ctx
-import pl.karol202.sciorder.client.common.extensions.getColorCompat
-import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.common.Product
 
 class ProductAdapter : DynamicAdapter<Product>()

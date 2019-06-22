@@ -5,11 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_order.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithoutLast
-import pl.karol202.sciorder.client.common.extensions.randomUUIDString
-import pl.karol202.sciorder.client.common.extensions.setOnItemSelectedListener
+import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
+import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Product
 

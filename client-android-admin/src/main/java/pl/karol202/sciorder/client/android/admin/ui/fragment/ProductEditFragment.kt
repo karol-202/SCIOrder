@@ -9,8 +9,12 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.admin.viewmodel.ProductsViewModel
-import pl.karol202.sciorder.client.common.components.ExtendedFragment
-import pl.karol202.sciorder.client.common.extensions.*
+import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
+import pl.karol202.sciorder.client.android.common.extension.ctx
+import pl.karol202.sciorder.client.android.common.extension.observeEvent
+import pl.karol202.sciorder.client.android.common.extension.observeOnceNonNull
+import pl.karol202.sciorder.client.android.common.extension.showSnackbar
+import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.common.Product
 
 class ProductEditFragment : ExtendedFragment()

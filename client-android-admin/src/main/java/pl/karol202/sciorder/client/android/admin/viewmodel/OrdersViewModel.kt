@@ -3,14 +3,14 @@ package pl.karol202.sciorder.client.android.admin.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.flow.*
-import pl.karol202.sciorder.client.common.components.Event
-import pl.karol202.sciorder.client.common.extensions.DEFAULT_FILTER
-import pl.karol202.sciorder.client.common.extensions.MutableLiveData
+import pl.karol202.sciorder.client.android.common.extension.MutableLiveData
+import pl.karol202.sciorder.client.android.common.util.Event
+import pl.karol202.sciorder.client.android.common.viewmodel.CoroutineViewModel
+import pl.karol202.sciorder.client.common.model.DEFAULT_FILTER
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
-import pl.karol202.sciorder.client.common.viewmodel.CoroutineViewModel
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 
