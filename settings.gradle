@@ -1,12 +1,14 @@
 rootProject.name = 'sciorder'
 
+if (HEROKU == "true") SKIP_ANDROID="true"
+
 include ':common'
 include ':server'
+include ':client'
+include ':client-js'
 
-if (HEROKU != "true") {
-    include ':client'
-    //include ':client-android'
-    //include ':client-android-user'
-    //include ':client-android-admin'
-    include ':client-js'
+if(SKIP_ANDROID != "true") {
+    include ':client-android'
+    include ':client-android-user'
+    include ':client-android-admin'
 }

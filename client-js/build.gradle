@@ -1,13 +1,16 @@
 apply plugin: 'kotlin2js'
 apply plugin: 'org.jetbrains.kotlin.frontend'
+apply plugin: 'kotlin-dce-js'
 
 compileKotlin2Js {
     kotlinOptions {
         moduleKind = 'commonjs'
-        sourceMap = true
+        sourceMap = DEV_MODE.toBoolean()
         sourceMapEmbedSources = 'always'
     }
 }
+
+runDceKotlinJs.dceOptions.devMode = DEV_MODE.toBoolean()
 
 kotlinFrontend {
     npm {
@@ -16,15 +19,16 @@ kotlinFrontend {
         dependency('core-js', "$coreJsVersion")
     }
 
-    sourceMaps = true
+    sourceMaps = DEV_MODE.toBoolean()
 
     webpackBundle {
         bundleName = "sciorder"
-        sourceMapEnabled = true
+        sourceMapEnabled = DEV_MODE.toBoolean()
         contentPath = file("src/main/web/")
         publicPath = "/"
         host = "localhost"
         port = 8080
+        mode = DEV_MODE.toBoolean() ? "development" : "production"
     }
 }
 
@@ -35,3 +39,5 @@ dependencies {
     implementation "org.jetbrains:kotlin-react-dom:$reactKotlinVersion"
     implementation "org.jetbrains:kotlin-extensions:$kotlinExtensionsVersion"
 }
+
+assemble.dependsOn runDceKotlinJs
