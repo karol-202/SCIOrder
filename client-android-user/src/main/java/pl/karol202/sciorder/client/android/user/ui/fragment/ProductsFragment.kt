@@ -22,6 +22,7 @@ import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListen
 import pl.karol202.sciorder.client.android.user.viewmodel.OrderComposeViewModel
 import pl.karol202.sciorder.client.android.user.viewmodel.ProductsViewModel
 import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel.OrderResult.SUCCESS
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Product
 
@@ -99,7 +100,7 @@ class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOr
 
 	private fun observeOrderError() =
 			ordersViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) {
-				if(it == OrderComposeViewModel.OrderResult.SUCCESS) showSnackbar(R.string.text_order_success)
+				if(it == SUCCESS) showSnackbar(R.string.text_order_success)
 				else showSnackbar(R.string.text_order_error)
 			}
 

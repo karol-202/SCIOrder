@@ -9,9 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/client" />
-            <option value="$PROJECT_DIR$/client-android" />
-            <option value="$PROJECT_DIR$/client-android-admin" />
-            <option value="$PROJECT_DIR$/client-android-user" />
+            <option value="$PROJECT_DIR$/client-js" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/server" />
           </set>

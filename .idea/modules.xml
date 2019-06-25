@@ -2,16 +2,21 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/SCIOrder.iml" filepath="$PROJECT_DIR$/.idea/SCIOrder.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/client-android/client-android.iml" filepath="$PROJECT_DIR$/client-android/client-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/client-android-admin/client-android-admin.iml" filepath="$PROJECT_DIR$/client-android-admin/client-android-admin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/client-android-user/client-android-user.iml" filepath="$PROJECT_DIR$/client-android-user/client-android-user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client-js/client-js.iml" filepath="$PROJECT_DIR$/client-js/client-js.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/sciorder.iml" filepath="$PROJECT_DIR$/sciorder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client-js/sciorder.client-js.main.iml" filepath="$PROJECT_DIR$/client-js/sciorder.client-js.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client-js/sciorder.client-js.test.iml" filepath="$PROJECT_DIR$/client-js/sciorder.client-js.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/sciorder.client.commonMain.iml" filepath="$PROJECT_DIR$/client/sciorder.client.commonMain.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/sciorder.client.commonTest.iml" filepath="$PROJECT_DIR$/client/sciorder.client.commonTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client/sciorder.client.jsMain.iml" filepath="$PROJECT_DIR$/client/sciorder.client.jsMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client/sciorder.client.jsTest.iml" filepath="$PROJECT_DIR$/client/sciorder.client.jsTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/sciorder.common.commonMain.iml" filepath="$PROJECT_DIR$/common/sciorder.common.commonMain.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/sciorder.common.commonTest.iml" filepath="$PROJECT_DIR$/common/sciorder.common.commonTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/sciorder.common.jsMain.iml" filepath="$PROJECT_DIR$/common/sciorder.common.jsMain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/sciorder.common.jsTest.iml" filepath="$PROJECT_DIR$/common/sciorder.common.jsTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/sciorder.common.jvmMain.iml" filepath="$PROJECT_DIR$/common/sciorder.common.jvmMain.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/sciorder.common.jvmTest.iml" filepath="$PROJECT_DIR$/common/sciorder.common.jvmTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />

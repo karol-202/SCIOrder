@@ -2,17 +2,29 @@ apply plugin: 'kotlin-multiplatform'
 
 kotlin {
     jvm()
+    js() {
+        compilations.main.kotlinOptions {
+            sourceMap = true
+            moduleKind = 'commonjs'
+        }
+    }
 
     sourceSets {
         commonMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion"
+                api "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion"
             }
         }
 
         jvmMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+                api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+            }
+        }
+
+        jsMain {
+            dependencies {
+                api "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
             }
         }
     }
