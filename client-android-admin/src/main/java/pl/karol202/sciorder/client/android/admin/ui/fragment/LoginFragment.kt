@@ -8,9 +8,9 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
-import pl.karol202.sciorder.client.android.common.extension.observeEvent
-import pl.karol202.sciorder.client.android.common.extension.observeNonNull
-import pl.karol202.sciorder.client.android.common.extension.showSnackbar
+import pl.karol202.sciorder.client.android.common.util.observeEvent
+import pl.karol202.sciorder.client.android.common.util.observeNonNull
+import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel.Error.NAME_BUSY
 
 class LoginFragment : InflatedFragment()

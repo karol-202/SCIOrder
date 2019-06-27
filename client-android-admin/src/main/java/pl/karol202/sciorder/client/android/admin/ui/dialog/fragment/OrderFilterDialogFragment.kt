@@ -5,10 +5,10 @@ import androidx.fragment.app.Fragment
 import pl.karol202.sciorder.client.android.admin.ui.dialog.OrderFilterDialog
 import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetListener
 import pl.karol202.sciorder.client.android.common.component.ExtendedDialogFragment
-import pl.karol202.sciorder.client.android.common.extension.ctx
-import pl.karol202.sciorder.client.android.common.extension.setArguments
-import pl.karol202.sciorder.client.android.common.extension.setTargetFragment
-import pl.karol202.sciorder.client.android.common.extension.to
+import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.setArguments
+import pl.karol202.sciorder.client.android.common.util.setTargetFragment
+import pl.karol202.sciorder.client.android.common.util.to
 import pl.karol202.sciorder.common.Order
 
 class OrderFilterDialogFragment : ExtendedDialogFragment()

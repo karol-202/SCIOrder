@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.common.component
 
 import android.os.Bundle
-import pl.karol202.sciorder.client.android.common.extension.BundleDelegate
+import pl.karol202.sciorder.client.android.common.util.BundleDelegate
 
 interface ComponentWithInstanceState
 {

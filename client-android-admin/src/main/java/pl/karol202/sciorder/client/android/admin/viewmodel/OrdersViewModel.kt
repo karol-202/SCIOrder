@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.admin.viewmodel
 
 import kotlinx.coroutines.flow.asFlow
-import pl.karol202.sciorder.client.android.common.extension.asLiveData
+import pl.karol202.sciorder.client.android.common.util.asLiveData
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.viewmodel.OrdersViewModel

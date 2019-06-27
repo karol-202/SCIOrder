@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.android.common.extension
+package pl.karol202.sciorder.client.android.common.util
 
 import android.content.Context
 import androidx.annotation.ColorRes

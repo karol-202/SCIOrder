@@ -1,6 +1,6 @@
 package pl.karol202.sciorder.client.android.common.viewmodel
 
-import pl.karol202.sciorder.client.android.common.extension.asLiveData
+import pl.karol202.sciorder.client.android.common.util.asLiveData
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.viewmodel.ProductsViewModel

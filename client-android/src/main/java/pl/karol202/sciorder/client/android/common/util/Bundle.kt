@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.android.common.extension
+package pl.karol202.sciorder.client.android.common.util
 
 import android.os.Bundle
 import android.os.Parcelable

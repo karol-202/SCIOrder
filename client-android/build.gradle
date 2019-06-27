@@ -33,7 +33,7 @@ androidExtensions {
 
 dependencies {
     api project(':client')
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutinesVersion"
 
     // Android
     api "androidx.appcompat:appcompat:$appCompatVersion"
@@ -49,15 +49,15 @@ dependencies {
     // Lifecycle
     api "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
 
-    // Room
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt           "androidx.room:room-compiler:$roomVersion"
-    implementation "androidx.room:room-ktx:$roomVersion"
-    implementation "androidx.room:room-rxjava2:$roomVersion"
-
     // Navigation
     api "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     api "androidx.navigation:navigation-ui-ktx:$navigationVersion"
+
+    // Room
+    kapt           "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
 
     // Koin
     api "org.koin:koin-core:$koinVersion"
