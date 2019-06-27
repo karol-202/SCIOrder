@@ -10,13 +10,17 @@ compileKotlin2Js {
     }
 }
 
-runDceKotlinJs.dceOptions.devMode = DEV_MODE.toBoolean()
+assemble.dependsOn runDceKotlinJs
 
 kotlinFrontend {
     npm {
+        dependency('core-js', "$coreJsVersion")
         dependency('react', "$reactVersion")
         dependency('react-dom', "$reactVersion")
-        dependency('core-js', "$coreJsVersion")
+        dependency('@material-ui/core', "$materialUiCoreVersion")
+        dependency('@material-ui/icons', "$materialUiIconsVersion")
+        dependency('inline-style-prefixer', "$inlineStylePrefixerVersion")
+        dependency('styled-components', "$styledComponentsVersion")
     }
 
     sourceMaps = DEV_MODE.toBoolean()
@@ -35,9 +39,9 @@ kotlinFrontend {
 dependencies {
     implementation project(':client')
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion"
+    implementation "org.jetbrains:kotlin-extensions:$kotlinExtensionsVersion"
     implementation "org.jetbrains:kotlin-react:$reactKotlinVersion"
     implementation "org.jetbrains:kotlin-react-dom:$reactKotlinVersion"
-    implementation "org.jetbrains:kotlin-extensions:$kotlinExtensionsVersion"
+    implementation "org.jetbrains:kotlin-styled:$kotlinStyledVersion"
+    implementation "com.ccfraser.muirwik:muirwik-components:$muirwikVersion"
 }
-
-assemble.dependsOn runDceKotlinJs
