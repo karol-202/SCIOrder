@@ -29,9 +29,19 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    // Workaround for "More than one file was found with OS independent path 'META-INF/kotlinx-coroutines-core.kotlin_module'"
+    // Workaround for "More than one file was found with OS independent path 'META-INF/.'"
     packagingOptions {
         exclude 'META-INF/kotlinx-coroutines-core.kotlin_module'
+        exclude 'META-INF/ktor-client-serialization.kotlin_module'
+        exclude 'META-INF/ktor-client-json.kotlin_module'
+        exclude 'META-INF/ktor-http.kotlin_module'
+        exclude 'META-INF/kotlinx-io.kotlin_module'
+        exclude 'META-INF/atomicfu.kotlin_module'
+        exclude 'META-INF/ktor-utils.kotlin_module'
+        exclude 'META-INF/kotlinx-coroutines-io.kotlin_module'
+        exclude 'META-INF/kotlinx-serialization-runtime.kotlin_module'
+        exclude 'META-INF/ktor-http-cio.kotlin_module'
+        exclude 'META-INF/ktor-client-core.kotlin_module'
     }
 }
 

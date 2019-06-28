@@ -6,8 +6,8 @@ import pl.karol202.sciorder.common.Order
 class OrderStatusConverter
 {
 	@TypeConverter
-	fun fromStatus(status: Order.Status) = status.ordinal
+	fun fromStatus(status: Order.Status) = status.name
 
 	@TypeConverter
-	fun toStatus(ordinal: Int) = Order.Status.values()[ordinal]
+	fun toStatus(name: String) = Order.Status.getByName(name)
 }

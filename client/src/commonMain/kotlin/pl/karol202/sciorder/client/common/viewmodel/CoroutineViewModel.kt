@@ -4,11 +4,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-abstract class CoroutineViewModel private constructor(private val job: Job,
-                                                      protected val coroutineScope: CoroutineScope = CoroutineScope(job)) :
-		ViewModel()
+abstract class CoroutineViewModel : ViewModel()
 {
-	constructor() : this(Job())
+	private val job = Job()
+	protected val coroutineScope = CoroutineScope(job)
 
 	override fun onCleared() = job.cancel()
 

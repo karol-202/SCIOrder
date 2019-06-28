@@ -1,18 +1,15 @@
 package pl.karol202.sciorder.client.android.common.model.local.order
 
 import androidx.room.TypeConverter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.list
 import pl.karol202.sciorder.common.Order
 
 class OrderEntriesListConverter
 {
-    private val entriesListType = Types.newParameterizedType(List::class.java, Order.Entry::class.java)
-    private val adapter = Moshi.Builder().build().adapter<List<Order.Entry>>(entriesListType)
+    @TypeConverter
+    fun fromEntriesList(entries: List<Order.Entry>) = Json.stringify(Order.Entry.serializer().list, entries)
 
     @TypeConverter
-    fun fromEntriesList(entries: List<Order.Entry>): String = adapter.toJson(entries)
-
-    @TypeConverter
-    fun toEntriesList(data: String) = adapter.fromJson(data)
+    fun toEntriesList(data: String) = Json.parse(Order.Entry.serializer().list, data)
 }

@@ -1,4 +1,5 @@
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlinx-serialization'
 
 if(SKIP_ANDROID != "true") {
     apply plugin: 'com.android.library'
@@ -38,6 +39,10 @@ if(SKIP_ANDROID != "true") {
     dependencies {
         api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
+        api "io.ktor:ktor-client-okhttp:$ktorVersion"
+        implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
+        implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
+
         // Lifecycle
         implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     }
@@ -57,12 +62,21 @@ kotlin {
             dependencies {
                 api project(':common')
                 api "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
+
+                implementation "io.ktor:ktor-client-core:$ktorVersion"
+                implementation "io.ktor:ktor-client-json:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization:$ktorVersion"
             }
         }
 
         jsMain {
             dependencies {
                 api "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion"
+
+                implementation "io.ktor:ktor-client-js:$ktorVersion"
+                implementation "io.ktor:ktor-client-json-js:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization-js:$ktorVersion"
+
                 implementation npm('sha1', "$sha1Version")
             }
         }

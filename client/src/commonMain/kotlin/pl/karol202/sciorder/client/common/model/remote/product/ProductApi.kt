@@ -1,5 +1,6 @@
-package pl.karol202.sciorder.client.common.model.remote
+package pl.karol202.sciorder.client.common.model.remote.product
 
+import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.common.Product
 
 interface ProductApi

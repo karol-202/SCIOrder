@@ -1,4 +1,5 @@
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlinx-serialization'
 
 kotlin {
     jvm()
@@ -13,18 +14,22 @@ kotlin {
         commonMain {
             dependencies {
                 api "org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion"
+                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$kotlinxSerializationVersion"
+
             }
         }
 
         jvmMain {
             dependencies {
                 api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$kotlinxSerializationVersion"
             }
         }
 
         jsMain {
             dependencies {
                 api "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlinVersion"
+                api "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$kotlinxSerializationVersion"
             }
         }
     }

@@ -18,7 +18,7 @@ import pl.karol202.sciorder.client.android.common.model.local.product.ProductPar
 private object DatabaseInfo
 {
 	const val NAME = "local"
-	const val VERSION = 5
+	const val VERSION = 6
 }
 
 @Database(entities = [ProductEntity::class, OrderEntity::class, OwnerEntity::class],

@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.common
 
 import android.app.Application
-import okhttp3.OkHttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -10,7 +10,13 @@ import pl.karol202.sciorder.client.android.common.model.local.LocalDatabase
 import pl.karol202.sciorder.client.android.common.model.local.order.toOrderDao
 import pl.karol202.sciorder.client.android.common.model.local.owner.toOwnerDao
 import pl.karol202.sciorder.client.android.common.model.local.product.toProductDao
-import pl.karol202.sciorder.client.android.common.model.remote.*
+import pl.karol202.sciorder.client.common.model.remote.createApiHttpClient
+import pl.karol202.sciorder.client.common.model.remote.order.KtorOrderApi
+import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
+import pl.karol202.sciorder.client.common.model.remote.owner.KtorOwnerApi
+import pl.karol202.sciorder.client.common.model.remote.owner.OwnerApi
+import pl.karol202.sciorder.client.common.model.remote.product.KtorProductApi
+import pl.karol202.sciorder.client.common.model.remote.product.ProductApi
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepositoryImpl
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
@@ -19,10 +25,6 @@ import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepositoryImpl
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryImpl
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
-import java.util.concurrent.TimeUnit
 
 abstract class SCIOrderApplication : Application()
 {
@@ -51,24 +53,11 @@ abstract class SCIOrderApplication : Application()
 	}
 
 	private fun networkingModule() = module {
-		fun okHttp() = OkHttpClient.Builder()
-				.connectTimeout(3, TimeUnit.SECONDS)
-				.readTimeout(3, TimeUnit.SECONDS)
-				.build()
+		single { createApiHttpClient(OkHttp) }
 
-		fun retrofit(httpClient: OkHttpClient) = Retrofit.Builder()
-				.baseUrl(SERVER_URL)
-				.client(httpClient)
-				.addConverterFactory(MoshiConverterFactory.create())
-				.addCallAdapterFactory(ApiResponseCallAdapter.Factory())
-				.build()
-
-		single { okHttp() }
-		single { retrofit(get()) }
-
-		single { get<Retrofit>().create<RetrofitOwnerApi>().asOwnerApi() }
-		single { get<Retrofit>().create<RetrofitProductApi>().asProductApi() }
-		single { get<Retrofit>().create<RetrofitOrderApi>().asOrderApi() }
+		single<OwnerApi> { KtorOwnerApi(get(), SERVER_URL) }
+		single<ProductApi> { KtorProductApi(get(), SERVER_URL) }
+		single<OrderApi> { KtorOrderApi(get(), SERVER_URL) }
 	}
 
 	private fun repositoryModule() = module {

@@ -1,18 +1,15 @@
 package pl.karol202.sciorder.client.android.common.model.local.product
 
 import androidx.room.TypeConverter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.list
 import pl.karol202.sciorder.common.Product
 
 class ProductParametersListConverter
 {
-    private val parametersListType = Types.newParameterizedType(List::class.java, Product.Parameter::class.java)
-    private val adapter = Moshi.Builder().build().adapter<List<Product.Parameter>>(parametersListType)
+    @TypeConverter
+    fun fromParametersList(parameters: List<Product.Parameter>) = Json.stringify(Product.Parameter.serializer().list, parameters)
 
     @TypeConverter
-    fun fromParametersList(parameters: List<Product.Parameter>): String = adapter.toJson(parameters)
-
-    @TypeConverter
-    fun toParametersList(data: String) = adapter.fromJson(data)
+    fun toParametersList(data: String) = Json.parse(Product.Parameter.serializer().list, data)
 }

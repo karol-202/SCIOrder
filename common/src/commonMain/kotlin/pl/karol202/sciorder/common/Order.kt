@@ -1,19 +1,24 @@
 package pl.karol202.sciorder.common
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Order(val _id: String,
                  val ownerId: String,
                  val entries: List<Entry>,
                  val details: Details,
-                 val status: Status) : Serializable, IdProvider
+                 val status: Status) : JvmSerializable, IdProvider
 {
 	companion object;
 
+	@Serializable
 	data class Entry(val productId: String,
 	                 val quantity: Int,
-	                 val parameters: Map<String, String>) : Serializable
+	                 val parameters: Map<String, String>) : JvmSerializable
 
+	@Serializable
 	data class Details(val location: String,
-	                   val recipient: String) : Serializable
+	                   val recipient: String) : JvmSerializable
 
 	enum class Status
 	{

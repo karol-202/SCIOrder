@@ -3,7 +3,7 @@ package pl.karol202.sciorder.client.common.repository.owner
 import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.local.OwnerDao
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.common.model.remote.OwnerApi
+import pl.karol202.sciorder.client.common.model.remote.owner.OwnerApi
 import pl.karol202.sciorder.common.Owner
 
 class OwnerRepositoryImpl(private val ownerDao: OwnerDao,

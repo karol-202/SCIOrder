@@ -3,6 +3,23 @@ package pl.karol202.sciorder.client.common.model.remote
 sealed class ApiResponse<out T>
 {
 	companion object
+	{
+		fun <T> fromData(data: T) = Success(data)
+
+		fun fromThrowable(throwable: Throwable) =
+				Error(throwable.getErrorType(), throwable.message ?: "")
+
+		private fun Throwable.getErrorType() = when(this)
+		{
+			// TODO Find possible exceptions
+			//is IOException -> ApiResponse.Error.Type.NETWORK
+			else ->
+			{
+				throw this
+				Error.Type.OTHER
+			}
+		}
+	}
 
 	class Success<T>(val data: T) : ApiResponse<T>()
 
