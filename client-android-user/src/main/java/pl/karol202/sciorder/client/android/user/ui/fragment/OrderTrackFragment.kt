@@ -9,15 +9,15 @@ import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.viewmodel.OrdersTrackAndroidViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.TrackedOrderAdapter
-import pl.karol202.sciorder.client.android.user.viewmodel.OrdersTrackViewModel
-import pl.karol202.sciorder.client.android.user.viewmodel.ProductsViewModel
 
 class OrderTrackFragment : InflatedFragment()
 {
-	private val productsViewModel by sharedViewModel<ProductsViewModel>()
-	private val ordersTrackViewModel by sharedViewModel<OrdersTrackViewModel>()
+	private val productsViewModel by sharedViewModel<ProductsAndroidViewModel>()
+	private val ordersTrackViewModel by sharedViewModel<OrdersTrackAndroidViewModel>()
 
 	private val adapter = TrackedOrderAdapter { order -> ordersTrackViewModel.removeOrder(order) }
 

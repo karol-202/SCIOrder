@@ -10,11 +10,11 @@ import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.user.R
-import pl.karol202.sciorder.client.android.user.viewmodel.OwnerViewModel
+import pl.karol202.sciorder.client.android.user.viewmodel.UserOwnerAndroidViewModel
 
 class LoginFragment : InflatedFragment()
 {
-	private val ownerViewModel by sharedViewModel<OwnerViewModel>()
+	private val ownerViewModel by sharedViewModel<UserOwnerAndroidViewModel>()
 
 	private val navController by lazy { NavHostFragment.findNavController(this) }
 

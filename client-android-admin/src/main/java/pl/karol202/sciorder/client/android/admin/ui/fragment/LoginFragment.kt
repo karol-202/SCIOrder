@@ -6,16 +6,16 @@ import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.android.admin.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel.Error.NAME_BUSY
 
 class LoginFragment : InflatedFragment()
 {
-	private val ownerViewModel by sharedViewModel<OwnerViewModel>()
+	private val ownerViewModel by sharedViewModel<OwnerAndroidViewModel>()
 
 	private val navController by lazy { NavHostFragment.findNavController(this) }
 

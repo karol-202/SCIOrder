@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.fragment_product_edit.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
-import pl.karol202.sciorder.client.android.admin.viewmodel.ProductsViewModel
+import pl.karol202.sciorder.client.android.admin.viewmodel.AdminProductsAndroidViewModel
 import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.util.ctx
@@ -19,7 +19,7 @@ import pl.karol202.sciorder.common.Product
 
 class ProductEditFragment : ExtendedFragment()
 {
-	private val productsViewModel by sharedViewModel<ProductsViewModel>()
+	private val productsViewModel by sharedViewModel<AdminProductsAndroidViewModel>()
 
 	private val arguments by navArgs<ProductEditFragmentArgs>()
 	private val productId by lazy { arguments.productId }
@@ -68,7 +68,7 @@ class ProductEditFragment : ExtendedFragment()
 	private fun observeUpdateEvent()
 	{
 		productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-			if(it == ProductsViewModel.UpdateResult.SUCCESS) navigateBack()
+			if(it == AdminProductsAndroidViewModel.UpdateResult.SUCCESS) navigateBack()
 			else showSnackbar(R.string.text_update_error)
 		}
 	}

@@ -9,12 +9,12 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.common.R
 import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.observe
-import pl.karol202.sciorder.client.android.common.viewmodel.OwnerViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
 import pl.karol202.sciorder.common.Owner
 
 abstract class MainFragment : FragmentWithMenu()
 {
-	private val ownerViewModel by sharedViewModel<OwnerViewModel>()
+	private val ownerViewModel by sharedViewModel<OwnerAndroidViewModel>()
 
 	override val layoutRes = R.layout.fragment_main
 	override val menuRes = R.menu.menu_main

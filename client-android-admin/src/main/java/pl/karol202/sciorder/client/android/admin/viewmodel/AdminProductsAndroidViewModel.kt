@@ -2,15 +2,15 @@ package pl.karol202.sciorder.client.android.admin.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.common.Product
 
-class ProductsViewModel(ownerRepository: OwnerRepository,
-                        private val productRepository: ProductRepository) : ProductsViewModel(ownerRepository, productRepository)
+class AdminProductsAndroidViewModel(ownerRepository: OwnerRepository,
+                                    private val productRepository: ProductRepository) : ProductsAndroidViewModel(ownerRepository, productRepository)
 {
 	enum class UpdateResult
 	{

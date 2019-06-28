@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.*
+import pl.karol202.sciorder.client.android.common.viewmodel.OrderComposeAndroidViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.OrderedProductAdapter
 import pl.karol202.sciorder.client.android.user.ui.adapter.ProductAdapter
@@ -19,8 +21,6 @@ import pl.karol202.sciorder.client.android.user.ui.dialog.fragment.ProductOrderE
 import pl.karol202.sciorder.client.android.user.ui.listener.OnOrderDetailsSetListener
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderEditListener
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
-import pl.karol202.sciorder.client.android.user.viewmodel.OrderComposeViewModel
-import pl.karol202.sciorder.client.android.user.viewmodel.ProductsViewModel
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel.OrderResult.SUCCESS
 import pl.karol202.sciorder.common.Order
@@ -28,8 +28,8 @@ import pl.karol202.sciorder.common.Product
 
 class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {
-	private val productsViewModel by sharedViewModel<ProductsViewModel>()
-	private val ordersViewModel by sharedViewModel<OrderComposeViewModel>()
+	private val productsViewModel by sharedViewModel<ProductsAndroidViewModel>()
+	private val ordersViewModel by sharedViewModel<OrderComposeAndroidViewModel>()
 
 	private val productsAdapter = ProductAdapter().apply {
 		onProductSelectListener = { product -> showProductOrderDialog(product) }
