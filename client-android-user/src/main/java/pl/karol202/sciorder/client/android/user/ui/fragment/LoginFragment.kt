@@ -9,12 +9,13 @@ import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
 import pl.karol202.sciorder.client.android.user.R
-import pl.karol202.sciorder.client.android.user.viewmodel.UserOwnerAndroidViewModel
+import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 
 class LoginFragment : InflatedFragment()
 {
-	private val ownerViewModel by sharedViewModel<UserOwnerAndroidViewModel>()
+	private val ownerViewModel by sharedViewModel<OwnerAndroidViewModel>()
 
 	private val navController by lazy { NavHostFragment.findNavController(this) }
 
@@ -40,7 +41,13 @@ class LoginFragment : InflatedFragment()
 			}
 
 	private fun observeError() =
-			ownerViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_login_error) }
+			ownerViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) {
+				when(it)
+				{
+					OwnerViewModel.Error.NOT_FOUND -> showSnackbar(R.string.text_login_error_not_found)
+					else -> showSnackbar(R.string.text_login_error)
+				}
+			}
 
 	private fun login()
 	{

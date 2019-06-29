@@ -1,5 +1,9 @@
 package pl.karol202.sciorder.client.common.model.remote
 
+import io.ktor.client.features.ResponseException
+import io.ktor.http.HttpStatusCode
+import kotlinx.io.IOException
+
 sealed class ApiResponse<out T>
 {
 	companion object
@@ -11,17 +15,21 @@ sealed class ApiResponse<out T>
 
 		private fun Throwable.getErrorType() = when(this)
 		{
-			// TODO Find possible exceptions
-			//is IOException -> ApiResponse.Error.Type.NETWORK
-			else ->
+			is IOException -> Error.Type.NETWORK
+			is ResponseException -> when(response.status)
 			{
-				throw this
-				Error.Type.OTHER
+				HttpStatusCode.NotFound -> Error.Type.NOT_FOUND
+				HttpStatusCode.Conflict -> Error.Type.CONFLICT
+				else -> Error.Type.OTHER
 			}
+			else -> Error.Type.OTHER
 		}
 	}
 
 	class Success<T>(val data: T) : ApiResponse<T>()
+	{
+		override fun <X> map(mapper: (T) -> X) = Success(mapper(data))
+	}
 
 	// Message is for debugging purposes
 	class Error(val type: Type,
@@ -33,7 +41,11 @@ sealed class ApiResponse<out T>
 			NOT_FOUND, CONFLICT,
 			OTHER
 		}
+
+		override fun <X> map(mapper: (Nothing) -> X) = this
 	}
+
+	abstract fun <X> map(mapper: (T) -> X): ApiResponse<X>
 
 	suspend fun fold(onSuccess: suspend (T) -> Unit = { },
 	                 onError: suspend (Error) -> Unit = { }): ApiResponse<T> = apply {

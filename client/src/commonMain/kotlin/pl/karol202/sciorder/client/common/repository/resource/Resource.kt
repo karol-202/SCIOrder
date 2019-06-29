@@ -18,8 +18,9 @@ interface Resource<T>
 			enum class Type
 			{
 				NETWORK,
-				NOT_FOUND, CONFLICT,
+				NOT_FOUND,
 				OTHER;
+				// ApiResponse's CONFLICT is not applicable to fetching data
 
 				companion object
 				{
@@ -27,7 +28,6 @@ interface Resource<T>
 					{
 						ApiResponse.Error.Type.NETWORK -> NETWORK
 						ApiResponse.Error.Type.NOT_FOUND -> NOT_FOUND
-						ApiResponse.Error.Type.CONFLICT -> CONFLICT
 						else -> OTHER
 					}
 				}

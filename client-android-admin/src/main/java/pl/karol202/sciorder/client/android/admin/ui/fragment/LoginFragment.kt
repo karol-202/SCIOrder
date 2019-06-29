@@ -12,6 +12,7 @@ import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel.Error.NAME_BUSY
+import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel.Error.NOT_FOUND
 
 class LoginFragment : InflatedFragment()
 {
@@ -48,8 +49,12 @@ class LoginFragment : InflatedFragment()
 
 	private fun observeError() =
 			ownerViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) {
-				if(it == NAME_BUSY) showSnackbar(R.string.text_login_error_name_busy)
-				else showSnackbar(R.string.text_login_error)
+				when(it)
+				{
+					NOT_FOUND -> showSnackbar(R.string.text_login_error_not_found)
+					NAME_BUSY -> showSnackbar(R.string.text_login_error_name_busy)
+					else -> showSnackbar(R.string.text_login_error)
+				}
 			}
 
 	private fun login()

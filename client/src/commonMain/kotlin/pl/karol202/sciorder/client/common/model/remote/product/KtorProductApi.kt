@@ -2,37 +2,32 @@ package pl.karol202.sciorder.client.common.model.remote.product
 
 import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
-import io.ktor.http.HttpMethod
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.list
 import pl.karol202.sciorder.client.common.model.remote.BasicApi
 import pl.karol202.sciorder.common.Product
 
 class KtorProductApi(httpClient: HttpClient,
                      serverUrl: String) : BasicApi(httpClient, serverUrl), ProductApi
 {
-	override suspend fun addProduct(ownerId: String, hash: String, product: Product) = apiRequest<Product> {
-		method = HttpMethod.Post
+	override suspend fun addProduct(ownerId: String, hash: String, product: Product) = post<Product> {
 		apiUrl("owner/$ownerId/products")
 		parameter("hash", hash)
-		json()
-		body = product
+		jsonBody(product)
 	}
 
-	override suspend fun updateProduct(ownerId: String, productId: String, hash: String, product: Product) = apiRequest<Unit> {
-		method = HttpMethod.Put
+	override suspend fun updateProduct(ownerId: String, productId: String, hash: String, product: Product) = put<Unit> {
 		apiUrl("owner/$ownerId/products/$productId")
 		parameter("hash", hash)
-		json()
-		body = product
+		jsonBody(product)
 	}
 
-	override suspend fun removeProduct(ownerId: String, productId: String, hash: String) = apiRequest<Unit> {
-		method = HttpMethod.Delete
+	override suspend fun removeProduct(ownerId: String, productId: String, hash: String) = delete<Unit> {
 		apiUrl("owner/$ownerId/products/$productId")
 		parameter("hash", hash)
 	}
 
-	override suspend fun getAllProducts(ownerId: String) = apiRequest<List<Product>> {
-		method = HttpMethod.Get
+	override suspend fun getAllProducts(ownerId: String) = get<String> {
 		apiUrl("owner/$ownerId/products")
-	}
+	}.map { Json.parse(Product.serializer().list, it) } // Workaround for Ktor's KotlinxSerializer not being able to deserialize lists
 }
