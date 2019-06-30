@@ -42,7 +42,7 @@
 	<string name="text_product_edit_param_attr_enum">Wartości</string>
 	<string name="text_product_edit_param_attr_enum_value_new">Nowa wartość</string>
 
-    <string name="text_product_param_int_range_closed">Od %d do %d</string>
+    <string name="text_product_param_int_range_closed">Od %1$d do %2$d</string>
     <string name="text_product_param_int_range_left_closed">Minimalnie %d</string>
     <string name="text_product_param_int_range_right_closed">Maksymalnie %d</string>
     <string name="text_product_param_float_range_closed">Od %1$.2f do %2$.2f</string>
