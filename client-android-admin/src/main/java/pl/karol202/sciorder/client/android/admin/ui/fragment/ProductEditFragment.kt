@@ -8,18 +8,19 @@ import kotlinx.android.synthetic.main.fragment_product_edit.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
-import pl.karol202.sciorder.client.android.admin.viewmodel.AdminProductsAndroidViewModel
 import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeOnceNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
+import pl.karol202.sciorder.client.common.viewmodel.ProductsViewModel.UpdateResult.SUCCESS
 import pl.karol202.sciorder.common.Product
 
 class ProductEditFragment : ExtendedFragment()
 {
-	private val productsViewModel by sharedViewModel<AdminProductsAndroidViewModel>()
+	private val productsViewModel by sharedViewModel<ProductsAndroidViewModel>()
 
 	private val arguments by navArgs<ProductEditFragmentArgs>()
 	private val productId by lazy { arguments.productId }
@@ -68,7 +69,7 @@ class ProductEditFragment : ExtendedFragment()
 	private fun observeUpdateEvent()
 	{
 		productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-			if(it == AdminProductsAndroidViewModel.UpdateResult.SUCCESS) navigateBack()
+			if(it == SUCCESS) navigateBack()
 			else showSnackbar(R.string.text_update_error)
 		}
 	}
