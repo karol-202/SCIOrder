@@ -6,7 +6,7 @@ import io.reactivex.Flowable
 @Dao
 interface ProductEntityDao
 {
-	@Insert
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	suspend fun insert(products: List<ProductEntity>)
 
 	@Update

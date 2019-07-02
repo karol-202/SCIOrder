@@ -7,7 +7,7 @@ import pl.karol202.sciorder.common.Order
 @Dao
 interface OrderEntityDao
 {
-	@Insert
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
 	suspend fun insert(orders: List<OrderEntity>)
 
 	@Update
