@@ -7,7 +7,7 @@ object Versions
 	const val KOIN = "2.0.1"
 
 	// Client
-	const val COROUTINES = "1.3.0-M1"
+	const val COROUTINES = "1.3.0-M2"
 
 	// Android
 	const val ANDROID_BUILD_TOOLS = "3.4.1"

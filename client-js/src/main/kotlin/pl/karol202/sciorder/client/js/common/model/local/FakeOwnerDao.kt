@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.js.common.model.local
 
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.flowViaChannel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.channelFlow
 import pl.karol202.sciorder.client.common.model.local.OwnerDao
 import pl.karol202.sciorder.client.js.common.util.Delegates
 import pl.karol202.sciorder.common.Owner
@@ -16,9 +16,9 @@ class FakeOwnerDao : OwnerDao
 		this.owner = owner
 	}
 
-	override fun get() = flowViaChannel<Owner?>(Channel.UNLIMITED) { channel ->
-		val listener: (Owner?) -> Unit = { channel.offer(it) }
+	override fun get() = channelFlow<Owner?> {
+		val listener: (Owner?) -> Unit = { offer(it) }
 		updateListeners += listener
-		channel.invokeOnClose { updateListeners -= listener }
+		awaitClose { updateListeners -= listener }
 	}
 }

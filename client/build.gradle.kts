@@ -58,7 +58,7 @@ kotlin {
         }
 
         if(includeAndroid) getByName("androidMain").dependencies {
-            implementation(Deps.COROUTINES_CORE_JVM)
+            api(Deps.COROUTINES_CORE_JVM)
 
             implementation(Deps.KTOR_CLIENT_CORE_JVM)
             implementation(Deps.KTOR_CLIENT_JSON_JVM)
@@ -68,7 +68,7 @@ kotlin {
         }
 
         js().compilations["main"].dependencies {
-            implementation(Deps.COROUTINES_CORE_JS)
+            api(Deps.COROUTINES_CORE_JS)
 
             implementation(Deps.KTOR_CLIENT_CORE_JS)
             implementation(Deps.KTOR_CLIENT_JSON_JS)

@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.js.common.model.local
 
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.flowViaChannel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import pl.karol202.sciorder.client.common.model.local.OrderDao
 import pl.karol202.sciorder.client.js.common.model.local.FakeDao.IdUniqueElement
@@ -40,10 +40,10 @@ class FakeOrderDao : OrderDao, FakeDao
 		orders = emptySet()
 	}
 
-	override fun getAll() = flowViaChannel<List<Order>>(Channel.UNLIMITED) { channel ->
-		val listener: (List<Order>) -> Unit = { channel.offer(it) }
+	override fun getAll() = channelFlow<List<Order>> {
+		val listener: (List<Order>) -> Unit = { offer(it) }
 		updateListeners += listener
-		channel.invokeOnClose { updateListeners -= listener }
+		awaitClose { updateListeners -= listener }
 	}
 
 	override fun getByOwnerId(ownerId: String) = getAll().map { orders ->

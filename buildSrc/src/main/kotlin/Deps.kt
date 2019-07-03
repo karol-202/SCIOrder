@@ -53,12 +53,20 @@ object Deps
 	const val RXJAVA = "io.reactivex.rxjava2:rxjava:${Versions.RXJAVA}"
 
 	// JS
-	const val SHA1 = "sha1"
-	const val EXTENSIONS_JS = "org.jetbrains:kotlin-extensions:${Versions.EXTENSIONS_JS}"
+	const val NPM_CORE_JS = "core-js"
+	const val NPM_REACT = "react"
+	const val NPM_REACT_DOM = "react-dom"
+	const val NPM_MATERIALUI_CORE = "@material-ui/core"
+	const val NPM_MATERIALUI_ICONS = "@material-ui/icons"
+	const val NPM_STYLED_COMPONENTS = "styled-components"
+	const val NPM_INLINE_STYLE_PREFIXER = "inline-style-prefixer"
+
 	const val REACT_KOTLIN = "org.jetbrains:kotlin-react:${Versions.REACT_KOTLIN}"
 	const val REACT_DOM_KOTLIN = "org.jetbrains:kotlin-react-dom:${Versions.REACT_KOTLIN}"
 	const val STYLED_KOTLIN = "org.jetbrains:kotlin-styled:${Versions.STYLED_KOTLIN}"
+	const val EXTENSIONS_JS = "org.jetbrains:kotlin-extensions:${Versions.EXTENSIONS_JS}"
 	const val MUIRWIK = "com.ccfraser.muirwik:muirwik-components:${Versions.MUIRWIK}"
+	const val SHA1 = "sha1"
 
 	// Server
 	const val KTOR_SERVER_NETTY = "io.ktor:ktor-server-netty:${Versions.KTOR}"

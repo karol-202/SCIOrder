@@ -28,13 +28,13 @@ kotlinFrontend {
     sourceMaps = devMode
 
     npm {
-        dependency("core-js", Versions.CORE_JS)
-        dependency("react", Versions.REACT)
-        dependency("react-dom", Versions.REACT)
-        dependency("@material-ui/core", Versions.MATERIALUI_CORE)
-        dependency("@material-ui/icons", Versions.MATERIALUI_ICONS)
-        dependency("inline-style-prefixer", Versions.INLINE_STYLE_PREFIXER)
-        dependency("styled-components", Versions.STYLED_COMPONENTS)
+        dependency(Deps.NPM_CORE_JS, Versions.CORE_JS)
+        dependency(Deps.NPM_REACT, Versions.REACT)
+        dependency(Deps.NPM_REACT_DOM, Versions.REACT)
+        dependency(Deps.NPM_MATERIALUI_CORE, Versions.MATERIALUI_CORE)
+        dependency(Deps.NPM_MATERIALUI_ICONS, Versions.MATERIALUI_ICONS)
+        dependency(Deps.NPM_STYLED_COMPONENTS, Versions.STYLED_COMPONENTS)
+        dependency(Deps.NPM_INLINE_STYLE_PREFIXER, Versions.INLINE_STYLE_PREFIXER)
     }
 
     bundle("webpack", delegateClosureOf<WebPackExtension> {

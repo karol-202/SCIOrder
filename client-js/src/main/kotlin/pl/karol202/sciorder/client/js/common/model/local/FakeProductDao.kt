@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.js.common.model.local
 
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.flowViaChannel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.channelFlow
 import pl.karol202.sciorder.client.common.model.local.ProductDao
 import pl.karol202.sciorder.client.js.common.model.local.FakeDao.IdUniqueElement
 import pl.karol202.sciorder.client.js.common.util.Delegates
@@ -33,9 +33,9 @@ class FakeProductDao : ProductDao, FakeDao
 		products = emptySet()
 	}
 
-	override fun getAll() = flowViaChannel<List<Product>>(Channel.UNLIMITED) { channel ->
-		val listener: (List<Product>) -> Unit = { channel.offer(it) }
+	override fun getAll() = channelFlow<List<Product>> {
+		val listener: (List<Product>) -> Unit = { offer(it) }
 		updateListeners += listener
-		channel.invokeOnClose { updateListeners -= listener }
+		awaitClose { updateListeners -= listener }
 	}
 }
