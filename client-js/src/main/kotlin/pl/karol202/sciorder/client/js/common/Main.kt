@@ -1,17 +1,13 @@
 package pl.karol202.sciorder.client.js.common
 
-import org.w3c.dom.Document
-import org.w3c.dom.events.Event
+import pl.karol202.sciorder.client.js.common.component.appComponent
+import pl.karol202.sciorder.client.js.common.util.addOnLoadListener
 import react.dom.render
 import kotlin.browser.document
 
 fun main()
 {
 	document.addOnLoadListener {
-		render(document.getElementById("root")) {
-
-		}
+		render(document.getElementById("root")) { appComponent() }
 	}
 }
-
-private fun Document.addOnLoadListener(listener: (Event) -> Unit) = addEventListener("DOMContentLoaded", listener)

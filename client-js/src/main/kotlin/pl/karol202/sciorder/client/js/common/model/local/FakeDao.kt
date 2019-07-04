@@ -8,7 +8,7 @@ interface FakeDao
 	{
 		val id get() = value.id
 
-		override fun equals(other: Any?) = value.id == (other as? IdProvider)
+		override fun equals(other: Any?) = value.id == (other as? IdProvider)?.id
 
 		override fun hashCode() = value.id.hashCode()
 	}
