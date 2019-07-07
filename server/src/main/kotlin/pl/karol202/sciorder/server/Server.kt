@@ -9,6 +9,7 @@ import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.request.ApplicationRequest
 import io.ktor.request.httpMethod
@@ -53,6 +54,11 @@ private fun Application.configure()
     }
 	install(CORS) {
 		anyHost()
+		method(HttpMethod.Get)
+		method(HttpMethod.Post)
+		method(HttpMethod.Put)
+		method(HttpMethod.Delete)
+		header(HttpHeaders.UserAgent)
 	}
 	install(Koin) {
 		propertiesByKtorEnvironment(environment, ARG_MONGODB)
