@@ -1,17 +1,20 @@
 package pl.karol202.sciorder.client.js.common.view
 
 import com.ccfraser.muirwik.components.*
-import kotlinx.css.*
+import kotlinx.css.FlexDirection
+import kotlinx.css.flexDirection
+import kotlinx.css.marginBottom
+import kotlinx.css.px
 import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
-import pl.karol202.sciorder.client.js.common.util.mTextFieldColor
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
 import react.RBuilder
 import react.RProps
 import react.RState
 import styled.css
+import styled.styledDiv
 
-class LoginView : ExtendedComponent<LoginView.Props, RState>()
+class UserLoginView : ExtendedComponent<AdminLoginView.Props, RState>()
 {
 	interface Props : RProps
 	{
@@ -28,15 +31,14 @@ class LoginView : ExtendedComponent<LoginView.Props, RState>()
 			}
 
 			mGridItem {
-				mTypography("Podaj nazwę konta", variant = MTypographyVariant.h5)
+				mTypography("Zaloguj się", variant = MTypographyVariant.h5)
 			}
 			mGridItem {
-				mTextFieldColor(textFieldColor = MColor.secondary) {
-					mTextField("Konto", fullWidth = true) {
-						css {
-							marginBottom = 24.px
-						}
+				styledDiv {
+					css {
+						marginBottom = 16.px
 					}
+					mTextField("Konto", fullWidth = true)
 				}
 			}
 			mGridItem {
@@ -46,16 +48,6 @@ class LoginView : ExtendedComponent<LoginView.Props, RState>()
 	}
 }
 
-fun RBuilder.loginView(ownerViewModel: OwnerJsViewModel) = child(LoginView::class) {
+fun RBuilder.userLoginView(ownerViewModel: OwnerJsViewModel) = child(UserLoginView::class) {
 	attrs.ownerViewModel = ownerViewModel
 }
-
-fun RBuilder.loginSheet(ownerViewModel: OwnerJsViewModel) =
-		mPaper {
-			css {
-				width = 400.px
-				margin(horizontal = LinearDimension.auto, vertical = 64.px)
-				padding(24.px)
-			}
-			loginView(ownerViewModel)
-		}
