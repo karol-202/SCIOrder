@@ -4,6 +4,7 @@ import io.ktor.application.Application
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
@@ -50,6 +51,9 @@ private fun Application.configure()
     install(ContentNegotiation) {
         gson()
     }
+	install(CORS) {
+		anyHost()
+	}
 	install(Koin) {
 		propertiesByKtorEnvironment(environment, ARG_MONGODB)
 		modules(KoinModules.databaseModule())
