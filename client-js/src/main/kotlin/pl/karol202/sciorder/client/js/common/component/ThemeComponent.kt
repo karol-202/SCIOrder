@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.client.js.common.component
 
 import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.styles.PaletteColor
 import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import kotlinext.js.jsObject
@@ -21,8 +22,11 @@ class ThemeComponent : ExtendedComponent<RProps, RState>()
 		val themeOptions: ThemeOptions = jsObject {
 			palette = jsObject {
 				type = "dark"
-				primary = jsObject<dynamic> {
+				primary = jsObject<PaletteColor> {
 					main = Colors.Red.shade500.toString()
+				}
+				secondary = jsObject<PaletteColor> {
+					main = Colors.Green.accent400.toString()
 				}
 			}
 		}

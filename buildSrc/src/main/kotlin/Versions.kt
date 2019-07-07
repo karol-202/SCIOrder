@@ -37,7 +37,7 @@ object Versions
 	const val STYLED_KOTLIN = "1.0.0-pre.73-kotlin-1.3.40"
 	const val INLINE_STYLE_PREFIXER = "5.1.0"
 	const val STYLED_COMPONENTS = "4.3.2"
-	const val MUIRWIK = "0.2.1"
+	//const val MUIRWIK = "0.2.1"
 	const val TEXT_ENCODING = "0.7.0"
 	const val SHA1 = "1.1.1"
 

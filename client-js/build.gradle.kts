@@ -1,6 +1,6 @@
-
 import org.jetbrains.kotlin.gradle.frontend.webpack.WebPackExtension
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJsDce
 
 plugins {
     id(Plugins.KOTLIN_JS) version Versions.KOTLIN
@@ -17,6 +17,10 @@ tasks {
             sourceMap = devMode
             sourceMapEmbedSources = "always"
         }
+    }
+
+    "runDceKotlinJs"(KotlinJsDce::class) {
+        dceOptions.devMode = devMode
     }
 }
 

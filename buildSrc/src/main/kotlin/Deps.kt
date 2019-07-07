@@ -67,7 +67,8 @@ object Deps
 	const val REACT_ROUTER_DOM_KOTLIN = "org.jetbrains:kotlin-react-router-dom:${Versions.REACT_ROUTER_KOTLIN}"
 	const val STYLED_KOTLIN = "org.jetbrains:kotlin-styled:${Versions.STYLED_KOTLIN}"
 	const val EXTENSIONS_JS = "org.jetbrains:kotlin-extensions:${Versions.EXTENSIONS_JS}"
-	const val MUIRWIK = "com.ccfraser.muirwik:muirwik-components:${Versions.MUIRWIK}"
+	//const val MUIRWIK = "com.ccfraser.muirwik:muirwik-components:${Versions.MUIRWIK}"
+	const val MUIRWIK = "com.github.karol-202:muirwik:76d32115d6"
 	const val TEXT_ENCODING = "text-encoding"
 	const val SHA1 = "sha1"
 

@@ -9,9 +9,9 @@ import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
 import react.RBuilder
 import react.RProps
 import react.RState
+import react.dom.div
 import react.router.dom.route
 import react.router.dom.switch
-import styled.styledDiv
 
 class MainView : ExtendedComponent<MainView.Props, RState>()
 {
@@ -30,13 +30,13 @@ class MainView : ExtendedComponent<MainView.Props, RState>()
 			}
 		}
 
-		styledDiv {
+		div {
 			switch {
 				route<RProps>("/admin") { (_, _, match) ->
-					loginControlView(viewModels, match, { null }, { null })
+					loginControlView(viewModels, match, { loginSheet(viewModels.ownerViewModel) }, { null })
 				}
 				route<RProps>("/user") { (_, _, match) ->
-					loginControlView(viewModels, match, { null }, { null })
+					loginControlView(viewModels, match, { loginSheet(viewModels.ownerViewModel) }, { null })
 				}
 				routeElse {
 					redirectTo("/user")
