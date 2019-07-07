@@ -7,8 +7,7 @@ import kotlinx.serialization.list
 import pl.karol202.sciorder.client.common.model.remote.BasicApi
 import pl.karol202.sciorder.common.Order
 
-class KtorOrderApi(httpClient: HttpClient,
-                   serverUrl: String) : BasicApi(httpClient, serverUrl), OrderApi
+class KtorOrderApi(httpClient: HttpClient) : BasicApi(httpClient), OrderApi
 {
 	override suspend fun addOrder(ownerId: String, order: Order) = post<Order> {
 		apiUrl("owner/$ownerId/orders")

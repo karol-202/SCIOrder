@@ -70,11 +70,9 @@ kotlin {
         js().compilations["main"].dependencies {
             api(Deps.COROUTINES_CORE_JS)
 
-            implementation(Deps.KTOR_CLIENT_CORE_JS)
-            implementation(Deps.KTOR_CLIENT_JSON_JS)
-            implementation(Deps.KTOR_CLIENT_SERIALIZATION_JS)
-
-            implementation(npm(Deps.SHA1, Versions.SHA1))
+            api(Deps.KTOR_CLIENT_CORE_JS)
+            api(Deps.KTOR_CLIENT_JSON_JS)
+            api(Deps.KTOR_CLIENT_SERIALIZATION_JS)
         }
     }
 }

@@ -5,8 +5,7 @@ import io.ktor.client.request.parameter
 import pl.karol202.sciorder.client.common.model.remote.BasicApi
 import pl.karol202.sciorder.common.Owner
 
-class KtorOwnerApi(httpClient: HttpClient,
-                   serverUrl: String) : BasicApi(httpClient, serverUrl), OwnerApi
+class KtorOwnerApi(httpClient: HttpClient) : BasicApi(httpClient), OwnerApi
 {
 	override suspend fun addOwner(owner: Owner) = post<Owner> {
 		apiUrl("owner")

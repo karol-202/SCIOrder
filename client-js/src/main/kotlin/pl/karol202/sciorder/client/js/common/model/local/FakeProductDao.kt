@@ -4,14 +4,14 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.channelFlow
 import pl.karol202.sciorder.client.common.model.local.ProductDao
 import pl.karol202.sciorder.client.js.common.model.local.FakeDao.IdUniqueElement
-import pl.karol202.sciorder.client.js.common.util.Delegates
 import pl.karol202.sciorder.client.js.common.util.invokeEach
+import pl.karol202.sciorder.client.js.common.util.observable
 import pl.karol202.sciorder.common.Product
 
 class FakeProductDao : ProductDao, FakeDao
 {
 	private var updateListeners = listOf<(List<Product>) -> Unit>()
-	private var products by Delegates.observable(setOf<IdUniqueElement<Product>>()) { updateListeners.invokeEach(it.values()) }
+	private var products by observable(setOf<IdUniqueElement<Product>>()) { updateListeners.invokeEach(it.values()) }
 
 	override suspend fun insert(items: List<Product>)
 	{

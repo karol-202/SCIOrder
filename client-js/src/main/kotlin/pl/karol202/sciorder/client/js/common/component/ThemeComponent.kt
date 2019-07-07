@@ -4,12 +4,12 @@ import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import kotlinext.js.jsObject
+import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
 import react.RBuilder
-import react.RComponent
 import react.RProps
 import react.RState
 
-class ThemeComponent : RComponent<RProps, RState>()
+class ThemeComponent : ExtendedComponent<RProps, RState>()
 {
 	override fun RState.init()
 	{

@@ -56,6 +56,7 @@ object Deps
 	const val NPM_CORE_JS = "core-js"
 	const val NPM_REACT = "react"
 	const val NPM_REACT_DOM = "react-dom"
+	const val NPM_REACT_ROUTER_DOM = "react-router-dom"
 	const val NPM_MATERIALUI_CORE = "@material-ui/core"
 	const val NPM_MATERIALUI_ICONS = "@material-ui/icons"
 	const val NPM_STYLED_COMPONENTS = "styled-components"
@@ -63,9 +64,11 @@ object Deps
 
 	const val REACT_KOTLIN = "org.jetbrains:kotlin-react:${Versions.REACT_KOTLIN}"
 	const val REACT_DOM_KOTLIN = "org.jetbrains:kotlin-react-dom:${Versions.REACT_KOTLIN}"
+	const val REACT_ROUTER_DOM_KOTLIN = "org.jetbrains:kotlin-react-router-dom:${Versions.REACT_ROUTER_KOTLIN}"
 	const val STYLED_KOTLIN = "org.jetbrains:kotlin-styled:${Versions.STYLED_KOTLIN}"
 	const val EXTENSIONS_JS = "org.jetbrains:kotlin-extensions:${Versions.EXTENSIONS_JS}"
 	const val MUIRWIK = "com.ccfraser.muirwik:muirwik-components:${Versions.MUIRWIK}"
+	const val TEXT_ENCODING = "text-encoding"
 	const val SHA1 = "sha1"
 
 	// Server

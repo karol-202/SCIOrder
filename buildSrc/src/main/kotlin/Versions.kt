@@ -26,17 +26,20 @@ object Versions
 
 	// JS
 	const val KOTLIN_FRONTEND = "0.0.45"
-	const val SHA1 = "1.1.1"
 	const val CORE_JS = "3.1.4"
 	const val REACT = "16.8.6"
+	const val REACT_ROUTER = "5.0.1"
 	const val MATERIALUI_CORE = "4.1.3"
 	const val MATERIALUI_ICONS = "4.2.1"
 	const val EXTENSIONS_JS = "1.0.1-pre.73-kotlin-1.3.40"
 	const val REACT_KOTLIN = "16.6.0-pre.73-kotlin-1.3.40"
+	const val REACT_ROUTER_KOTLIN = "4.3.1-pre.73-kotlin-1.3.40"
 	const val STYLED_KOTLIN = "1.0.0-pre.73-kotlin-1.3.40"
 	const val INLINE_STYLE_PREFIXER = "5.1.0"
 	const val STYLED_COMPONENTS = "4.3.2"
 	const val MUIRWIK = "0.2.1"
+	const val TEXT_ENCODING = "0.7.0"
+	const val SHA1 = "1.1.1"
 
 	// Server
 	const val SHADOW = "4.0.2"

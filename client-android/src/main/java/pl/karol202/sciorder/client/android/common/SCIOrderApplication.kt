@@ -28,11 +28,6 @@ import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryIm
 
 abstract class SCIOrderApplication : Application()
 {
-	companion object
-	{
-		private const val SERVER_URL = "https://sciorder.herokuapp.com"
-	}
-
 	abstract val modules: List<Module>
 
 	override fun onCreate()
@@ -55,9 +50,9 @@ abstract class SCIOrderApplication : Application()
 	private fun networkingModule() = module {
 		single { createApiHttpClient(OkHttp) }
 
-		single<OwnerApi> { KtorOwnerApi(get(), SERVER_URL) }
-		single<ProductApi> { KtorProductApi(get(), SERVER_URL) }
-		single<OrderApi> { KtorOrderApi(get(), SERVER_URL) }
+		single<OwnerApi> { KtorOwnerApi(get()) }
+		single<ProductApi> { KtorProductApi(get()) }
+		single<OrderApi> { KtorOrderApi(get()) }
 	}
 
 	private fun repositoryModule() = module {

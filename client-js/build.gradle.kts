@@ -1,7 +1,6 @@
 
 import org.jetbrains.kotlin.gradle.frontend.webpack.WebPackExtension
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinJsDce
 
 plugins {
     id(Plugins.KOTLIN_JS) version Versions.KOTLIN
@@ -19,10 +18,6 @@ tasks {
             sourceMapEmbedSources = "always"
         }
     }
-
-    "runDceKotlinJs"(KotlinJsDce::class) {
-        dceOptions.devMode = devMode
-    }
 }
 
 kotlinFrontend {
@@ -32,10 +27,14 @@ kotlinFrontend {
         dependency(Deps.NPM_CORE_JS, Versions.CORE_JS)
         dependency(Deps.NPM_REACT, Versions.REACT)
         dependency(Deps.NPM_REACT_DOM, Versions.REACT)
+        dependency(Deps.NPM_REACT_ROUTER_DOM, Versions.REACT_ROUTER)
         dependency(Deps.NPM_MATERIALUI_CORE, Versions.MATERIALUI_CORE)
         dependency(Deps.NPM_MATERIALUI_ICONS, Versions.MATERIALUI_ICONS)
         dependency(Deps.NPM_STYLED_COMPONENTS, Versions.STYLED_COMPONENTS)
         dependency(Deps.NPM_INLINE_STYLE_PREFIXER, Versions.INLINE_STYLE_PREFIXER)
+
+        dependency(Deps.SHA1, Versions.SHA1)
+        dependency(Deps.TEXT_ENCODING, Versions.TEXT_ENCODING)
     }
 
     bundle("webpack", delegateClosureOf<WebPackExtension> {
@@ -57,6 +56,7 @@ dependencies {
     implementation(Deps.EXTENSIONS_JS)
     implementation(Deps.REACT_KOTLIN)
     implementation(Deps.REACT_DOM_KOTLIN)
+    implementation(Deps.REACT_ROUTER_DOM_KOTLIN)
     implementation(Deps.STYLED_KOTLIN)
     implementation(Deps.MUIRWIK)
 }

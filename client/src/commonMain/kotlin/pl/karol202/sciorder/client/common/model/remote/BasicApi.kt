@@ -9,9 +9,13 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
 import io.ktor.http.takeFrom
 
-abstract class BasicApi(protected val httpClient: HttpClient,
-                        private val serverUrl: String)
+abstract class BasicApi(protected val httpClient: HttpClient)
 {
+	companion object
+	{
+		private const val SERVER_URL = "https://sciorder.herokuapp.com"
+	}
+
 	protected suspend inline fun <reified T> get(builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
 		method = HttpMethod.Get
 		builder()
@@ -43,7 +47,7 @@ abstract class BasicApi(protected val httpClient: HttpClient,
 			catch(t: Throwable) { ApiResponse.fromThrowable(t) }
 
 	protected fun HttpRequestBuilder.apiUrl(path: String) = url {
-		takeFrom(serverUrl)
+		takeFrom(SERVER_URL)
 		encodedPath = path
 	}
 
