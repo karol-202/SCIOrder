@@ -1,14 +1,17 @@
 package pl.karol202.sciorder.client.js.common.view
 
+import com.ccfraser.muirwik.components.currentTheme
+import com.ccfraser.muirwik.components.mSnackbar
+import kotlinx.css.Color
+import kotlinx.css.backgroundColor
+import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
-import react.RBuilder
-import react.RProps
-import react.RState
-import react.ReactElement
+import react.*
 import react.router.dom.RouteResultMatch
 import react.router.dom.route
 import react.router.dom.switch
+import styled.css
 
 class LoginControlView : ExtendedComponent<LoginControlView.Props, LoginControlView.State>()
 {
@@ -23,6 +26,8 @@ class LoginControlView : ExtendedComponent<LoginControlView.Props, LoginControlV
 	interface State : RState
 	{
 		var loggedIn: Boolean
+		var lastError: OwnerViewModel.Error?
+		var showError: Boolean
 	}
 
 	private val viewModels by prop { viewModels }
@@ -33,11 +38,13 @@ class LoginControlView : ExtendedComponent<LoginControlView.Props, LoginControlV
 	override fun State.init()
 	{
 		loggedIn = false
+		showError = false
 	}
 
 	override fun componentDidMount()
 	{
 		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
+		viewModels.ownerViewModel.errorEventObservable.bindEventToState { lastError = it; showError = true }
 	}
 
 	override fun RBuilder.render()
@@ -52,7 +59,28 @@ class LoginControlView : ExtendedComponent<LoginControlView.Props, LoginControlV
 				else redirectTo("${match.url}/login")
 			}
 		}
+		renderSnackbar()
 	}
+
+	private fun RBuilder.renderSnackbar(): ReactElement
+	{
+		val message = when(state.lastError)
+		{
+			OwnerViewModel.Error.NOT_FOUND -> "Dane nieprawidłowe"
+			OwnerViewModel.Error.NAME_BUSY -> "Nazwa zajęta"
+			OwnerViewModel.Error.OTHER -> "Błąd logowania"
+			null -> ""
+		}
+		return mSnackbar(message = message, open = state.showError, autoHideDuration = 3000, onClose = { _, _ -> hideSnackbar() }) {
+			css {
+				child(".MuiSnackbarContent-root") {
+					backgroundColor = Color(currentTheme.palette.error.main)
+				}
+			}
+		}
+	}
+
+	private fun hideSnackbar() = setState { showError = false }
 }
 
 fun RBuilder.loginControlView(viewModels: ViewModels,

@@ -3,7 +3,9 @@ package pl.karol202.sciorder.client.js.common.util
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.observe
+import pl.karol202.sciorder.client.common.util.observeEvent
 import react.*
 import react.router.dom.RouteResultProps
 import react.router.dom.redirect
@@ -27,6 +29,10 @@ abstract class ExtendedComponent<P : RProps, S : RState> : RComponent<P, S>
 	}
 
 	fun <T> Flow<T>.bindToState(buildState: S.(T) -> Unit) = observe(coroutineScope) {
+		setState { buildState(it) }
+	}
+
+	fun <T> Flow<Event<T>>.bindEventToState(buildState: S.(T) -> Unit) = observeEvent(coroutineScope) {
 		setState { buildState(it) }
 	}
 }
