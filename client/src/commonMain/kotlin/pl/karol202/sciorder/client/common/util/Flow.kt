@@ -1,9 +1,8 @@
-package pl.karol202.sciorder.client.js.common.util
+package pl.karol202.sciorder.client.common.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import pl.karol202.sciorder.client.common.util.Event
 
 fun <T> Flow<T>.shareIn(coroutineScope: CoroutineScope) =
 		conflate().broadcastIn(coroutineScope).asFlow()

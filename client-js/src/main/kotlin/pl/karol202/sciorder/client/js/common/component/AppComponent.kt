@@ -19,33 +19,41 @@ import react.RProps
 import react.RState
 import react.router.dom.browserRouter
 
-class AppComponent : ExtendedComponent<RProps, RState>()
+class AppComponent : ExtendedComponent<RProps, AppComponent.State>()
 {
-	private val httpClient = createApiHttpClient()
-	private val ownerApi = KtorOwnerApi(httpClient)
-	private val productApi = KtorProductApi(httpClient)
-	private val orderApi = KtorOrderApi(httpClient)
+	interface State : RState
+	{
+		var viewModels: ViewModels
+	}
 
-	private val ownerDao = FakeOwnerDao()
-	private val productDao = FakeProductDao()
-	private val orderDao = FakeOrderDao()
+	override fun State.init()
+	{
+		val httpClient = createApiHttpClient()
+		val ownerApi = KtorOwnerApi(httpClient)
+		val productApi = KtorProductApi(httpClient)
+		val orderApi = KtorOrderApi(httpClient)
 
-	private val ownerRepository = OwnerRepositoryImpl(ownerDao, ownerApi)
-	private val productRepository = ProductRepositoryImpl(productDao, productApi)
-	private val orderRepository = OrderRepositoryImpl(orderDao, orderApi)
-	private val orderTrackRepository = OrderTrackRepositoryImpl(orderDao, orderApi)
+		val ownerDao = FakeOwnerDao()
+		val productDao = FakeProductDao()
+		val orderDao = FakeOrderDao()
 
-	private val viewModels = ViewModels(OwnerJsViewModel(ownerRepository, orderDao, productDao),
-	                                    ProductJsViewModel(ownerRepository, productRepository),
-	                                    OrderComposeJsViewModel(ownerRepository, orderTrackRepository),
-	                                    OrdersJsViewModel(ownerRepository, orderRepository),
-	                                    OrdersTrackJsViewModel(ownerRepository, orderTrackRepository))
+		val ownerRepository = OwnerRepositoryImpl(ownerDao, ownerApi)
+		val productRepository = ProductRepositoryImpl(productDao, productApi)
+		val orderRepository = OrderRepositoryImpl(orderDao, orderApi)
+		val orderTrackRepository = OrderTrackRepositoryImpl(orderDao, orderApi)
+
+		viewModels = ViewModels(OwnerJsViewModel(ownerRepository, orderDao, productDao),
+		                        ProductJsViewModel(ownerRepository, productRepository),
+		                        OrderComposeJsViewModel(ownerRepository, orderTrackRepository),
+		                        OrdersJsViewModel(ownerRepository, orderRepository),
+		                        OrdersTrackJsViewModel(ownerRepository, orderTrackRepository))
+	}
 
 	override fun RBuilder.render()
 	{
 		themeComponent {
 			browserRouter {
-				mainView(viewModels)
+				mainView(state.viewModels)
 			}
 		}
 	}

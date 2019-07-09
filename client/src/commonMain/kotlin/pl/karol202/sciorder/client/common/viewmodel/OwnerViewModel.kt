@@ -39,5 +39,5 @@ abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : Co
 		onLogout()
 	}
 
-	abstract fun onLogout()
+	protected abstract fun onLogout()
 }

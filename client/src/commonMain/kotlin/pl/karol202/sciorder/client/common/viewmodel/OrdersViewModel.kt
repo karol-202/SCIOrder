@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.model.DEFAULT_FILTER
@@ -30,7 +31,7 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 													              .onEach { ordersResource = it }
 													              .switchMap { it.asFlow }
 																  .conflate()
-													              .broadcastIn(coroutineScope)
+													              .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 
 	protected val ordersFlow = ordersResourceAsBroadcastChannel.asFlow().map { it.data }
 	protected val loadingFlow = ordersResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }

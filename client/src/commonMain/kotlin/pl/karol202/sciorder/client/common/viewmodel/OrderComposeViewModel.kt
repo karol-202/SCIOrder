@@ -1,17 +1,17 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.collect
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.util.Event
+import pl.karol202.sciorder.client.common.util.observe
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Owner
 
-abstract class OrderComposeViewModel(private val ownerRepository: OwnerRepository,
+abstract class OrderComposeViewModel(ownerRepository: OwnerRepository,
                                      private val orderTrackRepository: OrderTrackRepository) : CoroutineViewModel()
 {
 	enum class OrderResult
@@ -27,11 +27,7 @@ abstract class OrderComposeViewModel(private val ownerRepository: OwnerRepositor
 
 	init
 	{
-		collectOwner()
-	}
-
-	private fun collectOwner() = launch {
-		ownerRepository.getOwnerFlow().collect { owner = it }
+		ownerRepository.getOwnerFlow().observe(coroutineScope) { owner = it }
 	}
 
 	fun addToOrder(orderedProduct: OrderedProduct)

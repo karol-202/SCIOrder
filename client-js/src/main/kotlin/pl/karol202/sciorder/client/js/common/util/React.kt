@@ -3,6 +3,7 @@ package pl.karol202.sciorder.client.js.common.util
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import pl.karol202.sciorder.client.common.util.observe
 import react.*
 import react.router.dom.RouteResultProps
 import react.router.dom.redirect
@@ -18,7 +19,7 @@ abstract class ExtendedComponent<P : RProps, S : RState> : RComponent<P, S>
 
 	constructor(props: P) : super(props)
 
-	override fun S.init(props: P) = init()
+	final override fun S.init(props: P) = init()
 
 	override fun componentWillUnmount()
 	{

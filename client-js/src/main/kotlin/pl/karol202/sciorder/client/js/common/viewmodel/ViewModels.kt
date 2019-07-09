@@ -4,4 +4,4 @@ data class ViewModels(val ownerViewModel: OwnerJsViewModel,
                       val productsViewModel: ProductJsViewModel,
                       val orderComposeViewModel: OrderComposeJsViewModel,
                       val ordersViewModel: OrdersJsViewModel,
-                      val ordersTractViewModel: OrdersTrackJsViewModel)
+                      val ordersTrackViewModel: OrdersTrackJsViewModel)

@@ -26,21 +26,26 @@ class LoginControlView : ExtendedComponent<LoginControlView.Props, LoginControlV
 	}
 
 	private val viewModels by prop { viewModels }
-	private val match by prop { match }
+	private val mainMatch by prop { match }
 	private val loginView by prop { loginView }
 	private val restView by prop { restView }
 
-	override fun State.init(props: Props)
+	override fun State.init()
 	{
 		loggedIn = false
+	}
+
+	override fun componentDidMount()
+	{
 		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
 	}
 
 	override fun RBuilder.render()
 	{
 		switch {
-			route<RProps>("${match.path}/login") { (_, _, match) ->
-				loginView(match)
+			route<RProps>("${mainMatch.path}/login") { (_, _, match) ->
+				if(!state.loggedIn) loginView(match)
+				else redirectTo(mainMatch.url)
 			}
 			routeElse { (_, _, match) ->
 				if(state.loggedIn) restView(match)

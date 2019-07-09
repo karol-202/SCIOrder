@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
@@ -34,7 +35,7 @@ abstract class ProductsViewModel(ownerRepository: OwnerRepository,
 																	.onEach { productsResource = it }
 																	.switchMap { it.asFlow }
 																	.conflate()
-																	.broadcastIn(coroutineScope)
+																	.broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 
 	protected val productsFlow = productsResourceAsBroadcastChannel.asFlow().map { it.data }
 	protected val loadingFlow = productsResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }

@@ -40,8 +40,9 @@ kotlin {
     if(includeAndroid) android()
     js {
         compilations["main"].kotlinOptions {
-            sourceMap = true
             moduleKind = "commonjs"
+            sourceMap = true
+            sourceMapEmbedSources = "always"
         }
     }
 
