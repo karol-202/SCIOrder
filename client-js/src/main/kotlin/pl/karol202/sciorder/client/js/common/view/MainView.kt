@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.js.common.view
 
 import com.ccfraser.muirwik.components.*
 import kotlinx.css.*
+import materialui.icons.iconLogout
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
 import react.RBuilder
@@ -12,20 +13,46 @@ import react.router.dom.route
 import react.router.dom.switch
 import styled.css
 
-class MainView : ExtendedComponent<MainView.Props, RState>()
+class MainView : ExtendedComponent<MainView.Props, MainView.State>()
 {
 	interface Props : RProps
 	{
 		var viewModels: ViewModels?
 	}
 
+	interface State : RState
+	{
+		var loggedIn: Boolean
+	}
+
 	private val viewModels by prop { viewModels }
+
+	override fun State.init()
+	{
+		loggedIn = false
+	}
+
+	override fun componentDidMount()
+	{
+		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
+	}
 
 	override fun RBuilder.render()
 	{
 		mAppBar(position = MAppBarPosition.relative) {
 			mToolbar {
-				mToolbarTitle("SCIOrder")
+				mTypography("SCIOrder",
+				            variant = MTypographyVariant.h6,
+				            color = MTypographyColor.inherit,
+				            noWrap = true) {
+					css {
+						flexGrow = 1.0
+					}
+				}
+				if(state.loggedIn) mIconButton(color = MColor.inherit,
+				                               onClick = { logout() }) {
+					iconLogout()
+				}
 			}
 		}
 
@@ -57,6 +84,8 @@ class MainView : ExtendedComponent<MainView.Props, RState>()
 				}
 				handler()
 			}
+
+	private fun logout() = viewModels.ownerViewModel.logout()
 }
 
 fun RBuilder.mainView(viewModels: ViewModels) = child(MainView::class) {
