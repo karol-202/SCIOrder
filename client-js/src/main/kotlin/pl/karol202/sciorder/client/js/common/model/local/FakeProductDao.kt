@@ -34,6 +34,8 @@ class FakeProductDao : ProductDao, FakeDao
 	}
 
 	override fun getAll() = channelFlow<List<Product>> {
+		send(products.values())
+
 		val listener: (List<Product>) -> Unit = { offer(it) }
 		updateListeners += listener
 		awaitClose { updateListeners -= listener }

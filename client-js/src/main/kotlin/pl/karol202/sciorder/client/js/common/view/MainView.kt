@@ -8,6 +8,7 @@ import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
 import react.RBuilder
 import react.RProps
 import react.RState
+import react.buildElement
 import react.dom.div
 import react.router.dom.route
 import react.router.dom.switch
@@ -76,19 +77,20 @@ class MainView : ExtendedComponent<MainView.Props, MainView.State>()
 		}
 	}
 
-	private fun RBuilder.adminLoginSheet() = loginSheet { adminLoginView(viewModels.ownerViewModel) }
+	private fun adminLoginSheet() = loginSheet { adminLoginView(viewModels.ownerViewModel) }
 
-	private fun RBuilder.userLoginSheet() = loginSheet { userLoginView(viewModels.ownerViewModel) }
+	private fun userLoginSheet() = loginSheet { userLoginView(viewModels.ownerViewModel) }
 
-	private fun RBuilder.loginSheet(handler: RBuilder.() -> Unit) =
-			mPaper {
-				css {
-					width = 400.px
-					margin(horizontal = LinearDimension.auto, vertical = 64.px)
-					padding(24.px)
-				}
-				handler()
+	private fun loginSheet(handler: RBuilder.() -> Unit) = buildElement {
+		mPaper {
+			css {
+				width = 400.px
+				margin(horizontal = LinearDimension.auto, vertical = 64.px)
+				padding(24.px)
 			}
+			handler()
+		}
+	}
 
 	private fun logout() = viewModels.ownerViewModel.logout()
 }

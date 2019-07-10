@@ -59,10 +59,10 @@ class LoginControlView : ExtendedComponent<LoginControlView.Props, LoginControlV
 				else redirectTo("${match.url}/login")
 			}
 		}
-		renderSnackbar()
+		snackbar()
 	}
 
-	private fun RBuilder.renderSnackbar(): ReactElement
+	private fun RBuilder.snackbar(): ReactElement
 	{
 		val message = when(state.lastError)
 		{
