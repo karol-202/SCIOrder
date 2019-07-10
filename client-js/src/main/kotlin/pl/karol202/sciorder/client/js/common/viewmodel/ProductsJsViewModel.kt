@@ -6,8 +6,8 @@ import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.util.shareIn
 import pl.karol202.sciorder.client.common.viewmodel.ProductsViewModel
 
-class ProductJsViewModel(ownerRepository: OwnerRepository,
-                         productRepository: ProductRepository) : ProductsViewModel(ownerRepository, productRepository)
+class ProductsJsViewModel(ownerRepository: OwnerRepository,
+                          productRepository: ProductRepository) : ProductsViewModel(ownerRepository, productRepository)
 {
 	val productsObservable = productsFlow.shareIn(coroutineScope)
 	val loadingObservable = loadingFlow.shareIn(coroutineScope)

@@ -23,6 +23,7 @@ class MainView : ExtendedComponent<MainView.Props, MainView.State>()
 	interface State : RState
 	{
 		var loggedIn: Boolean
+		var ownerName: String?
 	}
 
 	private val viewModels by prop { viewModels }
@@ -32,16 +33,16 @@ class MainView : ExtendedComponent<MainView.Props, MainView.State>()
 		loggedIn = false
 	}
 
-	override fun componentDidMount()
-	{
-		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
+	override fun componentDidMount() = viewModels.ownerViewModel.run {
+		ownerObservable.bindToState { loggedIn = it != null }
+		ownerObservable.bindToState { ownerName = it?.name }
 	}
 
 	override fun RBuilder.render()
 	{
 		mAppBar(position = MAppBarPosition.relative) {
 			mToolbar {
-				mTypography("SCIOrder",
+				mTypography(state.ownerName ?: "SCIOrder",
 				            variant = MTypographyVariant.h6,
 				            color = MTypographyColor.inherit,
 				            noWrap = true) {
@@ -50,19 +51,23 @@ class MainView : ExtendedComponent<MainView.Props, MainView.State>()
 					}
 				}
 				if(state.loggedIn) mIconButton(color = MColor.inherit,
-				                               onClick = { logout() }) {
-					iconLogout()
-				}
+				                               onClick = { logout() }) { iconLogout() }
 			}
 		}
 
 		div {
 			switch {
 				route<RProps>("/admin") { (_, _, match) ->
-					loginControlView(viewModels, match, { adminLoginSheet() }, { null })
+					loginControlView(viewModels,
+					                 match,
+					                 { adminLoginSheet() },
+					                 { null })
 				}
 				route<RProps>("/user") { (_, _, match) ->
-					loginControlView(viewModels, match, { userLoginSheet() }, { null })
+					loginControlView(viewModels,
+					                 match,
+					                 { userLoginSheet() },
+					                 { userView(viewModels.productsViewModel, viewModels.ordersTrackViewModel) })
 				}
 				routeElse {
 					redirectTo("/user")

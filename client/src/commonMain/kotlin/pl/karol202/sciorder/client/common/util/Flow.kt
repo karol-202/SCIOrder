@@ -7,10 +7,12 @@ import kotlinx.coroutines.launch
 fun <T> Flow<T>.shareIn(coroutineScope: CoroutineScope) =
 		conflate().broadcastIn(coroutineScope).asFlow()
 
-fun <T> Flow<T>.observe(coroutineScope: CoroutineScope, observer: (T) -> Unit) =
-		coroutineScope.launch {
-			collect { observer(it) }
-		}
+fun <T> Flow<T>.observe(coroutineScope: CoroutineScope, observer: (T) -> Unit)
+{
+	coroutineScope.launch {
+		collect { observer(it) }
+	}
+}
 
 fun <T> Flow<Event<T>>.observeEvent(coroutineScope: CoroutineScope, observer: (T) -> Unit) =
 		observe(coroutineScope) { it.getIfNotConsumed()?.let(observer) }

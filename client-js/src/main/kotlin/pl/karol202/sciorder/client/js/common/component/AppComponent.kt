@@ -43,7 +43,7 @@ class AppComponent : ExtendedComponent<RProps, AppComponent.State>()
 		val orderTrackRepository = OrderTrackRepositoryImpl(orderDao, orderApi)
 
 		viewModels = ViewModels(OwnerJsViewModel(ownerRepository, orderDao, productDao),
-		                        ProductJsViewModel(ownerRepository, productRepository),
+		                        ProductsJsViewModel(ownerRepository, productRepository),
 		                        OrderComposeJsViewModel(ownerRepository, orderTrackRepository),
 		                        OrdersJsViewModel(ownerRepository, orderRepository),
 		                        OrdersTrackJsViewModel(ownerRepository, orderTrackRepository))
