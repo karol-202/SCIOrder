@@ -48,3 +48,8 @@ operator fun <T : RProps> RouteResultProps<T>.component1() = history
 operator fun <T : RProps> RouteResultProps<T>.component2() = location
 
 operator fun <T : RProps> RouteResultProps<T>.component3() = match
+
+fun RElementBuilder<*>.onEnterEventListener(onEnter: () -> Unit)
+{
+	attrs.asDynamic().onKeyDown = { event: dynamic -> if(event.key == "Enter") onEnter() }
+}

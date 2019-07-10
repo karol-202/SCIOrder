@@ -1,11 +1,12 @@
 package pl.karol202.sciorder.client.common.util
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 fun <T> Flow<T>.shareIn(coroutineScope: CoroutineScope) =
-		conflate().broadcastIn(coroutineScope).asFlow()
+		conflate().broadcastIn(coroutineScope, CoroutineStart.DEFAULT).asFlow()
 
 fun <T> Flow<T>.observe(coroutineScope: CoroutineScope, observer: (T) -> Unit)
 {

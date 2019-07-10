@@ -14,6 +14,7 @@ import kotlinx.html.InputType
 import materialui.icons.iconVisibility
 import materialui.icons.iconVisibilityOff
 import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
+import pl.karol202.sciorder.client.js.common.util.onEnterEventListener
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
 import react.RBuilder
@@ -80,7 +81,9 @@ class AdminLoginView : ExtendedComponent<AdminLoginView.Props, AdminLoginView.St
 								       if(state.showPassword) iconVisibilityOff()
 								       else iconVisibility()
 							       }
-						       })
+						       }) {
+							onEnterEventListener { login() }
+						}
 					}
 				}
 			}

@@ -6,6 +6,7 @@ import kotlinx.css.flexDirection
 import kotlinx.css.marginBottom
 import kotlinx.css.px
 import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
+import pl.karol202.sciorder.client.js.common.util.onEnterEventListener
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
 import react.RBuilder
@@ -52,7 +53,9 @@ class UserLoginView : ExtendedComponent<UserLoginView.Props, UserLoginView.State
 					mTextField("Konto",
 					           fullWidth = true,
 					           value = state.ownerName,
-					           onChange = { onOwnerNameChange(it.targetInputValue) })
+					           onChange = { onOwnerNameChange(it.targetInputValue) }) {
+						onEnterEventListener { login() }
+					}
 				}
 			}
 			mGridItem {
