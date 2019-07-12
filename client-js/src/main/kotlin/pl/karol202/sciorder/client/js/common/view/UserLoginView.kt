@@ -1,11 +1,17 @@
 package pl.karol202.sciorder.client.js.common.view
 
-import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.MButtonVariant
+import com.ccfraser.muirwik.components.MColor
+import com.ccfraser.muirwik.components.MTypographyVariant
+import com.ccfraser.muirwik.components.mButton
+import com.ccfraser.muirwik.components.mTextField
+import com.ccfraser.muirwik.components.mTypography
+import com.ccfraser.muirwik.components.targetInputValue
+import kotlinx.css.Align
 import kotlinx.css.FlexDirection
-import kotlinx.css.flexDirection
 import kotlinx.css.marginBottom
 import kotlinx.css.px
-import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
+import pl.karol202.sciorder.client.js.common.util.flexBox
 import pl.karol202.sciorder.client.js.common.util.onEnterEventListener
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
@@ -16,7 +22,7 @@ import react.setState
 import styled.css
 import styled.styledDiv
 
-class UserLoginView : ExtendedComponent<UserLoginView.Props, UserLoginView.State>()
+class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.State>(props)
 {
 	interface Props : RProps
 	{
@@ -30,43 +36,40 @@ class UserLoginView : ExtendedComponent<UserLoginView.Props, UserLoginView.State
 
 	private val ownerViewModel by prop { ownerViewModel }
 
-	override fun State.init()
+	init
 	{
-		ownerName = ""
+		state.ownerName = ""
 	}
 
 	override fun RBuilder.render()
 	{
-		mGridContainer(alignItems = MGridAlignItems.stretch) {
-			css {
-				flexDirection = FlexDirection.column
-			}
-
-			mGridItem {
-				mTypography("Zaloguj się", variant = MTypographyVariant.h5)
-			}
-			mGridItem {
-				styledDiv {
-					css {
-						marginBottom = 16.px
-					}
-					mTextField("Konto",
-					           fullWidth = true,
-					           value = state.ownerName,
-					           onChange = { onOwnerNameChange(it.targetInputValue) }) {
-						onEnterEventListener { login() }
-					}
-				}
-			}
-			mGridItem {
-				mButton("Zaloguj",
-				        color = MColor.secondary,
-				        variant = MButtonVariant.contained,
-				        fullWidth = true,
-				        onClick = { login() })
-			}
+		flexBox(flexDirection = FlexDirection.column,
+		        alignItems = Align.stretch) {
+			titleText()
+			ownerTextField()
+			loginButton()
 		}
 	}
+
+	private fun RBuilder.titleText() = mTypography("Zaloguj się", variant = MTypographyVariant.h5)
+
+	private fun RBuilder.ownerTextField() = styledDiv {
+		css {
+			marginBottom = 16.px
+		}
+		mTextField("Konto",
+		           fullWidth = true,
+		           value = state.ownerName,
+		           onChange = { onOwnerNameChange(it.targetInputValue) }) {
+			onEnterEventListener { login() }
+		}
+	}
+
+	private fun RBuilder.loginButton() = mButton("Zaloguj",
+	                                             color = MColor.secondary,
+	                                             variant = MButtonVariant.contained,
+	                                             fullWidth = true,
+	                                             onClick = { login() })
 
 	private fun onOwnerNameChange(newName: String) = setState { ownerName = newName }
 

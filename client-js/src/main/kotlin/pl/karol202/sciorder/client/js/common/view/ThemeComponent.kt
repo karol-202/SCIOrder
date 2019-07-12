@@ -1,19 +1,23 @@
-package pl.karol202.sciorder.client.js.common.component
+package pl.karol202.sciorder.client.js.common.view
 
-import com.ccfraser.muirwik.components.*
+import com.ccfraser.muirwik.components.Colors
+import com.ccfraser.muirwik.components.MColor
+import com.ccfraser.muirwik.components.currentTheme
+import com.ccfraser.muirwik.components.mCssBaseline
+import com.ccfraser.muirwik.components.mMuiThemeProvider
 import com.ccfraser.muirwik.components.styles.PaletteColor
 import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import kotlinext.js.jsObject
-import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
+import pl.karol202.sciorder.client.js.common.util.createMuiTheme
 import pl.karol202.sciorder.client.js.common.util.mTextFieldColor
 import react.RBuilder
 import react.RProps
 import react.RState
 
-class ThemeComponent : ExtendedComponent<RProps, RState>()
+class ThemeComponent : View<RProps, RState>()
 {
-	override fun RState.init()
+	init
 	{
 		currentTheme = createTheme()
 	}
@@ -31,7 +35,7 @@ class ThemeComponent : ExtendedComponent<RProps, RState>()
 				}
 			}
 		}
-		return createMuiThemeFunction(themeOptions)
+		return createMuiTheme(themeOptions)
 	}
 
 	override fun RBuilder.render()

@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.js.common.component
+package pl.karol202.sciorder.client.js.common.view
 
 import pl.karol202.sciorder.client.common.model.remote.createApiHttpClient
 import pl.karol202.sciorder.client.common.model.remote.order.KtorOrderApi
@@ -11,22 +11,25 @@ import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryIm
 import pl.karol202.sciorder.client.js.common.model.local.FakeOrderDao
 import pl.karol202.sciorder.client.js.common.model.local.FakeOwnerDao
 import pl.karol202.sciorder.client.js.common.model.local.FakeProductDao
-import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
-import pl.karol202.sciorder.client.js.common.view.mainView
-import pl.karol202.sciorder.client.js.common.viewmodel.*
+import pl.karol202.sciorder.client.js.common.viewmodel.OrderComposeJsViewModel
+import pl.karol202.sciorder.client.js.common.viewmodel.OrdersJsViewModel
+import pl.karol202.sciorder.client.js.common.viewmodel.OrdersTrackJsViewModel
+import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
+import pl.karol202.sciorder.client.js.common.viewmodel.ProductsJsViewModel
+import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
 import react.RBuilder
 import react.RProps
 import react.RState
 import react.router.dom.browserRouter
 
-class AppComponent : ExtendedComponent<RProps, AppComponent.State>()
+class AppView : View<RProps, AppView.State>()
 {
 	interface State : RState
 	{
 		var viewModels: ViewModels
 	}
 
-	override fun State.init()
+	init
 	{
 		val httpClient = createApiHttpClient()
 		val ownerApi = KtorOwnerApi(httpClient)
@@ -42,7 +45,7 @@ class AppComponent : ExtendedComponent<RProps, AppComponent.State>()
 		val orderRepository = OrderRepositoryImpl(orderDao, orderApi)
 		val orderTrackRepository = OrderTrackRepositoryImpl(orderDao, orderApi)
 
-		viewModels = ViewModels(OwnerJsViewModel(ownerRepository, orderDao, productDao),
+		state.viewModels = ViewModels(OwnerJsViewModel(ownerRepository, orderDao, productDao),
 		                        ProductsJsViewModel(ownerRepository, productRepository),
 		                        OrderComposeJsViewModel(ownerRepository, orderTrackRepository),
 		                        OrdersJsViewModel(ownerRepository, orderRepository),
@@ -59,4 +62,4 @@ class AppComponent : ExtendedComponent<RProps, AppComponent.State>()
 	}
 }
 
-fun RBuilder.appComponent() = child(AppComponent::class) { }
+fun RBuilder.appComponent() = child(AppView::class) { }

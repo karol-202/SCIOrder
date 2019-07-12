@@ -1,6 +1,5 @@
 package pl.karol202.sciorder.client.js.common.view
 
-import pl.karol202.sciorder.client.js.common.util.ExtendedComponent
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.viewmodel.OrdersTrackJsViewModel
 import pl.karol202.sciorder.client.js.common.viewmodel.ProductsJsViewModel
@@ -8,7 +7,7 @@ import react.RBuilder
 import react.RProps
 import react.RState
 
-class UserView : ExtendedComponent<UserView.Props, RState>()
+class UserView(props: Props) : View<UserView.Props, RState>(props)
 {
 	interface Props : RProps
 	{

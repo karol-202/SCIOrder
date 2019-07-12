@@ -1,9 +1,27 @@
 package pl.karol202.sciorder.client.js.common.view
 
-import com.ccfraser.muirwik.components.*
-import kotlinx.css.*
+import com.ccfraser.muirwik.components.MAppBarPosition
+import com.ccfraser.muirwik.components.MColor
+import com.ccfraser.muirwik.components.MTypographyColor
+import com.ccfraser.muirwik.components.MTypographyVariant
+import com.ccfraser.muirwik.components.mAppBar
+import com.ccfraser.muirwik.components.mIconButton
+import com.ccfraser.muirwik.components.mPaper
+import com.ccfraser.muirwik.components.mToolbar
+import com.ccfraser.muirwik.components.mTypography
+import kotlinx.css.LinearDimension
+import kotlinx.css.flexGrow
+import kotlinx.css.margin
+import kotlinx.css.padding
+import kotlinx.css.px
+import kotlinx.css.width
 import materialui.icons.iconLogout
-import pl.karol202.sciorder.client.js.common.util.*
+import pl.karol202.sciorder.client.js.common.util.component1
+import pl.karol202.sciorder.client.js.common.util.component2
+import pl.karol202.sciorder.client.js.common.util.component3
+import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.util.redirectTo
+import pl.karol202.sciorder.client.js.common.util.routeElse
 import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
 import react.RBuilder
 import react.RProps
@@ -14,7 +32,7 @@ import react.router.dom.route
 import react.router.dom.switch
 import styled.css
 
-class MainView : ExtendedComponent<MainView.Props, MainView.State>()
+class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 {
 	interface Props : RProps
 	{
@@ -29,32 +47,17 @@ class MainView : ExtendedComponent<MainView.Props, MainView.State>()
 
 	private val viewModels by prop { viewModels }
 
-	override fun State.init()
+	init
 	{
-		loggedIn = false
-	}
+		state.loggedIn = false
 
-	override fun componentDidMount() = viewModels.ownerViewModel.run {
-		ownerObservable.bindToState { loggedIn = it != null }
-		ownerObservable.bindToState { ownerName = it?.name }
+		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
+		viewModels.ownerViewModel.ownerObservable.bindToState { ownerName = it?.name }
 	}
 
 	override fun RBuilder.render()
 	{
-		mAppBar(position = MAppBarPosition.relative) {
-			mToolbar {
-				mTypography(state.ownerName ?: "SCIOrder",
-				            variant = MTypographyVariant.h6,
-				            color = MTypographyColor.inherit,
-				            noWrap = true) {
-					css {
-						flexGrow = 1.0
-					}
-				}
-				if(state.loggedIn) mIconButton(color = MColor.inherit,
-				                               onClick = { logout() }) { iconLogout() }
-			}
-		}
+		appBar()
 
 		div {
 			switch {
@@ -70,10 +73,23 @@ class MainView : ExtendedComponent<MainView.Props, MainView.State>()
 					                 { userLoginSheet() },
 					                 { userView(viewModels.productsViewModel, viewModels.ordersTrackViewModel) })
 				}
-				routeElse {
-					redirectTo("/user")
+				routeElse { redirectTo("/user") }
+			}
+		}
+	}
+
+	private fun RBuilder.appBar() = mAppBar(position = MAppBarPosition.sticky) {
+		mToolbar {
+			mTypography(state.ownerName ?: "SCIOrder",
+			            variant = MTypographyVariant.h6,
+			            color = MTypographyColor.inherit,
+			            noWrap = true) {
+				css {
+					flexGrow = 1.0
 				}
 			}
+			if(state.loggedIn) mIconButton(color = MColor.inherit,
+			                               onClick = { logout() }) { iconLogout() }
 		}
 	}
 
