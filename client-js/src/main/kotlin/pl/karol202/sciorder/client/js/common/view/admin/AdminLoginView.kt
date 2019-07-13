@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.js.common.view
+package pl.karol202.sciorder.client.js.common.view.admin
 
 import com.ccfraser.muirwik.components.MButtonVariant
 import com.ccfraser.muirwik.components.MColor
@@ -23,6 +23,7 @@ import materialui.icons.iconVisibilityOff
 import pl.karol202.sciorder.client.js.common.util.flexBox
 import pl.karol202.sciorder.client.js.common.util.onEnterEventListener
 import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
 import react.RBuilder
 import react.RProps
@@ -35,7 +36,7 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 {
 	interface Props : RProps
 	{
-		var ownerViewModel: OwnerJsViewModel?
+		var ownerViewModel: OwnerJsViewModel
 	}
 
 	interface State : RState
@@ -71,7 +72,7 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 	private fun RBuilder.ownerTextField() = mTextField("Konto",
 	                                           fullWidth = true,
 	                                           value = state.ownerName,
-	                                           onChange = { onOwnerNameChange(it.targetInputValue) })
+	                                           onChange = { setOwnerName(it.targetInputValue) })
 
 	private fun RBuilder.passwordTextField() = styledDiv {
 		css {
@@ -83,7 +84,7 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 			       type = if(state.showPassword) InputType.text else InputType.password,
 			       autoComplete = "current-password",
 			       value = state.password,
-			       onChange = { onPasswordChange(it.targetInputValue) },
+			       onChange = { setPassword(it.targetInputValue) },
 			       endAdornment =
 			       mInputAdornment(position = MInputAdornmentPosition.end) {
 				       mIconButton(onClick = { togglePasswordVisibility() }) {
@@ -113,9 +114,9 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 	                                        fullWidth = true,
 	                                        onClick = { register() })
 
-	private fun onOwnerNameChange(newName: String) = setState { ownerName = newName }
+	private fun setOwnerName(newName: String) = setState { ownerName = newName }
 
-	private fun onPasswordChange(newPassword: String) = setState { password = newPassword }
+	private fun setPassword(newPassword: String) = setState { password = newPassword }
 
 	private fun togglePasswordVisibility() = setState { showPassword = !showPassword }
 

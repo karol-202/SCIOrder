@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.js.common.view
+package pl.karol202.sciorder.client.js.common.view.user
 
 import com.ccfraser.muirwik.components.MButtonVariant
 import com.ccfraser.muirwik.components.MColor
@@ -14,6 +14,7 @@ import kotlinx.css.px
 import pl.karol202.sciorder.client.js.common.util.flexBox
 import pl.karol202.sciorder.client.js.common.util.onEnterEventListener
 import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
 import react.RBuilder
 import react.RProps
@@ -26,7 +27,7 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 {
 	interface Props : RProps
 	{
-		var ownerViewModel: OwnerJsViewModel?
+		var ownerViewModel: OwnerJsViewModel
 	}
 
 	interface State : RState
@@ -60,7 +61,7 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 		mTextField("Konto",
 		           fullWidth = true,
 		           value = state.ownerName,
-		           onChange = { onOwnerNameChange(it.targetInputValue) }) {
+		           onChange = { setOwnerName(it.targetInputValue) }) {
 			onEnterEventListener { login() }
 		}
 	}
@@ -71,7 +72,7 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 	                                             fullWidth = true,
 	                                             onClick = { login() })
 
-	private fun onOwnerNameChange(newName: String) = setState { ownerName = newName }
+	private fun setOwnerName(newName: String) = setState { ownerName = newName }
 
 	private fun login()
 	{

@@ -10,7 +10,7 @@ import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions
 import kotlinext.js.jsObject
 import pl.karol202.sciorder.client.js.common.util.createMuiTheme
-import pl.karol202.sciorder.client.js.common.util.mTextFieldColor
+import pl.karol202.sciorder.client.js.common.util.textFieldColor
 import react.RBuilder
 import react.RProps
 import react.RState
@@ -42,7 +42,7 @@ class ThemeComponent : View<RProps, RState>()
 	{
 		mMuiThemeProvider(currentTheme) {
 			mCssBaseline()
-			mTextFieldColor(textFieldColor = MColor.secondary) {
+			textFieldColor(textFieldColor = MColor.secondary) {
 				children()
 			}
 		}

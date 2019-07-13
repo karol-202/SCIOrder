@@ -26,10 +26,10 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 {
 	interface Props : RProps
 	{
-		var viewModels: ViewModels?
-		var match: RouteResultMatch<RProps>?
-		var loginView: ((RouteResultMatch<RProps>) -> ReactElement?)?
-		var restView: ((RouteResultMatch<RProps>) -> ReactElement?)?
+		var viewModels: ViewModels
+		var match: RouteResultMatch<RProps>
+		var loginView: (RouteResultMatch<RProps>) -> ReactElement?
+		var restView: (RouteResultMatch<RProps>) -> ReactElement?
 	}
 
 	interface State : RState

@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.js.common.view
+package pl.karol202.sciorder.client.js.common.view.user
 
 import com.ccfraser.muirwik.components.MColor
 import com.ccfraser.muirwik.components.MTypographyVariant
@@ -25,6 +25,7 @@ import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.create
 import pl.karol202.sciorder.client.js.common.util.flexBox
 import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
 import react.RBuilder
 import react.RProps
@@ -37,9 +38,9 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 {
 	interface Props : RProps
 	{
-		var product: Product?
-		var onOrder: ((OrderedProduct) -> Unit)?
-		var onAddToOrder: ((OrderedProduct) -> Unit)?
+		var product: Product
+		var onOrder: (OrderedProduct) -> Unit
+		var onAddToOrder: (OrderedProduct) -> Unit
 	}
 
 	interface State : RState
@@ -225,10 +226,11 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 			this.takeIf { it in param.attributes.enumValues ?: emptyList() }
 }
 
-fun RBuilder.productOrderView(product: Product, onOrder: (OrderedProduct) -> Unit, onAddToOrder: (OrderedProduct) -> Unit) =
-		child(ProductOrderView::class) {
-			attrs.key = product.hashCode().toString() // To handle cases where product's params are changed in meanwhile
-			attrs.product = product
-			attrs.onOrder = onOrder
-			attrs.onAddToOrder = onAddToOrder
-		}
+fun RBuilder.productOrderView(product: Product,
+                              onOrder: (OrderedProduct) -> Unit,
+                              onAddToOrder: (OrderedProduct) -> Unit) = child(ProductOrderView::class) {
+	attrs.key = product.hashCode().toString() // To handle cases where product's params are changed in meanwhile
+	attrs.product = product
+	attrs.onOrder = onOrder
+	attrs.onAddToOrder = onAddToOrder
+}

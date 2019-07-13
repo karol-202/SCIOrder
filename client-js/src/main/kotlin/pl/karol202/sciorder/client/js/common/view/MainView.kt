@@ -9,34 +9,41 @@ import com.ccfraser.muirwik.components.mIconButton
 import com.ccfraser.muirwik.components.mPaper
 import com.ccfraser.muirwik.components.mToolbar
 import com.ccfraser.muirwik.components.mTypography
+import kotlinx.css.FlexDirection
 import kotlinx.css.LinearDimension
 import kotlinx.css.flexGrow
+import kotlinx.css.height
 import kotlinx.css.margin
 import kotlinx.css.padding
+import kotlinx.css.pct
 import kotlinx.css.px
 import kotlinx.css.width
 import materialui.icons.iconLogout
 import pl.karol202.sciorder.client.js.common.util.component1
 import pl.karol202.sciorder.client.js.common.util.component2
 import pl.karol202.sciorder.client.js.common.util.component3
+import pl.karol202.sciorder.client.js.common.util.flexBox
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.util.redirectTo
 import pl.karol202.sciorder.client.js.common.util.routeElse
+import pl.karol202.sciorder.client.js.common.view.admin.adminLoginView
+import pl.karol202.sciorder.client.js.common.view.user.userLoginView
+import pl.karol202.sciorder.client.js.common.view.user.userView
 import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
 import react.RBuilder
 import react.RProps
 import react.RState
 import react.buildElement
-import react.dom.div
 import react.router.dom.route
 import react.router.dom.switch
 import styled.css
+import styled.styledDiv
 
 class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 {
 	interface Props : RProps
 	{
-		var viewModels: ViewModels?
+		var viewModels: ViewModels
 	}
 
 	interface State : RState
@@ -57,23 +64,27 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 
 	override fun RBuilder.render()
 	{
-		appBar()
-
-		div {
-			switch {
-				route<RProps>("/admin") { (_, _, match) ->
-					loginControlView(viewModels,
-					                 match,
-					                 { adminLoginSheet() },
-					                 { null })
+		flexBox(flexDirection = FlexDirection.column) {
+			css {
+				height = 100.pct
+			}
+			
+			appBar()
+			
+			styledDiv {
+				css {
+					flexGrow = 1.0
 				}
-				route<RProps>("/user") { (_, _, match) ->
-					loginControlView(viewModels,
-					                 match,
-					                 { userLoginSheet() },
-					                 { userView(viewModels.productsViewModel, viewModels.ordersTrackViewModel) })
+				
+				switch {
+					route<RProps>("/admin") { (_, _, match) ->
+						loginControlView(viewModels, match, { adminLoginSheet() }, { null })
+					}
+					route<RProps>("/user") { (_, _, match) ->
+						loginControlView(viewModels, match, { userLoginSheet() }, { userView(viewModels.productsViewModel, viewModels.orderComposeViewModel, viewModels.ordersTrackViewModel) })
+					}
+					routeElse { redirectTo("/user") }
 				}
-				routeElse { redirectTo("/user") }
 			}
 		}
 	}
