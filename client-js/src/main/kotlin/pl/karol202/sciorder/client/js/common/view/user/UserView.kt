@@ -38,6 +38,8 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 
 	interface State : RState
 	{
+		var trackedOrders: List<Order>
+		
 		var products: List<Product>
 		var selectedProductId: String?
 		
@@ -75,10 +77,12 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 
 	init
 	{
+		state.trackedOrders = emptyList()
 		state.products = emptyList()
 		state.orderedProducts = emptyList()
 		state.orderDialogOpen = false
 
+		ordersTrackViewModel.ordersObservable.bindToState { trackedOrders = it ?: emptyList() }
 		productsViewModel.productsObservable.bindToState { products = it ?: emptyList() }
 		orderComposeViewModel.orderObservable.bindToState { orderedProducts = it }
 	}
@@ -90,6 +94,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 			css { height = 100.pct }
 			
 			flexItem(flexGrow = 1.0) {
+				if(state.trackedOrders.isNotEmpty()) ordersTrackView()
 				productsView()
 				productOrderView()
 			}
@@ -101,6 +106,8 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		}
 		orderDetailsDialog()
 	}
+	
+	private fun RBuilder.ordersTrackView() = ordersTrackView(state.trackedOrders, state.products)
 	
 	private fun RBuilder.productsView() = productsView(state.products, state.selectedProductId) { selectProduct(it) }
 

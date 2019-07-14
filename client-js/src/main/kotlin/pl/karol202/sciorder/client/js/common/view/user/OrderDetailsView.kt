@@ -9,6 +9,7 @@ import kotlinx.css.margin
 import kotlinx.css.px
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Order
@@ -16,7 +17,6 @@ import react.RBuilder
 import react.RProps
 import react.RState
 import react.setState
-import styled.css
 
 class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 {
@@ -58,12 +58,13 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 	}
 
 	private fun RBuilder.productsList() = orderedProductsView(orderedProducts = orderedProducts,
+	                                                          details = true,
 	                                                          horizontalPadding = 24.px)
 
 	private fun RBuilder.locationTextField() = mTextField(label = "Miejsce dostawy",
 	                                                      value = state.location,
 	                                                      onChange = { setLocation(it.targetInputValue) }) {
-		css { specific { margin(horizontal = 24.px) } }
+		overrideCss { margin(horizontal = 24.px) }
 	}
 
 	private fun setLocation(location: String) = setState { this.location = location }
@@ -71,7 +72,7 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 	private fun RBuilder.recipientTextField() = mTextField(label = "Adresat",
 	                                                       value = state.recipient,
 	                                                       onChange = { setRecipient(it.targetInputValue) }) {
-		css { specific { margin(horizontal = 24.px) } }
+		overrideCss { margin(horizontal = 24.px) }
 	}
 
 	private fun setRecipient(recipient: String) = setState { this.recipient = recipient }
@@ -79,7 +80,7 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 	private fun RBuilder.orderButton() = mButton(caption = "Zamów",
 	                                             color = MColor.secondary,
 	                                             onClick = { order() }) {
-		css { specific { margin(vertical = 16.px, horizontal = 24.px) } }
+		overrideCss { margin(vertical = 16.px, horizontal = 24.px) }
 	}
 
 	private fun order() = onDetailsSet(Order.Details(state.location, state.recipient))
@@ -87,7 +88,7 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 	private fun RBuilder.cancelButton() = mButton(caption = "Anuluj",
 	                                              color = MColor.secondary,
 	                                              onClick = { onCancel() }) {
-		css { specific { margin(vertical = 16.px) } }
+		overrideCss { margin(vertical = 16.px) }
 	}
 }
 

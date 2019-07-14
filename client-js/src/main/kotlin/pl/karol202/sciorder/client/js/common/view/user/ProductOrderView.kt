@@ -24,6 +24,7 @@ import kotlinx.html.InputType
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.create
 import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
@@ -32,7 +33,6 @@ import react.RProps
 import react.RState
 import react.key
 import react.setState
-import styled.css
 
 class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrderView.State>(props)
 {
@@ -147,11 +147,9 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 	private fun RBuilder.item(param: Product.Parameter, handler: RBuilder.() -> Unit) =
 			mListItem(alignItems = MListItemAlignItems.flexStart) {
 				mTypography(param.name, variant = MTypographyVariant.body2) {
-					css {
-						specific {
-							marginTop = 24.px
-							marginRight = 24.px
-						}
+					overrideCss {
+						marginTop = 24.px
+						marginRight = 24.px
 						flexShrink = 0.0
 					}
 				}
@@ -174,10 +172,8 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 	                            onClick: () -> Unit) = mButton(caption = text,
 	                                                           color = MColor.secondary,
 	                                                           onClick = { onClick() }) {
-		css {
-			specific {
-				margin(left = 16.px, right = 16.px, bottom = 16.px)
-			}
+		overrideCss {
+			margin(left = 16.px, right = 16.px, bottom = 16.px)
 		}
 	}
 

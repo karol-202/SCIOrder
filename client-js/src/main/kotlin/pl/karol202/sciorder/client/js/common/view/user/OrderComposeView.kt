@@ -16,6 +16,7 @@ import kotlinx.css.px
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.util.divider
 import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import react.RBuilder
@@ -37,9 +38,7 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 	override fun RBuilder.render()
 	{
 		flexBox(direction = FlexDirection.column) {
-			css {
-				height = 100.pct
-			}
+			css { height = 100.pct }
 			
 			titleText()
 			divider()
@@ -51,26 +50,21 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 	private fun RBuilder.titleText() = mTypography(text = "Zamówienie",
 	                                               variant = MTypographyVariant.h6,
 	                                               align = MTypographyAlign.center) {
-		css {
-			specific { margin(12.px) }
-		}
+		overrideCss { margin(12.px) }
 	}
 	
 	private fun RBuilder.productsList() = mList {
-		css {
-			flexGrow = 1.0
-		}
+		css { flexGrow = 1.0 }
 		
-		orderedProductsView(orderedProducts = orderedProducts)
+		orderedProductsView(orderedProducts = orderedProducts,
+		                    details = true)
 	}
 	
 	private fun RBuilder.orderButton() = mButton(caption = "Zamów",
 	                                             variant = MButtonVariant.outlined,
 	                                             color = MColor.secondary,
 	                                             onClick = { orderAll() }) {
-		css {
-			specific { margin(16.px) }
-		}
+		overrideCss { margin(16.px) }
 	}
 	
 	private fun orderAll()

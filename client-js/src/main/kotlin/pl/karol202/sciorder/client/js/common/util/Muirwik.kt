@@ -58,7 +58,5 @@ fun RBuilder.dialog(open: Boolean,
 		}
 
 fun RBuilder.divider() = mDivider {
-	css {
-		specific { backgroundColor = Muirwik.DIVIDER_COLOR }
-	}
+	overrideCss { backgroundColor = Muirwik.DIVIDER_COLOR }
 }
