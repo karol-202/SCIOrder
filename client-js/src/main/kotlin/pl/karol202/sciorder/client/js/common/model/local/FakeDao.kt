@@ -1,9 +1,11 @@
 package pl.karol202.sciorder.client.js.common.model.local
 
+import kotlinx.serialization.Serializable
 import pl.karol202.sciorder.common.IdProvider
 
 interface FakeDao
 {
+	@Serializable
 	class IdUniqueElement<T : IdProvider>(val value: T)
 	{
 		val id get() = value.id

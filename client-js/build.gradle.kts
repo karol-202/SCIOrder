@@ -6,6 +6,7 @@ plugins {
     id(Plugins.KOTLIN_JS) version Versions.KOTLIN
     id(Plugins.KOTLIN_FRONTEND) version Versions.KOTLIN_FRONTEND
     id(Plugins.KOTLIN_DCE_JS) version Versions.KOTLIN
+    id(Plugins.KOTLINX_SERIALIZATION) version Versions.KOTLIN
 }
 
 val devMode by project.booleanProperties

@@ -27,7 +27,20 @@ import react.router.dom.route
 import styled.StyledDOMBuilder
 import styled.css
 import styled.styledDiv
+import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
+
+fun <T, P : RProps> RComponent<P, *>.prop(selector: P.() -> T) = object : ReadOnlyProperty<Any, T>
+{
+	override fun getValue(thisRef: Any, property: KProperty<*>) =
+			props.selector() ?: throw IllegalArgumentException("Prop not passed: ${property.name}")
+}
+
+fun <T, P : RProps> RComponent<P, *>.nullableProp(selector: P.() -> T?) = object : ReadOnlyProperty<Any, T?>
+{
+	override fun getValue(thisRef: Any, property: KProperty<*>) = props.selector()
+}
 
 fun RBuilder.routeElse(render: (RouteResultProps<RProps>) -> ReactElement?) = route("", render = render)
 

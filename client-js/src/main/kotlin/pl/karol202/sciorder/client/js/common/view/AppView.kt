@@ -8,9 +8,9 @@ import pl.karol202.sciorder.client.common.repository.order.OrderRepositoryImpl
 import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackRepositoryImpl
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepositoryImpl
 import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryImpl
-import pl.karol202.sciorder.client.js.common.model.local.FakeOrderDao
-import pl.karol202.sciorder.client.js.common.model.local.FakeOwnerDao
-import pl.karol202.sciorder.client.js.common.model.local.FakeProductDao
+import pl.karol202.sciorder.client.js.common.model.local.LocalOrderDao
+import pl.karol202.sciorder.client.js.common.model.local.LocalOwnerDao
+import pl.karol202.sciorder.client.js.common.model.local.LocalProductDao
 import pl.karol202.sciorder.client.js.common.viewmodel.OrderComposeJsViewModel
 import pl.karol202.sciorder.client.js.common.viewmodel.OrdersJsViewModel
 import pl.karol202.sciorder.client.js.common.viewmodel.OrdersTrackJsViewModel
@@ -36,9 +36,9 @@ class AppView : View<RProps, AppView.State>()
 		val productApi = KtorProductApi(httpClient)
 		val orderApi = KtorOrderApi(httpClient)
 
-		val ownerDao = FakeOwnerDao()
-		val productDao = FakeProductDao()
-		val orderDao = FakeOrderDao()
+		val ownerDao = LocalOwnerDao()
+		val productDao = LocalProductDao()
+		val orderDao = LocalOrderDao()
 
 		val ownerRepository = OwnerRepositoryImpl(ownerDao, ownerApi)
 		val productRepository = ProductRepositoryImpl(productDao, productApi)
