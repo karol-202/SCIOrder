@@ -1,12 +1,8 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
 import com.ccfraser.muirwik.components.MColor
-import com.ccfraser.muirwik.components.MTypographyVariant
-import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.list.mListItem
 import com.ccfraser.muirwik.components.mButton
 import com.ccfraser.muirwik.components.mTextField
-import com.ccfraser.muirwik.components.mTypography
 import com.ccfraser.muirwik.components.targetInputValue
 import kotlinx.css.FlexDirection
 import kotlinx.css.margin
@@ -28,6 +24,7 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 	{
 		var orderedProducts: List<OrderedProduct>
 		var onDetailsSet: (Order.Details) -> Unit
+		var onCancel: () -> Unit
 	}
 
 	interface State : RState
@@ -38,6 +35,7 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 
 	private val orderedProducts by prop { orderedProducts }
 	private val onDetailsSet by prop { onDetailsSet }
+	private val onCancel by prop { onCancel }
 
 	init
 	{
@@ -47,31 +45,25 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 
 	override fun RBuilder.render()
 	{
-		flexBox(flexDirection = FlexDirection.column) {
+		flexBox(direction = FlexDirection.column) {
 			productsList()
 			locationTextField()
 			recipientTextField()
-			orderButton()
+			
+			flexBox(direction = FlexDirection.rowReverse) {
+				orderButton()
+				cancelButton()
+			}
 		}
 	}
 
-	private fun RBuilder.productsList() = mList {
-		orderedProducts.forEach { productItem(it) }
-	}
-
-	private fun RBuilder.productItem(orderedProduct: OrderedProduct) = mListItem(button = true) {
-		mTypography(text = "${orderedProduct.product.name} x${orderedProduct.quantity}",
-		            variant = MTypographyVariant.body2)
-	}
+	private fun RBuilder.productsList() = orderedProductsView(orderedProducts = orderedProducts,
+	                                                          horizontalPadding = 24.px)
 
 	private fun RBuilder.locationTextField() = mTextField(label = "Miejsce dostawy",
 	                                                      value = state.location,
 	                                                      onChange = { setLocation(it.targetInputValue) }) {
-		css {
-			specific {
-				margin(horizontal = 16.px)
-			}
-		}
+		css { specific { margin(horizontal = 24.px) } }
 	}
 
 	private fun setLocation(location: String) = setState { this.location = location }
@@ -79,30 +71,30 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 	private fun RBuilder.recipientTextField() = mTextField(label = "Adresat",
 	                                                       value = state.recipient,
 	                                                       onChange = { setRecipient(it.targetInputValue) }) {
-		css {
-			specific {
-				margin(horizontal = 16.px)
-			}
-		}
+		css { specific { margin(horizontal = 24.px) } }
 	}
 
 	private fun setRecipient(recipient: String) = setState { this.recipient = recipient }
-
+	
 	private fun RBuilder.orderButton() = mButton(caption = "Zamów",
 	                                             color = MColor.secondary,
 	                                             onClick = { order() }) {
-		css {
-			specific {
-				margin(16.px)
-			}
-		}
+		css { specific { margin(vertical = 16.px, horizontal = 24.px) } }
 	}
 
 	private fun order() = onDetailsSet(Order.Details(state.location, state.recipient))
+	
+	private fun RBuilder.cancelButton() = mButton(caption = "Anuluj",
+	                                              color = MColor.secondary,
+	                                              onClick = { onCancel() }) {
+		css { specific { margin(vertical = 16.px) } }
+	}
 }
 
 fun RBuilder.orderDetailsView(orderedProducts: List<OrderedProduct>,
-                              onDetailsSet: (Order.Details) -> Unit) = child(OrderDetailsView::class) {
+                              onDetailsSet: (Order.Details) -> Unit,
+                              onCancel: () -> Unit) = child(OrderDetailsView::class) {
 	attrs.orderedProducts = orderedProducts
 	attrs.onDetailsSet = onDetailsSet
+	attrs.onCancel = onCancel
 }

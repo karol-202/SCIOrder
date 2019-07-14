@@ -1,16 +1,19 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
+import com.ccfraser.muirwik.components.dialog.mDialogTitle
 import kotlinx.css.Align
 import kotlinx.css.BorderStyle
 import kotlinx.css.FlexDirection
-import kotlinx.css.flexGrow
+import kotlinx.css.basis
 import kotlinx.css.height
 import kotlinx.css.pct
 import kotlinx.css.properties.borderLeft
 import kotlinx.css.px
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.util.Muirwik
+import pl.karol202.sciorder.client.js.common.util.dialog
 import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.flexItem
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.client.js.common.viewmodel.OrderComposeJsViewModel
@@ -23,7 +26,6 @@ import react.RProps
 import react.RState
 import react.setState
 import styled.css
-import styled.styledDiv
 
 class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 {
@@ -40,7 +42,8 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		var selectedProductId: String?
 		
 		var orderedProducts: List<OrderedProduct>
-		var pendingOrder: PendingOrder?
+		var lastPendingOrder: PendingOrder?
+		var orderDialogOpen: Boolean
 	}
 
 	interface PendingOrder
@@ -74,6 +77,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	{
 		state.products = emptyList()
 		state.orderedProducts = emptyList()
+		state.orderDialogOpen = false
 
 		productsViewModel.productsObservable.bindToState { products = it ?: emptyList() }
 		orderComposeViewModel.orderObservable.bindToState { orderedProducts = it }
@@ -81,58 +85,70 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 
 	override fun RBuilder.render()
 	{
-		flexBox(flexDirection = FlexDirection.row,
+		flexBox(direction = FlexDirection.row,
 		        alignItems = Align.stretch) {
-			css {
-				height = 100.pct
-			}
+			css { height = 100.pct }
 			
-			styledDiv {
-				css {
-					flexGrow = 1.0
-				}
-				
-				productsView(state.products, state.selectedProductId) { selectProduct(it) }
+			flexItem(flexGrow = 1.0) {
+				productsView()
 				productOrderView()
-				orderDetailsView()
 			}
 			
-			styledDiv {
-				css {
-					flexGrow = 0.17
-					borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR)
-				}
-				
-				orderComposeView(state.orderedProducts) { startFullOrder() }
+			flexItem(flexBasis = 350.px.basis) {
+				css { borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR) }
+				orderComposeView()
 			}
 		}
+		orderDetailsDialog()
 	}
+	
+	private fun RBuilder.productsView() = productsView(state.products, state.selectedProductId) { selectProduct(it) }
 
 	private fun RBuilder.productOrderView() = state.products.singleOrNull { it.id == state.selectedProductId }?.let { product ->
-		productOrderView(product, { startSingleOrder(it) }, { addToOrder(it) })
+		productOrderView(product = product, onOrder = {
+			startSingleOrder(it)
+			resetProductSelection()
+		}, onAddToOrder = {
+			addToOrder(it)
+			resetProductSelection()
+		})
 	}
-
-	private fun RBuilder.orderDetailsView() = state.pendingOrder?.let { pendingOrder ->
+	
+	private fun RBuilder.orderDetailsDialog() = dialog(open = state.orderDialogOpen,
+	                                                   onClose = { closeDialog() }) {
+		mDialogTitle(text = "Podsumowanie zamówienia")
+		orderDetailsView()
+	}
+	
+	private fun RBuilder.orderDetailsView() = state.lastPendingOrder?.let { pendingOrder ->
 		val products = pendingOrder.getOrderedProducts(orderComposeViewModel)
-		orderDetailsView(products) { pendingOrder.apply(orderComposeViewModel, it) }
+		orderDetailsView(products, { finishOrder(pendingOrder, it) }, { closeDialog() })
 	}
-
+	
+	private fun RBuilder.orderComposeView() = orderComposeView(state.orderedProducts) { startFullOrder() }
+	
 	private fun selectProduct(productId: String) = setState { selectedProductId = productId }
-
-	private fun addToOrder(orderedProduct: OrderedProduct)
+	
+	private fun resetProductSelection() = setState { selectedProductId = null }
+	
+	private fun addToOrder(orderedProduct: OrderedProduct) = orderComposeViewModel.addToOrder(orderedProduct)
+	
+	private fun startSingleOrder(orderedProduct: OrderedProduct) = startOrder(PendingOrder.Single(orderedProduct))
+	
+	private fun startFullOrder() = startOrder(PendingOrder.Full())
+	
+	private fun startOrder(pendingOrder: PendingOrder) = setState {
+		lastPendingOrder = pendingOrder
+		orderDialogOpen = true
+	}
+	
+	private fun finishOrder(pendingOrder: PendingOrder, details: Order.Details)
 	{
-		orderComposeViewModel.addToOrder(orderedProduct)
-		setState { selectedProductId = null }
+		pendingOrder.apply(orderComposeViewModel, details)
+		closeDialog()
 	}
-
-	private fun startSingleOrder(orderedProduct: OrderedProduct) = setState {
-		pendingOrder = PendingOrder.Single(orderedProduct)
-		selectedProductId = null
-	}
-
-	private fun startFullOrder() = setState {
-		pendingOrder = PendingOrder.Full()
-	}
+	
+	private fun closeDialog() = setState { orderDialogOpen = false }
 }
 
 fun RBuilder.userView(productsViewModel: ProductsJsViewModel,

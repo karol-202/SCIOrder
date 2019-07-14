@@ -64,7 +64,7 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 
 	override fun RBuilder.render()
 	{
-		flexBox(flexDirection = FlexDirection.column) {
+		flexBox(direction = FlexDirection.column) {
 			css {
 				height = 100.pct
 			}

@@ -5,7 +5,6 @@ import com.ccfraser.muirwik.components.MColor
 import com.ccfraser.muirwik.components.MTypographyAlign
 import com.ccfraser.muirwik.components.MTypographyVariant
 import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.list.mListItem
 import com.ccfraser.muirwik.components.mButton
 import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.FlexDirection
@@ -37,7 +36,7 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 
 	override fun RBuilder.render()
 	{
-		flexBox(flexDirection = FlexDirection.column) {
+		flexBox(direction = FlexDirection.column) {
 			css {
 				height = 100.pct
 			}
@@ -62,16 +61,11 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 			flexGrow = 1.0
 		}
 		
-		orderedProducts.forEach { productItem(it) }
-	}
-
-	private fun RBuilder.productItem(orderedProduct: OrderedProduct) = mListItem(button = true) {
-		mTypography(text = "${orderedProduct.product.name} x${orderedProduct.quantity}",
-		            variant = MTypographyVariant.body2)
+		orderedProductsView(orderedProducts = orderedProducts)
 	}
 	
 	private fun RBuilder.orderButton() = mButton(caption = "Zamów",
-	                                             variant = MButtonVariant.contained,
+	                                             variant = MButtonVariant.outlined,
 	                                             color = MColor.secondary,
 	                                             onClick = { orderAll() }) {
 		css {

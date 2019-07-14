@@ -65,7 +65,7 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	override fun RBuilder.render()
 	{
-		flexBox(flexDirection = FlexDirection.column) {
+		flexBox(direction = FlexDirection.column) {
 			itemsList()
 			addToOrderButton()
 			orderButton()

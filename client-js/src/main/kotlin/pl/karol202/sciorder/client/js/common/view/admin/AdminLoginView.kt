@@ -57,7 +57,7 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 
 	override fun RBuilder.render()
 	{
-		flexBox(flexDirection = FlexDirection.column,
+		flexBox(direction = FlexDirection.column,
 		        alignItems = Align.stretch) {
 			titleText()
 			ownerTextField()
@@ -103,14 +103,14 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 		}
 		mButton("Zaloguj",
 		        color = MColor.secondary,
-		        variant = MButtonVariant.contained,
+		        variant = MButtonVariant.outlined,
 		        fullWidth = true,
 		        onClick = { login() })
 	}
 
 	private fun RBuilder.registerButton() = mButton("Utwórz nowe konto",
 	                                        color = MColor.secondary,
-	                                        variant = MButtonVariant.contained,
+	                                        variant = MButtonVariant.outlined,
 	                                        fullWidth = true,
 	                                        onClick = { register() })
 

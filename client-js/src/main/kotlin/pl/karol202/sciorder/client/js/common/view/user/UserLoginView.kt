@@ -44,7 +44,7 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 
 	override fun RBuilder.render()
 	{
-		flexBox(flexDirection = FlexDirection.column,
+		flexBox(direction = FlexDirection.column,
 		        alignItems = Align.stretch) {
 			titleText()
 			ownerTextField()
@@ -68,7 +68,7 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 
 	private fun RBuilder.loginButton() = mButton("Zaloguj",
 	                                             color = MColor.secondary,
-	                                             variant = MButtonVariant.contained,
+	                                             variant = MButtonVariant.outlined,
 	                                             fullWidth = true,
 	                                             onClick = { login() })
 

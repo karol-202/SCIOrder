@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
 import com.ccfraser.muirwik.components.MTypographyColor
+import com.ccfraser.muirwik.components.MTypographyVariant
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItem
 import com.ccfraser.muirwik.components.list.mListItemText
@@ -49,7 +50,9 @@ class UserProductsView(props: Props) : View<UserProductsView.Props, RState>(prop
 	}
 
 	private fun createProductName(product: Product) = buildElement {
-		mTypography(product.name, color = if(product.available) MTypographyColor.textPrimary else MTypographyColor.textSecondary)
+		mTypography(text = product.name,
+		            variant = MTypographyVariant.subtitle1,
+		            color = if(product.available) MTypographyColor.textPrimary else MTypographyColor.textSecondary)
 	}
 }
 

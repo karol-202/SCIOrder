@@ -3,6 +3,9 @@ package pl.karol202.sciorder.client.js.common.util
 import com.ccfraser.muirwik.components.MColor
 import com.ccfraser.muirwik.components.createMuiThemeFunction
 import com.ccfraser.muirwik.components.currentTheme
+import com.ccfraser.muirwik.components.dialog.DialogMaxWidth
+import com.ccfraser.muirwik.components.dialog.ModalOnCloseReason
+import com.ccfraser.muirwik.components.dialog.mDialog
 import com.ccfraser.muirwik.components.mDivider
 import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions
@@ -24,7 +27,7 @@ object Muirwik
 
 fun createMuiTheme(options: ThemeOptions) = createMuiThemeFunction(options).unsafeCast<Theme>()
 
-fun RBuilder.textFieldColor(textFieldColor: MColor,
+fun RBuilder.themeTextField(textFieldColor: MColor,
                             handler: RBuilder.() -> Unit) =
 		styledDiv {
 			css {
@@ -42,6 +45,16 @@ fun RBuilder.textFieldColor(textFieldColor: MColor,
 				height = 100.pct
 			}
 			handler()
+		}
+
+fun RBuilder.dialog(open: Boolean,
+                    onClose: ((ModalOnCloseReason) -> Unit)? = null,
+                    handler: RBuilder.() -> Unit) =
+		mDialog(fullWidth = true,
+		        maxWidth = DialogMaxWidth.sm,
+		        open = open,
+		        onClose = { _, reason -> onClose?.invoke(reason) }) {
+			themeTextField(textFieldColor = MColor.secondary) { handler() }
 		}
 
 fun RBuilder.divider() = mDivider {

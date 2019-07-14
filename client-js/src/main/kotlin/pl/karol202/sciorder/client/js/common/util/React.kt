@@ -2,12 +2,17 @@ package pl.karol202.sciorder.client.js.common.util
 
 import kotlinx.css.Align
 import kotlinx.css.Display
+import kotlinx.css.FlexBasis
 import kotlinx.css.FlexDirection
 import kotlinx.css.FlexWrap
 import kotlinx.css.JustifyContent
 import kotlinx.css.alignItems
+import kotlinx.css.alignSelf
 import kotlinx.css.display
+import kotlinx.css.flexBasis
 import kotlinx.css.flexDirection
+import kotlinx.css.flexGrow
+import kotlinx.css.flexShrink
 import kotlinx.css.flexWrap
 import kotlinx.css.justifyContent
 import kotlinx.html.DIV
@@ -41,17 +46,31 @@ fun RElementBuilder<*>.onEnterEventListener(onEnter: () -> Unit)
 	attrs.asDynamic().onKeyDown = { event: dynamic -> if(event.key == "Enter") onEnter() }
 }
 
-fun RBuilder.flexBox(flexDirection: FlexDirection? = null,
-                     flexWrap: FlexWrap? = null,
+fun RBuilder.flexBox(direction: FlexDirection? = null,
+                     wrap: FlexWrap? = null,
                      justifyContent: JustifyContent? = null,
                      alignItems: Align? = null,
                      styledHandler: StyledDOMBuilder<DIV>.() -> Unit) = styledDiv {
 	css {
 		display = Display.flex
-		flexDirection?.let { this.flexDirection = it }
-		flexWrap?.let { this.flexWrap = it }
+		direction?.let { this.flexDirection = it }
+		wrap?.let { this.flexWrap = it }
 		justifyContent?.let { this.justifyContent = it }
 		alignItems?.let { this.alignItems = it }
+	}
+	styledHandler()
+}
+
+fun RBuilder.flexItem(flexGrow: Double? = null,
+                      flexShrink: Double? = null,
+                      flexBasis: FlexBasis? = null,
+                      alignSelf: Align? = null,
+                      styledHandler: StyledDOMBuilder<DIV>.() -> Unit) = styledDiv {
+	css {
+		flexGrow?.let { this.flexGrow = it }
+		flexShrink?.let { this.flexShrink = it }
+		flexBasis?.let { this.flexBasis = it }
+		alignSelf?.let { this.alignSelf = it }
 	}
 	styledHandler()
 }
