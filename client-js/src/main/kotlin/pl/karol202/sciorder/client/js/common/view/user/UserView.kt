@@ -107,7 +107,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		orderDetailsDialog()
 	}
 	
-	private fun RBuilder.ordersTrackView() = ordersTrackView(state.trackedOrders, state.products)
+	private fun RBuilder.ordersTrackView() = ordersTrackView(state.trackedOrders, state.products) { ordersTrackViewModel.removeOrder(it) }
 	
 	private fun RBuilder.productsView() = productsView(state.products, state.selectedProductId) { selectProduct(it) }
 

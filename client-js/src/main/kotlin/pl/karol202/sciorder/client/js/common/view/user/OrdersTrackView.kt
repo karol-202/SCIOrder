@@ -3,7 +3,9 @@ package pl.karol202.sciorder.client.js.common.view.user
 import com.ccfraser.muirwik.components.MTypographyVariant
 import com.ccfraser.muirwik.components.card.mCard
 import com.ccfraser.muirwik.components.list.mList
+import com.ccfraser.muirwik.components.mIconButton
 import com.ccfraser.muirwik.components.mTypography
+import kotlinx.css.Align
 import kotlinx.css.Display
 import kotlinx.css.FlexDirection
 import kotlinx.css.color
@@ -13,6 +15,7 @@ import kotlinx.css.margin
 import kotlinx.css.marginLeft
 import kotlinx.css.marginRight
 import kotlinx.css.px
+import materialui.icons.iconClear
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.color
 import pl.karol202.sciorder.client.js.common.model.create
@@ -34,6 +37,8 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	{
 		var orders: List<Order>
 		var products: List<Product>
+		
+		var onDismiss: (Order) -> Unit
 	}
 	
 	companion object
@@ -43,6 +48,7 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	
 	private val orders by prop { orders }
 	private val products by prop { products }
+	private val onDismiss by prop { onDismiss }
 	
 	override fun RBuilder.render()
 	{
@@ -74,7 +80,11 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 			marginRight = 8.px
 		}
 		
-		orderStatusText(order.status)
+		flexBox(direction = FlexDirection.row,
+		        alignItems = Align.center) {
+			orderStatusText(order.status)
+			dismissButton(order)
+		}
 		products(order)
 	}
 	
@@ -87,6 +97,9 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 		}
 	}
 	
+	private fun RBuilder.dismissButton(order: Order) =
+			mIconButton(onClick = { onDismiss(order) }) { iconClear() }
+	
 	private fun RBuilder.products(order: Order) = orderedProductsView(order.getOrderedProducts())
 	
 	private fun Order.getOrderedProducts() = entries.map { it.getOrderedProduct() }
@@ -96,7 +109,9 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 }
 
 fun RBuilder.ordersTrackView(orders: List<Order>,
-                             products: List<Product>) = child(OrdersTrackView::class) {
+                             products: List<Product>,
+                             onDismiss: (Order) -> Unit) = child(OrdersTrackView::class) {
 	attrs.orders = orders
 	attrs.products = products
+	attrs.onDismiss = onDismiss
 }
