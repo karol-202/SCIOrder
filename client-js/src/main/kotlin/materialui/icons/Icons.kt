@@ -24,3 +24,8 @@ fun RBuilder.iconLogout() = logoutClass { }
 private external val clearModule: dynamic
 private val clearClass: RClass<RProps> = clearModule.default
 fun RBuilder.iconClear() = clearClass { }
+
+@JsModule("@material-ui/icons/Create")
+private external val createModule: dynamic
+private val createClass: RClass<RProps> = createModule.default
+fun RBuilder.iconEdit() = createClass { }

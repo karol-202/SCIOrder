@@ -44,6 +44,10 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		var selectedProductId: String?
 		
 		var orderedProducts: List<OrderedProduct>
+		
+		var lastEditedProduct: OrderedProduct?
+		var productEditDialogOpen: Boolean
+		
 		var lastPendingOrder: PendingOrder?
 		var orderDialogOpen: Boolean
 	}
@@ -52,21 +56,18 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	{
 		class Single(private val orderedProduct: OrderedProduct) : PendingOrder
 		{
-			override fun getOrderedProducts(viewModel: OrderComposeJsViewModel) = listOf(orderedProduct)
+			override val orderedProducts = listOf(orderedProduct)
 
 			override fun apply(viewModel: OrderComposeJsViewModel, details: Order.Details) =
 					viewModel.orderSingleProduct(orderedProduct, details)
 		}
 
-		class Full : PendingOrder
+		class Full(override val orderedProducts: List<OrderedProduct>) : PendingOrder
 		{
-			override fun getOrderedProducts(viewModel: OrderComposeJsViewModel) =
-					viewModel.getProductsInOrderOrNull() ?: emptyList()
-
 			override fun apply(viewModel: OrderComposeJsViewModel, details: Order.Details) = viewModel.orderAll(details)
 		}
 
-		fun getOrderedProducts(viewModel: OrderComposeJsViewModel): List<OrderedProduct>
+		val orderedProducts: List<OrderedProduct>
 
 		fun apply(viewModel: OrderComposeJsViewModel, details: Order.Details)
 	}
@@ -80,6 +81,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		state.trackedOrders = emptyList()
 		state.products = emptyList()
 		state.orderedProducts = emptyList()
+		state.productEditDialogOpen = false
 		state.orderDialogOpen = false
 
 		ordersTrackViewModel.ordersObservable.bindToState { trackedOrders = it ?: emptyList() }
@@ -93,17 +95,18 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		        alignItems = Align.stretch) {
 			css { height = 100.pct }
 			
-			flexItem(flexGrow = 1.0) {
+			flexItem(grow = 1.0) {
 				if(state.trackedOrders.isNotEmpty()) ordersTrackView()
 				productsView()
 				productOrderView()
 			}
 			
-			flexItem(flexBasis = 350.px.basis) {
+			flexItem(basis = 350.px.basis) {
 				css { borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR) }
 				orderComposeView()
 			}
 		}
+		productEditDialog()
 		orderDetailsDialog()
 	}
 	
@@ -121,18 +124,47 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		})
 	}
 	
+	private fun RBuilder.orderComposeView() = orderComposeView(orderedProducts = state.orderedProducts,
+	                                                           onOrder = { startFullOrder() },
+	                                                           onEdit = { editOrderedProduct(it) },
+	                                                           onDelete = { removeFromOrder(it) })
+	
+	private fun RBuilder.productEditDialog() = dialog(open = state.productEditDialogOpen,
+	                                                  onClose = { closeProductEditDialog() }) {
+		mDialogTitle(text = "Edytuj produkt")
+		productEditView()
+	}
+	
+	private fun RBuilder.productEditView() = state.lastEditedProduct?.let { oldProduct ->
+		val (id, product, quantity, params) = oldProduct
+		
+		fun fakeAttrs(param: Product.Parameter) = param.attributes.copy(defaultValue = params[param.name])
+		val fakeParams = product.parameters.map { it.copy(attributes = fakeAttrs(it)) }
+		val fakeProduct = product.copy(parameters = fakeParams)
+		
+		productOrderView(product = fakeProduct,
+		                 initialQuantity = quantity,
+		                 onEdit = {
+			                 val newProduct = it.copy(id = id)
+			                 replaceInOrder(oldProduct, newProduct)
+			                 closeProductEditDialog()
+		                 })
+	}
+	
 	private fun RBuilder.orderDetailsDialog() = dialog(open = state.orderDialogOpen,
-	                                                   onClose = { closeDialog() }) {
+	                                                   onClose = { closeOrderDetailsDialog() }) {
 		mDialogTitle(text = "Podsumowanie zamówienia")
 		orderDetailsView()
 	}
 	
 	private fun RBuilder.orderDetailsView() = state.lastPendingOrder?.let { pendingOrder ->
-		val products = pendingOrder.getOrderedProducts(orderComposeViewModel)
-		orderDetailsView(products, { finishOrder(pendingOrder, it) }, { closeDialog() })
+		orderDetailsView(orderedProducts = pendingOrder.orderedProducts,
+		                 onDetailsSet = {
+			                 finishOrder(pendingOrder, it)
+			                 closeOrderDetailsDialog()
+		                 },
+		                 onCancel = { closeOrderDetailsDialog() })
 	}
-	
-	private fun RBuilder.orderComposeView() = orderComposeView(state.orderedProducts) { startFullOrder() }
 	
 	private fun selectProduct(productId: String) = setState { selectedProductId = productId }
 	
@@ -140,22 +172,29 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	
 	private fun addToOrder(orderedProduct: OrderedProduct) = orderComposeViewModel.addToOrder(orderedProduct)
 	
+	private fun replaceInOrder(old: OrderedProduct, new: OrderedProduct) = orderComposeViewModel.replaceInOrder(old, new)
+	
+	private fun removeFromOrder(orderedProduct: OrderedProduct) = orderComposeViewModel.removeFromOrder(orderedProduct)
+	
+	private fun editOrderedProduct(orderedProduct: OrderedProduct) = setState {
+		lastEditedProduct = orderedProduct
+		productEditDialogOpen = true
+	}
+	
 	private fun startSingleOrder(orderedProduct: OrderedProduct) = startOrder(PendingOrder.Single(orderedProduct))
 	
-	private fun startFullOrder() = startOrder(PendingOrder.Full())
+	private fun startFullOrder() = startOrder(PendingOrder.Full(state.orderedProducts))
 	
 	private fun startOrder(pendingOrder: PendingOrder) = setState {
 		lastPendingOrder = pendingOrder
 		orderDialogOpen = true
 	}
 	
-	private fun finishOrder(pendingOrder: PendingOrder, details: Order.Details)
-	{
-		pendingOrder.apply(orderComposeViewModel, details)
-		closeDialog()
-	}
+	private fun finishOrder(order: PendingOrder, details: Order.Details) = order.apply(orderComposeViewModel, details)
 	
-	private fun closeDialog() = setState { orderDialogOpen = false }
+	private fun closeOrderDetailsDialog() = setState { orderDialogOpen = false }
+	
+	private fun closeProductEditDialog() = setState { productEditDialogOpen = false }
 }
 
 fun RBuilder.userView(productsViewModel: ProductsJsViewModel,

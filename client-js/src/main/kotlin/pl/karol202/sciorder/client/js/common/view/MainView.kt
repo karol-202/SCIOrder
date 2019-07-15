@@ -37,7 +37,6 @@ import react.buildElement
 import react.router.dom.route
 import react.router.dom.switch
 import styled.css
-import styled.styledDiv
 
 class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 {
@@ -71,11 +70,7 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 			
 			appBar()
 			
-			styledDiv {
-				css {
-					flexGrow = 1.0
-				}
-				
+			flexItem(grow = 1.0) {
 				switch {
 					route<RProps>("/admin") { (_, _, match) ->
 						loginControlView(viewModels, match, { adminLoginSheet() }, { null })

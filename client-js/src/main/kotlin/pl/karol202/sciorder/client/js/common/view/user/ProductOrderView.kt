@@ -15,15 +15,18 @@ import com.ccfraser.muirwik.components.targetInputValue
 import com.ccfraser.muirwik.components.targetValue
 import kotlinext.js.jsObject
 import kotlinx.css.FlexDirection
+import kotlinx.css.flexGrow
 import kotlinx.css.flexShrink
 import kotlinx.css.margin
 import kotlinx.css.marginRight
 import kotlinx.css.marginTop
+import kotlinx.css.padding
 import kotlinx.css.px
 import kotlinx.html.InputType
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.create
 import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.nullableProp
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
@@ -33,14 +36,17 @@ import react.RProps
 import react.RState
 import react.key
 import react.setState
+import styled.css
 
 class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrderView.State>(props)
 {
 	interface Props : RProps
 	{
 		var product: Product
-		var onOrder: (OrderedProduct) -> Unit
-		var onAddToOrder: (OrderedProduct) -> Unit
+		var initialQuantity: Int
+		var onOrder: ((OrderedProduct) -> Unit)?
+		var onAddToOrder: ((OrderedProduct) -> Unit)?
+		var onEdit: ((OrderedProduct) -> Unit)?
 	}
 
 	interface State : RState
@@ -51,24 +57,27 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private val quantityAsParameter = Product.Parameter("Liczba",
 	                                                    Product.Parameter.Type.INT,
-	                                                    Product.Parameter.Attributes(minimalValue = 1f, defaultValue = "1"))
+	                                                    Product.Parameter.Attributes(minimalValue = 1f))
 
 	private val product by prop { product }
-	private val onOrder by prop { onOrder }
-	private val onAddToOrder by prop { onAddToOrder }
+	private val initialQuantity by prop { initialQuantity }
+	private val onOrder by nullableProp { onOrder }
+	private val onAddToOrder by nullableProp { onAddToOrder }
+	private val onEdit by nullableProp { onEdit }
 
 	init
 	{
 		state.params = product.parameters.associateWith { it.attributes.defaultValue ?: "" }
-		state.quantity = "1"
+		state.quantity = initialQuantity.toString()
 	}
 
 	override fun RBuilder.render()
 	{
 		flexBox(direction = FlexDirection.column) {
 			itemsList()
-			addToOrderButton()
-			orderButton()
+			if(onAddToOrder != null) addToOrderButton()
+			if(onOrder != null) orderButton()
+			if(onEdit != null) editButton()
 		}
 	}
 
@@ -90,9 +99,10 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private fun RBuilder.textItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param) {
 		mTextField(label = "",
-		           fullWidth = true,
 		           value = value,
-		           onChange = { onUpdate(it.targetInputValue) })
+		           onChange = { onUpdate(it.targetInputValue) }) {
+			css { flexGrow = 1.0 }
+		}
 	}
 
 	private fun RBuilder.intItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) =
@@ -119,12 +129,13 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 		mTextField(label = "",
 		           type = InputType.number,
-		           fullWidth = true,
 		           helperText = errorText,
 		           error = error,
 		           nativeInputProps = nativeInputProps(param.attributes.minimalValue, param.attributes.maximalValue, anyStep),
 		           value = value,
-		           onChange = { onUpdate(it.targetInputValue) })
+		           onChange = { onUpdate(it.targetInputValue) }) {
+			css { flexGrow = 1.0 }
+		}
 	}
 
 	private fun RBuilder.booleanItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param) {
@@ -135,9 +146,10 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private fun RBuilder.enumItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param) {
 		mTextFieldSelect(label = "",
-		                 fullWidth = true,
 		                 value = value,
 		                 onChange = { onUpdate(it.targetValue.toString()) }) {
+			css { flexGrow = 1.0 }
+			
 			param.attributes.enumValues?.forEach {
 				mMenuItem(primaryText = it, value = it)
 			}
@@ -146,6 +158,10 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private fun RBuilder.item(param: Product.Parameter, handler: RBuilder.() -> Unit) =
 			mListItem(alignItems = MListItemAlignItems.flexStart) {
+				overrideCss {
+					padding(horizontal = 24.px)
+				}
+				
 				mTypography(param.name, variant = MTypographyVariant.body2) {
 					overrideCss {
 						marginTop = 24.px
@@ -167,13 +183,16 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private fun RBuilder.orderButton() = button(text = "Zamów",
 	                                            onClick = { order() })
+	
+	private fun RBuilder.editButton() = button(text = "Zatwierdź",
+	                                           onClick = { edit() })
 
 	private fun RBuilder.button(text: String,
 	                            onClick: () -> Unit) = mButton(caption = text,
 	                                                           color = MColor.secondary,
 	                                                           onClick = { onClick() }) {
 		overrideCss {
-			margin(left = 16.px, right = 16.px, bottom = 16.px)
+			margin(left = 24.px, right = 24.px, bottom = 16.px)
 		}
 	}
 
@@ -181,9 +200,11 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private fun setQuantity(quantity: String) = setState { this.quantity = quantity }
 
-	private fun order() = createOrderedProduct()?.let(onOrder)
+	private fun order() = onOrder?.let { createOrderedProduct()?.let(it) }
 
-	private fun addToOrder() = createOrderedProduct()?.let(onAddToOrder)
+	private fun addToOrder() = onAddToOrder?.let { createOrderedProduct()?.let(it) }
+	
+	private fun edit() = onEdit?.let { createOrderedProduct()?.let(it) }
 
 	private fun createOrderedProduct(): OrderedProduct?
 	{
@@ -223,10 +244,14 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 }
 
 fun RBuilder.productOrderView(product: Product,
-                              onOrder: (OrderedProduct) -> Unit,
-                              onAddToOrder: (OrderedProduct) -> Unit) = child(ProductOrderView::class) {
+                              initialQuantity: Int = 1,
+                              onOrder: ((OrderedProduct) -> Unit)? = null,
+                              onAddToOrder: ((OrderedProduct) -> Unit)? = null,
+                              onEdit: ((OrderedProduct) -> Unit)? = null) = child(ProductOrderView::class) {
 	attrs.key = product.hashCode().toString() // To handle cases where product's params are changed in meanwhile
 	attrs.product = product
+	attrs.initialQuantity = initialQuantity
 	attrs.onOrder = onOrder
 	attrs.onAddToOrder = onAddToOrder
+	attrs.onEdit = onEdit
 }

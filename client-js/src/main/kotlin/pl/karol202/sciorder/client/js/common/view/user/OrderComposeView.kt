@@ -30,10 +30,14 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 	{
 		var orderedProducts: List<OrderedProduct>
 		var onOrder: () -> Unit
+		var onEdit: (OrderedProduct) -> Unit
+		var onDelete: (OrderedProduct) -> Unit
 	}
 
 	private val orderedProducts by prop { orderedProducts }
 	private val onOrder by prop { onOrder }
+	private val onEdit by prop { onEdit }
+	private val onDelete by prop { onDelete }
 
 	override fun RBuilder.render()
 	{
@@ -57,24 +61,33 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 		css { flexGrow = 1.0 }
 		
 		orderedProductsView(orderedProducts = orderedProducts,
-		                    details = true)
+		                    details = true,
+		                    onEdit = { onEdit(it) },
+		                    onDelete = { onDelete(it) })
 	}
 	
 	private fun RBuilder.orderButton() = mButton(caption = "Zamów",
 	                                             variant = MButtonVariant.outlined,
 	                                             color = MColor.secondary,
+	                                             disabled = !isOrderPossible(),
 	                                             onClick = { orderAll() }) {
 		overrideCss { margin(16.px) }
 	}
 	
 	private fun orderAll()
 	{
-		if(orderedProducts.isNotEmpty()) onOrder()
+		if(isOrderPossible()) onOrder()
 	}
+	
+	private fun isOrderPossible() = orderedProducts.isNotEmpty()
 }
 
 fun RBuilder.orderComposeView(orderedProducts: List<OrderedProduct>,
-                              onOrder: () -> Unit) = child(OrderComposeView::class) {
+                              onOrder: () -> Unit,
+                              onEdit: (OrderedProduct) -> Unit,
+                              onDelete: (OrderedProduct) -> Unit) = child(OrderComposeView::class) {
 	attrs.orderedProducts = orderedProducts
 	attrs.onOrder = onOrder
+	attrs.onEdit = onEdit
+	attrs.onDelete = onDelete
 }
