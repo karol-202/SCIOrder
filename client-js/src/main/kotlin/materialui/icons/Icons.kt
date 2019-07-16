@@ -29,3 +29,13 @@ fun RBuilder.iconClear() = clearClass { }
 private external val createModule: dynamic
 private val createClass: RClass<RProps> = createModule.default
 fun RBuilder.iconEdit() = createClass { }
+
+@JsModule("@material-ui/icons/KeyboardArrowLeft")
+private external val keyboardArrowLeftModule: dynamic
+private val keyboardArrowLeftClass: RClass<RProps> = keyboardArrowLeftModule.default
+fun RBuilder.iconArrowLeft() = keyboardArrowLeftClass { }
+
+@JsModule("@material-ui/icons/KeyboardArrowRight")
+private external val keyboardArrowRightModule: dynamic
+private val keyboardArrowRightClass: RClass<RProps> = keyboardArrowRightModule.default
+fun RBuilder.iconArrowRight() = keyboardArrowRightClass { }

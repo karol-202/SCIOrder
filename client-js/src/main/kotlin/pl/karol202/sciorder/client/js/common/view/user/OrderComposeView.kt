@@ -1,29 +1,12 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
-import com.ccfraser.muirwik.components.MButtonVariant
-import com.ccfraser.muirwik.components.MColor
-import com.ccfraser.muirwik.components.MTypographyAlign
-import com.ccfraser.muirwik.components.MTypographyVariant
+import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.mButton
-import com.ccfraser.muirwik.components.mTypography
-import kotlinx.css.Align
-import kotlinx.css.FlexDirection
-import kotlinx.css.Overflow
-import kotlinx.css.height
-import kotlinx.css.margin
-import kotlinx.css.overflowY
-import kotlinx.css.padding
-import kotlinx.css.paddingBottom
-import kotlinx.css.pct
-import kotlinx.css.px
-import kotlinx.css.width
+import kotlinx.css.*
+import materialui.icons.iconArrowLeft
+import materialui.icons.iconArrowRight
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.js.common.util.cssFlexBox
-import pl.karol202.sciorder.client.js.common.util.cssFlexItem
-import pl.karol202.sciorder.client.js.common.util.divider
-import pl.karol202.sciorder.client.js.common.util.overrideCss
-import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import react.RBuilder
 import react.RProps
@@ -39,12 +22,18 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 		var onOrder: () -> Unit
 		var onEdit: (OrderedProduct) -> Unit
 		var onDelete: (OrderedProduct) -> Unit
+		
+		var open: Boolean
+		var onOpenToggle: () -> Unit
 	}
 
 	private val orderedProducts by prop { orderedProducts }
 	private val onOrder by prop { onOrder }
 	private val onEdit by prop { onEdit }
 	private val onDelete by prop { onDelete }
+	
+	private val open by prop { open }
+	private val onOpenToggle by prop { onOpenToggle }
 
 	override fun RBuilder.render()
 	{
@@ -56,18 +45,41 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 				overflowY = Overflow.auto
 			}
 			
-			titleText()
-			divider()
-			productsList()
-			divider()
-			orderButton()
+			titlePanel()
+			if(open)
+			{
+				divider()
+				productsList()
+				divider()
+				orderButton()
+			}
 		}
 	}
 	
-	private fun RBuilder.titleText() = mTypography(text = "Zamówienie",
-	                                               variant = MTypographyVariant.h6,
-	                                               align = MTypographyAlign.center) {
-		overrideCss { margin(12.px) }
+	private fun RBuilder.titlePanel() = styledDiv {
+		css { position = Position.relative }
+		
+		if(open) titleText()
+		openToggleButton()
+	}
+	
+	private fun RBuilder.titleText() = styledDiv {
+		cssFlexBox(direction = FlexDirection.column,
+		           justifyContent = JustifyContent.center)
+		css {
+			position = Position.absolute
+			left = 0.px; top = 0.px; right = 0.px; bottom = 0.px
+		}
+		
+		mTypography(text = "Zamówienie",
+		            variant = MTypographyVariant.h6,
+		            align = MTypographyAlign.center)
+	}
+	
+	private fun RBuilder.openToggleButton() = mIconButton(onClick = { onOpenToggle() }) {
+		overrideCss { margin(4.px) }
+		
+		if(open) iconArrowRight() else iconArrowLeft()
 	}
 	
 	private fun RBuilder.productsList() = mList {
@@ -104,9 +116,13 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 fun RBuilder.orderComposeView(orderedProducts: List<OrderedProduct>,
                               onOrder: () -> Unit,
                               onEdit: (OrderedProduct) -> Unit,
-                              onDelete: (OrderedProduct) -> Unit) = child(OrderComposeView::class) {
+                              onDelete: (OrderedProduct) -> Unit,
+                              open: Boolean,
+                              onOpenToggle: () -> Unit) = child(OrderComposeView::class) {
 	attrs.orderedProducts = orderedProducts
 	attrs.onOrder = onOrder
 	attrs.onEdit = onEdit
 	attrs.onDelete = onDelete
+	attrs.open = open
+	attrs.onOpenToggle = onOpenToggle
 }

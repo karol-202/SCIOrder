@@ -4,22 +4,12 @@ import com.ccfraser.muirwik.components.currentTheme
 import com.ccfraser.muirwik.components.mSnackbar
 import kotlinx.css.Color
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
-import pl.karol202.sciorder.client.js.common.util.component1
-import pl.karol202.sciorder.client.js.common.util.component2
-import pl.karol202.sciorder.client.js.common.util.component3
-import pl.karol202.sciorder.client.js.common.util.cssSnackbarColor
-import pl.karol202.sciorder.client.js.common.util.prop
-import pl.karol202.sciorder.client.js.common.util.redirectTo
-import pl.karol202.sciorder.client.js.common.util.routeElse
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
-import react.RBuilder
-import react.RProps
-import react.RState
-import react.ReactElement
+import react.*
 import react.router.dom.RouteResultMatch
 import react.router.dom.route
 import react.router.dom.switch
-import react.setState
 
 class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControlView.State>(props)
 {
@@ -35,7 +25,7 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 	{
 		var loggedIn: Boolean
 		var lastError: OwnerViewModel.Error?
-		var showError: Boolean
+		var errorShown: Boolean
 	}
 
 	private val viewModels by prop { viewModels }
@@ -46,10 +36,10 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 	init
 	{
 		state.loggedIn = false
-		state.showError = false
+		state.errorShown = false
 
 		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
-		viewModels.ownerViewModel.errorEventObservable.bindEventToState { lastError = it; showError = true }
+		viewModels.ownerViewModel.errorEventObservable.bindEventToState { lastError = it; errorShown = true }
 	}
 
 	override fun RBuilder.render()
@@ -78,13 +68,13 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 		}
 		return mSnackbar(message = message,
 		                 autoHideDuration = 3000,
-		                 open = state.showError,
+		                 open = state.errorShown,
 		                 onClose = { _, _ -> hideSnackbar() }) {
 			cssSnackbarColor(Color(currentTheme.palette.error.main))
 		}
 	}
 
-	private fun hideSnackbar() = setState { showError = false }
+	private fun hideSnackbar() = setState { errorShown = false }
 }
 
 fun RBuilder.loginControlView(viewModels: ViewModels,

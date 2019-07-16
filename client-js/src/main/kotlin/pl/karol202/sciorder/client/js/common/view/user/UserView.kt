@@ -1,35 +1,12 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
-import com.ccfraser.muirwik.components.Colors
-import com.ccfraser.muirwik.components.MTypographyVariant
-import com.ccfraser.muirwik.components.currentTheme
+import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.dialog.mDialogTitle
-import com.ccfraser.muirwik.components.mPaper
-import com.ccfraser.muirwik.components.mSnackbar
-import com.ccfraser.muirwik.components.mTypography
-import kotlinx.css.Align
-import kotlinx.css.BorderStyle
-import kotlinx.css.Color
-import kotlinx.css.FlexDirection
-import kotlinx.css.LinearDimension
-import kotlinx.css.basis
-import kotlinx.css.margin
-import kotlinx.css.marginRight
-import kotlinx.css.paddingTop
+import kotlinx.css.*
 import kotlinx.css.properties.borderLeft
-import kotlinx.css.px
-import kotlinx.css.width
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel
-import pl.karol202.sciorder.client.js.common.util.Muirwik
-import pl.karol202.sciorder.client.js.common.util.cssFlexBox
-import pl.karol202.sciorder.client.js.common.util.cssFlexItem
-import pl.karol202.sciorder.client.js.common.util.cssPositionFixed
-import pl.karol202.sciorder.client.js.common.util.cssSnackbarColor
-import pl.karol202.sciorder.client.js.common.util.dialog
-import pl.karol202.sciorder.client.js.common.util.divider
-import pl.karol202.sciorder.client.js.common.util.overrideCss
-import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.client.js.common.viewmodel.OrderComposeJsViewModel
 import pl.karol202.sciorder.client.js.common.viewmodel.OrdersTrackJsViewModel
@@ -60,6 +37,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		var selectedProductId: String?
 		
 		var orderedProducts: List<OrderedProduct>
+		var orderComposeViewOpen: Boolean
 		
 		var lastEditedProduct: OrderedProduct?
 		var productEditDialogOpen: Boolean
@@ -68,7 +46,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		var orderDialogOpen: Boolean
 		
 		var lastMessage: Message?
-		var showMessage: Boolean
+		var messageShown: Boolean
 	}
 	
 	enum class Message(val text: String,
@@ -109,9 +87,10 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		state.trackedOrders = emptyList()
 		state.products = emptyList()
 		state.orderedProducts = emptyList()
+		state.orderComposeViewOpen = true
 		state.productEditDialogOpen = false
 		state.orderDialogOpen = false
-		state.showMessage = false
+		state.messageShown = false
 		
 		ordersTrackViewModel.ordersObservable.bindToState { trackedOrders = it ?: emptyList() }
 		ordersTrackViewModel.errorEventObservable.observeEvent { showMessage(Message.TRACKED_ORDERS_LOADING_FAILURE) }
@@ -132,7 +111,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		styledDiv {
 			cssFlexBox(direction = FlexDirection.column,
 			           alignItems = Align.stretch)
-			css { marginRight = 350.px }
+			css { marginRight = if(state.orderComposeViewOpen) 350.px else 57.px }
 			
 			if(state.trackedOrders.isNotEmpty())
 			{
@@ -146,7 +125,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		styledDiv {
 			cssPositionFixed(right = 0.px, top = 64.px, bottom = 0.px)
 			css {
-				width = 350.px
+				width = if(state.orderComposeViewOpen) 350.px else 57.px
 				borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR)
 			}
 			
@@ -198,7 +177,9 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	private fun RBuilder.orderComposeView() = orderComposeView(orderedProducts = state.orderedProducts,
 	                                                           onOrder = { startFullOrder() },
 	                                                           onEdit = { editOrderedProduct(it) },
-	                                                           onDelete = { removeFromOrder(it) })
+	                                                           onDelete = { removeFromOrder(it) },
+	                                                           open = state.orderComposeViewOpen,
+	                                                           onOpenToggle = { toggleOrderComposeViewOpen() })
 	
 	private fun RBuilder.productEditDialog() = dialog(open = state.productEditDialogOpen,
 	                                                  onClose = { closeProductEditDialog() }) {
@@ -239,7 +220,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	
 	private fun RBuilder.messageSnackbar() = mSnackbar(message = state.lastMessage?.text ?: "",
 	                                                   autoHideDuration = 3000,
-	                                                   open = state.showMessage,
+	                                                   open = state.messageShown,
 	                                                   onClose = { _, _ -> hideMessage() }) {
 		state.lastMessage?.color?.let { cssSnackbarColor(it) }
 	}
@@ -270,16 +251,18 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	
 	private fun finishOrder(order: PendingOrder, details: Order.Details) = order.apply(orderComposeViewModel, details)
 	
+	private fun toggleOrderComposeViewOpen() = setState { orderComposeViewOpen = !orderComposeViewOpen }
+	
 	private fun closeOrderDetailsDialog() = setState { orderDialogOpen = false }
 	
 	private fun closeProductEditDialog() = setState { productEditDialogOpen = false }
 	
 	private fun showMessage(message: Message) = setState {
 		lastMessage = message
-		showMessage = true
+		messageShown = true
 	}
 	
-	private fun hideMessage() = setState { showMessage = false }
+	private fun hideMessage() = setState { messageShown = false }
 }
 
 fun RBuilder.userView(productsViewModel: ProductsJsViewModel,
