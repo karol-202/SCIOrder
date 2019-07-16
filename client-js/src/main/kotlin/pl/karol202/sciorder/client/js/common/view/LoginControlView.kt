@@ -3,11 +3,11 @@ package pl.karol202.sciorder.client.js.common.view
 import com.ccfraser.muirwik.components.currentTheme
 import com.ccfraser.muirwik.components.mSnackbar
 import kotlinx.css.Color
-import kotlinx.css.backgroundColor
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.js.common.util.component1
 import pl.karol202.sciorder.client.js.common.util.component2
 import pl.karol202.sciorder.client.js.common.util.component3
+import pl.karol202.sciorder.client.js.common.util.cssSnackbarColor
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.util.redirectTo
 import pl.karol202.sciorder.client.js.common.util.routeElse
@@ -20,7 +20,6 @@ import react.router.dom.RouteResultMatch
 import react.router.dom.route
 import react.router.dom.switch
 import react.setState
-import styled.css
 
 class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControlView.State>(props)
 {
@@ -77,12 +76,11 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 			OwnerViewModel.Error.OTHER -> "Błąd logowania"
 			null -> ""
 		}
-		return mSnackbar(message = message, open = state.showError, autoHideDuration = 3000, onClose = { _, _ -> hideSnackbar() }) {
-			css {
-				child(".MuiSnackbarContent-root") {
-					backgroundColor = Color(currentTheme.palette.error.main)
-				}
-			}
+		return mSnackbar(message = message,
+		                 autoHideDuration = 3000,
+		                 open = state.showError,
+		                 onClose = { _, _ -> hideSnackbar() }) {
+			cssSnackbarColor(Color(currentTheme.palette.error.main))
 		}
 	}
 

@@ -26,12 +26,14 @@ abstract class View<P : RProps, S : RState> : RComponent<P, S>
 	{
 		job.cancel()
 	}
+	
+	protected fun <T> Flow<Event<T>>.observeEvent(observer: (T) -> Unit) = observeEvent(coroutineScope, observer)
 
-	fun <T> Flow<T>.bindToState(buildState: S.(T) -> Unit) = observe(coroutineScope) {
+	protected fun <T> Flow<T>.bindToState(buildState: S.(T) -> Unit) = observe(coroutineScope) {
 		setState { buildState(it) }
 	}
-
-	fun <T> Flow<Event<T>>.bindEventToState(buildState: S.(T) -> Unit) = observeEvent(coroutineScope) {
+	
+	protected fun <T> Flow<Event<T>>.bindEventToState(buildState: S.(T) -> Unit) = observeEvent(coroutineScope) {
 		setState { buildState(it) }
 	}
 }

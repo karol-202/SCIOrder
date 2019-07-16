@@ -1,8 +1,12 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
+import com.ccfraser.muirwik.components.Colors
+import com.ccfraser.muirwik.components.currentTheme
 import com.ccfraser.muirwik.components.dialog.mDialogTitle
+import com.ccfraser.muirwik.components.mSnackbar
 import kotlinx.css.Align
 import kotlinx.css.BorderStyle
+import kotlinx.css.Color
 import kotlinx.css.FlexDirection
 import kotlinx.css.basis
 import kotlinx.css.height
@@ -10,7 +14,9 @@ import kotlinx.css.pct
 import kotlinx.css.properties.borderLeft
 import kotlinx.css.px
 import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel
 import pl.karol202.sciorder.client.js.common.util.Muirwik
+import pl.karol202.sciorder.client.js.common.util.cssSnackbarColor
 import pl.karol202.sciorder.client.js.common.util.dialog
 import pl.karol202.sciorder.client.js.common.util.flexBox
 import pl.karol202.sciorder.client.js.common.util.flexBoxNested
@@ -51,6 +57,18 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		
 		var lastPendingOrder: PendingOrder?
 		var orderDialogOpen: Boolean
+		
+		var lastMessage: Message?
+		var showMessage: Boolean
+	}
+	
+	enum class Message(val text: String,
+	                   val color: Color)
+	{
+		ORDER_SUCCESS("Zamówiono pomyślnie", Colors.Green.shade600),
+		ORDER_FAILURE("Błąd zamówienia", Color(currentTheme.palette.error.main)),
+		TRACKED_ORDERS_LOADING_FAILURE("Błąd ładowania", Color(currentTheme.palette.error.main)),
+		PRODUCTS_LOADING_FAILURE("Błąd ładowania", Color(currentTheme.palette.error.main))
 	}
 
 	interface PendingOrder
@@ -84,10 +102,20 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		state.orderedProducts = emptyList()
 		state.productEditDialogOpen = false
 		state.orderDialogOpen = false
-
+		state.showMessage = false
+		
 		ordersTrackViewModel.ordersObservable.bindToState { trackedOrders = it ?: emptyList() }
+		ordersTrackViewModel.errorEventObservable.observeEvent { showMessage(Message.TRACKED_ORDERS_LOADING_FAILURE) }
+		
 		productsViewModel.productsObservable.bindToState { products = it ?: emptyList() }
+		productsViewModel.loadingErrorEventObservable.observeEvent { showMessage(Message.PRODUCTS_LOADING_FAILURE) }
+		
 		orderComposeViewModel.orderObservable.bindToState { orderedProducts = it }
+		orderComposeViewModel.errorEventObservable.observeEvent { showMessage(when(it)
+		{
+			OrderComposeViewModel.OrderResult.SUCCESS -> Message.ORDER_SUCCESS
+			OrderComposeViewModel.OrderResult.FAILURE -> Message.ORDER_FAILURE
+		})}
 	}
 
 	override fun RBuilder.render()
@@ -110,6 +138,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		}
 		productEditDialog()
 		orderDetailsDialog()
+		messageSnackbar()
 	}
 	
 	private fun RBuilder.ordersTrackView() = ordersTrackView(state.trackedOrders, state.products) { ordersTrackViewModel.removeOrder(it) }
@@ -168,6 +197,13 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		                 onCancel = { closeOrderDetailsDialog() })
 	}
 	
+	private fun RBuilder.messageSnackbar() = mSnackbar(message = state.lastMessage?.text ?: "",
+	                                                   autoHideDuration = 3000,
+	                                                   open = state.showMessage,
+	                                                   onClose = { _, _ -> hideMessage() }) {
+		state.lastMessage?.color?.let { cssSnackbarColor(it) }
+	}
+	
 	private fun selectProduct(productId: String) = setState { selectedProductId = productId }
 	
 	private fun resetProductSelection() = setState { selectedProductId = null }
@@ -197,6 +233,13 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	private fun closeOrderDetailsDialog() = setState { orderDialogOpen = false }
 	
 	private fun closeProductEditDialog() = setState { productEditDialogOpen = false }
+	
+	private fun showMessage(message: Message) = setState {
+		lastMessage = message
+		showMessage = true
+	}
+	
+	private fun hideMessage() = setState { showMessage = false }
 }
 
 fun RBuilder.userView(productsViewModel: ProductsJsViewModel,
