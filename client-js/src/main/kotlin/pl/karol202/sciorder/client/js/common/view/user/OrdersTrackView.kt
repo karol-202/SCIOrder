@@ -6,14 +6,9 @@ import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.mIconButton
 import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.Align
-import kotlinx.css.Display
 import kotlinx.css.FlexDirection
 import kotlinx.css.FlexWrap
 import kotlinx.css.color
-import kotlinx.css.display
-import kotlinx.css.flexDirection
-import kotlinx.css.flexShrink
-import kotlinx.css.flexWrap
 import kotlinx.css.margin
 import kotlinx.css.padding
 import kotlinx.css.px
@@ -22,7 +17,8 @@ import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.color
 import pl.karol202.sciorder.client.js.common.model.create
 import pl.karol202.sciorder.client.js.common.model.visibleName
-import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexItem
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
@@ -32,6 +28,7 @@ import react.RBuilder
 import react.RProps
 import react.RState
 import styled.css
+import styled.styledDiv
 
 class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 {
@@ -54,7 +51,9 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	
 	override fun RBuilder.render()
 	{
-		flexBox(direction = FlexDirection.column) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column)
+			
 			titleText()
 			orders()
 		}
@@ -62,17 +61,14 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	
 	private fun RBuilder.titleText() = mTypography(text = "Twoje zamówienia",
 	                                               variant = MTypographyVariant.h6) {
-		overrideCss {
-			margin(16.px)
-		}
+		overrideCss { margin(16.px) }
 	}
 	
 	private fun RBuilder.orders() = mList {
 		overrideCss {
 			padding(horizontal = 4.px)
-			display = Display.flex
-			flexDirection = FlexDirection.row
-			flexWrap = FlexWrap.wrap
+			cssFlexBox(direction = FlexDirection.row,
+			           wrap = FlexWrap.wrap)
 		}
 		
 		orders.asReversed().forEach { order(it) }
@@ -80,12 +76,14 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	
 	private fun RBuilder.order(order: Order) = mCard {
 		css {
+			cssFlexItem(shrink = 0.0)
 			margin(left = 12.px, right = 12.px, bottom = 24.px)
-			flexShrink = 0.0
 		}
 		
-		flexBox(direction = FlexDirection.row,
-		        alignItems = Align.center) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.row,
+			           alignItems = Align.center)
+			
 			orderStatusText(order.status)
 			dismissButton(order)
 		}
@@ -96,8 +94,8 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 			mTypography(text = "Status: ${status.visibleName}",
 			            variant = MTypographyVariant.subtitle2) {
 		overrideCss {
-			color = status.color
 			margin(16.px)
+			color = status.color
 		}
 	}
 	

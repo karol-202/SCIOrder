@@ -15,8 +15,8 @@ import kotlinx.css.px
 import materialui.icons.iconClear
 import materialui.icons.iconEdit
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.js.common.util.flexBox
-import pl.karol202.sciorder.client.js.common.util.flexBoxNested
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexItem
 import pl.karol202.sciorder.client.js.common.util.nullableProp
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
@@ -25,6 +25,7 @@ import react.RBuilder
 import react.RProps
 import react.RState
 import styled.css
+import styled.styledDiv
 
 class OrderedProductsView : View<OrderedProductsView.Props, RState>()
 {
@@ -56,11 +57,15 @@ class OrderedProductsView : View<OrderedProductsView.Props, RState>()
 			else if(onEdit != null || onDelete != null) paddingRight = 8.px
 		}
 		
-		flexBoxNested(direction = FlexDirection.column,
-		              alignItems = Align.stretch,
-		              grow = 1.0) {
-			flexBox(direction = FlexDirection.row,
-			        alignItems = Align.center) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column,
+			           alignItems = Align.stretch)
+			cssFlexItem(grow = 1.0)
+			
+			styledDiv {
+				cssFlexBox(direction = FlexDirection.row,
+				           alignItems = Align.center)
+				
 				productNameText(orderedProduct)
 				if(onEdit != null) editButton(orderedProduct)
 				if(onDelete != null) deleteButton(orderedProduct)

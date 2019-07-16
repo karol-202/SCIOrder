@@ -11,7 +11,6 @@ import com.ccfraser.muirwik.components.mToolbar
 import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.FlexDirection
 import kotlinx.css.LinearDimension
-import kotlinx.css.flexGrow
 import kotlinx.css.margin
 import kotlinx.css.minHeight
 import kotlinx.css.padding
@@ -22,8 +21,8 @@ import materialui.icons.iconLogout
 import pl.karol202.sciorder.client.js.common.util.component1
 import pl.karol202.sciorder.client.js.common.util.component2
 import pl.karol202.sciorder.client.js.common.util.component3
-import pl.karol202.sciorder.client.js.common.util.flexBox
-import pl.karol202.sciorder.client.js.common.util.flexItem
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexItem
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.util.redirectTo
 import pl.karol202.sciorder.client.js.common.util.routeElse
@@ -38,6 +37,7 @@ import react.buildElement
 import react.router.dom.route
 import react.router.dom.switch
 import styled.css
+import styled.styledDiv
 
 class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 {
@@ -64,12 +64,14 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 
 	override fun RBuilder.render()
 	{
-		flexBox(direction = FlexDirection.column) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column)
 			css { minHeight = 100.vh }
 			
 			appBar()
 			
-			flexItem(grow = 1.0) {
+			styledDiv {
+				cssFlexItem(grow = 1.0)
 				switch {
 					route<RProps>("/admin") { (_, _, match) ->
 						loginControlView(viewModels, match, { adminLoginSheet() }, { null })
@@ -89,9 +91,7 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 			            variant = MTypographyVariant.h6,
 			            color = MTypographyColor.inherit,
 			            noWrap = true) {
-				css {
-					flexGrow = 1.0
-				}
+				cssFlexItem(grow = 1.0)
 			}
 			if(state.loggedIn) mIconButton(color = MColor.inherit,
 			                               onClick = { logout() }) { iconLogout() }

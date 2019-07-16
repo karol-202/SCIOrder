@@ -11,7 +11,7 @@ import kotlinx.css.Align
 import kotlinx.css.FlexDirection
 import kotlinx.css.marginBottom
 import kotlinx.css.px
-import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.onEnterEventListener
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
@@ -44,8 +44,10 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 
 	override fun RBuilder.render()
 	{
-		flexBox(direction = FlexDirection.column,
-		        alignItems = Align.stretch) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column,
+			           alignItems = Align.stretch)
+			
 			titleText()
 			ownerTextField()
 			loginButton()
@@ -55,9 +57,8 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 	private fun RBuilder.titleText() = mTypography("Zaloguj się", variant = MTypographyVariant.h5)
 
 	private fun RBuilder.ownerTextField() = styledDiv {
-		css {
-			marginBottom = 16.px
-		}
+		css { marginBottom = 16.px }
+		
 		mTextField("Konto",
 		           fullWidth = true,
 		           value = state.ownerName,
@@ -74,10 +75,7 @@ class UserLoginView(props: Props) : View<UserLoginView.Props, UserLoginView.Stat
 
 	private fun setOwnerName(newName: String) = setState { ownerName = newName }
 
-	private fun login()
-	{
-		ownerViewModel.login(state.ownerName)
-	}
+	private fun login() = ownerViewModel.login(state.ownerName)
 }
 
 fun RBuilder.userLoginView(ownerViewModel: OwnerJsViewModel) = child(UserLoginView::class) {

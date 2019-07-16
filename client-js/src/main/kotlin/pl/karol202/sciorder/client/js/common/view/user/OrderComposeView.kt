@@ -11,20 +11,16 @@ import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.Align
 import kotlinx.css.Color
 import kotlinx.css.FlexDirection
-import kotlinx.css.Position
 import kotlinx.css.backgroundColor
-import kotlinx.css.bottom
-import kotlinx.css.flexGrow
 import kotlinx.css.margin
 import kotlinx.css.paddingBottom
-import kotlinx.css.position
 import kotlinx.css.px
-import kotlinx.css.top
 import kotlinx.css.zIndex
 import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexItem
+import pl.karol202.sciorder.client.js.common.util.cssPositionSticky
 import pl.karol202.sciorder.client.js.common.util.divider
-import pl.karol202.sciorder.client.js.common.util.flexBox
-import pl.karol202.sciorder.client.js.common.util.flexBoxNested
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
@@ -32,6 +28,7 @@ import react.RBuilder
 import react.RProps
 import react.RState
 import styled.css
+import styled.styledDiv
 
 class OrderComposeView : View<OrderComposeView.Props, RState>()
 {
@@ -50,14 +47,15 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 
 	override fun RBuilder.render()
 	{
-		flexBoxNested(direction = FlexDirection.column,
-		              alignItems = Align.stretch,
-		              grow = 1.0) {
-			flexBox(direction = FlexDirection.column) {
+		styledDiv {
+			cssFlexItem(grow = 1.0)
+			cssFlexBox(direction = FlexDirection.column,
+			           alignItems = Align.stretch)
+			
+			styledDiv {
+				cssFlexBox(direction = FlexDirection.column)
+				cssPositionSticky(top = 64.px)
 				css {
-					position = Position.sticky
-					top = 64.px
-					
 					backgroundColor = Color(currentTheme.palette.background.default)
 					zIndex = 1
 				}
@@ -68,12 +66,11 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 			
 			productsList()
 			
-			flexBox(direction = FlexDirection.column,
-			        alignItems = Align.stretch) {
+			styledDiv {
+				cssFlexBox(direction = FlexDirection.column,
+				           alignItems = Align.stretch)
+				cssPositionSticky(bottom = 0.px)
 				css {
-					position = Position.sticky
-					bottom = 0.px
-					
 					backgroundColor = Color(currentTheme.palette.background.default)
 					zIndex = 1
 				}
@@ -90,10 +87,8 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 	}
 	
 	private fun RBuilder.productsList() = mList {
-		overrideCss {
-			paddingBottom = 0.px
-			flexGrow = 1.0
-		}
+		cssFlexItem(grow = 1.0)
+		overrideCss { paddingBottom = 0.px }
 		
 		orderedProductsView(orderedProducts = orderedProducts,
 		                    details = true,

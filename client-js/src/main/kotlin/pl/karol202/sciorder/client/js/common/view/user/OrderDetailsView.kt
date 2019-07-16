@@ -8,7 +8,7 @@ import kotlinx.css.FlexDirection
 import kotlinx.css.margin
 import kotlinx.css.px
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
@@ -17,6 +17,7 @@ import react.RBuilder
 import react.RProps
 import react.RState
 import react.setState
+import styled.styledDiv
 
 class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 {
@@ -45,12 +46,16 @@ class OrderDetailsView : View<OrderDetailsView.Props, OrderDetailsView.State>()
 
 	override fun RBuilder.render()
 	{
-		flexBox(direction = FlexDirection.column) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column)
+			
 			productsList()
 			locationTextField()
 			recipientTextField()
 			
-			flexBox(direction = FlexDirection.rowReverse) {
+			styledDiv {
+				cssFlexBox(direction = FlexDirection.rowReverse)
+				
 				orderButton()
 				cancelButton()
 			}

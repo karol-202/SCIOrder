@@ -16,11 +16,10 @@ import kotlinx.css.px
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel
 import pl.karol202.sciorder.client.js.common.util.Muirwik
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexItem
 import pl.karol202.sciorder.client.js.common.util.cssSnackbarColor
 import pl.karol202.sciorder.client.js.common.util.dialog
-import pl.karol202.sciorder.client.js.common.util.flexBox
-import pl.karol202.sciorder.client.js.common.util.flexBoxNested
-import pl.karol202.sciorder.client.js.common.util.flexItem
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.client.js.common.viewmodel.OrderComposeJsViewModel
@@ -33,6 +32,7 @@ import react.RProps
 import react.RState
 import react.setState
 import styled.css
+import styled.styledDiv
 
 class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 {
@@ -120,19 +120,24 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 
 	override fun RBuilder.render()
 	{
-		flexBox(direction = FlexDirection.row,
-		        alignItems = Align.stretch) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.row,
+			           alignItems = Align.stretch)
 			css { height = 100.pct }
 			
-			flexItem(grow = 1.0) {
+			styledDiv {
+				cssFlexItem(grow = 1.0)
+				
 				if(state.trackedOrders.isNotEmpty()) ordersTrackView()
 				productsView()
 				productOrderView()
 			}
 			
-			flexBoxNested(direction = FlexDirection.column,
-			              basis = 350.px.basis) {
+			styledDiv {
+				cssFlexItem(basis = 350.px.basis)
+				cssFlexBox(direction = FlexDirection.column)
 				css { borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR) }
+				
 				orderComposeView()
 			}
 		}

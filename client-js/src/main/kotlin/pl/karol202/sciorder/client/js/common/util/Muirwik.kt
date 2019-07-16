@@ -15,7 +15,6 @@ import kotlinx.css.borderBottomColor
 import kotlinx.css.color
 import kotlinx.css.rgba
 import react.RBuilder
-import styled.StyledBuilder
 import styled.css
 import styled.styledDiv
 
@@ -56,10 +55,4 @@ fun RBuilder.dialog(open: Boolean,
 
 fun RBuilder.divider() = mDivider {
 	overrideCss { backgroundColor = Muirwik.DIVIDER_COLOR }
-}
-
-fun StyledBuilder<*>.cssSnackbarColor(color: Color) = css {
-	child(".MuiSnackbarContent-root") {
-		backgroundColor = color
-	}
 }

@@ -20,7 +20,7 @@ import kotlinx.css.px
 import kotlinx.html.InputType
 import materialui.icons.iconVisibility
 import materialui.icons.iconVisibilityOff
-import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.onEnterEventListener
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
@@ -57,8 +57,10 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 
 	override fun RBuilder.render()
 	{
-		flexBox(direction = FlexDirection.column,
-		        alignItems = Align.stretch) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column,
+			           alignItems = Align.stretch)
+			
 			titleText()
 			ownerTextField()
 			passwordTextField()
@@ -70,14 +72,13 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 	private fun RBuilder.titleText() = mTypography("Panel administracyjny", variant = MTypographyVariant.h5)
 
 	private fun RBuilder.ownerTextField() = mTextField("Konto",
-	                                           fullWidth = true,
-	                                           value = state.ownerName,
-	                                           onChange = { setOwnerName(it.targetInputValue) })
+	                                                   fullWidth = true,
+	                                                   value = state.ownerName,
+	                                                   onChange = { setOwnerName(it.targetInputValue) })
 
 	private fun RBuilder.passwordTextField() = styledDiv {
-		css {
-			marginBottom = 16.px
-		}
+		css { marginBottom = 16.px }
+		
 		mFormControl(fullWidth = true) {
 			mInputLabel(caption = "Hasło", htmlFor = "input-password")
 			mInput(id = "input-password",
@@ -98,9 +99,8 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 	}
 
 	private fun RBuilder.loginButton() = styledDiv {
-		css {
-			marginBottom = 16.px
-		}
+		css { marginBottom = 16.px }
+		
 		mButton("Zaloguj",
 		        color = MColor.secondary,
 		        variant = MButtonVariant.outlined,
@@ -109,10 +109,10 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 	}
 
 	private fun RBuilder.registerButton() = mButton("Utwórz nowe konto",
-	                                        color = MColor.secondary,
-	                                        variant = MButtonVariant.outlined,
-	                                        fullWidth = true,
-	                                        onClick = { register() })
+	                                                color = MColor.secondary,
+	                                                variant = MButtonVariant.outlined,
+	                                                fullWidth = true,
+	                                                onClick = { register() })
 
 	private fun setOwnerName(newName: String) = setState { ownerName = newName }
 
@@ -120,15 +120,9 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 
 	private fun togglePasswordVisibility() = setState { showPassword = !showPassword }
 
-	private fun login()
-	{
-		ownerViewModel.login(state.ownerName, state.password)
-	}
+	private fun login() = ownerViewModel.login(state.ownerName, state.password)
 
-	private fun register()
-	{
-		ownerViewModel.register(state.ownerName, state.password)
-	}
+	private fun register() = ownerViewModel.register(state.ownerName, state.password)
 }
 
 fun RBuilder.adminLoginView(ownerViewModel: OwnerJsViewModel) = child(AdminLoginView::class) {

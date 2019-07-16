@@ -15,8 +15,6 @@ import com.ccfraser.muirwik.components.targetInputValue
 import com.ccfraser.muirwik.components.targetValue
 import kotlinext.js.jsObject
 import kotlinx.css.FlexDirection
-import kotlinx.css.flexGrow
-import kotlinx.css.flexShrink
 import kotlinx.css.margin
 import kotlinx.css.marginRight
 import kotlinx.css.marginTop
@@ -25,7 +23,8 @@ import kotlinx.css.px
 import kotlinx.html.InputType
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.create
-import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexItem
 import pl.karol202.sciorder.client.js.common.util.nullableProp
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
@@ -36,7 +35,7 @@ import react.RProps
 import react.RState
 import react.key
 import react.setState
-import styled.css
+import styled.styledDiv
 
 class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrderView.State>(props)
 {
@@ -73,7 +72,9 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	override fun RBuilder.render()
 	{
-		flexBox(direction = FlexDirection.column) {
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column)
+			
 			itemsList()
 			if(onAddToOrder != null) addToOrderButton()
 			if(onOrder != null) orderButton()
@@ -101,7 +102,7 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 		mTextField(label = "",
 		           value = value,
 		           onChange = { onUpdate(it.targetInputValue) }) {
-			css { flexGrow = 1.0 }
+			cssFlexItem(grow = 1.0)
 		}
 	}
 
@@ -134,7 +135,7 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 		           nativeInputProps = nativeInputProps(param.attributes.minimalValue, param.attributes.maximalValue, anyStep),
 		           value = value,
 		           onChange = { onUpdate(it.targetInputValue) }) {
-			css { flexGrow = 1.0 }
+			cssFlexItem(grow = 1.0)
 		}
 	}
 
@@ -148,7 +149,7 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 		mTextFieldSelect(label = "",
 		                 value = value,
 		                 onChange = { onUpdate(it.targetValue.toString()) }) {
-			css { flexGrow = 1.0 }
+			cssFlexItem(grow = 1.0)
 			
 			param.attributes.enumValues?.forEach {
 				mMenuItem(primaryText = it, value = it)
@@ -158,15 +159,13 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private fun RBuilder.item(param: Product.Parameter, handler: RBuilder.() -> Unit) =
 			mListItem(alignItems = MListItemAlignItems.flexStart) {
-				overrideCss {
-					padding(horizontal = 24.px)
-				}
+				overrideCss { padding(horizontal = 24.px) }
 				
 				mTypography(param.name, variant = MTypographyVariant.body2) {
+					cssFlexItem(shrink = 0.0)
 					overrideCss {
 						marginTop = 24.px
 						marginRight = 24.px
-						flexShrink = 0.0
 					}
 				}
 				handler()
@@ -191,9 +190,7 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 	                            onClick: () -> Unit) = mButton(caption = text,
 	                                                           color = MColor.secondary,
 	                                                           onClick = { onClick() }) {
-		overrideCss {
-			margin(left = 24.px, right = 24.px, bottom = 16.px)
-		}
+		overrideCss { margin(left = 24.px, right = 24.px, bottom = 16.px) }
 	}
 
 	private fun setParam(param: Product.Parameter, value: String) = setState { params += param to value }
