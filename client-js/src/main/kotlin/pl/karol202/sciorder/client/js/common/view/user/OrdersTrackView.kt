@@ -5,14 +5,9 @@ import com.ccfraser.muirwik.components.card.mCard
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.mIconButton
 import com.ccfraser.muirwik.components.mTypography
-import kotlinx.css.Align
-import kotlinx.css.FlexDirection
-import kotlinx.css.FlexWrap
-import kotlinx.css.color
-import kotlinx.css.margin
-import kotlinx.css.padding
-import kotlinx.css.px
+import kotlinx.css.*
 import materialui.icons.iconClear
+import materialui.icons.iconRefresh
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.color
 import pl.karol202.sciorder.client.js.common.model.create
@@ -38,6 +33,7 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 		var products: List<Product>
 		
 		var onDismiss: (Order) -> Unit
+		var onRefresh: () -> Unit
 	}
 	
 	companion object
@@ -48,20 +44,35 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	private val orders by prop { orders }
 	private val products by prop { products }
 	private val onDismiss by prop { onDismiss }
+	private val onRefresh by prop { onRefresh }
 	
 	override fun RBuilder.render()
 	{
 		styledDiv {
 			cssFlexBox(direction = FlexDirection.column)
 			
-			titleText()
+			titlePanel()
 			orders()
 		}
 	}
 	
+	private fun RBuilder.titlePanel() = styledDiv {
+		cssFlexBox(direction = FlexDirection.row,
+		           alignItems = Align.center)
+		
+		titleText()
+		refreshButton()
+	}
+	
 	private fun RBuilder.titleText() = mTypography(text = "Twoje zamówienia",
 	                                               variant = MTypographyVariant.h6) {
+		cssFlexItem(grow = 1.0)
 		overrideCss { margin(16.px) }
+	}
+	
+	private fun RBuilder.refreshButton() = mIconButton(onClick = { onRefresh() }) {
+		overrideCss { marginRight = 8.px }
+		iconRefresh()
 	}
 	
 	private fun RBuilder.orders() = mList {
@@ -111,8 +122,10 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 
 fun RBuilder.ordersTrackView(orders: List<Order>,
                              products: List<Product>,
-                             onDismiss: (Order) -> Unit) = child(OrdersTrackView::class) {
+                             onDismiss: (Order) -> Unit,
+                             onRefresh: () -> Unit) = child(OrdersTrackView::class) {
 	attrs.orders = orders
 	attrs.products = products
 	attrs.onDismiss = onDismiss
+	attrs.onRefresh = onRefresh
 }

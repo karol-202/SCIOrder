@@ -4,6 +4,8 @@ import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.dialog.mDialogTitle
 import kotlinx.css.*
 import kotlinx.css.properties.borderLeft
+import materialui.icons.iconClear
+import materialui.icons.iconRefresh
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel
 import pl.karol202.sciorder.client.js.common.util.*
@@ -13,10 +15,7 @@ import pl.karol202.sciorder.client.js.common.viewmodel.OrdersTrackJsViewModel
 import pl.karol202.sciorder.client.js.common.viewmodel.ProductsJsViewModel
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Product
-import react.RBuilder
-import react.RProps
-import react.RState
-import react.setState
+import react.*
 import styled.css
 import styled.styledDiv
 
@@ -136,27 +135,48 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		messageSnackbar()
 	}
 	
-	private fun RBuilder.ordersTrackView() = ordersTrackView(state.trackedOrders, state.products) { ordersTrackViewModel.removeOrder(it) }
+	private fun RBuilder.ordersTrackView() = ordersTrackView(orders = state.trackedOrders,
+	                                                         products = state.products,
+	                                                         onDismiss = { dismissTrackedOrder(it) },
+	                                                         onRefresh = { refreshTrackedOrders() })
 	
-	private fun RBuilder.productsPanel() = panel("Zamów") { productsView() }
+	private fun RBuilder.productsPanel() = panel(title = "Zamów",
+	                                             actionIcon = { iconRefresh() },
+	                                             action = { refreshProducts() }) { productsView() }
 	
 	private fun RBuilder.productOrderPanel() = state.products.singleOrNull { it.id == state.selectedProductId }?.let { product ->
-		panel("Zamów: ${product.name}") { productOrderView(product) }
+		panel(title = "Zamów: ${product.name}",
+		      actionIcon = { iconClear() },
+		      action = { resetProductSelection() }) { productOrderView(product) }
 	}
 	
 	private fun RBuilder.panel(title: String,
+	                           actionIcon: RBuilder.() -> ReactElement,
+	                           action: () -> Unit,
 	                           handler: RBuilder.() -> Unit) = styledDiv {
 		cssFlexBox(direction = FlexDirection.row)
 		
 		mPaper {
 			cssFlexItem(basis = 500.px.basis)
+			cssFlexBox(direction = FlexDirection.column)
 			css {
 				margin(horizontal = LinearDimension.auto, vertical = 24.px)
-				paddingTop = 16.px
+				paddingTop = 8.px
 			}
 			
-			mTypography(text = title, variant = MTypographyVariant.h6) {
-				overrideCss { margin(horizontal = 24.px) }
+			styledDiv {
+				cssFlexBox(direction = FlexDirection.row,
+				           alignItems = Align.center)
+				
+				mTypography(text = title, variant = MTypographyVariant.h6) {
+					cssFlexItem(grow = 1.0)
+					overrideCss { margin(horizontal = 24.px) }
+				}
+				mIconButton(onClick = { action() }) {
+					overrideCss { marginRight = 8.px }
+					actionIcon()
+				}
+				
 			}
 			handler()
 		}
@@ -228,6 +248,12 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	private fun selectProduct(productId: String) = setState { selectedProductId = productId }
 	
 	private fun resetProductSelection() = setState { selectedProductId = null }
+	
+	private fun refreshProducts() = productsViewModel.refreshProducts()
+	
+	private fun refreshTrackedOrders() = ordersTrackViewModel.refreshOrders()
+	
+	private fun dismissTrackedOrder(order: Order) = ordersTrackViewModel.removeOrder(order)
 	
 	private fun addToOrder(orderedProduct: OrderedProduct) = orderComposeViewModel.addToOrder(orderedProduct)
 	

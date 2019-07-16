@@ -39,3 +39,8 @@ fun RBuilder.iconArrowLeft() = keyboardArrowLeftClass { }
 private external val keyboardArrowRightModule: dynamic
 private val keyboardArrowRightClass: RClass<RProps> = keyboardArrowRightModule.default
 fun RBuilder.iconArrowRight() = keyboardArrowRightClass { }
+
+@JsModule("@material-ui/icons/Refresh")
+private external val refreshModule: dynamic
+private val refreshClass: RClass<RProps> = refreshModule.default
+fun RBuilder.iconRefresh() = refreshClass { }
