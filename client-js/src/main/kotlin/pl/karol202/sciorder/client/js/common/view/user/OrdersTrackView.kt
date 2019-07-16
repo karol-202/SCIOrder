@@ -65,11 +65,10 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	}
 	
 	private fun RBuilder.orders() = mList {
-		overrideCss {
-			padding(horizontal = 4.px)
-			cssFlexBox(direction = FlexDirection.row,
-			           wrap = FlexWrap.wrap)
-		}
+		cssFlexBox(direction = FlexDirection.row,
+		           wrap = FlexWrap.wrap)
+		
+		overrideCss { padding(horizontal = 4.px) }
 		
 		orders.asReversed().forEach { order(it) }
 	}

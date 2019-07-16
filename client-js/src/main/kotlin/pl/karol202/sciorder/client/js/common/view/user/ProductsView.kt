@@ -6,7 +6,10 @@ import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItem
 import com.ccfraser.muirwik.components.list.mListItemText
 import com.ccfraser.muirwik.components.mTypography
+import kotlinx.css.padding
+import kotlinx.css.px
 import pl.karol202.sciorder.client.js.common.util.nullableProp
+import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
@@ -28,7 +31,7 @@ class UserProductsView(props: Props) : View<UserProductsView.Props, RState>(prop
 	private val products by prop { products }
 	private val selectedProductId by nullableProp { selectedProductId }
 	private val onProductSelect by prop { onProductSelect }
-
+	
 	override fun RBuilder.render()
 	{
 		productsList()
@@ -39,8 +42,11 @@ class UserProductsView(props: Props) : View<UserProductsView.Props, RState>(prop
 	}
 
 	private fun RBuilder.product(product: Product) = mListItem(button = product.available,
+	                                                           disableGutters = true,
 	                                                           selected = product.id == selectedProductId,
 	                                                           onClick = { selectProductIfAvailable(product) }) {
+		overrideCss { padding(horizontal = 24.px) }
+		
 		mListItemText(primary = createProductName(product), disableTypography = true)
 	}
 

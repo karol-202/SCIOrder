@@ -57,11 +57,11 @@ fun StyledBuilder<*>.cssFlexItem(grow: Double? = null,
 	alignSelf?.let { this.alignSelf = it }
 }
 
-fun StyledBuilder<*>.cssPositionSticky(left: LinearDimension? = null,
-                                       right: LinearDimension? = null,
-                                       top: LinearDimension? = null,
-                                       bottom: LinearDimension? = null) = css {
-	position = Position.sticky
+fun StyledBuilder<*>.cssPositionFixed(left: LinearDimension? = null,
+                                      right: LinearDimension? = null,
+                                      top: LinearDimension? = null,
+                                      bottom: LinearDimension? = null) = css {
+	position = Position.fixed
 	left?.let { this.left = it }
 	right?.let { this.right = it }
 	top?.let { this.top = it }

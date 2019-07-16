@@ -1,25 +1,34 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
 import com.ccfraser.muirwik.components.Colors
+import com.ccfraser.muirwik.components.MTypographyVariant
 import com.ccfraser.muirwik.components.currentTheme
 import com.ccfraser.muirwik.components.dialog.mDialogTitle
+import com.ccfraser.muirwik.components.mPaper
 import com.ccfraser.muirwik.components.mSnackbar
+import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.Align
 import kotlinx.css.BorderStyle
 import kotlinx.css.Color
 import kotlinx.css.FlexDirection
+import kotlinx.css.LinearDimension
 import kotlinx.css.basis
-import kotlinx.css.height
-import kotlinx.css.pct
+import kotlinx.css.margin
+import kotlinx.css.marginRight
+import kotlinx.css.paddingTop
 import kotlinx.css.properties.borderLeft
 import kotlinx.css.px
+import kotlinx.css.width
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel
 import pl.karol202.sciorder.client.js.common.util.Muirwik
 import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.cssFlexItem
+import pl.karol202.sciorder.client.js.common.util.cssPositionFixed
 import pl.karol202.sciorder.client.js.common.util.cssSnackbarColor
 import pl.karol202.sciorder.client.js.common.util.dialog
+import pl.karol202.sciorder.client.js.common.util.divider
+import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.client.js.common.viewmodel.OrderComposeJsViewModel
@@ -121,25 +130,27 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	override fun RBuilder.render()
 	{
 		styledDiv {
-			cssFlexBox(direction = FlexDirection.row,
+			cssFlexBox(direction = FlexDirection.column,
 			           alignItems = Align.stretch)
-			css { height = 100.pct }
+			css { marginRight = 350.px }
 			
-			styledDiv {
-				cssFlexItem(grow = 1.0)
-				
-				if(state.trackedOrders.isNotEmpty()) ordersTrackView()
-				productsView()
-				productOrderView()
+			if(state.trackedOrders.isNotEmpty())
+			{
+				ordersTrackView()
+				divider()
+			}
+			productsPanel()
+			productOrderPanel()
+		}
+		
+		styledDiv {
+			cssPositionFixed(right = 0.px, top = 64.px, bottom = 0.px)
+			css {
+				width = 350.px
+				borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR)
 			}
 			
-			styledDiv {
-				cssFlexItem(basis = 350.px.basis)
-				cssFlexBox(direction = FlexDirection.column)
-				css { borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR) }
-				
-				orderComposeView()
-			}
+			orderComposeView()
 		}
 		productEditDialog()
 		orderDetailsDialog()
@@ -148,17 +159,41 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 	
 	private fun RBuilder.ordersTrackView() = ordersTrackView(state.trackedOrders, state.products) { ordersTrackViewModel.removeOrder(it) }
 	
+	private fun RBuilder.productsPanel() = panel("Zamów") { productsView() }
+	
+	private fun RBuilder.productOrderPanel() = state.products.singleOrNull { it.id == state.selectedProductId }?.let { product ->
+		panel("Zamów: ${product.name}") { productOrderView(product) }
+	}
+	
+	private fun RBuilder.panel(title: String,
+	                           handler: RBuilder.() -> Unit) = styledDiv {
+		cssFlexBox(direction = FlexDirection.row)
+		
+		mPaper {
+			cssFlexItem(basis = 500.px.basis)
+			css {
+				margin(horizontal = LinearDimension.auto, vertical = 24.px)
+				paddingTop = 16.px
+			}
+			
+			mTypography(text = title, variant = MTypographyVariant.h6) {
+				overrideCss { margin(horizontal = 24.px) }
+			}
+			handler()
+		}
+	}
+	
 	private fun RBuilder.productsView() = productsView(state.products, state.selectedProductId) { selectProduct(it) }
 
-	private fun RBuilder.productOrderView() = state.products.singleOrNull { it.id == state.selectedProductId }?.let { product ->
-		productOrderView(product = product, onOrder = {
-			startSingleOrder(it)
-			resetProductSelection()
-		}, onAddToOrder = {
-			addToOrder(it)
-			resetProductSelection()
-		})
-	}
+	private fun RBuilder.productOrderView(product: Product) = productOrderView(product = product,
+	                                                                           onOrder = {
+		                                                                           startSingleOrder(it)
+		                                                                           resetProductSelection()
+	                                                                           },
+	                                                                           onAddToOrder = {
+		                                                                           addToOrder(it)
+		                                                                           resetProductSelection()
+	                                                                           })
 	
 	private fun RBuilder.orderComposeView() = orderComposeView(orderedProducts = state.orderedProducts,
 	                                                           onOrder = { startFullOrder() },

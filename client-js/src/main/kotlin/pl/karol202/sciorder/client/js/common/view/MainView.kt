@@ -12,10 +12,8 @@ import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.FlexDirection
 import kotlinx.css.LinearDimension
 import kotlinx.css.margin
-import kotlinx.css.minHeight
 import kotlinx.css.padding
 import kotlinx.css.px
-import kotlinx.css.vh
 import kotlinx.css.width
 import materialui.icons.iconLogout
 import pl.karol202.sciorder.client.js.common.util.component1
@@ -66,7 +64,6 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 	{
 		styledDiv {
 			cssFlexBox(direction = FlexDirection.column)
-			css { minHeight = 100.vh }
 			
 			appBar()
 			
@@ -74,10 +71,10 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 				cssFlexItem(grow = 1.0)
 				switch {
 					route<RProps>("/admin") { (_, _, match) ->
-						loginControlView(viewModels, match, { adminLoginSheet() }, { null })
+						loginControlView(viewModels, match, { adminLoginPanel() }, { null })
 					}
 					route<RProps>("/user") { (_, _, match) ->
-						loginControlView(viewModels, match, { userLoginSheet() }, { userView(viewModels.productsViewModel, viewModels.orderComposeViewModel, viewModels.ordersTrackViewModel) })
+						loginControlView(viewModels, match, { userLoginPanel() }, { userView(viewModels.productsViewModel, viewModels.orderComposeViewModel, viewModels.ordersTrackViewModel) })
 					}
 					routeElse { redirectTo("/user") }
 				}
@@ -98,9 +95,9 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 		}
 	}
 
-	private fun adminLoginSheet() = loginSheet { adminLoginView(viewModels.ownerViewModel) }
+	private fun adminLoginPanel() = loginSheet { adminLoginView(viewModels.ownerViewModel) }
 
-	private fun userLoginSheet() = loginSheet { userLoginView(viewModels.ownerViewModel) }
+	private fun userLoginPanel() = loginSheet { userLoginView(viewModels.ownerViewModel) }
 
 	private fun loginSheet(handler: RBuilder.() -> Unit) = buildElement {
 		mPaper {
