@@ -13,8 +13,6 @@ import kotlinx.css.Color
 import kotlinx.css.backgroundColor
 import kotlinx.css.borderBottomColor
 import kotlinx.css.color
-import kotlinx.css.height
-import kotlinx.css.pct
 import kotlinx.css.rgba
 import react.RBuilder
 import styled.css
@@ -41,8 +39,6 @@ fun RBuilder.themeTextField(textFieldColor: MColor,
 
 				descendants("label.Mui-focused") { color = colorValue }
 				descendants(".MuiInput-underline:after") { borderBottomColor = colorValue }
-				
-				height = 100.pct
 			}
 			handler()
 		}

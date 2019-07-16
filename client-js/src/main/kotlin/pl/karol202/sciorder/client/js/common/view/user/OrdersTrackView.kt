@@ -8,12 +8,14 @@ import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.Align
 import kotlinx.css.Display
 import kotlinx.css.FlexDirection
+import kotlinx.css.FlexWrap
 import kotlinx.css.color
 import kotlinx.css.display
 import kotlinx.css.flexDirection
+import kotlinx.css.flexShrink
+import kotlinx.css.flexWrap
 import kotlinx.css.margin
-import kotlinx.css.marginLeft
-import kotlinx.css.marginRight
+import kotlinx.css.padding
 import kotlinx.css.px
 import materialui.icons.iconClear
 import pl.karol202.sciorder.client.common.model.OrderedProduct
@@ -66,18 +68,20 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	}
 	
 	private fun RBuilder.orders() = mList {
-		css {
+		overrideCss {
+			padding(horizontal = 4.px)
 			display = Display.flex
 			flexDirection = FlexDirection.row
+			flexWrap = FlexWrap.wrap
 		}
 		
-		orders.forEach { order(it) }
+		orders.asReversed().forEach { order(it) }
 	}
 	
 	private fun RBuilder.order(order: Order) = mCard {
 		css {
-			marginLeft = 16.px
-			marginRight = 8.px
+			margin(left = 12.px, right = 12.px, bottom = 24.px)
+			flexShrink = 0.0
 		}
 		
 		flexBox(direction = FlexDirection.row,

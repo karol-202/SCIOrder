@@ -12,17 +12,18 @@ import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.FlexDirection
 import kotlinx.css.LinearDimension
 import kotlinx.css.flexGrow
-import kotlinx.css.height
 import kotlinx.css.margin
+import kotlinx.css.minHeight
 import kotlinx.css.padding
-import kotlinx.css.pct
 import kotlinx.css.px
+import kotlinx.css.vh
 import kotlinx.css.width
 import materialui.icons.iconLogout
 import pl.karol202.sciorder.client.js.common.util.component1
 import pl.karol202.sciorder.client.js.common.util.component2
 import pl.karol202.sciorder.client.js.common.util.component3
 import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.flexItem
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.util.redirectTo
 import pl.karol202.sciorder.client.js.common.util.routeElse
@@ -64,9 +65,7 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 	override fun RBuilder.render()
 	{
 		flexBox(direction = FlexDirection.column) {
-			css {
-				height = 100.pct
-			}
+			css { minHeight = 100.vh }
 			
 			appBar()
 			

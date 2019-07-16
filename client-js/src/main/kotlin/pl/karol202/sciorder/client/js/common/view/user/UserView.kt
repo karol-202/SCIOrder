@@ -13,6 +13,7 @@ import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.util.Muirwik
 import pl.karol202.sciorder.client.js.common.util.dialog
 import pl.karol202.sciorder.client.js.common.util.flexBox
+import pl.karol202.sciorder.client.js.common.util.flexBoxNested
 import pl.karol202.sciorder.client.js.common.util.flexItem
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
@@ -101,7 +102,8 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 				productOrderView()
 			}
 			
-			flexItem(basis = 350.px.basis) {
+			flexBoxNested(direction = FlexDirection.column,
+			              basis = 350.px.basis) {
 				css { borderLeft(1.px, BorderStyle.solid, Muirwik.DIVIDER_COLOR) }
 				orderComposeView()
 			}
