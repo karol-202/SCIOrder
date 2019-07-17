@@ -4,6 +4,7 @@ import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.card.mCard
 import com.ccfraser.muirwik.components.list.mList
 import kotlinx.css.*
+import materialui.icons.iconDelete
 import materialui.icons.iconRefresh
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.color
@@ -29,9 +30,14 @@ class OrdersView : View<OrdersView.Props, RState>()
 	{
 		var orders: List<Order>
 		var products: List<Product>
+		var filter: Set<Order.Status>
 		
-		var onStatusUpdate: (Order, Order.Status) -> Unit
+		var deleteEnabled: Boolean
+		
+		var onDeleteAll: () -> Unit
 		var onRefresh: () -> Unit
+		var onFilterToggle: (Order.Status) -> Unit
+		var onStatusUpdate: (Order, Order.Status) -> Unit
 	}
 	
 	companion object
@@ -41,9 +47,14 @@ class OrdersView : View<OrdersView.Props, RState>()
 	
 	private val orders by prop { orders }
 	private val products by prop { products }
+	private val filter by prop { filter }
 	
-	private val onStatusUpdate by prop { onStatusUpdate }
+	private val deleteEnabled by prop { deleteEnabled }
+	
+	private val onDeleteAll by prop { onDeleteAll }
 	private val onRefresh by prop { onRefresh }
+	private val onFilterToggle by prop { onFilterToggle }
+	private val onStatusUpdate by prop { onStatusUpdate }
 	
 	override fun RBuilder.render()
 	{
@@ -51,6 +62,7 @@ class OrdersView : View<OrdersView.Props, RState>()
 			cssFlexBox(direction = FlexDirection.column)
 			
 			titlePanel()
+			filterPanel()
 			orders()
 		}
 	}
@@ -60,6 +72,7 @@ class OrdersView : View<OrdersView.Props, RState>()
 		           alignItems = Align.center)
 		
 		titleText()
+		deleteAllButton()
 		refreshButton()
 	}
 	
@@ -69,14 +82,50 @@ class OrdersView : View<OrdersView.Props, RState>()
 		overrideCss { margin(16.px) }
 	}
 	
+	private fun RBuilder.deleteAllButton() = mIconButton(disabled = !deleteEnabled,
+	                                                     onClick = { onDeleteAll() }) {
+		overrideCss { marginRight = 8.px }
+		iconDelete()
+	}
+	
 	private fun RBuilder.refreshButton() = mIconButton(onClick = { onRefresh() }) {
 		overrideCss { marginRight = 8.px }
 		iconRefresh()
 	}
 	
-	private fun RBuilder.orders() = mList {
+	private fun RBuilder.filterPanel() = styledDiv {
+		cssFlexBox(direction = FlexDirection.row,
+		           alignItems = Align.center)
+		css { marginBottom = 16.px }
+		
+		filterText()
+		filterList()
+	}
+	
+	private fun RBuilder.filterText() = mTypography(text = "Filtruj",
+	                                                variant = MTypographyVariant.body1) {
+		overrideCss { margin(left = 16.px, right = 8.px) }
+	}
+	
+	private fun RBuilder.filterList() = mList {
 		cssFlexBox(direction = FlexDirection.row,
 		           wrap = FlexWrap.wrap)
+		
+		Order.Status.values().forEach { filterItem(it, it in filter) }
+	}
+	
+	private fun RBuilder.filterItem(status: Order.Status, checked: Boolean) =
+			mChip(label = status.visibleName,
+			      color = MChipColor.secondary,
+			      variant = if(checked) MChipVariant.default else MChipVariant.outlined,
+			      onClick = { onFilterToggle(status) }) {
+				css { margin(horizontal = 8.px) }
+			}
+	
+	private fun RBuilder.orders() = mList {
+		cssFlexBox(direction = FlexDirection.row,
+		           wrap = FlexWrap.wrap,
+		           alignItems = Align.flexStart)
 		
 		overrideCss { padding(horizontal = 4.px) }
 		
@@ -112,7 +161,9 @@ class OrdersView : View<OrdersView.Props, RState>()
 	}
 	
 	private fun RBuilder.orderStatusSelect(order: Order) = mSelect(value = order.status.name,
-	                                                               onChange = { e, _ -> updateStatus(order, e.targetValue.toString()) }) {
+	                                                               onChange = { e, _ ->
+		                                                               updateStatus(order, e.targetValue.toString())
+	                                                               }) {
 		Order.Status.values().forEach { orderStatusItem(it) }
 	}
 	
@@ -138,10 +189,18 @@ class OrdersView : View<OrdersView.Props, RState>()
 
 fun RBuilder.ordersView(orders: List<Order>,
                         products: List<Product>,
-                        onStatusUpdate: (Order, Order.Status) -> Unit,
-                        onRefresh: () -> Unit) = child(OrdersView::class) {
+                        filter: Set<Order.Status>,
+                        deleteEnabled: Boolean,
+                        onDeleteAll: () -> Unit,
+                        onRefresh: () -> Unit,
+                        onFilterToggle: (Order.Status) -> Unit,
+                        onStatusUpdate: (Order, Order.Status) -> Unit) = child(OrdersView::class) {
 	attrs.orders = orders
 	attrs.products = products
-	attrs.onStatusUpdate = onStatusUpdate
+	attrs.filter = filter
+	attrs.deleteEnabled = deleteEnabled
+	attrs.onDeleteAll = onDeleteAll
 	attrs.onRefresh = onRefresh
+	attrs.onFilterToggle = onFilterToggle
+	attrs.onStatusUpdate = onStatusUpdate
 }

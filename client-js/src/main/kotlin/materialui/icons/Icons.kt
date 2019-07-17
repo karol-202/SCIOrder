@@ -44,3 +44,8 @@ fun RBuilder.iconArrowRight() = keyboardArrowRightClass { }
 private external val refreshModule: dynamic
 private val refreshClass: RClass<RProps> = refreshModule.default
 fun RBuilder.iconRefresh() = refreshClass { }
+
+@JsModule("@material-ui/icons/Delete")
+private external val deleteModule: dynamic
+private val deleteClass: RClass<RProps> = deleteModule.default
+fun RBuilder.iconDelete() = deleteClass { }
