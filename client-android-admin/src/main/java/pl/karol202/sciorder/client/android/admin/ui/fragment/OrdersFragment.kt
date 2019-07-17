@@ -35,7 +35,6 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 		observeLoading()
 		observeLoadingError()
 		observeUpdateError()
-		observeOrderFilter()
 	}
 
 	private fun initRefreshLayout()
@@ -66,9 +65,6 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 
 	private fun observeUpdateError() =
 			ordersViewModel.updateErrorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_update_error) }
-
-	private fun observeOrderFilter() =
-			ordersViewModel.orderFilterLiveData.observeNonNull(viewLifecycleOwner) { adapter.orderFilter = it }
 
 	override fun onMenuItemSelected(itemId: Int) = when(itemId)
 	{

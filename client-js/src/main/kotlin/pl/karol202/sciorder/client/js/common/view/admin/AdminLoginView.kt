@@ -79,8 +79,8 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 			       endAdornment =
 			       mInputAdornment(position = MInputAdornmentPosition.end) {
 				       mIconButton(onClick = { togglePasswordVisibility() }) {
-					       if(state.showPassword) iconVisibilityOff()
-					       else iconVisibility()
+					       if(state.showPassword) iconVisibility()
+					       else iconVisibilityOff()
 				       }
 			       }) {
 				onEnterEventListener { login() }

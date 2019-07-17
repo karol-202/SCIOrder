@@ -47,12 +47,9 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 		}
 	}
 
-	var orders = emptyList<Order>()
-		set(value)
-		{
-			field = value
-			updateItems()
-		}
+	var orders: List<Order>
+		get() = items
+		set(value) { items = value }
 	var products = emptyList<Product>()
 		set(value)
 		{
@@ -66,21 +63,10 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 				order.entries.any { entry -> entry.productId in affectedIds }
 			}.forEach { notifyItemChanged(it.index) }
 		}
-	var orderFilter = emptySet<Order.Status>()
-		set(value)
-		{
-			field = value
-			updateItems()
-		}
 
 	override fun getLayout(viewType: Int) = R.layout.item_order
 
 	override fun createViewHolder(view: View, viewType: Int) = ViewHolder(view)
 
 	override fun getItemId(item: Order) = item.id
-
-	private fun updateItems()
-	{
-		items = orders.filter { it.status in orderFilter }
-	}
 }

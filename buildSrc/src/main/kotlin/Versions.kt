@@ -10,7 +10,7 @@ object Versions
 	const val COROUTINES = "1.3.0-M2"
 
 	// Android
-	const val ANDROID_BUILD_TOOLS = "3.4.1"
+	const val ANDROID_BUILD_TOOLS = "3.4.2"
 	const val ANDROID_KTX = "1.0.2"
 	const val ANDROID_APPCOMPAT = "1.1.0-beta01"
 	const val ANDROID_FRAGMENT = "1.0.0"

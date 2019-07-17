@@ -23,6 +23,8 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 			field?.close()
 			field = value
 		}
+	
+	private val orderFilterBroadcastChannel = ConflatedBroadcastChannel(Order.Status.DEFAULT_FILTER)
 
 	private val ordersResourceAsBroadcastChannel = ownerRepository.getOwnerFlow()
 													              .onEach { owner = it }
@@ -35,20 +37,19 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 																  .conflate()
 													              .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 
-	protected val ordersFlow = ordersResourceAsBroadcastChannel.asFlow().map { it.data }
+	protected val ordersFlow = ordersResourceAsBroadcastChannel.asFlow()
+															   .combineLatest(orderFilterBroadcastChannel.asFlow()) { resource, filter ->
+																   resource.data?.filter { it.status in filter }
+															   }
 	protected val loadingFlow = ordersResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }
 	protected val loadingErrorEventFlow = ordersResourceAsBroadcastChannel.asFlow()
-																	.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
+																		  .mapNotNull {if(it is Resource.State.Failure) Event(Unit) else null }
 
 	protected val updateErrorEventBroadcastChannel = ConflatedBroadcastChannel<Event<Unit>>()
 
-	protected val orderFilterBroadcastChannel = ConflatedBroadcastChannel(Order.Status.DEFAULT_FILTER)
 	var orderFilter: Set<Order.Status>
 		get() = orderFilterBroadcastChannel.value
-		set(value)
-		{
-			orderFilterBroadcastChannel.offer(value)
-		}
+		set(value) { orderFilterBroadcastChannel.offer(value) }
 
 	fun refreshOrders() = launch { ordersResource?.reload() }
 

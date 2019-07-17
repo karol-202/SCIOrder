@@ -14,6 +14,4 @@ class OrdersJsViewModel(ownerRepository: OwnerRepository,
 	val loadingErrorEventObservable = loadingErrorEventFlow.shareIn(coroutineScope)
 
 	val updateErrorEventObservable = updateErrorEventBroadcastChannel.asFlow()
-
-	val orderFilterObservable = orderFilterBroadcastChannel.asFlow()
 }

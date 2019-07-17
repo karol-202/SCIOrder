@@ -14,6 +14,4 @@ class OrdersAndroidViewModel(ownerRepository: OwnerRepository,
 	val loadingErrorEventLiveData = loadingErrorEventFlow.asLiveData(coroutineScope)
 
 	val updateErrorEventLiveData = updateErrorEventBroadcastChannel.asFlow().asLiveData(coroutineScope)
-
-	val orderFilterLiveData = orderFilterBroadcastChannel.asFlow().asLiveData(coroutineScope)
 }
