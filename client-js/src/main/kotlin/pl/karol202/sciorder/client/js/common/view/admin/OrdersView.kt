@@ -139,6 +139,8 @@ class OrdersView : View<OrdersView.Props, RState>()
 		}
 		
 		orderStatusPanel(order)
+		orderLocationText(order)
+		orderRecipientText(order)
 		products(order)
 	}
 	
@@ -172,6 +174,25 @@ class OrdersView : View<OrdersView.Props, RState>()
 		            variant = MTypographyVariant.subtitle2) {
 			css { color = status.color }
 		}
+	}
+	
+	private fun RBuilder.orderLocationText(order: Order) = orderInfoText("Miejsce dostawy:", order.details.location)
+	
+	private fun RBuilder.orderRecipientText(order: Order) = orderInfoText("Adresat:", order.details.recipient)
+	
+	private fun RBuilder.orderInfoText(name: String, value: String) = styledDiv {
+		cssFlexBox(direction = FlexDirection.row)
+		css {
+			margin(horizontal = 24.px)
+			marginTop = 12.px
+		}
+		
+		mTypography(text = name,
+		            variant = MTypographyVariant.body2) {
+			overrideCss { margin(right = 6.px, top = 1.px) }
+		}
+		mTypography(text = value,
+		            variant = MTypographyVariant.subtitle2)
 	}
 	
 	private fun RBuilder.products(order: Order) = orderedProductsView(orderedProducts = order.getOrderedProducts(),
