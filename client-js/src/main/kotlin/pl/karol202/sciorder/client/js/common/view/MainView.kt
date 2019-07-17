@@ -1,30 +1,11 @@
 package pl.karol202.sciorder.client.js.common.view
 
-import com.ccfraser.muirwik.components.MAppBarPosition
-import com.ccfraser.muirwik.components.MColor
-import com.ccfraser.muirwik.components.MTypographyColor
-import com.ccfraser.muirwik.components.MTypographyVariant
-import com.ccfraser.muirwik.components.mAppBar
-import com.ccfraser.muirwik.components.mIconButton
-import com.ccfraser.muirwik.components.mPaper
-import com.ccfraser.muirwik.components.mToolbar
-import com.ccfraser.muirwik.components.mTypography
-import kotlinx.css.FlexDirection
-import kotlinx.css.LinearDimension
-import kotlinx.css.margin
-import kotlinx.css.padding
-import kotlinx.css.px
-import kotlinx.css.width
+import com.ccfraser.muirwik.components.*
+import kotlinx.css.*
 import materialui.icons.iconLogout
-import pl.karol202.sciorder.client.js.common.util.component1
-import pl.karol202.sciorder.client.js.common.util.component2
-import pl.karol202.sciorder.client.js.common.util.component3
-import pl.karol202.sciorder.client.js.common.util.cssFlexBox
-import pl.karol202.sciorder.client.js.common.util.cssFlexItem
-import pl.karol202.sciorder.client.js.common.util.prop
-import pl.karol202.sciorder.client.js.common.util.redirectTo
-import pl.karol202.sciorder.client.js.common.util.routeElse
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.admin.adminLoginView
+import pl.karol202.sciorder.client.js.common.view.admin.adminView
 import pl.karol202.sciorder.client.js.common.view.user.userLoginView
 import pl.karol202.sciorder.client.js.common.view.user.userView
 import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
@@ -71,10 +52,10 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 				cssFlexItem(grow = 1.0)
 				switch {
 					route<RProps>("/admin") { (_, _, match) ->
-						loginControlView(viewModels, match, { adminLoginPanel() }, { null })
+						loginControlView(viewModels, match, { adminLoginPanel() }, { adminView() })
 					}
 					route<RProps>("/user") { (_, _, match) ->
-						loginControlView(viewModels, match, { userLoginPanel() }, { userView(viewModels.productsViewModel, viewModels.orderComposeViewModel, viewModels.ordersTrackViewModel) })
+						loginControlView(viewModels, match, { userLoginPanel() }, { userView() })
 					}
 					routeElse { redirectTo("/user") }
 				}
@@ -108,6 +89,14 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 			}
 			handler()
 		}
+	}
+	
+	private fun adminView() = buildElement {
+		adminView(viewModels.productsViewModel, viewModels.ordersViewModel)
+	}
+	
+	private fun userView() = buildElement {
+		userView(viewModels.productsViewModel, viewModels.orderComposeViewModel, viewModels.ordersTrackViewModel)
 	}
 
 	private fun logout() = viewModels.ownerViewModel.logout()

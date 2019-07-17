@@ -1,12 +1,9 @@
-package pl.karol202.sciorder.client.js.common.view.user
+package pl.karol202.sciorder.client.js.common.view.admin
 
-import com.ccfraser.muirwik.components.MTypographyVariant
+import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.card.mCard
 import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.mIconButton
-import com.ccfraser.muirwik.components.mTypography
 import kotlinx.css.*
-import materialui.icons.iconClear
 import materialui.icons.iconRefresh
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.color
@@ -26,14 +23,14 @@ import react.RState
 import styled.css
 import styled.styledDiv
 
-class OrdersTrackView : View<OrdersTrackView.Props, RState>()
+class OrdersView : View<OrdersView.Props, RState>()
 {
 	interface Props : RProps
 	{
 		var orders: List<Order>
 		var products: List<Product>
 		
-		var onDismiss: (Order) -> Unit
+		var onStatusUpdate: (Order, Order.Status) -> Unit
 		var onRefresh: () -> Unit
 	}
 	
@@ -44,7 +41,8 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	
 	private val orders by prop { orders }
 	private val products by prop { products }
-	private val onDismiss by prop { onDismiss }
+	
+	private val onStatusUpdate by prop { onStatusUpdate }
 	private val onRefresh by prop { onRefresh }
 	
 	override fun RBuilder.render()
@@ -65,7 +63,7 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 		refreshButton()
 	}
 	
-	private fun RBuilder.titleText() = mTypography(text = "Twoje zamówienia",
+	private fun RBuilder.titleText() = mTypography(text = "Wszystkie zamówienia",
 	                                               variant = MTypographyVariant.h6) {
 		cssFlexItem(grow = 1.0)
 		overrideCss { margin(16.px) }
@@ -82,7 +80,7 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 		
 		overrideCss { padding(horizontal = 4.px) }
 		
-		orders.asReversed().forEach { order(it) }
+		orders.forEach { order(it) }
 	}
 	
 	private fun RBuilder.order(order: Order) = mCard {
@@ -91,42 +89,59 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 			margin(left = 12.px, right = 12.px, bottom = 24.px)
 		}
 		
-		styledDiv {
-			cssFlexBox(direction = FlexDirection.row,
-			           alignItems = Align.center)
-			
-			orderStatusText(order.status)
-			dismissButton(order)
-		}
+		orderStatusPanel(order)
 		products(order)
 	}
 	
+	private fun RBuilder.orderStatusPanel(order: Order) = styledDiv {
+		cssFlexBox(direction = FlexDirection.row,
+		           alignItems = Align.center)
+		css { margin(horizontal = 24.px, vertical = 16.px) }
+		
+		orderStatusText(order.status)
+		orderStatusSelect(order)
+	}
+	
 	private fun RBuilder.orderStatusText(status: Order.Status) =
-			mTypography(text = "Status: ${status.visibleName}",
+			mTypography(text = "Status:",
 			            variant = MTypographyVariant.subtitle2) {
 		overrideCss {
-			margin(16.px)
+			margin(right = 8.px, bottom = 3.px)
 			color = status.color
 		}
 	}
 	
-	private fun RBuilder.dismissButton(order: Order) =
-			mIconButton(onClick = { onDismiss(order) }) { iconClear() }
+	private fun RBuilder.orderStatusSelect(order: Order) = mSelect(value = order.status.name,
+	                                                               onChange = { e, _ -> updateStatus(order, e.targetValue.toString()) }) {
+		Order.Status.values().forEach { orderStatusItem(it) }
+	}
 	
-	private fun RBuilder.products(order: Order) = orderedProductsView(orderedProducts = order.getOrderedProducts())
+	private fun RBuilder.orderStatusItem(status: Order.Status) = mMenuItem(value = status.name) {
+		mTypography(text = status.visibleName,
+		            variant = MTypographyVariant.subtitle2) {
+			css { color = status.color }
+		}
+	}
+	
+	private fun RBuilder.products(order: Order) = orderedProductsView(orderedProducts = order.getOrderedProducts(),
+	                                                                  details = true,
+	                                                                  horizontalPadding = 24.px)
 	
 	private fun Order.getOrderedProducts() = entries.map { it.getOrderedProduct() }
 	
 	private fun Order.Entry.getOrderedProduct() =
 			OrderedProduct.create(products.find { it.id == this.productId } ?: PLACEHOLDER_PRODUCT, quantity, parameters)
+	
+	private fun updateStatus(order: Order, statusName: String) =
+			Order.Status.getByName(statusName)?.let { onStatusUpdate(order, it) }
 }
 
-fun RBuilder.ordersTrackView(orders: List<Order>,
-                             products: List<Product>,
-                             onDismiss: (Order) -> Unit,
-                             onRefresh: () -> Unit) = child(OrdersTrackView::class) {
+fun RBuilder.ordersView(orders: List<Order>,
+                        products: List<Product>,
+                        onStatusUpdate: (Order, Order.Status) -> Unit,
+                        onRefresh: () -> Unit) = child(OrdersView::class) {
 	attrs.orders = orders
 	attrs.products = products
-	attrs.onDismiss = onDismiss
+	attrs.onStatusUpdate = onStatusUpdate
 	attrs.onRefresh = onRefresh
 }

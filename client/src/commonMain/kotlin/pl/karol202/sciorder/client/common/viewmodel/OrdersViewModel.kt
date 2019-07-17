@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.model.DEFAULT_FILTER
+import pl.karol202.sciorder.client.common.model.isLoggedAsAdmin
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
@@ -26,6 +27,7 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 	private val ordersResourceAsBroadcastChannel = ownerRepository.getOwnerFlow()
 													              .onEach { owner = it }
 													              .filterNotNull()
+													              .filter { it.isLoggedAsAdmin() }
 													              .map { orderRepository.getOrdersResource(it.id, it.hash) }
 													              .onEach { it.autoReloadIn(coroutineScope) }
 													              .onEach { ordersResource = it }

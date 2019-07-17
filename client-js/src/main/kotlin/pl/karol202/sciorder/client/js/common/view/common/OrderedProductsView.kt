@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.js.common.view.user
+package pl.karol202.sciorder.client.js.common.view.common
 
 import com.ccfraser.muirwik.components.MTypographyVariant
 import com.ccfraser.muirwik.components.list.mList
@@ -15,17 +15,15 @@ import kotlinx.css.px
 import materialui.icons.iconClear
 import materialui.icons.iconEdit
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.js.common.util.cssFlexBox
-import pl.karol202.sciorder.client.js.common.util.cssFlexItem
-import pl.karol202.sciorder.client.js.common.util.nullableProp
-import pl.karol202.sciorder.client.js.common.util.overrideCss
-import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import react.RBuilder
 import react.RProps
 import react.RState
 import styled.css
 import styled.styledDiv
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 class OrderedProductsView : View<OrderedProductsView.Props, RState>()
 {

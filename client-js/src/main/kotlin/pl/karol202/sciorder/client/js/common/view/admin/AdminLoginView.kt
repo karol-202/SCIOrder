@@ -1,22 +1,12 @@
 package pl.karol202.sciorder.client.js.common.view.admin
 
-import com.ccfraser.muirwik.components.MButtonVariant
-import com.ccfraser.muirwik.components.MColor
-import com.ccfraser.muirwik.components.MTypographyVariant
+import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.form.mFormControl
 import com.ccfraser.muirwik.components.input.MInputAdornmentPosition
 import com.ccfraser.muirwik.components.input.mInput
 import com.ccfraser.muirwik.components.input.mInputAdornment
 import com.ccfraser.muirwik.components.input.mInputLabel
-import com.ccfraser.muirwik.components.mButton
-import com.ccfraser.muirwik.components.mIconButton
-import com.ccfraser.muirwik.components.mTextField
-import com.ccfraser.muirwik.components.mTypography
-import com.ccfraser.muirwik.components.targetInputValue
-import kotlinx.css.Align
-import kotlinx.css.FlexDirection
-import kotlinx.css.marginBottom
-import kotlinx.css.px
+import kotlinx.css.*
 import kotlinx.html.InputType
 import materialui.icons.iconVisibility
 import materialui.icons.iconVisibilityOff
@@ -77,7 +67,7 @@ class AdminLoginView(props: Props) : View<AdminLoginView.Props, AdminLoginView.S
 	                                                   onChange = { setOwnerName(it.targetInputValue) })
 
 	private fun RBuilder.passwordTextField() = styledDiv {
-		css { marginBottom = 16.px }
+		css { margin(vertical = 16.px) }
 		
 		mFormControl(fullWidth = true) {
 			mInputLabel(caption = "Hasło", htmlFor = "input-password")

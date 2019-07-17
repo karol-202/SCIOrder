@@ -12,6 +12,7 @@ import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
+import pl.karol202.sciorder.client.js.common.view.common.orderedProductsView
 import pl.karol202.sciorder.common.Order
 import react.RBuilder
 import react.RProps

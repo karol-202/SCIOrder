@@ -8,6 +8,7 @@ import materialui.icons.iconArrowRight
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
+import pl.karol202.sciorder.client.js.common.view.common.orderedProductsView
 import react.RBuilder
 import react.RProps
 import react.RState
