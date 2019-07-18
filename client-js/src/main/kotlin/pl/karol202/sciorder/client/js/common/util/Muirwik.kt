@@ -9,11 +9,7 @@ import com.ccfraser.muirwik.components.dialog.mDialog
 import com.ccfraser.muirwik.components.mDivider
 import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions
-import kotlinx.css.Color
-import kotlinx.css.backgroundColor
-import kotlinx.css.borderBottomColor
-import kotlinx.css.color
-import kotlinx.css.rgba
+import kotlinx.css.*
 import react.RBuilder
 import styled.css
 import styled.styledDiv
@@ -37,7 +33,7 @@ fun RBuilder.themeTextField(textFieldColor: MColor,
 					MColor.secondary -> currentTheme.palette.secondary.main
 				})
 
-				descendants("label.Mui-focused") { color = colorValue }
+				descendants("label.Mui-focused") { not(".Mui-error") { color = colorValue } }
 				descendants(".MuiInput-underline:after") { borderBottomColor = colorValue }
 			}
 			handler()
