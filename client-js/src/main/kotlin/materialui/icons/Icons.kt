@@ -49,3 +49,8 @@ fun RBuilder.iconRefresh() = refreshClass { }
 private external val deleteModule: dynamic
 private val deleteClass: RClass<RProps> = deleteModule.default
 fun RBuilder.iconDelete() = deleteClass { }
+
+@JsModule("@material-ui/icons/ExpandMore")
+private external val expandMoreModule: dynamic
+private val expandMoreClass: RClass<RProps> = expandMoreModule.default
+fun RBuilder.iconExpandMore() = expandMoreClass { }
