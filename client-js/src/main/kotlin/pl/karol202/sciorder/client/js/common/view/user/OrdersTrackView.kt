@@ -78,7 +78,8 @@ class OrdersTrackView : View<OrdersTrackView.Props, RState>()
 	
 	private fun RBuilder.orders() = mList {
 		cssFlexBox(direction = FlexDirection.row,
-		           wrap = FlexWrap.wrap)
+		           wrap = FlexWrap.wrap,
+		           alignItems = Align.flexStart)
 		
 		overrideCss { padding(horizontal = 4.px) }
 		

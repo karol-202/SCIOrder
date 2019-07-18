@@ -1,41 +1,24 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
-import com.ccfraser.muirwik.components.MColor
-import com.ccfraser.muirwik.components.MTypographyVariant
+import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.MListItemAlignItems
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItem
-import com.ccfraser.muirwik.components.mButton
-import com.ccfraser.muirwik.components.mCheckbox
-import com.ccfraser.muirwik.components.mMenuItem
-import com.ccfraser.muirwik.components.mTextField
-import com.ccfraser.muirwik.components.mTextFieldSelect
-import com.ccfraser.muirwik.components.mTypography
-import com.ccfraser.muirwik.components.targetInputValue
-import com.ccfraser.muirwik.components.targetValue
 import kotlinext.js.jsObject
 import kotlinx.css.FlexDirection
 import kotlinx.css.margin
-import kotlinx.css.marginRight
-import kotlinx.css.marginTop
 import kotlinx.css.padding
 import kotlinx.css.px
 import kotlinx.html.InputType
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.model.create
-import pl.karol202.sciorder.client.js.common.util.cssFlexBox
-import pl.karol202.sciorder.client.js.common.util.cssFlexItem
-import pl.karol202.sciorder.client.js.common.util.nullableProp
-import pl.karol202.sciorder.client.js.common.util.overrideCss
-import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
-import react.RBuilder
-import react.RProps
-import react.RState
-import react.key
-import react.setState
+import react.*
 import styled.styledDiv
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrderView.State>(props)
 {
@@ -98,7 +81,7 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 
 	private fun RBuilder.quantityItem() = intItem(quantityAsParameter, state.quantity) { setQuantity(it) }
 
-	private fun RBuilder.textItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param) {
+	private fun RBuilder.textItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param, false) {
 		mTextField(label = "",
 		           value = value,
 		           onChange = { onUpdate(it.targetInputValue) }) {
@@ -116,7 +99,7 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 	                                convert: String.() -> Number?,
 	                                anyStep: Boolean,
 	                                value: String,
-	                                onUpdate: (String) -> Unit) = item(param) {
+	                                onUpdate: (String) -> Unit) = item(param, false) {
 		val error = value.takeIfValidNumber(param, convert) == null
 		val errorText = when
 		{
@@ -139,13 +122,13 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 		}
 	}
 
-	private fun RBuilder.booleanItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param) {
+	private fun RBuilder.booleanItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param, true) {
 		mCheckbox(primary = false,
 		          checked = value.toBoolean(),
 		          onChange = { _, checked -> onUpdate(checked.toString()) })
 	}
 
-	private fun RBuilder.enumItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param) {
+	private fun RBuilder.enumItem(param: Product.Parameter, value: String, onUpdate: (String) -> Unit) = item(param, false) {
 		mTextFieldSelect(label = "",
 		                 value = value,
 		                 onChange = { onUpdate(it.targetValue.toString()) }) {
@@ -157,15 +140,15 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 		}
 	}
 
-	private fun RBuilder.item(param: Product.Parameter, handler: RBuilder.() -> Unit) =
-			mListItem(alignItems = MListItemAlignItems.flexStart) {
+	private fun RBuilder.item(param: Product.Parameter, checkbox: Boolean, handler: RBuilder.() -> Unit) =
+			mListItem(alignItems = if(checkbox) MListItemAlignItems.center else MListItemAlignItems.flexStart) {
 				overrideCss { padding(horizontal = 24.px) }
 				
 				mTypography(param.name, variant = MTypographyVariant.body2) {
 					cssFlexItem(shrink = 0.0)
 					overrideCss {
-						marginTop = 24.px
-						marginRight = 24.px
+						if(checkbox) margin(right = 12.px)
+						else margin(right = 24.px, top = 24.px)
 					}
 				}
 				handler()

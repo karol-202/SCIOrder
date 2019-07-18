@@ -65,7 +65,7 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 	                                               products = state.products,
 	                                               filter = state.orderFilter,
 	                                               deleteEnabled = state.anyOrdersPresent,
-	                                               onDeleteAll = { showOrdersDeleteDialog() },
+	                                               onDeleteAll = this@AdminView::showOrdersDeleteDialog,
 	                                               onRefresh = this@AdminView::refreshOrders,
 	                                               onFilterToggle = ordersViewModel::toggleOrderFilter,
 	                                               onStatusUpdate = this@AdminView::updateOrderStatus)

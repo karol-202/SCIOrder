@@ -17,6 +17,7 @@ import materialui.icons.iconEdit
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
+import pl.karol202.sciorder.common.Product
 import react.RBuilder
 import react.RProps
 import react.RState
@@ -91,12 +92,23 @@ class OrderedProductsView : View<OrderedProductsView.Props, RState>()
 			}
 	
 	private fun RBuilder.productParams(orderedProduct: OrderedProduct) = mList {
-		orderedProduct.parameters.forEach { (name, value) -> productParam(name, value) }
+		orderedProduct.recoverParams().forEach { (param, value) -> productParam(param, value) }
 	}
 	
-	private fun RBuilder.productParam(paramName: String, value: String) = mListItem {
-		mTypography(text = "$paramName: $value",
+	private fun RBuilder.productParam(param: Product.Parameter, value: String) = mListItem {
+		mTypography(text = "${param.name}: ${param.formatValue(value)}",
 		            variant = MTypographyVariant.body2)
+	}
+	
+	private fun OrderedProduct.recoverParams() =
+			parameters.mapNotNull { (name, value) -> product.getParamByName(name)?.to(value) }.toMap()
+	
+	private fun Product.getParamByName(name: String) = parameters.singleOrNull { it.name == name }
+	
+	private fun Product.Parameter.formatValue(value: String) = when(type)
+	{
+		Product.Parameter.Type.BOOL -> if(value.toBoolean()) "Tak" else "Nie"
+		else -> value
 	}
 }
 

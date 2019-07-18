@@ -23,11 +23,7 @@ interface FakeDao
 
 	fun <T : IdProvider> Set<IdUniqueElement<T>>.update(element: IdUniqueElement<T>) = map { if(it.id == element.id) element else it }.toSet()
 
-	tailrec fun <T : IdProvider> Set<IdUniqueElement<T>>.update(element: List<IdUniqueElement<T>>): Set<IdUniqueElement<T>> =
-			if(element.isEmpty()) this
-			else
-			{
-				update(element.first())
-				update(element.drop(1))
-			}
+	tailrec fun <T : IdProvider> Set<IdUniqueElement<T>>.update(elements: List<IdUniqueElement<T>>): Set<IdUniqueElement<T>> =
+			if(elements.isEmpty()) this
+			else update(elements.first()).update(elements.drop(1))
 }
