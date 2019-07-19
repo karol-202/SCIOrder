@@ -1,15 +1,17 @@
 package pl.karol202.sciorder.client.js.common.view.admin
 
+import com.ccfraser.muirwik.components.card.mCard
 import com.ccfraser.muirwik.components.form.MLabelPlacement
 import com.ccfraser.muirwik.components.form.mFormControlLabel
+import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.mCheckbox
 import com.ccfraser.muirwik.components.mTextField
+import com.ccfraser.muirwik.components.mTypography
 import com.ccfraser.muirwik.components.targetInputValue
 import kotlinx.css.*
-import pl.karol202.sciorder.client.js.common.util.cssFlexBox
-import pl.karol202.sciorder.client.js.common.util.cssFlexItem
-import pl.karol202.sciorder.client.js.common.util.overrideCss
-import pl.karol202.sciorder.client.js.common.util.prop
+import materialui.icons.iconAdd
+import org.w3c.dom.events.Event
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
 import react.*
@@ -38,6 +40,7 @@ class ProductEditView(props: Props) : View<ProductEditView.Props, ProductEditVie
 			
 			nameTextField()
 			availabilityPanel()
+			parametersPanel()
 		}
 	}
 	
@@ -66,9 +69,34 @@ class ProductEditView(props: Props) : View<ProductEditView.Props, ProductEditVie
 		          onChange = { _, checked -> updateAvailability(checked) })
 	}!!
 	
+	private fun RBuilder.parametersPanel() = styledDiv {
+		mTypography(text = "Parametry")
+		parametersList()
+	}
+	
+	private fun RBuilder.parametersList() = mList {
+		product.parameters.forEach { parameterPanel(it) }
+		newParameterPanel()
+	}
+	
+	private fun RBuilder.parameterPanel(param: Product.Parameter) = mCard {
+		productParamEditView(param) { newParam, _ -> updateParameter(param, newParam) }
+	}
+	
+	private fun RBuilder.newParameterPanel() = mCard {
+		attrs.asDynamic().onClick = { e: Event -> addParameter(Product.Parameter("", Product.Parameter.Type.TEXT, Product.Parameter.Attributes())) }
+		iconAdd()
+		mTypography(text = "Nowy parametr")
+	}
+	
 	private fun updateName(name: String) = update(product.copy(name = name))
 	
 	private fun updateAvailability(availability: Boolean) = update(product.copy(available = availability))
+	
+	private fun updateParameter(oldParam: Product.Parameter, newParam: Product.Parameter) =
+			update(product.copy(parameters = product.parameters.replace(oldParam, newParam)))
+	
+	private fun addParameter(param: Product.Parameter) = update(product.copy(parameters = product.parameters + param))
 	
 	private fun update(product: Product) = onUpdate(product, product.isValid())
 	

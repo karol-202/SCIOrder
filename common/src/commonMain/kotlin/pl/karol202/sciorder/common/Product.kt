@@ -18,7 +18,12 @@ data class Product(val _id: String,
 	{
 		enum class Type
 		{
-			TEXT, INT, FLOAT, BOOL, ENUM
+			TEXT, INT, FLOAT, BOOL, ENUM;
+			
+			companion object
+			{
+				fun getByName(name: String) = values().find { it.name == name }
+			}
 		}
 
 		@Serializable
