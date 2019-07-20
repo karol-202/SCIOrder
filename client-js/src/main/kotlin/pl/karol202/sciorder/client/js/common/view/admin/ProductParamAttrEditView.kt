@@ -10,6 +10,7 @@ import materialui.icons.iconDelete
 import pl.karol202.sciorder.client.js.common.util.cssFlexItem
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
+import pl.karol202.sciorder.common.Product
 import pl.karol202.sciorder.common.Product.Parameter.Attributes
 import react.*
 
@@ -18,7 +19,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 	interface Props : RProps
 	{
 		var attrs: Attributes
-		var onUpdate: (Attributes, valid: Boolean) -> Unit
+		var onUpdate: (Attributes) -> Unit
 	}
 	
 	protected val attrs by prop { attrs }
@@ -36,7 +37,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		                                                          onChange = { updateDefaultValue(it.targetInputValue) })
 	}
 	
-	abstract class NumberView : ProductParamAttrEditView()
+	abstract class NumberView(private val type: Product.Parameter.Type) : ProductParamAttrEditView()
 	{
 		override fun RBuilder.render()
 		{
@@ -47,7 +48,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		
 		private fun RBuilder.defaultValueTextField(): ReactElement
 		{
-			val valid = attrs.defaultValue.isValidDefaultValue()
+			val valid = attrs.isDefaultValueValidFor(type)
 			return mTextField(label = "Domyślna wartość",
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
@@ -57,59 +58,28 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		
 		private fun RBuilder.minimalValueTextField(): ReactElement
 		{
-			val valid = attrs.minimalValue.isValidMinimalValue()
+			val valid = attrs.isMinimalValueValidFor(type)
 			return mTextField(label = "Minimalna wartość",
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
 			                  value = attrs.minimalValue?.toString(),
-			                  onChange = { updateMinimalValue(it.targetInputValue.toNumberOrNull()?.toFloat()) })
+			                  onChange = { updateMinimalValue(it.targetInputValue.toFloatOrNull()) })
 		}
 		
 		private fun RBuilder.maximalValueTextField(): ReactElement
 		{
-			val valid = attrs.maximalValue.isValidMaximalValue()
+			val valid = attrs.isMaximalValueValidFor(type)
 			return mTextField(label = "Maksymalna wartość",
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
 			                  value = attrs.minimalValue?.toString(),
-			                  onChange = { updateMaximalValue(it.targetInputValue.toNumberOrNull()?.toFloat()) })
+			                  onChange = { updateMaximalValue(it.targetInputValue.toFloatOrNull()) })
 		}
-		
-		override fun Attributes.isValid() =
-				defaultValue.isValidDefaultValue() && minimalValue.isValidMinimalValue() && maximalValue.isValidMaximalValue()
-		
-		private fun String?.isValidDefaultValue() = this == null || (isValidNumber() && toNumberOrNull()!!.toFloat().inRange())
-		
-		private fun Float?.isValidMinimalValue() = this == null || lesserThanMax()
-		
-		private fun Float?.isValidMaximalValue() = this == null || greaterThanMin()
-		
-		private fun String.isValidNumber() = toNumberOrNull() != null
-		
-		private fun Float.inRange(): Boolean
-		{
-			val minValue = attrs.minimalValue ?: Float.MIN_VALUE
-			val maxValue = attrs.maximalValue ?: Float.MAX_VALUE
-			val range = minValue..maxValue
-			return this in range
-		}
-		
-		private fun Float.lesserThanMax() = this < attrs.maximalValue ?: Float.MAX_VALUE
-		
-		private fun Float.greaterThanMin() = this > attrs.minimalValue ?: Float.MIN_VALUE
-		
-		protected abstract fun String.toNumberOrNull(): Number?
 	}
 	
-	class IntView : NumberView()
-	{
-		override fun String.toNumberOrNull() = toIntOrNull()
-	}
+	class IntView : NumberView(Product.Parameter.Type.INT)
 	
-	class FloatView : NumberView()
-	{
-		override fun String.toNumberOrNull() = toFloatOrNull()
-	}
+	class FloatView : NumberView(Product.Parameter.Type.FLOAT)
 	
 	class BooleanView : ProductParamAttrEditView()
 	{
@@ -162,7 +132,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		
 		private fun RBuilder.valueTextField(value: String, onChange: (String) -> Unit): ReactElement
 		{
-			val valid = enumValues.areValidEnumValues()
+			val valid = attrs.areEnumValuesValidFor(Product.Parameter.Type.ENUM)
 			return mTextField(label = "",
 			                  helperText = if(!valid) "Podaj wartość" else "",
 			                  error = !valid,
@@ -188,10 +158,6 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			val wasTheOnlyOne = enumValues.none { it == value }
 			if(wasTheOnlyOne) updateDefaultValue(null)
 		}
-		
-		override fun Attributes.isValid() = enumValues.areValidEnumValues()
-		
-		private fun List<String>?.areValidEnumValues() = this != null && this.isNotEmpty()
 	}
 	
 	protected fun updateDefaultValue(defaultValue: String?) = update(attrs.copy(defaultValue = defaultValue))
@@ -202,34 +168,32 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 	
 	protected fun updateEnumValues(enumValues: List<String>?) = update(attrs.copy(enumValues = enumValues))
 	
-	private fun update(attrs: Attributes) = onUpdate(attrs, attrs.isValid())
-	
-	protected open fun Attributes.isValid() = true
+	private fun update(attrs: Attributes) = onUpdate(attrs)
 }
 
 fun RBuilder.productParamAttrTextEditView(attrs: Attributes,
-                                          onUpdate: (Attributes, valid: Boolean) -> Unit) =
+                                          onUpdate: (Attributes) -> Unit) =
 		productParamAttrEditView<ProductParamAttrEditView.TextView>(attrs, onUpdate)
 
 fun RBuilder.productParamAttrIntEditView(attrs: Attributes,
-                                         onUpdate: (Attributes, valid: Boolean) -> Unit) =
+                                         onUpdate: (Attributes) -> Unit) =
 		productParamAttrEditView<ProductParamAttrEditView.IntView>(attrs, onUpdate)
 
 fun RBuilder.productParamAttrFloatEditView(attrs: Attributes,
-                                           onUpdate: (Attributes, valid: Boolean) -> Unit) =
+                                           onUpdate: (Attributes) -> Unit) =
 		productParamAttrEditView<ProductParamAttrEditView.FloatView>(attrs, onUpdate)
 
 fun RBuilder.productParamAttrBooleanEditView(attrs: Attributes,
-                                             onUpdate: (Attributes, valid: Boolean) -> Unit) =
+                                             onUpdate: (Attributes) -> Unit) =
 		productParamAttrEditView<ProductParamAttrEditView.BooleanView>(attrs, onUpdate)
 
 fun RBuilder.productParamAttrEnumEditView(attrs: Attributes,
-                                          onUpdate: (Attributes, valid: Boolean) -> Unit) =
+                                          onUpdate: (Attributes) -> Unit) =
 		productParamAttrEditView<ProductParamAttrEditView.EnumView>(attrs, onUpdate)
 
 private inline fun <reified V : ProductParamAttrEditView> RBuilder.productParamAttrEditView(
 		attrs: Attributes,
-		noinline onUpdate: (Attributes, valid: Boolean) -> Unit
+		noinline onUpdate: (Attributes) -> Unit
 ) = child(V::class) {
 	this.attrs.attrs = attrs
 	this.attrs.onUpdate = onUpdate

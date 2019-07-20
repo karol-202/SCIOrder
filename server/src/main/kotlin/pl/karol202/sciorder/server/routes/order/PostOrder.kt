@@ -7,7 +7,7 @@ import io.ktor.routing.post
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.server.database.OrderDao
 import pl.karol202.sciorder.server.database.ProductDao
-import pl.karol202.sciorder.server.extensions.isValid
+import pl.karol202.sciorder.server.model.isValid
 import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.created
 import pl.karol202.sciorder.server.util.newStringId

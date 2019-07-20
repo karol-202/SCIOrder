@@ -13,30 +13,23 @@ import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
-import react.*
+import react.RBuilder
+import react.RProps
+import react.RState
+import react.ReactElement
 import styled.css
 import styled.styledDiv
 
-class ProductParamEditView : View<ProductParamEditView.Props, ProductParamEditView.State>()
+class ProductParamEditView : View<ProductParamEditView.Props, RState>()
 {
 	interface Props : RProps
 	{
 		var parameter: Product.Parameter
-		var onUpdate: (Product.Parameter, valid: Boolean) -> Unit
-	}
-	
-	interface State : RState
-	{
-		var attributesValidity: Boolean
+		var onUpdate: (Product.Parameter) -> Unit
 	}
 	
 	private val parameter by prop { parameter }
 	private val onUpdate by prop { onUpdate }
-	
-	init
-	{
-		state.attributesValidity = true
-	}
 	
 	override fun RBuilder.render()
 	{
@@ -53,7 +46,7 @@ class ProductParamEditView : View<ProductParamEditView.Props, ProductParamEditVi
 	
 	private fun RBuilder.nameTextField(): ReactElement
 	{
-		val valid = parameter.name.isNotBlank()
+		val valid = parameter.isNameValid
 		return mTextField(label = "Nazwa parametru",
 		                  helperText = if(!valid) "Podaj nazwę" else null,
 		                  error = !valid,
@@ -77,26 +70,20 @@ class ProductParamEditView : View<ProductParamEditView.Props, ProductParamEditVi
 		Product.Parameter.Type.FLOAT -> ::productParamAttrFloatEditView
 		Product.Parameter.Type.BOOL -> ::productParamAttrBooleanEditView
 		Product.Parameter.Type.ENUM -> ::productParamAttrEnumEditView
-	}(parameter.attributes) { attrs, valid -> updateAttrs(attrs, valid) }
+	}(parameter.attributes) { updateAttrs(it) }
 	
 	private fun updateName(name: String) = update(parameter.copy(name = name))
 	
 	private fun updateType(typeName: String) =
 			Product.Parameter.Type.getByName(typeName)?.let { update(parameter.copy(type = it)) }
 	
-	private fun updateAttrs(attrs: Product.Parameter.Attributes, valid: Boolean)
-	{
-		update(parameter.copy(attributes = attrs))
-		setState { attributesValidity = valid }
-	}
+	private fun updateAttrs(attrs: Product.Parameter.Attributes) = update(parameter.copy(attributes = attrs))
 	
-	private fun update(param: Product.Parameter) = onUpdate(param, param.isValid())
-	
-	private fun Product.Parameter.isValid() = name.isNotBlank()
+	private fun update(param: Product.Parameter) = onUpdate(param)
 }
 
 fun RBuilder.productParamEditView(parameter: Product.Parameter,
-                                  onUpdate: (Product.Parameter, valid: Boolean) -> Unit) = child(ProductParamEditView::class) {
+                                  onUpdate: (Product.Parameter) -> Unit) = child(ProductParamEditView::class) {
 	attrs.parameter = parameter
 	attrs.onUpdate = onUpdate
 }

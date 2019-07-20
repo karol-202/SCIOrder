@@ -31,7 +31,6 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 	interface State : RState
 	{
 		var editedProducts: Map<String, Product>
-		var productsValidity: Map<String, Boolean>
 	}
 	
 	private val products by prop { products }
@@ -42,7 +41,6 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 	init
 	{
 		state.editedProducts = emptyMap()
-		state.productsValidity = emptyMap()
 	}
 	
 	override fun RBuilder.render()
@@ -79,7 +77,7 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 		overrideCss { paddingBottom = 0.px }
 		
 		productEditView(product = getEditedOrDefaultProduct(product),
-		                onUpdate = { product, valid -> updateProduct(product, valid) })
+		                onUpdate = { updateProduct(product) })
 	}
 	
 	private fun RBuilder.actionsPanel(product: Product) = mExpansionPanelActions {
@@ -90,7 +88,7 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 		
 		mButton(caption = "Zatwierdź",
 		        color = MColor.secondary,
-		        disabled = !isProductEdited(product) || !isProductValid(product),
+		        disabled = !isProductEdited(product) || !getEditedOrDefaultProduct(product).isValid,
 		        onClick = {
 			        applyChanges(product)
 			        cancelChanges(product)
@@ -99,23 +97,15 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 		}
 	}
 	
-	private fun getEditedOrDefaultProduct(product: Product) = getEditedProduct(product) ?: product
-	
 	private fun isProductEdited(product: Product) = getEditedProduct(product) != null
+	
+	private fun getEditedOrDefaultProduct(product: Product) = getEditedProduct(product) ?: product
 	
 	private fun getEditedProduct(product: Product) = state.editedProducts[product.id]
 	
-	private fun isProductValid(product: Product) = state.productsValidity[product.id] ?: true
+	private fun updateProduct(product: Product) = setState { editedProducts += product.id to product }
 	
-	private fun updateProduct(product: Product, valid: Boolean) = setState {
-		editedProducts += product.id to product
-		productsValidity += product.id to valid
-	}
-	
-	private fun cancelChanges(product: Product) = setState {
-		editedProducts -= product.id
-		productsValidity -= product.id
-	}
+	private fun cancelChanges(product: Product) = setState { editedProducts -= product.id }
 	
 	private fun applyChanges(product: Product) = getEditedProduct(product)?.let(onChange)
 }

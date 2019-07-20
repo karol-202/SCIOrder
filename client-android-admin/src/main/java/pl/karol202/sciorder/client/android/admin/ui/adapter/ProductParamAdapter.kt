@@ -10,6 +10,7 @@ import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
 import pl.karol202.sciorder.client.android.common.util.randomUUIDString
+import pl.karol202.sciorder.client.common.model.NEW_PARAMETER
 import pl.karol202.sciorder.common.Product
 
 class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parameter>) -> Unit) :
@@ -140,7 +141,7 @@ class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parame
 
 	private fun addNewParam()
 	{
-		val newItem = Product.Parameter("", Product.Parameter.Type.TEXT, Product.Parameter.Attributes()).withId()
+		val newItem = Product.Parameter.NEW_PARAMETER.withId()
 		items = items.dropLast(1) + newItem + ParameterWithId.NULL
 	}
 

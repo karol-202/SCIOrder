@@ -10,7 +10,7 @@ import com.ccfraser.muirwik.components.mTypography
 import com.ccfraser.muirwik.components.targetInputValue
 import kotlinx.css.*
 import materialui.icons.iconAdd
-import org.w3c.dom.events.Event
+import pl.karol202.sciorder.client.common.model.NEW_PARAMETER
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
@@ -18,15 +18,13 @@ import react.*
 import styled.css
 import styled.styledDiv
 
-class ProductEditView(props: Props) : View<ProductEditView.Props, ProductEditView.State>(props)
+class ProductEditView(props: Props) : View<ProductEditView.Props, RState>(props)
 {
 	interface Props : RProps
 	{
 		var product: Product
-		var onUpdate: (Product, valid: Boolean) -> Unit
+		var onUpdate: (Product) -> Unit
 	}
-	
-	interface State : RState
 	
 	private val product by prop { product }
 	private val onUpdate by prop { onUpdate }
@@ -46,7 +44,7 @@ class ProductEditView(props: Props) : View<ProductEditView.Props, ProductEditVie
 	
 	private fun RBuilder.nameTextField(): ReactElement
 	{
-		val valid = product.name.isNotBlank()
+		val valid = product.isNameValid
 		return mTextField(label = "Nazwa",
 		                  helperText = if(!valid) "Podaj nazwę" else null,
 		                  error = !valid,
@@ -80,11 +78,11 @@ class ProductEditView(props: Props) : View<ProductEditView.Props, ProductEditVie
 	}
 	
 	private fun RBuilder.parameterPanel(param: Product.Parameter) = mCard {
-		productParamEditView(param) { newParam, _ -> updateParameter(param, newParam) }
+		productParamEditView(param) { newParam -> updateParameter(param, newParam) }
 	}
 	
 	private fun RBuilder.newParameterPanel() = mCard {
-		attrs.asDynamic().onClick = { e: Event -> addParameter(Product.Parameter("", Product.Parameter.Type.TEXT, Product.Parameter.Attributes())) }
+		attrs.asDynamic().onClick = { addParameter(Product.Parameter.NEW_PARAMETER) }
 		iconAdd()
 		mTypography(text = "Nowy parametr")
 	}
@@ -98,15 +96,11 @@ class ProductEditView(props: Props) : View<ProductEditView.Props, ProductEditVie
 	
 	private fun addParameter(param: Product.Parameter) = update(product.copy(parameters = product.parameters + param))
 	
-	private fun update(product: Product) = onUpdate(product, product.isValid())
-	
-	private fun Product.isValid() = name.isNotBlank() && parameters.all { it.isValid() }
-	
-	private fun Product.Parameter.isValid() = name.isNotBlank()
+	private fun update(product: Product) = onUpdate(product)
 }
 
 fun RBuilder.productEditView(product: Product,
-                             onUpdate: (Product, valid: Boolean) -> Unit) = child(ProductEditView::class) {
+                             onUpdate: (Product) -> Unit) = child(ProductEditView::class) {
 	attrs.product = product
 	attrs.onUpdate = onUpdate
 }
