@@ -1,9 +1,9 @@
 import com.android.build.gradle.LibraryExtension
 
 plugins {
-    id(Plugins.ANDROID_LIBRARY) version Versions.ANDROID_BUILD_TOOLS apply false
-    id(Plugins.KOTLIN_MULTIPLATFORM) version Versions.KOTLIN
-    id(Plugins.KOTLINX_SERIALIZATION) version Versions.KOTLIN
+    id(Plugins.ANDROID_LIBRARY) apply false
+    id(Plugins.KOTLIN_MULTIPLATFORM)
+    id(Plugins.KOTLINX_SERIALIZATION)
 }
 
 val includeAndroid by project.booleanProperties

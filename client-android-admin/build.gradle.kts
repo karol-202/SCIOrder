@@ -1,9 +1,9 @@
 plugins {
-    id(Plugins.ANDROID_APP) version Versions.ANDROID_BUILD_TOOLS
-    id(Plugins.KOTLIN_ANDROID) version Versions.KOTLIN
-    id(Plugins.KOTLIN_KAPT) version Versions.KOTLIN
-    id(Plugins.ANDROID_KTX) version Versions.KOTLIN
-    id(Plugins.ANDROID_NAVIGATION) version Versions.ANDROID_NAVIGATION
+    id(Plugins.ANDROID_APP)
+    id(Plugins.KOTLIN_ANDROID)
+    id(Plugins.KOTLIN_KAPT)
+    id(Plugins.ANDROID_KTX)
+    id(Plugins.ANDROID_NAVIGATION)
 }
 
 android {

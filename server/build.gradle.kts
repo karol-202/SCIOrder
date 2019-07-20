@@ -2,8 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id(Plugins.KOTLIN_JVM) version Versions.KOTLIN
-    id(Plugins.SHADOW) version Versions.SHADOW
+    id(Plugins.KOTLIN_JVM)
+    id(Plugins.SHADOW)
     id(Plugins.APPLICATION)
 }
 

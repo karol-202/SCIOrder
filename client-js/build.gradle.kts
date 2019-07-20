@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinJsDce
 
 plugins {
-    id(Plugins.KOTLIN_JS) version Versions.KOTLIN
-    id(Plugins.KOTLIN_FRONTEND) version Versions.KOTLIN_FRONTEND
-    id(Plugins.KOTLIN_DCE_JS) version Versions.KOTLIN
-    id(Plugins.KOTLINX_SERIALIZATION) version Versions.KOTLIN
+    id(Plugins.KOTLIN_JS)
+    id(Plugins.KOTLIN_FRONTEND)
+    id(Plugins.KOTLIN_DCE_JS)
+    id(Plugins.KOTLINX_SERIALIZATION)
 }
 
 val devMode by project.booleanProperties

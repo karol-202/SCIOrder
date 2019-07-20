@@ -1,8 +1,8 @@
 plugins {
-    id(Plugins.ANDROID_LIBRARY) version Versions.ANDROID_BUILD_TOOLS
-    id(Plugins.KOTLIN_ANDROID) version Versions.KOTLIN
-	id(Plugins.KOTLIN_KAPT) version Versions.KOTLIN
-	id(Plugins.ANDROID_KTX) version Versions.KOTLIN
+    id(Plugins.ANDROID_LIBRARY)
+    id(Plugins.KOTLIN_ANDROID)
+	id(Plugins.KOTLIN_KAPT)
+	id(Plugins.ANDROID_KTX)
 }
 
 android {

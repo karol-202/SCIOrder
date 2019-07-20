@@ -22,6 +22,13 @@ abstract class LocalDao<T : Any>(private val storageId: String,
 		fun noValue(): Nothing = throw NoValueException()
 	}
 	
+	companion object
+	{
+		const val STORAGE_OWNER = "owner"
+		const val STORAGE_ORDERS = "orders"
+		const val STORAGE_PRODUCTS = "products"
+	}
+	
 	private var updateListeners = listOf<(T) -> Unit>()
 	private var loaded = false
 	private var data = initialData
@@ -59,9 +66,9 @@ abstract class LocalDao<T : Any>(private val storageId: String,
 
 abstract class NullableLocalDao<T : Any>(storageId: String,
                                          serializer: KSerializer<T>,
-                                         initialData: T?) : LocalDao<Nullable<T>>(storageId,
-                                                                                 Nullable.serializer(serializer),
-                                                                                 Nullable(initialData))
+                                         initialData: T?) : LocalDao<Nullable<T>>(storageId, 
+                                                                                  Nullable.serializer(serializer), 
+                                                                                  Nullable(initialData))
 {
 	@Serializable
 	class Nullable<T>(val value: T? = null)

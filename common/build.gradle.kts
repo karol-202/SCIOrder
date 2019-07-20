@@ -1,8 +1,6 @@
 plugins {
-    // Adding Android to classpath surprisingly removes error related to kotlinNodeJs extension
-    id(Plugins.ANDROID_LIBRARY) version Versions.ANDROID_BUILD_TOOLS apply false
-    id(Plugins.KOTLIN_MULTIPLATFORM) version Versions.KOTLIN
-	id(Plugins.KOTLINX_SERIALIZATION) version Versions.KOTLIN
+    id(Plugins.KOTLIN_MULTIPLATFORM)
+	id(Plugins.KOTLINX_SERIALIZATION)
 }
 
 kotlin {

@@ -6,7 +6,7 @@ import pl.karol202.sciorder.client.common.model.local.OrderDao
 import pl.karol202.sciorder.client.js.common.model.local.FakeDao.IdUniqueElement
 import pl.karol202.sciorder.common.Order
 
-class LocalOrderDao : LocalDao<Set<IdUniqueElement<Order>>>(LocalStorage.STORAGE_ORDERS,
+class LocalOrderDao : LocalDao<Set<IdUniqueElement<Order>>>(STORAGE_ORDERS,
                                                             IdUniqueElement.serializer(Order.serializer()).set,
                                                             emptySet()),
                       OrderDao, FakeDao
