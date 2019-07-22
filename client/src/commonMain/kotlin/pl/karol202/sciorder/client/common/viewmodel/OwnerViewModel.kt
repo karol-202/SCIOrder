@@ -1,16 +1,23 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.sha1
+import pl.karol202.sciorder.common.Owner
 
 abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : CoroutineViewModel()
 {
 	enum class Error
 	{
-		NOT_FOUND, NAME_BUSY, OTHER
+		NOT_FOUND, NAME_BUSY, NAME_INVALID, PASSWORD_TOO_SHORT, OTHER
+	}
+	
+	companion object
+	{
+		private const val MIN_PASSWORD_LENGTH = 3
 	}
 
 	protected val ownerFlow = ownerRepository.getOwnerFlow()
@@ -22,10 +29,22 @@ abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : Co
 	}
 
 	fun register(name: String, password: String) = launch {
-		ownerRepository.register(name, password.sha1()).handleResponse()
+		val owner = Owner.create(name, password.sha1())
+		when
+		{
+			!owner.isNameValid -> broadcastError(Error.NAME_INVALID)
+			password.length < MIN_PASSWORD_LENGTH -> broadcastError(Error.PASSWORD_TOO_SHORT)
+			owner.isValid -> ownerRepository.register(owner).handleResponse()
+			else -> throw IllegalStateException()
+		}
 	}
 
-	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { errorEventBroadcastChannel.offer(Event(it.toError())) }
+	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { broadcastError(it.toError()) }
+	
+	private fun broadcastError(error: Error)
+	{
+		errorEventBroadcastChannel.offer(Event(error))
+	}
 
 	private fun ApiResponse.Error.toError() = when(type)
 	{

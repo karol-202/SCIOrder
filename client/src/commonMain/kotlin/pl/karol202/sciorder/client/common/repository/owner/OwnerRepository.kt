@@ -10,7 +10,7 @@ interface OwnerRepository
 
 	suspend fun login(name: String, hash: String?): ApiResponse<Owner>
 
-	suspend fun register(name: String, hash: String): ApiResponse<Owner>
+	suspend fun register(owner: Owner): ApiResponse<Owner>
 
 	suspend fun logout()
 }

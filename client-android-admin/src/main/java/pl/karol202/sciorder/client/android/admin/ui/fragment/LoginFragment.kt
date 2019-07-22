@@ -11,8 +11,7 @@ import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
-import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel.Error.NAME_BUSY
-import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel.Error.NOT_FOUND
+import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel.Error.*
 
 class LoginFragment : InflatedFragment()
 {
@@ -53,6 +52,8 @@ class LoginFragment : InflatedFragment()
 				{
 					NOT_FOUND -> showSnackbar(R.string.text_login_error_not_found)
 					NAME_BUSY -> showSnackbar(R.string.text_login_error_name_busy)
+					NAME_INVALID -> showSnackbar(R.string.text_login_error_name_invalid)
+					PASSWORD_TOO_SHORT -> showSnackbar(R.string.text_login_error_password_too_short)
 					else -> showSnackbar(R.string.text_login_error)
 				}
 			}

@@ -61,10 +61,12 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 	{
 		val message = when(state.lastError)
 		{
+			null -> ""
 			OwnerViewModel.Error.NOT_FOUND -> "Dane nieprawidłowe"
 			OwnerViewModel.Error.NAME_BUSY -> "Nazwa zajęta"
-			OwnerViewModel.Error.OTHER -> "Błąd logowania"
-			null -> ""
+			OwnerViewModel.Error.NAME_INVALID -> "Nazwa za krótka"
+			OwnerViewModel.Error.PASSWORD_TOO_SHORT -> "Hasło za krótkie"
+			else -> "Błąd logowania"
 		}
 		return mSnackbar(message = message,
 		                 autoHideDuration = 3000,
