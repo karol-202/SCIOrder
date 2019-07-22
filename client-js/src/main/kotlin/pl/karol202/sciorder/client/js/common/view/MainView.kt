@@ -2,7 +2,6 @@ package pl.karol202.sciorder.client.js.common.view
 
 import com.ccfraser.muirwik.components.*
 import kotlinx.css.*
-import materialui.icons.iconLogout
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.admin.adminLoginView
 import pl.karol202.sciorder.client.js.common.view.admin.adminView

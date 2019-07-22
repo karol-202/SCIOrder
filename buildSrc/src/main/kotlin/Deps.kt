@@ -68,7 +68,7 @@ object Deps
 	const val STYLED_KOTLIN = "org.jetbrains:kotlin-styled:${Versions.STYLED_KOTLIN}"
 	const val EXTENSIONS_JS = "org.jetbrains:kotlin-extensions:${Versions.EXTENSIONS_JS}"
 	//const val MUIRWIK = "com.ccfraser.muirwik:muirwik-components:${Versions.MUIRWIK}"
-	const val MUIRWIK = "com.github.karol-202:muirwik:07a1b01fc1"
+	const val MUIRWIK = "com.github.karol-202:muirwik:e35fe3a392"
 	const val TEXT_ENCODING = "text-encoding"
 	const val SHA1 = "sha1"
 

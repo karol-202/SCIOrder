@@ -15,11 +15,6 @@ private external val visibilityOffModule: dynamic
 private val visibilityOffClass: RClass<RProps> = visibilityOffModule.default
 fun RBuilder.iconVisibilityOff() = visibilityOffClass { }
 
-@JsModule("@material-ui/icons/ExitToApp")
-private external val logoutModule: dynamic
-private val logoutClass: RClass<RProps> = logoutModule.default
-fun RBuilder.iconLogout() = logoutClass { }
-
 @JsModule("@material-ui/icons/Clear")
 private external val clearModule: dynamic
 private val clearClass: RClass<RProps> = clearModule.default
