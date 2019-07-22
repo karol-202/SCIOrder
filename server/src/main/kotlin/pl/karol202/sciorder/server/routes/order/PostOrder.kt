@@ -14,12 +14,12 @@ import pl.karol202.sciorder.server.util.newStringId
 
 fun Route.postOrder(productDao: ProductDao, orderDao: OrderDao) = post {
 	val ownerId = call.parameters["ownerId"] ?: return@post badRequest()
-	val order = call.receive<Order>().override(ownerId)
+	val order = call.receive<Order>().overwrite(ownerId)
 	if(!order.isValid(productDao)) return@post badRequest()
 	orderDao.insertOrder(order)
 	created(order)
 }
 
-private fun Order.override(ownerId: String) = copy(_id = newStringId<Order>(),
-                                                   ownerId = ownerId,
-                                                   status = Order.Status.WAITING)
+private fun Order.overwrite(ownerId: String) = copy(_id = newStringId<Order>(),
+                                                    ownerId = ownerId,
+                                                    status = Order.Status.WAITING)

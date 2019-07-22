@@ -9,6 +9,8 @@ import materialui.icons.iconAdd
 import materialui.icons.iconDelete
 import pl.karol202.sciorder.client.js.common.util.cssFlexItem
 import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.util.removeIndex
+import pl.karol202.sciorder.client.js.common.util.replaceIndex
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
 import pl.karol202.sciorder.common.Product.Parameter.Attributes
@@ -150,11 +152,11 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		private fun addValue(value: String) = updateEnumValues(enumValues + value)
 		
 		private fun updateValue(id: Int, value: String) =
-				updateEnumValues(enumValues.mapIndexed { i, v -> if(i == id) value else v })
+				updateEnumValues(enumValues.replaceIndex(id, value))
 		
 		private fun deleteValue(id: Int, value: String)
 		{
-			updateEnumValues(enumValues.mapIndexedNotNull { i, v -> if(i != id) v else null })
+			updateEnumValues(enumValues.removeIndex(id))
 			val wasTheOnlyOne = enumValues.none { it == value }
 			if(wasTheOnlyOne) updateDefaultValue(null)
 		}

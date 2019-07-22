@@ -31,6 +31,9 @@
               android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.ProductEditFragment"
               android:label="@string/fragment_product_edit">
 
-        <argument android:name="productId" app:argType="string" app:nullable="true"/>
+        <argument android:name="product"
+                  app:argType="pl.karol202.sciorder.common.Product"
+                  app:nullable="true"
+                  android:defaultValue="@null"/>
     </fragment>
 </navigation>

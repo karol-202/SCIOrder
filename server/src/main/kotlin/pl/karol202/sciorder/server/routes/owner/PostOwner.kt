@@ -11,9 +11,9 @@ import pl.karol202.sciorder.server.util.created
 import pl.karol202.sciorder.server.util.newStringId
 
 fun Route.postOwner(ownerDao: OwnerDao) = post {
-	val owner = call.receive<Owner>().override()
+	val owner = call.receive<Owner>().overwrite()
 	val success = ownerDao.insertOwner(owner)
 	if(success) created(owner) else conflict()
 }
 
-private fun Owner.override() = copy(_id = newStringId<Owner>())
+private fun Owner.overwrite() = copy(_id = newStringId<Owner>())

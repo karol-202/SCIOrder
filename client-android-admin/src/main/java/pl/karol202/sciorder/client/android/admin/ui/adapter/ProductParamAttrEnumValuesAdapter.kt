@@ -10,7 +10,7 @@ import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 
 class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
-                                        private val valuesUpdateListener: (values: List<String>, default: String?) -> Unit) :
+                                        private val onValuesUpdate: (values: List<String>, default: String?) -> Unit) :
 		DynamicAdapter<ProductParamAttrEnumValuesAdapter.EnumEntry?>()
 {
 	data class EnumEntry(val id: String,
@@ -67,7 +67,7 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 		set(value)
 		{
 			items = items.map { it?.copy(selected = it == value) }
-			invokeUpdateListener()
+			onValuesUpdate()
 		}
 	var selection: String?
 		get() = _selection?.value
@@ -98,14 +98,14 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 	private fun addNewValue(item: EnumEntry)
 	{
 		items = items.dropLast(1) + item + EnumEntry.NULL
-		invokeUpdateListener()
+		onValuesUpdate()
 	}
 
 	private fun removeValue(item: EnumEntry)
 	{
 		items = items - item
-		invokeUpdateListener()
+		onValuesUpdate()
 	}
 
-	private fun invokeUpdateListener() = valuesUpdateListener(values, _selection?.value)
+	private fun onValuesUpdate() = onValuesUpdate(values, selection)
 }

@@ -69,10 +69,8 @@ class ProductsFragment : InflatedFragment()
 				if(it == FAILURE) showSnackbar(R.string.text_update_error)
 			}
 
-	private fun navigateToProductEditFragment(product: Product?)
-	{
-		navController.navigate(MainFragmentDirections.actionMainFragmentToProductEditFragment(product?.id))
-	}
+	private fun navigateToProductEditFragment(product: Product?) =
+			navController.navigate(MainFragmentDirections.actionMainFragmentToProductEditFragment(product))
 
 	private fun showProductRemoveDialog(product: Product)
 	{

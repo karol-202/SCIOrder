@@ -43,7 +43,7 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 	}
 	protected val loadingFlow = ordersResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }
 	protected val loadingErrorEventFlow = ordersResourceAsBroadcastChannel.asFlow()
-																		  .mapNotNull {if(it is Resource.State.Failure) Event(Unit) else null }
+																		  .mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
 
 	protected val updateErrorEventBroadcastChannel = ConflatedBroadcastChannel<Event<Unit>>()
 

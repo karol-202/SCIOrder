@@ -12,11 +12,10 @@ import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithout
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
-import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.common.Product
 
 class ProductParamAttrAdapter(private val attrs: List<Attr>,
-                              private val attrsUpdateListener: (Product.Parameter.Attributes) -> Unit) :
+                              private val onAttrsUpdate: (Product.Parameter.Attributes) -> Unit) :
 		StaticAdapter<ProductParamAttrAdapter.Attr>(attrs)
 {
 	sealed class Attr(val viewType: Int)
@@ -124,8 +123,6 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 					attributes.copy(enumValues = values, defaultValue = defaultValue)
 		}
 
-		val id = randomUUIDString()
-
 		abstract fun applyTo(attributes: Product.Parameter.Attributes): Product.Parameter.Attributes
 	}
 
@@ -173,7 +170,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 		private fun setDefaultValue(value: String?)
 		{
 			item?.defaultAsString = value?.takeIf { it.isNotBlank() }
-			onAttrsUpdated()
+			onAttrsUpdate()
 		}
 	}
 
@@ -190,7 +187,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 		private fun setDefaultValue(item: Attr.DefaultValue.Bool, value: Boolean)
 		{
 			item.default = value
-			onAttrsUpdated()
+			onAttrsUpdate()
 		}
 	}
 
@@ -219,13 +216,13 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 		private fun setMinimum(minimum: String?)
 		{
 			item?.minimumAsString = minimum
-			onAttrsUpdated()
+			onAttrsUpdate()
 		}
 
 		private fun setMaximum(maximum: String?)
 		{
 			item?.maximumAsString = maximum
-			onAttrsUpdated()
+			onAttrsUpdate()
 		}
 	}
 
@@ -254,7 +251,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 		{
 			item?.values = values
 			item?.defaultValue = default
-			onAttrsUpdated()
+			onAttrsUpdate()
 		}
 	}
 
@@ -278,12 +275,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 
 	override fun getItemViewType(position: Int) = getItem(position).viewType
 
-	private fun onAttrsUpdated() = attrsUpdateListener(createParamAttrs())
+	private fun onAttrsUpdate() = onAttrsUpdate(createParamAttrs())
 
-	private fun createParamAttrs(): Product.Parameter.Attributes
-	{
-		var attributes = Product.Parameter.Attributes()
-		attrs.forEach { attributes = it.applyTo(attributes) }
-		return attributes
-	}
+	private fun createParamAttrs() = attrs.fold(Product.Parameter.Attributes()) { attrs, attr -> attr.applyTo(attrs) }
 }

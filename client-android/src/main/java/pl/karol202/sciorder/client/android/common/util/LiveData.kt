@@ -30,8 +30,6 @@ private class FlowLiveData<T>(private val flow: Flow<T>,
 
 // LiveData creation
 
-fun <T> MutableLiveData(initialValue: T) = androidx.lifecycle.MutableLiveData<T>().apply { value = initialValue }
-
 fun <T> Flow<T>.asLiveData(coroutineScope: CoroutineScope): LiveData<T> = FlowLiveData(this, coroutineScope)
 
 // LiveData observing
@@ -45,19 +43,3 @@ fun <T : Any> LiveData<out T?>.observeNonNull(lifecycleOwner: LifecycleOwner, ob
 
 fun <T> LiveData<Event<T>>.observeEvent(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) =
 		observe(lifecycleOwner) { it?.getIfNotConsumed()?.let(observer) }
-
-// Waits for first non-null value and then stops observing
-fun <T : Any> LiveData<out T?>.observeOnceNonNull(observer: (T) -> Unit) = apply {
-	DisposableObserver(this) { value -> if(value != null) true.also { observer(value) } else false }.plug()
-}
-
-private class DisposableObserver<T>(private val liveData: LiveData<T>,
-                                    private val observer: (T?) -> Boolean) : Observer<T>
-{
-	fun plug() = liveData.observeForever(this)
-
-	override fun onChanged(value: T?)
-	{
-		if(observer(value)) liveData.removeObserver(this)
-	}
-}

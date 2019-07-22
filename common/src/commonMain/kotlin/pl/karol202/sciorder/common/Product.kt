@@ -1,7 +1,6 @@
 package pl.karol202.sciorder.common
 
 import kotlinx.serialization.Serializable
-import pl.karol202.sciorder.common.util.hasDuplicates
 import pl.karol202.sciorder.common.util.isValidFloat
 import pl.karol202.sciorder.common.util.isValidInt
 
@@ -35,25 +34,25 @@ data class Product(val _id: String,
 		                      val enumValues: List<String>? = null,
 		                      val defaultValue: String? = null) : JvmSerializable
 		{
-			private val realMinimalValue = minimalValue ?: Float.MIN_VALUE
-			private val realMaximalValue = maximalValue ?: Float.MAX_VALUE
-			private val range = realMinimalValue..realMaximalValue
+			private val realMinimalValue get() = minimalValue ?: Float.NEGATIVE_INFINITY
+			private val realMaximalValue get() = maximalValue ?: Float.POSITIVE_INFINITY
+			private val range get() = realMinimalValue..realMaximalValue
 			
 			fun areValidFor(type: Type) = isMinimalValueValidFor(type) &&
-										 isMaximalValueValidFor(type) &&
-										 areEnumValuesValidFor(type) &&
-										 isDefaultValueValidFor(type)
+										  isMaximalValueValidFor(type) &&
+										  areEnumValuesValidFor(type) &&
+										  isDefaultValueValidFor(type)
 			
 			fun isMinimalValueValidFor(type: Type) = when(type)
 			{
-				Type.INT -> minimalValue == null || (minimalValue.toString().isValidInt() && minimalValue < realMaximalValue)
+				Type.INT -> minimalValue == null || (minimalValue.isValidInt() && minimalValue < realMaximalValue)
 				Type.FLOAT -> minimalValue == null || minimalValue < realMaximalValue
 				else -> true
 			}
 			
 			fun isMaximalValueValidFor(type: Type) = when(type)
 			{
-				Type.INT -> maximalValue == null || (maximalValue.toString().isValidInt() && maximalValue > realMinimalValue)
+				Type.INT -> maximalValue == null || (maximalValue.isValidInt() && maximalValue > realMinimalValue)
 				Type.FLOAT -> maximalValue == null || maximalValue > realMinimalValue
 				else -> true
 			}
@@ -73,16 +72,18 @@ data class Product(val _id: String,
 			}
 		}
 		
-		val isNameValid = name.isNotBlank()
-		val areAttributesValid = attributes.areValidFor(type)
-		val isValid = isNameValid && areAttributesValid
+		val isNameValid get() = name.isNotBlank()
+		val areAttributesValid get() = attributes.areValidFor(type)
+		val isValid get() = isNameValid && areAttributesValid
 	}
 
 	override val id get() = _id
 	
-	val isOwnerIdValid = ownerId.isNotBlank()
-	val isNameValid = name.isNotBlank()
-	val areParametersValid = parameters.all { it.isValid }
-	val areParametersDistinct = !parameters.hasDuplicates { it.name }
-	val isValid = isOwnerIdValid && isNameValid && areParametersValid && areParametersDistinct
+	val isNameValid get() = name.isNotBlank()
+	val areParametersValid get() = parameters.all { it.isValid }
+	val areParametersDistinct get() = parameters.duplicatedParameterNames.isEmpty()
+	val isValid get() = isNameValid && areParametersValid && areParametersDistinct
 }
+
+val List<Product.Parameter>.duplicatedParameterNames get() =
+	this.groupBy { it.name }.mapValues { (_, params) -> params.count() }.filterValues { it > 1 }.keys

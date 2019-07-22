@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.client.android.admin.ui.adapter
 
+import android.os.Handler
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_product_param.*
@@ -12,8 +13,10 @@ import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
 import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.client.common.model.NEW_PARAMETER
 import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.duplicatedParameterNames
 
-class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parameter>) -> Unit) :
+class ProductParamAdapter(initialParameters: List<Product.Parameter>,
+                          private val onParamsUpdate: (List<Product.Parameter>) -> Unit) :
 		DynamicAdapter<ProductParamAdapter.ParameterWithId?>()
 {
 	data class ParameterWithId(val id: String,
@@ -23,25 +26,36 @@ class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parame
 		{
 			val NULL: ParameterWithId? = null
 		}
-
-		var name
-			get() = parameter.name
-			set(value) { parameter = parameter.copy(name = value) }
-		var type
-			get() = parameter.type
-			set(value) { parameter = parameter.copy(type = value) }
-		var attributes
-			get() = parameter.attributes
-			set(value) { parameter = parameter.copy(attributes = value) }
 	}
 
 	inner class ParamViewHolder(view: View) : BasicAdapter.ViewHolder<ParameterWithId?>(view)
 	{
 		private var item: ParameterWithId? = null
+		
+		private var ParameterWithId.name
+			get() = parameter.name
+			set(value)
+			{
+				val oldName = parameter.name
+				if(value == oldName) return
+				updateParameter(parameter.copy(name = value))
+				updateParametersWithNames(oldName, value, excluding = this)
+			}
+		private var ParameterWithId.type
+			get() = parameter.type
+			set(value)
+			{
+				if(value == parameter.type) return
+				updateParameter(parameter.copy(type = value, attributes = Product.Parameter.Attributes()))
+				updateAttrsAdapter(this)
+			}
+		private var ParameterWithId.attributes
+			get() = parameter.attributes
+			set(value) = updateParameter(parameter.copy(attributes = value))
 
 		init
 		{
-			editTextProductEditParamName.addAfterTextChangedListener { onNameChanged(it) }
+			editTextProductEditParamName.addAfterTextChangedListener { item?.name = it }
 
 			spinnerProductEditParamType.adapter = ProductParamTypeAdapter()
 
@@ -53,44 +67,45 @@ class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parame
 			this.item = item ?: throw IllegalArgumentException()
 
 			editTextProductEditParamName.setText(item.name)
-
-			spinnerProductEditParamType.setOnItemSelectedListener { onTypeChanged(it as Product.Parameter.Type) }
+			
+			spinnerProductEditParamType.setOnItemSelectedListener { item.type = it as Product.Parameter.Type }
 			spinnerProductEditParamType.setSelection(item.type.ordinal)
 
 			buttonProductEditParamRemove.setOnClickListener { removeParam(item) }
 
-			updateAttrsAdapter(item.parameter)
+			updateAttrsAdapter(item)
 		}
 
-		private fun updateAttrsAdapter(parameter: Product.Parameter)
+		private fun updateAttrsAdapter(item: ParameterWithId)
 		{
-			recyclerProductEditParamAttrs.adapter = ProductParamAttrAdapter.fromParam(parameter) { onAttributesChanged(it) }
+			recyclerProductEditParamAttrs.adapter = ProductParamAttrAdapter.fromParam(item.parameter) { item.attributes = it }
 		}
-
-		private fun onNameChanged(name: String?)
+		
+		private fun ParameterWithId.updateParameter(parameter: Product.Parameter)
 		{
-			item?.name = name ?: ""
-			updateNameError(name)
+			this.parameter = parameter
+			validate(parameter)
 			onParamsUpdate()
 		}
-
-		private fun updateNameError(name: String?)
-		{
-			editLayoutProductEditParamName.error =
-					if(name.isNullOrBlank()) ctx.getString(R.string.text_product_edit_param_name_no_value) else ""
-		}
-
-		private fun onTypeChanged(type: Product.Parameter.Type)
-		{
-			item?.type = type
-			item?.parameter?.let { updateAttrsAdapter(it) }
-			onParamsUpdate()
-		}
-
-		private fun onAttributesChanged(attributes: Product.Parameter.Attributes)
-		{
-			item?.attributes = attributes
-			onParamsUpdate()
+		
+		private fun validate(parameter: Product.Parameter) = with(parameter) {
+			editLayoutProductEditParamName.error = when
+			{
+				!isNameValid -> ctx.getString(R.string.text_product_edit_param_name_no_value)
+				name in parameters.duplicatedParameterNames -> ctx.getString(R.string.text_product_edit_param_name_duplicated)
+				else -> null
+			}
+			when
+			{
+				!attributes.isMinimalValueValidFor(type) || !attributes.isMaximalValueValidFor(type) ->
+					ctx.getString(R.string.text_product_edit_param_error_limits)
+				!attributes.areEnumValuesValidFor(type) -> ctx.getString(R.string.text_product_edit_param_error_empty_enum)
+				!attributes.isDefaultValueValidFor(type) -> ctx.getString(R.string.text_product_edit_param_error_default_value)
+				else -> null
+			}.let {
+				textProductEditParamError.text = it
+				textProductEditParamError.visibility = if(it != null) View.VISIBLE else View.GONE
+			}
 		}
 	}
 
@@ -108,7 +123,7 @@ class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parame
 		private const val TYPE_NULL = 1
 	}
 
-	var parameters: List<Product.Parameter>
+	private var parameters: List<Product.Parameter>
 		get() = items.mapNotNull { it?.parameter }
 		set(value) { items = value.map { it.withId() } + ParameterWithId.NULL }
 	override var items: List<ParameterWithId?>
@@ -118,6 +133,11 @@ class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parame
 			super.items = value
 			onParamsUpdate()
 		}
+	
+	init
+	{
+		parameters = initialParameters
+	}
 
 	private fun Product.Parameter.withId(id: String = randomUUIDString()) = ParameterWithId(id, this)
 
@@ -148,7 +168,13 @@ class ProductParamAdapter(private val paramsUpdateListener: (List<Product.Parame
 	private fun removeParam(param: ParameterWithId)
 	{
 		items = items - param
+		updateParametersWithNames(param.parameter.name)
 	}
 
-	private fun onParamsUpdate() = paramsUpdateListener(parameters)
+	private fun onParamsUpdate() = onParamsUpdate(parameters)
+	
+	private fun updateParametersWithNames(vararg names: String, excluding: ParameterWithId? = null) = Handler().post {
+		items.withIndex().filter { (_, item) -> item != excluding && item?.parameter?.name in names }
+						 .forEach { (i, _) -> notifyItemChanged(i) }
+	}
 }

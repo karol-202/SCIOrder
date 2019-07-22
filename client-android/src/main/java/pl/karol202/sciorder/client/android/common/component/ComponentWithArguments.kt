@@ -11,11 +11,11 @@ interface ComponentWithArguments
 	fun <T : Any> arguments() =
 		BundleDelegate.Nullable<T>(bundleProvider = this::getOrCreateNewArguments)
 
-	fun <T : Any> argumentsOr(defaultValue: T) =
+	fun <T : Any> arguments(defaultValue: T) =
 		BundleDelegate.NotNull(bundleProvider = this::getOrCreateNewArguments,
 		                       defaultValueProvider = { defaultValue })
 
-	fun <T : Any> argumentsOr(defaultValueProvider: () -> T) =
+	fun <T : Any> arguments(defaultValueProvider: () -> T) =
 		BundleDelegate.NotNull(bundleProvider = this::getOrCreateNewArguments,
 		                       defaultValueProvider = defaultValueProvider)
 

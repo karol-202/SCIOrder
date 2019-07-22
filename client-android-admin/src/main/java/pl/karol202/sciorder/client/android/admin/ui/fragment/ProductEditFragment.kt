@@ -12,9 +12,9 @@ import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.common.util.observeEvent
-import pl.karol202.sciorder.client.android.common.util.observeOnceNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
+import pl.karol202.sciorder.client.common.model.NEW_PRODUCT
 import pl.karol202.sciorder.client.common.viewmodel.ProductsViewModel.UpdateResult.SUCCESS
 import pl.karol202.sciorder.common.Product
 
@@ -23,42 +23,48 @@ class ProductEditFragment : ExtendedFragment()
 	private val productsViewModel by sharedViewModel<ProductsAndroidViewModel>()
 
 	private val arguments by navArgs<ProductEditFragmentArgs>()
-	private val productId by lazy { arguments.productId }
+	private val initialProduct by lazy { arguments.product }
 
-	private val adapter = ProductParamAdapter { savedParameters = it }
-
-	private var savedParameters by instanceState<List<Product.Parameter>>()
+	private var product by instanceState { initialProduct ?: Product.NEW_PRODUCT }
+	private var name
+		get() = product.name
+		set(value) = updateProduct(product.copy(name = value))
+	private var available
+		get() = product.available
+		set(value) = updateProduct(product.copy(available = value))
+	private var parameters
+		get() = product.parameters
+		set(value) = updateProduct(product.copy(parameters = value))
 
 	override val layoutRes = R.layout.fragment_product_edit
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		initNameEditText()
+		initAvailabilityCheckbox()
 		initParamsRecycler()
 		initApplyButton()
 
 		observeUpdateEvent()
-
-		productId?.let { observeProductsAndPopulateViews(it) }
 	}
 
 	private fun initNameEditText()
 	{
-		fun checkNameValidity(name: String?)
-		{
-			editLayoutProductEditName.error =
-					if(name.isNullOrBlank()) ctx.getString(R.string.text_product_edit_name_no_value) else ""
-		}
-
-		editTextProductEditName.addAfterTextChangedListener { checkNameValidity(it) }
-		checkNameValidity(null)
+		editTextProductEditName.setText(name)
+		editTextProductEditName.addAfterTextChangedListener { name = it }
+	}
+	
+	private fun initAvailabilityCheckbox()
+	{
+		checkProductEditAvailable.isChecked = available
+		checkProductEditAvailable.setOnCheckedChangeListener { _, checked -> available = checked }
 	}
 
 	private fun initParamsRecycler()
 	{
 		recyclerProductEditParams.layoutManager = LinearLayoutManager(ctx)
 		recyclerProductEditParams.isNestedScrollingEnabled = false
-		recyclerProductEditParams.adapter = adapter
+		recyclerProductEditParams.adapter = ProductParamAdapter(parameters) { parameters = it }
 	}
 
 	private fun initApplyButton()
@@ -74,52 +80,24 @@ class ProductEditFragment : ExtendedFragment()
 		}
 	}
 
-	private fun observeProductsAndPopulateViews(productId: String)
-	{
-		productsViewModel.productsLiveData.observeOnceNonNull { products ->
-			val product = products.find { it.id == productId } ?: throw IllegalArgumentException()
-			populateViews(product)
-		}
-	}
-
-	private fun populateViews(product: Product)
-	{
-		editTextProductEditName.setText(product.name)
-
-		checkProductEditAvailable.isChecked = product.available
-
-		adapter.parameters = product.parameters
-	}
-
-	override fun onRestoreInstanceState()
-	{
-		adapter.parameters = savedParameters ?: emptyList()
-	}
-
 	private fun apply()
 	{
-		val product = createProduct() ?: return showSnackbar(R.string.text_product_edit_error)
-		if(productId != null) productsViewModel.updateProduct(product)
+		if(!product.isValid) return showSnackbar(R.string.text_product_edit_error)
+		if(initialProduct != null) productsViewModel.updateProduct(product)
 		else productsViewModel.addProduct(product)
 	}
 
-	private fun createProduct(): Product?
-	{
-		val name = getName() ?: return null
-		val available = getAvailable()
-		val parameters = getParameters() ?: return null
-		return Product(productId ?: "", "", name, available, parameters)
-	}
-
-	private fun getName() = editTextProductEditName.text?.toString()?.takeIf { it.isNotBlank() }
-
-	private fun getAvailable() = checkProductEditAvailable.isChecked
-
-	private fun getParameters() = adapter.parameters.takeIf { it.allValid() }
-
-	private fun List<Product.Parameter>.allValid() = all { it.isValid() }
-
-	private fun Product.Parameter.isValid() = name.isNotBlank()
-
 	private fun navigateBack() = fragmentManager?.popBackStack()
+	
+	private fun updateProduct(product: Product)
+	{
+		this.product = product
+		validate()
+	}
+	
+	private fun validate()
+	{
+		editLayoutProductEditName.error =
+				if(!product.isNameValid) ctx.getString(R.string.text_product_edit_name_no_value) else null
+	}
 }

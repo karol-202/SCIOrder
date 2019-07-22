@@ -56,7 +56,7 @@ class ProductParamAdapter(context: Context,
 	{
 		init
 		{
-			editTextProductParamText.addAfterTextChangedListener { onUpdateListener?.invoke(it ?: "") }
+			editTextProductParamText.addAfterTextChangedListener { onUpdateListener?.invoke(it) }
 		}
 	}
 
