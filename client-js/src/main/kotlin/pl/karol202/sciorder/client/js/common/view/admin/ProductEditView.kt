@@ -1,19 +1,18 @@
 package pl.karol202.sciorder.client.js.common.view.admin
 
+import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.card.mCard
 import com.ccfraser.muirwik.components.form.MLabelPlacement
 import com.ccfraser.muirwik.components.form.mFormControlLabel
 import com.ccfraser.muirwik.components.list.mList
-import com.ccfraser.muirwik.components.mCheckbox
-import com.ccfraser.muirwik.components.mTextField
-import com.ccfraser.muirwik.components.mTypography
-import com.ccfraser.muirwik.components.targetInputValue
+import com.ccfraser.muirwik.components.list.mListItem
 import kotlinx.css.*
 import materialui.icons.iconAdd
 import pl.karol202.sciorder.client.common.model.NEW_PARAMETER
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.duplicatedParameterNames
 import react.*
 import styled.css
 import styled.styledDiv
@@ -68,33 +67,55 @@ class ProductEditView(props: Props) : View<ProductEditView.Props, RState>(props)
 	}!!
 	
 	private fun RBuilder.parametersPanel() = styledDiv {
+		css { marginTop = 8.px }
+		
 		mTypography(text = "Parametry")
 		parametersList()
 	}
 	
 	private fun RBuilder.parametersList() = mList {
-		product.parameters.forEach { parameterPanel(it) }
+		product.parameters.forEachIndexed { i, param -> parameterPanel(i, param) }
 		newParameterPanel()
 	}
 	
-	private fun RBuilder.parameterPanel(param: Product.Parameter) = mCard {
-		productParamEditView(param) { newParam -> updateParameter(param, newParam) }
+	private fun RBuilder.parameterPanel(index: Int, param: Product.Parameter) = mCard {
+		overrideCss {
+			marginBottom = 24.px
+			backgroundColor = Colors.Grey.shade700
+		}
+		
+		productParamEditView(parameter = param,
+		                     nameDuplicated = param.name in product.parameters.duplicatedParameterNames,
+		                     onUpdate = { updateParameter(index, it) },
+		                     onDelete = { deleteParameter(param) })
 	}
 	
 	private fun RBuilder.newParameterPanel() = mCard {
-		attrs.asDynamic().onClick = { addParameter(Product.Parameter.NEW_PARAMETER) }
-		iconAdd()
-		mTypography(text = "Nowy parametr")
+		overrideCss { backgroundColor = Colors.Grey.shade700 }
+		
+		mListItem(button = true,
+		          disableGutters = true,
+		          onClick = { addParameter(Product.Parameter.NEW_PARAMETER) }) {
+			styledDiv {
+				css { margin(horizontal = 16.px, vertical = 4.px) }
+				iconAdd()
+			}
+			mTypography(text = "Nowy parametr")
+		}
 	}
 	
 	private fun updateName(name: String) = update(product.copy(name = name))
 	
 	private fun updateAvailability(availability: Boolean) = update(product.copy(available = availability))
 	
-	private fun updateParameter(oldParam: Product.Parameter, newParam: Product.Parameter) =
-			update(product.copy(parameters = product.parameters.replace(oldParam, newParam)))
+	private fun updateParameters(parameters: List<Product.Parameter>) = update(product.copy(parameters = parameters))
 	
-	private fun addParameter(param: Product.Parameter) = update(product.copy(parameters = product.parameters + param))
+	private fun addParameter(param: Product.Parameter) = updateParameters(product.parameters + param)
+	
+	private fun updateParameter(index: Int, param: Product.Parameter) =
+			updateParameters(product.parameters.replaceIndex(index, param))
+	
+	private fun deleteParameter(param: Product.Parameter) = updateParameters(product.parameters - param)
 	
 	private fun update(product: Product) = onUpdate(product)
 }

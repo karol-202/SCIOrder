@@ -9,6 +9,6 @@ class OrdersTrackJsViewModel(ownerRepository: OwnerRepository,
                              orderRepository: OrderTrackRepository) : OrdersTrackViewModel(ownerRepository, orderRepository)
 {
 	val ordersObservable = ordersFlow.shareIn(coroutineScope)
-	val loadingObservable = loadingFlow.shareIn(coroutineScope)
+	//val loadingObservable = loadingFlow.shareIn(coroutineScope)
 	val errorEventObservable = errorEventFlow.shareIn(coroutineScope)
 }

@@ -52,9 +52,9 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 		state.ordersDeleteDialogOpen = false
 		state.productDeleteDialogOpen = false
 		
-		ordersViewModel.unfilteredOrdersObservable.bindToState { anyOrdersPresent = it?.isNotEmpty() ?: false }
-		ordersViewModel.ordersObservable.bindToState { filteredOrders = it ?: emptyList() }
-		ordersViewModel.orderFilterObservable.bindToState { orderFilter = it }
+		ordersViewModel.anyOrdersPresentObservable.bindToState { anyOrdersPresent = it }
+		ordersViewModel.ordersObservable.bindToState { filteredOrders = it }
+		ordersViewModel.filterObservable.bindToState { orderFilter = it }
 		
 		productsViewModel.productsObservable.bindToState { products = it ?: emptyList() }
 	}

@@ -1,15 +1,12 @@
 package pl.karol202.sciorder.client.js.common.view.admin
 
-import com.ccfraser.muirwik.components.mMenuItem
-import com.ccfraser.muirwik.components.mTextField
-import com.ccfraser.muirwik.components.mTextFieldSelect
-import com.ccfraser.muirwik.components.targetInputValue
-import kotlinx.css.Align
-import kotlinx.css.FlexDirection
-import kotlinx.css.pct
-import kotlinx.css.width
+import com.ccfraser.muirwik.components.*
+import kotlinx.css.*
+import materialui.icons.iconDelete
 import pl.karol202.sciorder.client.js.common.model.visibleName
 import pl.karol202.sciorder.client.js.common.util.cssFlexBox
+import pl.karol202.sciorder.client.js.common.util.cssFlexItem
+import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
@@ -25,38 +22,65 @@ class ProductParamEditView : View<ProductParamEditView.Props, RState>()
 	interface Props : RProps
 	{
 		var parameter: Product.Parameter
+		var nameDuplicated: Boolean
 		var onUpdate: (Product.Parameter) -> Unit
+		var onDelete: () -> Unit
 	}
 	
 	private val parameter by prop { parameter }
+	private val nameDuplicated by prop { nameDuplicated }
 	private val onUpdate by prop { onUpdate }
+	private val onDelete by prop { onDelete }
 	
 	override fun RBuilder.render()
 	{
 		styledDiv {
 			cssFlexBox(direction = FlexDirection.column,
 			           alignItems = Align.stretch)
-			css { width = 100.pct }
+			css {
+				width = 100.pct
+				padding(bottom = 16.px, left = 24.px, right = 24.px)
+			}
 			
-			nameTextField()
+			headerPanel()
 			typeSelect()
 			attributesView()
 		}
 	}
 	
+	private fun RBuilder.headerPanel() = styledDiv {
+		cssFlexBox(direction = FlexDirection.row,
+		           alignItems = Align.flexStart)
+		
+		nameTextField()
+		deleteButton()
+	}
+	
 	private fun RBuilder.nameTextField(): ReactElement
 	{
-		val valid = parameter.isNameValid
+		val error = when
+		{
+			!parameter.isNameValid -> "Podaj nazwę"
+			nameDuplicated -> "Nazwy muszą się różnić"
+			else -> null
+		}
 		return mTextField(label = "Nazwa parametru",
-		                  helperText = if(!valid) "Podaj nazwę" else null,
-		                  error = !valid,
+		                  helperText = error,
+		                  error = error != null,
 		                  value = parameter.name,
-		                  onChange = { updateName(it.targetInputValue) })
+		                  onChange = { updateName(it.targetInputValue) }) {
+			cssFlexItem(grow = 1.0)
+		}
+	}
+	
+	private fun RBuilder.deleteButton() = mIconButton(onClick = { onDelete() }) {
+		overrideCss { margin(left = 12.px, top = 20.px) }
+		iconDelete()
 	}
 	
 	private fun RBuilder.typeSelect() = mTextFieldSelect(label = "Typ",
 	                                                     value = parameter.type.name,
-	                                                     onChange = { updateType(it.target.toString()) }) {
+	                                                     onChange = { updateType(it.targetValue.toString()) }) {
 		Product.Parameter.Type.values().forEach { typeItem(it) }
 	}
 	
@@ -83,7 +107,11 @@ class ProductParamEditView : View<ProductParamEditView.Props, RState>()
 }
 
 fun RBuilder.productParamEditView(parameter: Product.Parameter,
-                                  onUpdate: (Product.Parameter) -> Unit) = child(ProductParamEditView::class) {
+                                  nameDuplicated: Boolean,
+                                  onUpdate: (Product.Parameter) -> Unit,
+                                  onDelete: () -> Unit) = child(ProductParamEditView::class) {
 	attrs.parameter = parameter
+	attrs.nameDuplicated = nameDuplicated
 	attrs.onUpdate = onUpdate
+	attrs.onDelete = onDelete
 }

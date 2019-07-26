@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
@@ -21,9 +22,11 @@ abstract class OrderComposeViewModel(ownerRepository: OwnerRepository,
 
 	private var owner: Owner? = null
 
-	protected val orderBroadcastChannel = ConflatedBroadcastChannel<List<OrderedProduct>>(emptyList())
-
-	protected val errorEventBroadcastChannel = ConflatedBroadcastChannel<Event<OrderResult>>()
+	private val orderBroadcastChannel = ConflatedBroadcastChannel<List<OrderedProduct>>(emptyList())
+	private val errorEventBroadcastChannel = ConflatedBroadcastChannel<Event<OrderResult>>()
+	
+	protected val orderFlow = orderBroadcastChannel.asFlow()
+	protected val errorEventFlow = errorEventBroadcastChannel.asFlow()
 
 	init
 	{

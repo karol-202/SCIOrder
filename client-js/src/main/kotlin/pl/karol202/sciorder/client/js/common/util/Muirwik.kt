@@ -6,11 +6,14 @@ import com.ccfraser.muirwik.components.currentTheme
 import com.ccfraser.muirwik.components.dialog.DialogMaxWidth
 import com.ccfraser.muirwik.components.dialog.ModalOnCloseReason
 import com.ccfraser.muirwik.components.dialog.mDialog
+import com.ccfraser.muirwik.components.expansion.MExpansionPanelProps
 import com.ccfraser.muirwik.components.mDivider
 import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions
+import kotlinext.js.assign
 import kotlinx.css.*
 import react.RBuilder
+import react.RElementBuilder
 import styled.css
 import styled.styledDiv
 
@@ -52,3 +55,12 @@ fun RBuilder.dialog(open: Boolean,
 fun RBuilder.divider() = mDivider {
 	overrideCss { backgroundColor = Muirwik.DIVIDER_COLOR }
 }
+
+var RElementBuilder<MExpansionPanelProps>.unmountOnExit
+	get() = transitionProps.unmountOnExit as Boolean
+	set(value) { transitionProps = assign(transitionProps) { this.unmountOnExit = value } }
+	
+
+private var RElementBuilder<MExpansionPanelProps>.transitionProps
+	get() = attrs.asDynamic().TransitionProps
+	set(value) { attrs.asDynamic().TransitionProps = value }

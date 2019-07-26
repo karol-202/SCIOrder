@@ -11,6 +11,7 @@ import materialui.icons.iconExpandMore
 import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.overrideCss
 import pl.karol202.sciorder.client.js.common.util.prop
+import pl.karol202.sciorder.client.js.common.util.unmountOnExit
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
 import react.*
@@ -53,6 +54,7 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 	}
 	
 	private fun RBuilder.product(product: Product) = mExpansionPanel {
+		unmountOnExit = true
 		summaryPanel(product)
 		editPanel(product)
 		actionsPanel(product)
@@ -77,7 +79,7 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 		overrideCss { paddingBottom = 0.px }
 		
 		productEditView(product = getEditedOrDefaultProduct(product),
-		                onUpdate = { updateProduct(product) })
+		                onUpdate = { updateProduct(it) })
 	}
 	
 	private fun RBuilder.actionsPanel(product: Product) = mExpansionPanelActions {

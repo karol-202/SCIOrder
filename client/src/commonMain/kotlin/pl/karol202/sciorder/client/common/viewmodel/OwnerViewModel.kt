@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
 import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
@@ -20,9 +21,10 @@ abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : Co
 		private const val MIN_PASSWORD_LENGTH = 3
 	}
 
+	private val errorEventBroadcastChannel = ConflatedBroadcastChannel<Event<Error>>()
+	
 	protected val ownerFlow = ownerRepository.getOwnerFlow()
-
-	protected val errorEventBroadcastChannel = ConflatedBroadcastChannel<Event<Error>>()
+	protected val errorEventFlow = errorEventBroadcastChannel.asFlow()
 
 	fun login(name: String, password: String? = null) = launch {
 		ownerRepository.login(name, password?.sha1()).handleResponse()
@@ -59,4 +61,10 @@ abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : Co
 	}
 
 	protected abstract fun onLogout()
+	
+	override fun onCleared()
+	{
+		super.onCleared()
+		errorEventBroadcastChannel.cancel()
+	}
 }

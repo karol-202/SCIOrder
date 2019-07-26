@@ -39,7 +39,10 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 		state.errorShown = false
 
 		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
-		viewModels.ownerViewModel.errorEventObservable.bindEventToState { lastError = it; errorShown = true }
+		viewModels.ownerViewModel.errorEventObservable.bindEventToState {
+			lastError = it
+			errorShown = true
+		}
 	}
 
 	override fun RBuilder.render()

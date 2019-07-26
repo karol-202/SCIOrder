@@ -1,10 +1,6 @@
 package pl.karol202.sciorder.client.js.common.view
 
-import com.ccfraser.muirwik.components.Colors
-import com.ccfraser.muirwik.components.MColor
-import com.ccfraser.muirwik.components.currentTheme
-import com.ccfraser.muirwik.components.mCssBaseline
-import com.ccfraser.muirwik.components.mMuiThemeProvider
+import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.styles.PaletteColor
 import com.ccfraser.muirwik.components.styles.Theme
 import com.ccfraser.muirwik.components.styles.ThemeOptions

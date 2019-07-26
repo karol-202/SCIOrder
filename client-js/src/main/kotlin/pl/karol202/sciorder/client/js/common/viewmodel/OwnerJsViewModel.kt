@@ -1,6 +1,5 @@
 package pl.karol202.sciorder.client.js.common.viewmodel
 
-import kotlinx.coroutines.flow.asFlow
 import pl.karol202.sciorder.client.common.model.local.OrderDao
 import pl.karol202.sciorder.client.common.model.local.ProductDao
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
@@ -12,7 +11,7 @@ class OwnerJsViewModel(ownerRepository: OwnerRepository,
                        private val productDao: ProductDao) : OwnerViewModel(ownerRepository)
 {
 	val ownerObservable = ownerFlow.shareIn(coroutineScope)
-	val errorEventObservable = errorEventBroadcastChannel.asFlow()
+	val errorEventObservable = errorEventFlow.shareIn(coroutineScope)
 
 	override fun onLogout() = launch {
 		orderDao.deleteAll()

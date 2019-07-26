@@ -91,7 +91,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		state.orderDialogOpen = false
 		state.messageShown = false
 		
-		ordersTrackViewModel.ordersObservable.bindToState { trackedOrders = it ?: emptyList() }
+		ordersTrackViewModel.ordersObservable.bindToState { trackedOrders = it }
 		ordersTrackViewModel.errorEventObservable.observeEvent { showMessage(Message.TRACKED_ORDERS_LOADING_FAILURE) }
 		
 		productsViewModel.productsObservable.bindToState { products = it ?: emptyList() }
@@ -102,7 +102,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		{
 			OrderComposeViewModel.OrderResult.SUCCESS -> Message.ORDER_SUCCESS
 			OrderComposeViewModel.OrderResult.FAILURE -> Message.ORDER_FAILURE
-		})}
+		}) }
 	}
 
 	override fun RBuilder.render()

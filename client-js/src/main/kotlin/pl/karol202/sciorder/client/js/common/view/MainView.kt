@@ -36,8 +36,10 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 	{
 		state.loggedIn = false
 
-		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
-		viewModels.ownerViewModel.ownerObservable.bindToState { ownerName = it?.name }
+		viewModels.ownerViewModel.ownerObservable.bindToState {
+			loggedIn = it != null
+			ownerName = it?.name
+		}
 	}
 
 	override fun RBuilder.render()

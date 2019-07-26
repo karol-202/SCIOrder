@@ -5,16 +5,16 @@ import com.ccfraser.muirwik.components.form.MLabelPlacement
 import com.ccfraser.muirwik.components.form.mFormControlLabel
 import com.ccfraser.muirwik.components.list.mList
 import com.ccfraser.muirwik.components.list.mListItem
+import kotlinx.css.*
 import materialui.icons.iconAdd
 import materialui.icons.iconDelete
-import pl.karol202.sciorder.client.js.common.util.cssFlexItem
-import pl.karol202.sciorder.client.js.common.util.prop
-import pl.karol202.sciorder.client.js.common.util.removeIndex
-import pl.karol202.sciorder.client.js.common.util.replaceIndex
+import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
 import pl.karol202.sciorder.common.Product.Parameter.Attributes
 import react.*
+import styled.css
+import styled.styledDiv
 
 abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, RState>()
 {
@@ -39,13 +39,16 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		                                                          onChange = { updateDefaultValue(it.targetInputValue) })
 	}
 	
+	class IntView : NumberView(Product.Parameter.Type.INT)
+	
+	class FloatView : NumberView(Product.Parameter.Type.FLOAT)
+	
 	abstract class NumberView(private val type: Product.Parameter.Type) : ProductParamAttrEditView()
 	{
 		override fun RBuilder.render()
 		{
 			defaultValueTextField()
-			minimalValueTextField()
-			maximalValueTextField()
+			rangePanel()
 		}
 		
 		private fun RBuilder.defaultValueTextField(): ReactElement
@@ -58,6 +61,15 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			                  onChange = { updateDefaultValue(it.targetInputValue) })
 		}
 		
+		private fun RBuilder.rangePanel() = styledDiv {
+			cssFlexBox(direction = FlexDirection.row,
+			           alignItems = Align.flexStart)
+			
+			minimalValueTextField()
+			rangeSeparator()
+			maximalValueTextField()
+		}
+		
 		private fun RBuilder.minimalValueTextField(): ReactElement
 		{
 			val valid = attrs.isMinimalValueValidFor(type)
@@ -65,7 +77,13 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
 			                  value = attrs.minimalValue?.toString(),
-			                  onChange = { updateMinimalValue(it.targetInputValue.toFloatOrNull()) })
+			                  onChange = { updateMinimalValue(it.targetInputValue.toFloatOrNull()) }) {
+				cssFlexItem(grow = 1.0)
+			}
+		}
+		
+		private fun RBuilder.rangeSeparator() = mTypography(text = "-") {
+			overrideCss { margin(top = 36.px, left = 16.px, right = 16.px) }
 		}
 		
 		private fun RBuilder.maximalValueTextField(): ReactElement
@@ -75,13 +93,11 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
 			                  value = attrs.minimalValue?.toString(),
-			                  onChange = { updateMaximalValue(it.targetInputValue.toFloatOrNull()) })
+			                  onChange = { updateMaximalValue(it.targetInputValue.toFloatOrNull()) }) {
+				cssFlexItem(grow = 1.0)
+			}
 		}
 	}
-	
-	class IntView : NumberView(Product.Parameter.Type.INT)
-	
-	class FloatView : NumberView(Product.Parameter.Type.FLOAT)
 	
 	class BooleanView : ProductParamAttrEditView()
 	{
@@ -115,14 +131,17 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			newItem()
 		}
 		
-		private fun RBuilder.item(id: Int, value: String) = mListItem(button = true) {
+		private fun RBuilder.item(id: Int, value: String) = mListItem {
 			defaultRadio(value)
 			valueTextField(value) { updateValue(id, it) }
 			deleteButton { deleteValue(id, value) }
 		}
 		
-		private fun RBuilder.newItem() = mListItem(button = true) {
-			iconAdd()
+		private fun RBuilder.newItem() = mListItem {
+			styledDiv {
+				css { margin(9.px) }
+				iconAdd()
+			}
 			valueTextField("") { addValue(it) }
 		}
 		
@@ -145,7 +164,10 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		}
 		
 		private fun RBuilder.deleteButton(onDelete: () -> Unit) =
-				mIconButton(onClick = { onDelete() }) { iconDelete() }
+				mIconButton(onClick = { onDelete() }) {
+					overrideCss { marginLeft = 12.px }
+					iconDelete()
+				}
 		
 		private fun String.isDefaultValue() = this == attrs.defaultValue
 		
@@ -162,11 +184,11 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		}
 	}
 	
-	protected fun updateDefaultValue(defaultValue: String?) = update(attrs.copy(defaultValue = defaultValue))
+	protected fun updateDefaultValue(defaultValue: String?) = update(attrs.copy(defaultValue = defaultValue?.takeIf { it.isNotEmpty() }))
 	
-	protected fun updateMinimalValue(minimalValue: Float?) = update(attrs.copy(minimalValue = minimalValue))
+	protected fun updateMinimalValue(minimalValue: kotlin.Float?) = update(attrs.copy(minimalValue = minimalValue))
 	
-	protected fun updateMaximalValue(maximalValue: Float?) = update(attrs.copy(maximalValue = maximalValue))
+	protected fun updateMaximalValue(maximalValue: kotlin.Float?) = update(attrs.copy(maximalValue = maximalValue))
 	
 	protected fun updateEnumValues(enumValues: List<String>?) = update(attrs.copy(enumValues = enumValues))
 	

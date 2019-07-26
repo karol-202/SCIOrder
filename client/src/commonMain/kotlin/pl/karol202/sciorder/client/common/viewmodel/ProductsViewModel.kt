@@ -26,23 +26,28 @@ abstract class ProductsViewModel(ownerRepository: OwnerRepository,
 			field?.close()
 			field = value
 		}
+	
+	private val productsStateBroadcastChannel = ownerRepository.getOwnerFlow()
+															   .onEach { owner = it }
+															   .filterNotNull()
+															   .map { productRepository.getProductsResource(it.id) }
+															   .onEach { it.autoReloadIn(coroutineScope) }
+															   .onEach { productsResource = it }
+															   .switchMap { it.asFlow }
+															   .conflate()
+															   .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+	private val updateEventBroadcastChannel = ConflatedBroadcastChannel<Event<UpdateResult>>()
+	
+	private val productsStateFlow = productsStateBroadcastChannel.asFlow()
 
-	private val productsResourceAsBroadcastChannel = ownerRepository.getOwnerFlow()
-																	.onEach { owner = it }
-																	.filterNotNull()
-																	.map { productRepository.getProductsResource(it.id) }
-																	.onEach { it.autoReloadIn(coroutineScope) }
-																	.onEach { productsResource = it }
-																	.switchMap { it.asFlow }
-																	.conflate()
-																	.broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
-
-	protected val productsFlow = productsResourceAsBroadcastChannel.asFlow().map { it.data }
-	protected val loadingFlow = productsResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }
-	protected val loadingErrorEventFlow = productsResourceAsBroadcastChannel.asFlow()
-																	        .mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
-
-	protected val updateEventBroadcastChannel = ConflatedBroadcastChannel<Event<UpdateResult>>()
+	protected val productsFlow = productsStateFlow.map { it.data }
+												  .distinctUntilChanged()
+	protected val loadingFlow = productsStateFlow.map { it is Resource.State.Loading }
+												 .distinctUntilChanged()
+	protected val loadingErrorEventFlow = productsStateFlow.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
+														   .distinctUntilChanged()
+	protected val updateEventFlow = updateEventBroadcastChannel.asFlow()
+															   .distinctUntilChanged()
 
 	fun refreshProducts() = launch { productsResource?.reload() }
 
@@ -66,6 +71,7 @@ abstract class ProductsViewModel(ownerRepository: OwnerRepository,
 	{
 		super.onCleared()
 		productsResource?.close()
-		productsResourceAsBroadcastChannel.cancel()
+		productsStateBroadcastChannel.cancel()
+		updateEventBroadcastChannel.cancel()
 	}
 }

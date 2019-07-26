@@ -18,19 +18,23 @@ abstract class OrdersTrackViewModel(ownerRepository: OwnerRepository,
 			field = value
 		}
 
-	private val ordersResourceAsBroadcastChannel = ownerRepository.getOwnerFlow()
-																  .filterNotNull()
-																  .map { orderRepository.getTrackedOrdersResource(it.id) }
-																  .onEach { ordersResource = it }
-																  .onEach { it.autoReloadIn(coroutineScope) }
-																  .switchMap { it.asFlow }
-																  .conflate()
-																  .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+	private val ordersStateBroadcastChannel = ownerRepository.getOwnerFlow()
+															 .filterNotNull()
+															 .map { orderRepository.getTrackedOrdersResource(it.id) }
+															 .onEach { ordersResource = it }
+															 .onEach { it.autoReloadIn(coroutineScope) }
+															 .switchMap { it.asFlow }
+															 .conflate()
+															 .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+	
+	private val ordersStateFlow = ordersStateBroadcastChannel.asFlow()
 
-	protected val ordersFlow = ordersResourceAsBroadcastChannel.asFlow().map { it.data }
-	protected val loadingFlow = ordersResourceAsBroadcastChannel.asFlow().map { it is Resource.State.Loading }
-	protected val errorEventFlow = ordersResourceAsBroadcastChannel.asFlow()
-															 .mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
+	protected val ordersFlow = ordersStateFlow.map { it.data.orEmpty() }
+											  .distinctUntilChanged()
+	protected val loadingFlow = ordersStateFlow.map { it is Resource.State.Loading }
+											   .distinctUntilChanged()
+	protected val errorEventFlow = ordersStateFlow.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
+												  .distinctUntilChanged()
 
 	fun refreshOrders() = launch { ordersResource?.reload() }
 
@@ -40,6 +44,6 @@ abstract class OrdersTrackViewModel(ownerRepository: OwnerRepository,
 	{
 		super.onCleared()
 		ordersResource?.close()
-		ordersResourceAsBroadcastChannel.cancel()
+		ordersStateBroadcastChannel.cancel()
 	}
 }
