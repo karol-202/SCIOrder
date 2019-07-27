@@ -12,11 +12,12 @@ import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
 import pl.karol202.sciorder.common.Product.Parameter.Attributes
+import pl.karol202.sciorder.common.util.isValidFloat
 import react.*
 import styled.css
 import styled.styledDiv
 
-abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, RState>()
+abstract class ProductParamAttrEditView<S : RState> : View<ProductParamAttrEditView.Props, S>()
 {
 	interface Props : RProps
 	{
@@ -27,7 +28,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 	protected val attrs by prop { attrs }
 	protected val onUpdate by prop { onUpdate }
 	
-	class TextView : ProductParamAttrEditView()
+	class TextView : ProductParamAttrEditView<RState>()
 	{
 		override fun RBuilder.render()
 		{
@@ -35,7 +36,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		}
 		
 		private fun RBuilder.defaultValueTextField() = mTextField(label = "Domyślna wartość",
-		                                                          value = attrs.defaultValue,
+		                                                          value = attrs.defaultValue ?: "",
 		                                                          onChange = { updateDefaultValue(it.targetInputValue) })
 	}
 	
@@ -43,8 +44,20 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 	
 	class FloatView : NumberView(Product.Parameter.Type.FLOAT)
 	
-	abstract class NumberView(private val type: Product.Parameter.Type) : ProductParamAttrEditView()
+	abstract class NumberView(private val type: Product.Parameter.Type) : ProductParamAttrEditView<NumberView.State>()
 	{
+		interface State : RState
+		{
+			var minimalValue: String
+			var maximalValue: String
+		}
+		
+		init
+		{
+			state.minimalValue = ""
+			state.maximalValue = ""
+		}
+		
 		override fun RBuilder.render()
 		{
 			defaultValueTextField()
@@ -57,7 +70,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			return mTextField(label = "Domyślna wartość",
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
-			                  value = attrs.defaultValue,
+			                  value = attrs.defaultValue ?: "",
 			                  onChange = { updateDefaultValue(it.targetInputValue) })
 		}
 		
@@ -76,8 +89,8 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			return mTextField(label = "Minimalna wartość",
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
-			                  value = attrs.minimalValue?.toString(),
-			                  onChange = { updateMinimalValue(it.targetInputValue.toFloatOrNull()) }) {
+			                  value = state.minimalValue,
+			                  onChange = { updateMinimalValue(it.targetInputValue) }) {
 				cssFlexItem(grow = 1.0)
 			}
 		}
@@ -92,14 +105,36 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 			return mTextField(label = "Maksymalna wartość",
 			                  helperText = if(!valid) "Niewłaściwa wartość" else "",
 			                  error = !valid,
-			                  value = attrs.minimalValue?.toString(),
-			                  onChange = { updateMaximalValue(it.targetInputValue.toFloatOrNull()) }) {
+			                  value = state.maximalValue,
+			                  onChange = { updateMaximalValue(it.targetInputValue) }) {
 				cssFlexItem(grow = 1.0)
 			}
 		}
+		
+		private fun updateMinimalValue(minimalValue: String)
+		{
+			setState { this.minimalValue = minimalValue }
+			updateMinimalValue(when
+			                   {
+				                   minimalValue.isEmpty() -> null
+				                   minimalValue.isValidFloat() -> minimalValue.toFloatOrNull()
+				                   else -> kotlin.Float.POSITIVE_INFINITY
+			                   })
+		}
+		
+		private fun updateMaximalValue(maximalValue: String)
+		{
+			setState { this.maximalValue = maximalValue }
+			updateMaximalValue(when
+			                   {
+				                   maximalValue.isEmpty() -> null
+				                   maximalValue.isValidFloat() -> maximalValue.toFloatOrNull()
+				                   else -> kotlin.Float.NEGATIVE_INFINITY
+			                   })
+		}
 	}
 	
-	class BooleanView : ProductParamAttrEditView()
+	class BooleanView : ProductParamAttrEditView<RState>()
 	{
 		override fun RBuilder.render()
 		{
@@ -108,7 +143,10 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		
 		private fun RBuilder.defaultValuePanel() = mFormControlLabel(label = "Domyślna wartość",
 		                                                             labelPlacement = MLabelPlacement.start,
-		                                                             control = createDefaultValueCheckbox())
+		                                                             control = createDefaultValueCheckbox()) {
+			cssFlexItem(alignSelf = Align.flexStart)
+			overrideCss { margin(left = 0.px) }
+		}
 		
 		private fun createDefaultValueCheckbox() = buildElement {
 			mCheckbox(primary = false,
@@ -117,7 +155,7 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		}!!
 	}
 	
-	class EnumView : ProductParamAttrEditView()
+	class EnumView : ProductParamAttrEditView<RState>()
 	{
 		private val enumValues get() = attrs.enumValues ?: emptyList()
 		
@@ -178,19 +216,23 @@ abstract class ProductParamAttrEditView : View<ProductParamAttrEditView.Props, R
 		
 		private fun deleteValue(id: Int, value: String)
 		{
-			updateEnumValues(enumValues.removeIndex(id))
-			val wasTheOnlyOne = enumValues.none { it == value }
-			if(wasTheOnlyOne) updateDefaultValue(null)
+			val enumValues = enumValues.removeIndex(id)
+			val wasTheOnlyOne = enumValues.count { it == value } <= 1 // Rerenders may be batched!
+			if(wasTheOnlyOne) updateEnumValues(enumValues, null)
+			else updateEnumValues(enumValues)
 		}
 	}
 	
-	protected fun updateDefaultValue(defaultValue: String?) = update(attrs.copy(defaultValue = defaultValue?.takeIf { it.isNotEmpty() }))
+	protected fun updateDefaultValue(defaultValue: String?) = update(attrs.copy(defaultValue = defaultValue))
 	
 	protected fun updateMinimalValue(minimalValue: kotlin.Float?) = update(attrs.copy(minimalValue = minimalValue))
 	
 	protected fun updateMaximalValue(maximalValue: kotlin.Float?) = update(attrs.copy(maximalValue = maximalValue))
 	
 	protected fun updateEnumValues(enumValues: List<String>?) = update(attrs.copy(enumValues = enumValues))
+	
+	protected fun updateEnumValues(enumValues: List<String>?, defaultValue: String?) =
+			update(attrs.copy(enumValues = enumValues, defaultValue = defaultValue))
 	
 	private fun update(attrs: Attributes) = onUpdate(attrs)
 }
@@ -215,7 +257,7 @@ fun RBuilder.productParamAttrEnumEditView(attrs: Attributes,
                                           onUpdate: (Attributes) -> Unit) =
 		productParamAttrEditView<ProductParamAttrEditView.EnumView>(attrs, onUpdate)
 
-private inline fun <reified V : ProductParamAttrEditView> RBuilder.productParamAttrEditView(
+private inline fun <reified V : ProductParamAttrEditView<*>> RBuilder.productParamAttrEditView(
 		attrs: Attributes,
 		noinline onUpdate: (Attributes) -> Unit
 ) = child(V::class) {

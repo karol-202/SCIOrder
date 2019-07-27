@@ -98,8 +98,9 @@ class ProductParamEditView : View<ProductParamEditView.Props, RState>()
 	
 	private fun updateName(name: String) = update(parameter.copy(name = name))
 	
-	private fun updateType(typeName: String) =
-			Product.Parameter.Type.getByName(typeName)?.let { update(parameter.copy(type = it)) }
+	private fun updateType(typeName: String) = Product.Parameter.Type.getByName(typeName)?.let {
+		update(parameter.copy(type = it, attributes = Product.Parameter.Attributes()))
+	}
 	
 	private fun updateAttrs(attrs: Product.Parameter.Attributes) = update(parameter.copy(attributes = attrs))
 	
