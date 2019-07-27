@@ -7,7 +7,7 @@ import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.dialog.ProductParamAttrEnumNewValueDialog
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
-import pl.karol202.sciorder.client.android.common.util.randomUUIDString
+import pl.karol202.sciorder.client.common.util.uuid
 
 class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
                                         private val onValuesUpdate: (values: List<String>, default: String?) -> Unit) :
@@ -73,7 +73,7 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 		get() = _selection?.value
 		set(value) { _selection = items.find { it?.value == value } }
 
-	private fun String.withId(id: String = randomUUIDString()) = EnumEntry(id, this, false)
+	private fun String.withId(id: String = uuid()) = EnumEntry(id, this, false)
 
 	override fun getLayout(viewType: Int) = when(viewType)
 	{

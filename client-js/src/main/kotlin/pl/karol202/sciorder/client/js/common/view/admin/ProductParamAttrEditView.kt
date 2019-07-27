@@ -170,12 +170,14 @@ abstract class ProductParamAttrEditView<S : RState> : View<ProductParamAttrEditV
 		}
 		
 		private fun RBuilder.item(id: Int, value: String) = mListItem {
+			key = id.toString()
 			defaultRadio(value)
 			valueTextField(value) { updateValue(id, it) }
 			deleteButton { deleteValue(id, value) }
 		}
 		
 		private fun RBuilder.newItem() = mListItem {
+			key = enumValues.size.toString()
 			styledDiv {
 				css { margin(9.px) }
 				iconAdd()

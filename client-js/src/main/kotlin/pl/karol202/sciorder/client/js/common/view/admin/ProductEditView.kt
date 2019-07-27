@@ -74,6 +74,8 @@ class ProductEditView(props: Props) : View<ProductEditView.Props, RState>(props)
 	}
 	
 	private fun RBuilder.parametersList() = mList {
+		overrideCss { marginTop = 8.px }
+		
 		product.parameters.forEachIndexed { i, param -> parameterPanel(i, param) }
 		newParameterPanel()
 	}

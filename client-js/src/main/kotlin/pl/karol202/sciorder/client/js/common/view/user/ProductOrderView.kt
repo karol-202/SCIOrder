@@ -11,7 +11,6 @@ import kotlinx.css.padding
 import kotlinx.css.px
 import kotlinx.html.InputType
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.js.common.model.create
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product

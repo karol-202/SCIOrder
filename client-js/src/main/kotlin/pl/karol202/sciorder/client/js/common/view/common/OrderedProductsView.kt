@@ -51,6 +51,7 @@ class OrderedProductsView : View<OrderedProductsView.Props, RState>()
 	}
 	
 	private fun RBuilder.product(orderedProduct: OrderedProduct) = mListItem(button = true) {
+		key = orderedProduct.id
 		overrideCss {
 			if(horizontalPadding != null) padding(horizontal = horizontalPadding)
 			else if(onEdit != null || onDelete != null) paddingRight = 8.px

@@ -6,7 +6,7 @@ import pl.karol202.sciorder.client.android.admin.viewmodel.AdminOwnerAndroidView
 import pl.karol202.sciorder.client.android.common.SCIOrderApplication
 import pl.karol202.sciorder.client.android.common.viewmodel.OrdersAndroidViewModel
 import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
 
 class AdminApplication : SCIOrderApplication()
 {
@@ -14,7 +14,7 @@ class AdminApplication : SCIOrderApplication()
 
 	private fun viewModelsModule() = module {
 		viewModel<OwnerAndroidViewModel> { AdminOwnerAndroidViewModel(get(), get(), get()) }
-		viewModel { ProductsAndroidViewModel(get(), get()) }
+		viewModel { ProductsEditAndroidViewModel(get(), get()) }
 		viewModel { OrdersAndroidViewModel(get(), get()) }
 	}
 }

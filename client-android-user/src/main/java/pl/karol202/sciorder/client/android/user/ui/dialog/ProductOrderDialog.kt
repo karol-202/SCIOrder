@@ -9,7 +9,6 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_product_order.*
 import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
-import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
@@ -60,6 +59,6 @@ class ProductOrderDialog(context: Context,
 	private fun getValidProductOrder(): OrderedProduct?
 	{
 		val params = adapter.params.mapKeys { it.key.name }.mapValues { it.value?.toString() ?: return null }
-		return OrderedProduct(randomUUIDString(), product, adapter.quantity ?: return null, params)
+		return OrderedProduct.create(product, adapter.quantity ?: return null, params)
 	}
 }

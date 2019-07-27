@@ -11,5 +11,4 @@ class ProductsJsViewModel(ownerRepository: OwnerRepository,
 	val productsObservable = productsFlow.shareIn(coroutineScope)
 	//val loadingObservable = loadingFlow.shareIn(coroutineScope)
 	val loadingErrorEventObservable = loadingErrorEventFlow.shareIn(coroutineScope)
-	//val updateErrorEventObservable = updateEventFlow.shareIn(coroutineScope)
 }

@@ -11,13 +11,13 @@ import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.*
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
-import pl.karol202.sciorder.client.common.viewmodel.ProductsViewModel.UpdateResult.FAILURE
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
+import pl.karol202.sciorder.client.common.viewmodel.ProductsEditViewModel
 import pl.karol202.sciorder.common.Product
 
 class ProductsFragment : InflatedFragment()
 {
-	private val productsViewModel by sharedViewModel<ProductsAndroidViewModel>()
+	private val productsViewModel by sharedViewModel<ProductsEditAndroidViewModel>()
 
 	private val navController by lazy { findNavController(this) }
 
@@ -66,7 +66,7 @@ class ProductsFragment : InflatedFragment()
 
 	private fun observeUpdateError() =
 			productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-				if(it == FAILURE) showSnackbar(R.string.text_update_error)
+				if(it == ProductsEditViewModel.UpdateResult.FAILURE) showSnackbar(R.string.text_update_error)
 			}
 
 	private fun navigateToProductEditFragment(product: Product?) =

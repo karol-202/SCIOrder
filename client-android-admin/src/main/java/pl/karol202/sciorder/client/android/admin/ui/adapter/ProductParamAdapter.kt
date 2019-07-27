@@ -10,8 +10,8 @@ import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
-import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.client.common.model.NEW_PARAMETER
+import pl.karol202.sciorder.client.common.util.uuid
 import pl.karol202.sciorder.common.Product
 import pl.karol202.sciorder.common.duplicatedParameterNames
 
@@ -139,7 +139,7 @@ class ProductParamAdapter(initialParameters: List<Product.Parameter>,
 		parameters = initialParameters
 	}
 
-	private fun Product.Parameter.withId(id: String = randomUUIDString()) = ParameterWithId(id, this)
+	private fun Product.Parameter.withId(id: String = uuid()) = ParameterWithId(id, this)
 
 	override fun getLayout(viewType: Int) = when(viewType)
 	{

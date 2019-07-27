@@ -12,12 +12,12 @@ import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetLis
 import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.OrdersAndroidViewModel
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
 import pl.karol202.sciorder.common.Order
 
 class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 {
-	private val productsViewModel by sharedViewModel<ProductsAndroidViewModel>()
+	private val productsViewModel by sharedViewModel<ProductsEditAndroidViewModel>()
 	private val ordersViewModel by sharedViewModel<OrdersAndroidViewModel>()
 
 	private val adapter = OrderAdapter { order, status -> ordersViewModel.updateOrderStatus(order, status) }

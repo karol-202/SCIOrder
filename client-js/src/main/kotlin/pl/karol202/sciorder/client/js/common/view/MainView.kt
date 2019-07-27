@@ -93,7 +93,7 @@ class MainView(props: Props) : View<MainView.Props, MainView.State>(props)
 	}
 	
 	private fun adminView() = buildElement {
-		adminView(viewModels.productsViewModel, viewModels.ordersViewModel)
+		adminView(viewModels.productsEditViewModel, viewModels.ordersViewModel)
 	}
 	
 	private fun userView() = buildElement {

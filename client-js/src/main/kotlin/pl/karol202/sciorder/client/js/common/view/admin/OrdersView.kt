@@ -7,8 +7,8 @@ import kotlinx.css.*
 import materialui.icons.iconDelete
 import materialui.icons.iconRefresh
 import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.js.common.model.color
-import pl.karol202.sciorder.client.js.common.model.create
 import pl.karol202.sciorder.client.js.common.model.visibleName
 import pl.karol202.sciorder.client.js.common.util.cssFlexBox
 import pl.karol202.sciorder.client.js.common.util.cssFlexItem
@@ -42,7 +42,7 @@ class OrdersView : View<OrdersView.Props, RState>()
 	
 	companion object
 	{
-		private val PLACEHOLDER_PRODUCT = Product("", "", "Usunięty produkt", false, emptyList())
+		private val PLACEHOLDER_PRODUCT = Product.create(name = "Usunięty produkt")
 	}
 	
 	private val orders by prop { orders }
@@ -133,6 +133,7 @@ class OrdersView : View<OrdersView.Props, RState>()
 	}
 	
 	private fun RBuilder.order(order: Order) = mCard {
+		key = order.id
 		css {
 			cssFlexItem(shrink = 0.0)
 			margin(left = 12.px, right = 12.px, bottom = 24.px)

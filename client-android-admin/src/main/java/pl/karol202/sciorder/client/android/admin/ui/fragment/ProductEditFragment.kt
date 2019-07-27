@@ -13,19 +13,19 @@ import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
-import pl.karol202.sciorder.client.common.model.NEW_PRODUCT
-import pl.karol202.sciorder.client.common.viewmodel.ProductsViewModel.UpdateResult.SUCCESS
+import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
+import pl.karol202.sciorder.client.common.model.create
+import pl.karol202.sciorder.client.common.viewmodel.ProductsEditViewModel
 import pl.karol202.sciorder.common.Product
 
 class ProductEditFragment : ExtendedFragment()
 {
-	private val productsViewModel by sharedViewModel<ProductsAndroidViewModel>()
+	private val productsViewModel by sharedViewModel<ProductsEditAndroidViewModel>()
 
 	private val arguments by navArgs<ProductEditFragmentArgs>()
 	private val initialProduct by lazy { arguments.product }
 
-	private var product by instanceState { initialProduct ?: Product.NEW_PRODUCT }
+	private var product by instanceState { initialProduct ?: Product.create() }
 	private var name
 		get() = product.name
 		set(value) = updateProduct(product.copy(name = value))
@@ -75,7 +75,7 @@ class ProductEditFragment : ExtendedFragment()
 	private fun observeUpdateEvent()
 	{
 		productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-			if(it == SUCCESS) navigateBack()
+			if(it == ProductsEditViewModel.UpdateResult.SUCCESS) navigateBack()
 			else showSnackbar(R.string.text_update_error)
 		}
 	}

@@ -54,6 +54,7 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 	}
 	
 	private fun RBuilder.product(product: Product) = mExpansionPanel {
+		key = product.id
 		unmountOnExit = true
 		summaryPanel(product)
 		editPanel(product)
@@ -76,8 +77,6 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 	private fun summaryIcon() = buildElement { iconExpandMore() }
 	
 	private fun RBuilder.editPanel(product: Product) = mExpansionPanelDetails {
-		overrideCss { paddingBottom = 0.px }
-		
 		productEditView(product = getEditedOrDefaultProduct(product),
 		                onUpdate = { updateProduct(it) })
 	}

@@ -8,7 +8,6 @@ import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithout
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
-import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Product
@@ -43,7 +42,7 @@ class OrderAdapter(private val orderStatusUpdateListener: (Order, Order.Status) 
 		}
 
 		private fun Order.Entry.toOrderedProduct() = products.find { it.id == productId }?.let { product ->
-			OrderedProduct(randomUUIDString(), product, quantity, parameters)
+			OrderedProduct.create(product, quantity, parameters)
 		}
 	}
 

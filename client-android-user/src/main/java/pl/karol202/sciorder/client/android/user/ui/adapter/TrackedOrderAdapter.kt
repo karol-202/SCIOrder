@@ -8,9 +8,9 @@ import pl.karol202.sciorder.client.android.common.model.visibleName
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.util.getColorCompat
-import pl.karol202.sciorder.client.android.common.util.randomUUIDString
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.common.Order
 import pl.karol202.sciorder.common.Product
 
@@ -35,13 +35,11 @@ class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : Dy
 		}
 
 		private fun Order.Entry.getOrderedProduct() =
-				OrderedProduct(randomUUIDString(),
-				               products.find { it.id == productId } ?: createPlaceholderProduct(),
-				               quantity,
-				               parameters)
+				OrderedProduct.create(products.find { it.id == productId } ?: createPlaceholderProduct(),
+				                      quantity,
+				                      parameters)
 
-		private fun createPlaceholderProduct() =
-				Product(randomUUIDString(), "", ctx.getString(R.string.unknown_product), false, emptyList())
+		private fun createPlaceholderProduct() = Product.create(name = ctx.getString(R.string.unknown_product))
 	}
 
 	var orders: List<Order>

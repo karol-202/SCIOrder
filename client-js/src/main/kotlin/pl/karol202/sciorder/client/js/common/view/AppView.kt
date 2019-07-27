@@ -11,12 +11,7 @@ import pl.karol202.sciorder.client.common.repository.product.ProductRepositoryIm
 import pl.karol202.sciorder.client.js.common.model.local.LocalOrderDao
 import pl.karol202.sciorder.client.js.common.model.local.LocalOwnerDao
 import pl.karol202.sciorder.client.js.common.model.local.LocalProductDao
-import pl.karol202.sciorder.client.js.common.viewmodel.OrderComposeJsViewModel
-import pl.karol202.sciorder.client.js.common.viewmodel.OrdersJsViewModel
-import pl.karol202.sciorder.client.js.common.viewmodel.OrdersTrackJsViewModel
-import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
-import pl.karol202.sciorder.client.js.common.viewmodel.ProductsJsViewModel
-import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
+import pl.karol202.sciorder.client.js.common.viewmodel.*
 import react.RBuilder
 import react.RProps
 import react.RState
@@ -46,10 +41,11 @@ class AppView : View<RProps, AppView.State>()
 		val orderTrackRepository = OrderTrackRepositoryImpl(orderDao, orderApi)
 
 		state.viewModels = ViewModels(OwnerJsViewModel(ownerRepository, orderDao, productDao),
-		                        ProductsJsViewModel(ownerRepository, productRepository),
-		                        OrderComposeJsViewModel(ownerRepository, orderTrackRepository),
-		                        OrdersJsViewModel(ownerRepository, orderRepository),
-		                        OrdersTrackJsViewModel(ownerRepository, orderTrackRepository))
+		                              ProductsJsViewModel(ownerRepository, productRepository),
+		                              ProductsEditJsViewModel(ownerRepository, productRepository),
+		                              OrderComposeJsViewModel(ownerRepository, orderTrackRepository),
+		                              OrdersJsViewModel(ownerRepository, orderRepository),
+		                              OrdersTrackJsViewModel(ownerRepository, orderTrackRepository))
 	}
 
 	override fun RBuilder.render()
