@@ -93,6 +93,7 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 			styledDiv {
 				cssFlexBox(direction = FlexDirection.row,
 				           alignItems = Align.center)
+				css { paddingBottom = 8.px }
 				
 				mTypography(text = "Produkty", variant = MTypographyVariant.h6) {
 					cssFlexItem(grow = 1.0)

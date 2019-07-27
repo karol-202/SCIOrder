@@ -1,18 +1,18 @@
 object Versions
 {
 	// Common
-	const val KOTLIN = "1.3.40"
+	const val KOTLIN = "1.3.41"
 	const val KOTLINX_SERIALIZATION = "0.11.1"
 	const val KTOR = "1.2.2"
 	const val KOIN = "2.0.1"
 
 	// Client
-	const val COROUTINES = "1.3.0-M2"
+	const val COROUTINES = "1.3.0-RC"
 
 	// Android
 	const val ANDROID_BUILD_TOOLS = "3.4.2"
 	const val ANDROID_KTX = "1.0.2"
-	const val ANDROID_APPCOMPAT = "1.1.0-beta01"
+	const val ANDROID_APPCOMPAT = "1.1.0-rc01"
 	const val ANDROID_FRAGMENT = "1.0.0"
 	const val ANDROID_LIFECYCLE = "2.0.0"
 	const val ANDROID_VIEWMODEL = "2.0.0"
@@ -22,7 +22,7 @@ object Versions
 	const val ANDROID_MATERIAL = "1.0.0"
 	const val ANDROID_NAVIGATION = "2.0.0"
 	const val ANDROID_ROOM = "2.1.0"
-	const val RXJAVA = "2.2.9"
+	const val RXJAVA = "2.2.10"
 
 	// JS
 	const val KOTLIN_FRONTEND = "0.0.45"
