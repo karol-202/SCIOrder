@@ -113,7 +113,7 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 			css { margin(horizontal = LinearDimension.auto, vertical = 24.px) }
 			
 			mPaper {
-				overrideCss {
+				if(state.products.isNotEmpty()) overrideCss {
 					borderBottomLeftRadius = 0.px
 					borderBottomRightRadius = 0.px
 				}

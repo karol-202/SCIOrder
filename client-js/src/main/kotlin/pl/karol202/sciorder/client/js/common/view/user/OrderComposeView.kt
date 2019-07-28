@@ -44,6 +44,7 @@ class OrderComposeView : View<OrderComposeView.Props, RState>()
 			css {
 				height = 100.pct
 				overflowY = Overflow.auto
+				backgroundColor = Color(currentTheme.palette.background.default)
 			}
 			
 			titlePanel()

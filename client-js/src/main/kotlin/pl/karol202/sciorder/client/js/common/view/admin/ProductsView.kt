@@ -50,6 +50,7 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 	
 	private fun RBuilder.products() = styledDiv {
 		overrideCss {
+			overflow = Overflow.hidden
 			children {
 				firstChild {
 					borderTopLeftRadius = 0.px

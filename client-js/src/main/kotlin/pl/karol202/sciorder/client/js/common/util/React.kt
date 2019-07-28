@@ -4,12 +4,9 @@ import react.RBuilder
 import react.RComponent
 import react.RElementBuilder
 import react.RProps
-import react.ReactElement
 import react.router.dom.RouteResultProps
 import react.router.dom.redirect
-import react.router.dom.route
 import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 fun <T, P : RProps> RComponent<P, *>.prop(selector: P.() -> T) = object : ReadOnlyProperty<Any, T>
@@ -22,10 +19,6 @@ fun <T, P : RProps> RComponent<P, *>.nullableProp(selector: P.() -> T?) = object
 {
 	override fun getValue(thisRef: Any, property: KProperty<*>) = props.selector()
 }
-
-fun RBuilder.routeElse(render: (RouteResultProps<RProps>) -> ReactElement?) = route("", render = render)
-
-fun RBuilder.routeElse(component: KClass<out RComponent<*, *>>) = route("", component)
 
 fun RBuilder.redirectTo(to: String) = redirect(from = "", to = to)
 

@@ -8,6 +8,7 @@ import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
 import react.*
 import react.router.dom.RouteResultMatch
+import react.router.dom.redirect
 import react.router.dom.route
 import react.router.dom.switch
 import styled.styledDiv
@@ -78,14 +79,11 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 	private fun RBuilder.contentView() = styledDiv {
 		cssFlexItem(grow = 1.0)
 		switch {
-			route<RProps>("${mainMatch.path}/login") { (_, _, match) ->
-				if(!state.loggedIn) loginView(match)
-				else redirectTo(mainMatch.url)
-			}
-			routeElse { (_, _, match) ->
-				if(state.loggedIn) restView(match)
-				else redirectTo("${match.url}/login")
-			}
+			if(state.loggedIn) redirect(from = "${mainMatch.path}/login", to = mainMatch.url)
+			else redirect(from = mainMatch.path, exact = true, to = "${mainMatch.url}/login")
+			route<RProps>("${mainMatch.path}/login") { (_, _, match) -> println("login route"); loginView(match) }
+			route<RProps>(path = mainMatch.path, exact = true) { (_, _, match) -> println("rest route"); restView(match) }
+			redirectTo(mainMatch.url)
 		}
 	}
 	
@@ -117,6 +115,7 @@ fun RBuilder.loginControlView(ownerViewModel: OwnerJsViewModel,
                               match: RouteResultMatch<RProps>,
                               loginView: (RouteResultMatch<RProps>) -> ReactElement?,
                               restView: (RouteResultMatch<RProps>) -> ReactElement?) = child(LoginControlView::class) {
+	attrs.key = match.url
 	attrs.ownerViewModel = ownerViewModel
 	attrs.match = match
 	attrs.loginView = loginView
