@@ -1,12 +1,6 @@
 package pl.karol202.sciorder.client.js.common.view.user
 
-import com.ccfraser.muirwik.components.MButtonVariant
-import com.ccfraser.muirwik.components.MColor
-import com.ccfraser.muirwik.components.MTypographyVariant
-import com.ccfraser.muirwik.components.mButton
-import com.ccfraser.muirwik.components.mTextField
-import com.ccfraser.muirwik.components.mTypography
-import com.ccfraser.muirwik.components.targetInputValue
+import com.ccfraser.muirwik.components.*
 import kotlinx.css.Align
 import kotlinx.css.FlexDirection
 import kotlinx.css.marginBottom

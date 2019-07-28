@@ -9,7 +9,6 @@ import kotlinx.css.FlexDirection
 import kotlinx.css.margin
 import kotlinx.css.padding
 import kotlinx.css.px
-import kotlinx.html.InputType
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
@@ -111,7 +110,6 @@ class ProductOrderView(props: Props) : View<ProductOrderView.Props, ProductOrder
 		}
 
 		mTextField(label = "",
-		           type = InputType.number,
 		           helperText = errorText,
 		           error = error,
 		           nativeInputProps = nativeInputProps(param.attributes.minimalValue, param.attributes.maximalValue, anyStep),

@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.model.DEFAULT_FILTER
-import pl.karol202.sciorder.client.common.model.isLoggedAsAdmin
 import pl.karol202.sciorder.client.common.model.remote.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
@@ -26,19 +25,17 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 	
 	private val ordersStateBroadcastChannel = ownerRepository.getOwnerFlow()
 															 .onEach { owner = it }
-															 .filterNotNull()
-															 .filter { it.isLoggedAsAdmin() }
-															 .map { orderRepository.getOrdersResource(it.id, it.hash) }
-															 .onEach { it.autoReloadIn(coroutineScope) }
+															 .map { it?.let { orderRepository.getOrdersResource(it.id, it.hash) } }
+															 .onEach { it?.autoReloadIn(coroutineScope) }
 															 .onEach { ordersResource = it }
-															 .switchMap { it.asFlow }
+															 .switchMap { it?.asFlow ?: flowOf(null) }
 															 .conflate()
 															 .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 	private val orderFilterBroadcastChannel = ConflatedBroadcastChannel(Order.Status.DEFAULT_FILTER)
 	private val updateErrorEventBroadcastChannel = ConflatedBroadcastChannel<Event<Unit>>()
 	
 	private val ordersStateFlow = ordersStateBroadcastChannel.asFlow()
-	private val rawOrdersFlow = ordersStateFlow.map { it.data.orEmpty() }
+	private val rawOrdersFlow = ordersStateFlow.map { it?.data.orEmpty() }
 	
 	protected val filterFlow = orderFilterBroadcastChannel.asFlow()
 	protected val anyOrdersPresentFlow = rawOrdersFlow.map { it.isNotEmpty() }

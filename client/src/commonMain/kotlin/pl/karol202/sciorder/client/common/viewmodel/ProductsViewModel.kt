@@ -22,17 +22,16 @@ abstract class ProductsViewModel(ownerRepository: OwnerRepository,
 	
 	private val productsStateBroadcastChannel = ownerRepository.getOwnerFlow()
 															   .onEach { owner = it }
-															   .filterNotNull()
-															   .map { productRepository.getProductsResource(it.id) }
-															   .onEach { it.autoReloadIn(coroutineScope) }
+															   .map { it?.let { productRepository.getProductsResource(it.id) } }
+															   .onEach { it?.autoReloadIn(coroutineScope) }
 															   .onEach { productsResource = it }
-															   .switchMap { it.asFlow }
+															   .switchMap { it?.asFlow ?: flowOf(null) }
 															   .conflate()
 															   .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 	
 	private val productsStateFlow = productsStateBroadcastChannel.asFlow()
 
-	protected val productsFlow = productsStateFlow.map { it.data.orEmpty() }
+	protected val productsFlow = productsStateFlow.map { it?.data.orEmpty() }
 												  .distinctUntilChanged()
 	protected val loadingFlow = productsStateFlow.map { it is Resource.State.Loading }
 												 .distinctUntilChanged()

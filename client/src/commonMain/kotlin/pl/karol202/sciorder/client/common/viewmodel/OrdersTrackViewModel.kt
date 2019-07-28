@@ -19,17 +19,16 @@ abstract class OrdersTrackViewModel(ownerRepository: OwnerRepository,
 		}
 
 	private val ordersStateBroadcastChannel = ownerRepository.getOwnerFlow()
-															 .filterNotNull()
-															 .map { orderRepository.getTrackedOrdersResource(it.id) }
+															 .map { it?.let { orderRepository.getTrackedOrdersResource(it.id) } }
 															 .onEach { ordersResource = it }
-															 .onEach { it.autoReloadIn(coroutineScope) }
-															 .switchMap { it.asFlow }
+															 .onEach { it?.autoReloadIn(coroutineScope) }
+															 .switchMap { it?.asFlow ?: flowOf(null) }
 															 .conflate()
 															 .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 	
 	private val ordersStateFlow = ordersStateBroadcastChannel.asFlow()
 
-	protected val ordersFlow = ordersStateFlow.map { it.data.orEmpty() }
+	protected val ordersFlow = ordersStateFlow.map { it?.data.orEmpty() }
 											  .distinctUntilChanged()
 	protected val loadingFlow = ordersStateFlow.map { it is Resource.State.Loading }
 											   .distinctUntilChanged()

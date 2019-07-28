@@ -6,15 +6,26 @@ import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.util.shareIn
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 
-class OwnerJsViewModel(ownerRepository: OwnerRepository,
-                       private val orderDao: OrderDao,
-                       private val productDao: ProductDao) : OwnerViewModel(ownerRepository)
+abstract class OwnerJsViewModel(ownerRepository: OwnerRepository) : OwnerViewModel(ownerRepository)
 {
 	val ownerObservable = ownerFlow.shareIn(coroutineScope)
 	val errorEventObservable = errorEventFlow.shareIn(coroutineScope)
+}
 
+class AdminOwnerJsViewModel(ownerRepository: OwnerRepository,
+                            private val orderDao: OrderDao,
+                            private val productDao: ProductDao) : OwnerJsViewModel(ownerRepository)
+{
 	override fun onLogout() = launch {
 		orderDao.deleteAll()
+		productDao.deleteAll()
+	}
+}
+
+class UserOwnerJsViewModel(ownerRepository: OwnerRepository,
+                           private val productDao: ProductDao) : OwnerJsViewModel(ownerRepository)
+{
+	override fun onLogout() = launch {
 		productDao.deleteAll()
 	}
 }

@@ -24,9 +24,12 @@ abstract class LocalDao<T : Any>(private val storageId: String,
 	
 	companion object
 	{
-		const val STORAGE_OWNER = "owner"
-		const val STORAGE_ORDERS = "orders"
-		const val STORAGE_PRODUCTS = "products"
+		const val STORAGE_ADMIN_OWNER = "admin_owner"
+		const val STORAGE_ADMIN_ORDERS = "admin_orders"
+		const val STORAGE_ADMIN_PRODUCTS = "admin_products"
+		const val STORAGE_USER_OWNER = "user_owner"
+		const val STORAGE_USER_ORDERS = "user_orders"
+		const val STORAGE_USER_PRODUCTS = "user_products"
 	}
 	
 	private var updateListeners = listOf<(T) -> Unit>()

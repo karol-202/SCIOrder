@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.client.js.common.viewmodel
 
-data class ViewModels(val ownerViewModel: OwnerJsViewModel,
+data class ViewModels(val adminOwnerViewModel: AdminOwnerJsViewModel,
+                      val userOwnerViewModel: UserOwnerJsViewModel,
                       val productsViewModel: ProductsJsViewModel,
                       val productsEditViewModel: ProductsEditJsViewModel,
                       val orderComposeViewModel: OrderComposeJsViewModel,

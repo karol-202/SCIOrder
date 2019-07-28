@@ -6,10 +6,12 @@ import pl.karol202.sciorder.client.common.model.local.ProductDao
 import pl.karol202.sciorder.client.js.common.model.local.FakeDao.IdUniqueElement
 import pl.karol202.sciorder.common.Product
 
-class LocalProductDao : LocalDao<Set<IdUniqueElement<Product>>>(STORAGE_PRODUCTS,
-                                                                IdUniqueElement.serializer(Product.serializer()).set,
-                                                                emptySet()),
-                        ProductDao, FakeDao
+class LocalProductDao(storageId: String) :
+		LocalDao<Set<IdUniqueElement<Product>>>(storageId,
+		                                        IdUniqueElement.serializer(Product.serializer()).set,
+		                                        emptySet()),
+		ProductDao,
+		FakeDao
 {
 	override suspend fun insert(items: List<Product>) = setData { it + items.wrap() }
 

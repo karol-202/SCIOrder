@@ -1,21 +1,22 @@
 package pl.karol202.sciorder.client.js.common.view
 
-import com.ccfraser.muirwik.components.currentTheme
-import com.ccfraser.muirwik.components.mSnackbar
+import com.ccfraser.muirwik.components.*
 import kotlinx.css.Color
+import kotlinx.css.FlexDirection
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 import pl.karol202.sciorder.client.js.common.util.*
-import pl.karol202.sciorder.client.js.common.viewmodel.ViewModels
+import pl.karol202.sciorder.client.js.common.viewmodel.OwnerJsViewModel
 import react.*
 import react.router.dom.RouteResultMatch
 import react.router.dom.route
 import react.router.dom.switch
+import styled.styledDiv
 
 class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControlView.State>(props)
 {
 	interface Props : RProps
 	{
-		var viewModels: ViewModels
+		var ownerViewModel: OwnerJsViewModel
 		var match: RouteResultMatch<RProps>
 		var loginView: (RouteResultMatch<RProps>) -> ReactElement?
 		var restView: (RouteResultMatch<RProps>) -> ReactElement?
@@ -24,11 +25,13 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 	interface State : RState
 	{
 		var loggedIn: Boolean
+		var ownerName: String?
+		
 		var lastError: OwnerViewModel.Error?
 		var errorShown: Boolean
 	}
 
-	private val viewModels by prop { viewModels }
+	private val ownerViewModel by prop { ownerViewModel }
 	private val mainMatch by prop { match }
 	private val loginView by prop { loginView }
 	private val restView by prop { restView }
@@ -38,8 +41,11 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 		state.loggedIn = false
 		state.errorShown = false
 
-		viewModels.ownerViewModel.ownerObservable.bindToState { loggedIn = it != null }
-		viewModels.ownerViewModel.errorEventObservable.bindEventToState {
+		ownerViewModel.ownerObservable.bindToState {
+			loggedIn = it != null
+			ownerName = it?.name
+		}
+		ownerViewModel.errorEventObservable.bindEventToState {
 			lastError = it
 			errorShown = true
 		}
@@ -47,6 +53,30 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 
 	override fun RBuilder.render()
 	{
+		styledDiv {
+			cssFlexBox(direction = FlexDirection.column)
+			
+			appBar()
+			contentView()
+		}
+		snackbar()
+	}
+	
+	private fun RBuilder.appBar() = mAppBar(position = MAppBarPosition.sticky) {
+		mToolbar {
+			mTypography(state.ownerName ?: "SCIOrder",
+			            variant = MTypographyVariant.h6,
+			            color = MTypographyColor.inherit,
+			            noWrap = true) {
+				cssFlexItem(grow = 1.0)
+			}
+			if(state.loggedIn) mIconButton(color = MColor.inherit,
+			                               onClick = { logout() }) { iconLogout() }
+		}
+	}
+
+	private fun RBuilder.contentView() = styledDiv {
+		cssFlexItem(grow = 1.0)
 		switch {
 			route<RProps>("${mainMatch.path}/login") { (_, _, match) ->
 				if(!state.loggedIn) loginView(match)
@@ -57,9 +87,8 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 				else redirectTo("${match.url}/login")
 			}
 		}
-		snackbar()
 	}
-
+	
 	private fun RBuilder.snackbar(): ReactElement
 	{
 		val message = when(state.lastError)
@@ -78,15 +107,17 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 			cssSnackbarColor(Color(currentTheme.palette.error.main))
 		}
 	}
-
+	
+	private fun logout() = ownerViewModel.logout()
+	
 	private fun hideSnackbar() = setState { errorShown = false }
 }
 
-fun RBuilder.loginControlView(viewModels: ViewModels,
+fun RBuilder.loginControlView(ownerViewModel: OwnerJsViewModel,
                               match: RouteResultMatch<RProps>,
                               loginView: (RouteResultMatch<RProps>) -> ReactElement?,
                               restView: (RouteResultMatch<RProps>) -> ReactElement?) = child(LoginControlView::class) {
-	attrs.viewModels = viewModels
+	attrs.ownerViewModel = ownerViewModel
 	attrs.match = match
 	attrs.loginView = loginView
 	attrs.restView = restView
