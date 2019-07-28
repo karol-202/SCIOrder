@@ -107,30 +107,34 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 	private fun RBuilder.productsPanel() = styledDiv {
 		cssFlexBox(direction = FlexDirection.row)
 		
-		mPaper {
+		styledDiv {
 			cssFlexItem(basis = 600.px.basis)
 			cssFlexBox(direction = FlexDirection.column)
-			css {
-				margin(horizontal = LinearDimension.auto, vertical = 24.px)
-				paddingTop = 8.px
-			}
+			css { margin(horizontal = LinearDimension.auto, vertical = 24.px) }
 			
-			styledDiv {
-				cssFlexBox(direction = FlexDirection.row,
-				           alignItems = Align.center)
-				css { paddingBottom = 8.px }
+			mPaper {
+				overrideCss {
+					borderBottomLeftRadius = 0.px
+					borderBottomRightRadius = 0.px
+				}
 				
-				mTypography(text = "Produkty", variant = MTypographyVariant.h6) {
-					cssFlexItem(grow = 1.0)
-					overrideCss { margin(horizontal = 24.px) }
-				}
-				mIconButton(onClick = { newProduct() }) {
-					overrideCss { marginRight = 8.px }
-					iconAdd()
-				}
-				mIconButton(onClick = { refreshProducts() }) {
-					overrideCss { marginRight = 8.px }
-					iconRefresh()
+				styledDiv {
+					cssFlexBox(direction = FlexDirection.row,
+					           alignItems = Align.center)
+					css { padding(vertical = 8.px) }
+					
+					mTypography(text = "Produkty", variant = MTypographyVariant.h6) {
+						cssFlexItem(grow = 1.0)
+						overrideCss { margin(horizontal = 24.px) }
+					}
+					mIconButton(onClick = { newProduct() }) {
+						overrideCss { marginRight = 8.px }
+						iconAdd()
+					}
+					mIconButton(onClick = { refreshProducts() }) {
+						overrideCss { marginRight = 8.px }
+						iconRefresh()
+					}
 				}
 			}
 			productsView()

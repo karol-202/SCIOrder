@@ -15,7 +15,6 @@ import pl.karol202.sciorder.client.js.common.util.unmountOnExit
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.common.Product
 import react.*
-import react.dom.div
 import styled.css
 import styled.styledDiv
 
@@ -49,11 +48,20 @@ class ProductsView : View<ProductsView.Props, ProductsView.State>()
 		products()
 	}
 	
-	private fun RBuilder.products() = div {
+	private fun RBuilder.products() = styledDiv {
+		overrideCss {
+			children {
+				firstChild {
+					borderTopLeftRadius = 0.px
+					borderTopRightRadius = 0.px
+				}
+			}
+		}
+		
 		products.forEach { product(it) }
 	}
 	
-	private fun RBuilder.product(product: Product) = mExpansionPanel {
+	private fun RBuilder.product(product: Product) = mExpansionPanel(className = "MuiPaper-elevation2") {
 		key = product.id
 		unmountOnExit = true
 		summaryPanel(product)
