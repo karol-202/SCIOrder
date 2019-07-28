@@ -8,6 +8,7 @@ import com.ccfraser.muirwik.components.dialog.mDialogTitle
 import kotlinx.css.*
 import materialui.icons.iconAdd
 import materialui.icons.iconRefresh
+import pl.karol202.sciorder.client.common.viewmodel.ProductsEditViewModel
 import pl.karol202.sciorder.client.js.common.util.*
 import pl.karol202.sciorder.client.js.common.view.View
 import pl.karol202.sciorder.client.js.common.viewmodel.OrdersJsViewModel
@@ -41,6 +42,19 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 		
 		var lastDeletedProduct: Product?
 		var productDeleteDialogOpen: Boolean
+		
+		var lastMessage: Message?
+		var messageShown: Boolean
+	}
+	
+	enum class Message(val text: String,
+	                   val color: Color)
+	{
+		PRODUCTS_UPDATE_SUCCESS("Zaktualizowano pomyślnie", Colors.Green.shade600),
+		PRODUCTS_UPDATE_FAILURE("Błąd aktualizacji", Color(currentTheme.palette.error.main)),
+		PRODUCTS_LOADING_FAILURE("Błąd ładowania", Color(currentTheme.palette.error.main)),
+		ORDERS_LOADING_FAILURE("Błąd ładowania", Color(currentTheme.palette.error.main)),
+		ORDERS_UPDATE_FAILURE("Błąd aktualizacji", Color(currentTheme.palette.error.main)),
 	}
 	
 	private val productsEditViewModel by prop { productsEditViewModel }
@@ -54,12 +68,22 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 		state.products = emptyList()
 		state.ordersDeleteDialogOpen = false
 		state.productDeleteDialogOpen = false
+		state.messageShown = false
 		
+		ordersViewModel.filterObservable.bindToState { orderFilter = it }
 		ordersViewModel.anyOrdersPresentObservable.bindToState { anyOrdersPresent = it }
 		ordersViewModel.ordersObservable.bindToState { filteredOrders = it }
-		ordersViewModel.filterObservable.bindToState { orderFilter = it }
+		ordersViewModel.loadingErrorEventObservable.observeEvent { showMessage(Message.ORDERS_LOADING_FAILURE) }
+		ordersViewModel.updateErrorEventObservable.observeEvent { showMessage(Message.ORDERS_UPDATE_FAILURE) }
 		
 		productsEditViewModel.productsObservable.bindToState { products = it }
+		productsEditViewModel.loadingErrorEventObservable.observeEvent { showMessage(Message.PRODUCTS_LOADING_FAILURE) }
+		productsEditViewModel.updateEventObservable.observeEvent {
+			showMessage(when(it)
+			            {
+				            ProductsEditViewModel.UpdateResult.SUCCESS -> Message.PRODUCTS_UPDATE_SUCCESS
+				            ProductsEditViewModel.UpdateResult.FAILURE -> Message.PRODUCTS_UPDATE_FAILURE
+			            }) }
 	}
 	
 	override fun RBuilder.render()
@@ -68,6 +92,7 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 		productsPanel()
 		ordersDeleteDialog()
 		productDeleteDialog()
+		messageSnackbar()
 	}
 	
 	private fun RBuilder.ordersView() = ordersView(orders = state.filteredOrders,
@@ -156,6 +181,13 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 		}
 	}
 	
+	private fun RBuilder.messageSnackbar() = mSnackbar(message = state.lastMessage?.text ?: "",
+	                                                   autoHideDuration = 3000,
+	                                                   open = state.messageShown,
+	                                                   onClose = { _, _ -> hideMessage() }) {
+		state.lastMessage?.color?.let { cssSnackbarColor(it) }
+	}
+	
 	private fun refreshOrders() = ordersViewModel.refreshOrders()
 	
 	private fun refreshProducts() = productsEditViewModel.refreshProducts()
@@ -180,6 +212,13 @@ class AdminView(props: Props) : View<AdminView.Props, AdminView.State>(props)
 	}
 	
 	private fun closeProductDeleteDialog() = setState { productDeleteDialogOpen = false }
+	
+	private fun showMessage(message: Message) = setState {
+		lastMessage = message
+		messageShown = true
+	}
+	
+	private fun hideMessage() = setState { messageShown = false }
 }
 
 fun RBuilder.adminView(productsEditViewModel: ProductsEditJsViewModel,

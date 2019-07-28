@@ -13,8 +13,8 @@ class OrdersJsViewModel(ownerRepository: OwnerRepository,
 	val anyOrdersPresentObservable = anyOrdersPresentFlow.shareIn(coroutineScope)
 	val ordersObservable = ordersFlow.shareIn(coroutineScope)
 	//val loadingObservable = loadingFlow.shareIn(coroutineScope)
-	//val loadingErrorEventObservable = loadingErrorEventFlow.shareIn(coroutineScope)
-	//val updateErrorEventObservable = updateErrorEventFlow.shareIn(coroutineScope)
+	val loadingErrorEventObservable = loadingErrorEventFlow.shareIn(coroutineScope)
+	val updateErrorEventObservable = updateErrorEventFlow.shareIn(coroutineScope)
 	
 	fun toggleOrderFilter(status: Order.Status)
 	{

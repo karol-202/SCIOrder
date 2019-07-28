@@ -94,7 +94,7 @@ class UserView(props: Props) : View<UserView.Props, UserView.State>(props)
 		ordersTrackViewModel.ordersObservable.bindToState { trackedOrders = it }
 		ordersTrackViewModel.errorEventObservable.observeEvent { showMessage(Message.TRACKED_ORDERS_LOADING_FAILURE) }
 		
-		productsViewModel.productsObservable.bindToState { products = it ?: emptyList() }
+		productsViewModel.productsObservable.bindToState { products = it }
 		productsViewModel.loadingErrorEventObservable.observeEvent { showMessage(Message.PRODUCTS_LOADING_FAILURE) }
 		
 		orderComposeViewModel.orderObservable.bindToState { orderedProducts = it }

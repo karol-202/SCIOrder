@@ -23,8 +23,8 @@ class ProductsEditJsViewModel(ownerRepository: OwnerRepository,
 	val productsObservable = productsFlow.combineLatest(newProductsFlow) { products, newProducts -> products + newProducts }
 										 .shareIn(coroutineScope)
 	//val loadingObservable = loadingFlow.shareIn(coroutineScope)
-	//val loadingErrorEventObservable = loadingErrorEventFlow.shareIn(coroutineScope)
-	//val updateErrorEventObservable = updateEventFlow.shareIn(coroutineScope)
+	val loadingErrorEventObservable = loadingErrorEventFlow.shareIn(coroutineScope)
+	val updateEventObservable = updateEventFlow.shareIn(coroutineScope)
 	
 	fun newProduct() = addToNewProducts(uuid())
 	
