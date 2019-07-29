@@ -27,4 +27,7 @@ interface OrderEntityDao
 
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME} WHERE ownerId = :ownerId")
 	fun getByOwnerId(ownerId: String): Flowable<List<OrderEntity>>
+	
+	@Query("SELECT status FROM ${OrderEntity.TABLE_NAME} WHERE id = :id LIMIT 1")
+	fun getStatus(id: String): Flowable<List<Order.Status>>
 }

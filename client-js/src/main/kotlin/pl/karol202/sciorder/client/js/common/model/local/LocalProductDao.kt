@@ -22,4 +22,8 @@ class LocalProductDao(storageId: String) :
 	override suspend fun deleteAll() = setData { emptySet() }
 
 	override fun getAll() = getFromStorage().map { it.values() }
+	
+	override fun getById(id: String) = getAll().map { products ->
+		products.singleOrNull { it.id == id }
+	}
 }

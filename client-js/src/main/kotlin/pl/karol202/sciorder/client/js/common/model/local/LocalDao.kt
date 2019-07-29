@@ -36,7 +36,7 @@ abstract class LocalDao<T : Any>(private val storageId: String,
 	private var loaded = false
 	private var data = initialData
 	
-	protected fun getFromStorage() = channelFlow<T> {
+	protected fun getFromStorage() = channelFlow {
 		if(!loaded) loadFromStorage()
 		send(data)
 		

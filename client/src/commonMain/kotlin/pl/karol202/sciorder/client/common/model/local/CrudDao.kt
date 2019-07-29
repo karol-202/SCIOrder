@@ -12,3 +12,9 @@ interface CrudDao<T>
 
 	fun getAll(): Flow<List<T>>
 }
+
+suspend fun <T> CrudDao<T>.insert(item: T) = insert(listOf(item))
+
+suspend fun <T> CrudDao<T>.update(item: T) = update(listOf(item))
+
+suspend fun <T> CrudDao<T>.delete(item: T) = delete(listOf(item))

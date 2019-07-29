@@ -9,7 +9,7 @@ sealed class ApiResponse<out T>
 	companion object
 	{
 		fun <T> fromData(data: T) = Success(data)
-
+		
 		fun fromThrowable(throwable: Throwable) =
 				Error(throwable.getErrorType(), throwable.message ?: "")
 
@@ -33,12 +33,14 @@ sealed class ApiResponse<out T>
 
 	// Message is for debugging purposes
 	class Error(val type: Type,
-	            val message: String) : ApiResponse<Nothing>()
+	            val message: String = "") : ApiResponse<Nothing>()
 	{
 		enum class Type
 		{
 			NETWORK,
 			NOT_FOUND, CONFLICT,
+			LOCAL_INCONSISTENCY, // Indicates that local client's state makes request impossible or pointless,
+								 // may be caused for instance by trying to update order that has been just deleted.
 			OTHER
 		}
 

@@ -31,4 +31,8 @@ class LocalOrderDao(storageId: String) :
 	override fun getByOwnerId(ownerId: String) = getAll().map { orders ->
 		orders.filter { it.ownerId == ownerId }
 	}
+	
+	override fun getStatus(id: String) = getAll().map { orders ->
+		orders.singleOrNull { it.id == id }?.status
+	}
 }

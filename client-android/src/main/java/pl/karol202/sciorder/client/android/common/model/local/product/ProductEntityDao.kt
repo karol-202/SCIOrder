@@ -20,4 +20,7 @@ interface ProductEntityDao
 
     @Query("SELECT * FROM ${ProductEntity.TABLE_NAME}")
     fun getAll(): Flowable<List<ProductEntity>>
+	
+	@Query("SELECT * FROM ${ProductEntity.TABLE_NAME} WHERE id = :id")
+	fun getById(id: String): Flowable<List<ProductEntity>>
 }

@@ -10,4 +10,6 @@ interface OrderDao : CrudDao<Order>
 	suspend fun deleteAll()
 
 	fun getByOwnerId(ownerId: String): Flow<List<Order>>
+	
+	fun getStatus(id: String): Flow<Order.Status?>
 }

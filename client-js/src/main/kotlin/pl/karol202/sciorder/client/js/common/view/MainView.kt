@@ -81,7 +81,7 @@ class MainView(props: Props) : View<MainView.Props, RState>(props)
 	}
 	
 	private fun RBuilder.footer() = styledDiv {
-		attrs.classes += "MuiPaper-elevation4"
+		attrs.classes += "MuiPaper-elevation16"
 		divider()
 		styledDiv {
 			cssFlexBox(direction = FlexDirection.row)
