@@ -119,7 +119,7 @@ class OrdersView : View<OrdersView.Props, RState>()
 			      color = MChipColor.secondary,
 			      variant = if(checked) MChipVariant.default else MChipVariant.outlined,
 			      onClick = { onFilterToggle(status) }) {
-				css { margin(horizontal = 8.px) }
+				css { margin(horizontal = 8.px, vertical = 4.px) }
 			}
 	
 	private fun RBuilder.orders() = mList {

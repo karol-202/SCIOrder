@@ -81,8 +81,8 @@ class LoginControlView(props: Props) : View<LoginControlView.Props, LoginControl
 		switch {
 			if(state.loggedIn) redirect(from = "${mainMatch.path}/login", to = mainMatch.url)
 			else redirect(from = mainMatch.path, exact = true, to = "${mainMatch.url}/login")
-			route<RProps>("${mainMatch.path}/login") { (_, _, match) -> println("login route"); loginView(match) }
-			route<RProps>(path = mainMatch.path, exact = true) { (_, _, match) -> println("rest route"); restView(match) }
+			route<RProps>("${mainMatch.path}/login") { (_, _, match) -> loginView(match) }
+			route<RProps>(path = mainMatch.path, exact = true) { (_, _, match) -> restView(match) }
 			redirectTo(mainMatch.url)
 		}
 	}

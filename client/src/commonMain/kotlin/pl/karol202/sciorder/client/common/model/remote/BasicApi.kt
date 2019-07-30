@@ -8,6 +8,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
 import io.ktor.http.takeFrom
+import kotlinx.coroutines.withTimeout
 
 abstract class BasicApi(protected val httpClient: HttpClient)
 {
@@ -15,31 +16,35 @@ abstract class BasicApi(protected val httpClient: HttpClient)
 	{
 		private const val SERVER_URL = "https://sciorder.herokuapp.com"
 	}
+	
+	val timeoutMillis = 5000L // Accessing companion's const from inline function caused ReferenceError
 
-	protected suspend inline fun <reified T> get(builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
+	protected suspend inline fun <reified T> get(crossinline builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
 		method = HttpMethod.Get
 		builder()
 	}
 
-	protected suspend inline fun <reified T> post(builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
+	protected suspend inline fun <reified T> post(crossinline builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
 		method = HttpMethod.Post
 		emptyBody()
 		builder()
 	}
 
-	protected suspend inline fun <reified T> put(builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
+	protected suspend inline fun <reified T> put(crossinline builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
 		method = HttpMethod.Put
 		emptyBody()
 		builder()
 	}
 
-	protected suspend inline fun <reified T> delete(builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
+	protected suspend inline fun <reified T> delete(crossinline builder: HttpRequestBuilder.() -> Unit) = apiRequest<T> {
 		method = HttpMethod.Delete
 		builder()
 	}
 
-	protected suspend inline fun <reified T> apiRequest(builder: HttpRequestBuilder.() -> Unit) = executeForApiResponse {
-		httpClient.request<T>(builder)
+	protected suspend inline fun <reified T> apiRequest(crossinline builder: HttpRequestBuilder.() -> Unit) = executeForApiResponse {
+		withTimeout(timeoutMillis) {
+			httpClient.request<T>(builder)
+		}
 	}
 
 	protected inline fun <T> executeForApiResponse(block: () -> T) =

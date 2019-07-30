@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.common.model.remote
 
 import io.ktor.client.features.ResponseException
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.io.IOException
 
 sealed class ApiResponse<out T>
@@ -22,6 +23,7 @@ sealed class ApiResponse<out T>
 				HttpStatusCode.Conflict -> Error.Type.CONFLICT
 				else -> Error.Type.OTHER
 			}
+			is TimeoutCancellationException -> Error.Type.NETWORK
 			else -> Error.Type.OTHER
 		}
 	}
