@@ -48,7 +48,7 @@ kotlinFrontend {
         contentPath = file("src/main/web/")
         publicPath = "/"
         host = "localhost"
-        port = 8080
+        port = 8081
         mode = if(devMode) "development" else "production"
     })
 }

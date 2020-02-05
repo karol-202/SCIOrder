@@ -1,6 +1,9 @@
 .gradle
-.idea/libraries
 .idea/caches
+.idea/dictionaries
+.idea/libraries
+.idea/gradle.xml
+.idea/modules.xml
 .idea/workspace.xml
 build
 
