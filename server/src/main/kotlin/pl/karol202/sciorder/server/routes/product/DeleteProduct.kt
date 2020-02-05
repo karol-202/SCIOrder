@@ -1,8 +1,6 @@
 package pl.karol202.sciorder.server.routes.product
 
 import io.ktor.application.call
-import io.ktor.http.HttpStatusCode
-import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.delete
 import pl.karol202.sciorder.server.database.ProductDao
