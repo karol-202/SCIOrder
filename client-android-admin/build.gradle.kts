@@ -2,7 +2,7 @@ plugins {
     id(Plugins.ANDROID_APP)
     id(Plugins.KOTLIN_ANDROID)
     id(Plugins.KOTLIN_KAPT)
-    id(Plugins.ANDROID_KTX)
+    id(Plugins.KOTLIN_ANDROID_EXTENSIONS)
     id(Plugins.ANDROID_NAVIGATION)
 }
 
@@ -28,7 +28,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     
-    lintOptions {
+    /*lintOptions {
         isCheckReleaseBuilds = false // Workaround for "Configuration with name 'compileClasspath' not found." on lintVitalRelease
     }
 
@@ -44,7 +44,7 @@ android {
         exclude("META-INF/kotlinx-serialization-runtime.kotlin_module")
         exclude("META-INF/ktor-http-cio.kotlin_module")
         exclude("META-INF/ktor-client-core.kotlin_module")
-    }
+    }*/
 }
 
 androidExtensions {

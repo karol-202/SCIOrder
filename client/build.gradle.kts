@@ -3,7 +3,7 @@ import com.android.build.gradle.LibraryExtension
 plugins {
     id(Plugins.ANDROID_LIBRARY) apply false
     id(Plugins.KOTLIN_MULTIPLATFORM)
-    id(Plugins.KOTLINX_SERIALIZATION)
+    id(Plugins.KOTLIN_SERIALIZATION)
 }
 
 val includeAndroid by project.booleanProperties
@@ -59,13 +59,13 @@ kotlin {
         }
 
         if(includeAndroid) getByName("androidMain").dependencies {
-            api(Deps.COROUTINES_CORE_JVM)
+            api(Deps.COROUTINES_CORE_ANDROID)
 
             implementation(Deps.KTOR_CLIENT_CORE_JVM)
             implementation(Deps.KTOR_CLIENT_JSON_JVM)
             implementation(Deps.KTOR_CLIENT_SERIALIZATION_JVM)
 
-            implementation(Deps.ANDROID_VIEWMODEL)
+            implementation(Deps.ANDROID_LIFECYCLE_VIEWMODEL)
         }
 
         js().compilations["main"].dependencies {

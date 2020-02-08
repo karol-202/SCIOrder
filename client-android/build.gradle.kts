@@ -1,8 +1,8 @@
 plugins {
     id(Plugins.ANDROID_LIBRARY)
     id(Plugins.KOTLIN_ANDROID)
+	id(Plugins.KOTLIN_ANDROID_EXTENSIONS)
 	id(Plugins.KOTLIN_KAPT)
-	id(Plugins.ANDROID_KTX)
 }
 
 android {
@@ -32,7 +32,7 @@ androidExtensions {
 
 dependencies {
     api(project(":client"))
-    implementation(Deps.COROUTINES_RX)
+    implementation(Deps.COROUTINES_CORE_ANDROID)
 
     implementation(Deps.KTOR_CLIENT_ENGINE_OKHTTP)
 
@@ -44,20 +44,15 @@ dependencies {
     api(Deps.ANDROID_KTX)
     api(Deps.ANDROID_APPCOMPAT)
     api(Deps.ANDROID_FRAGMENT)
-    api(Deps.ANDROID_LIFECYCLE)
-	api(Deps.ANDROID_VIEWMODEL)
+	api(Deps.ANDROID_LIFECYCLE_VIEWMODEL)
     api(Deps.ANDROID_CONSTRAINT_LAYOUT)
     api(Deps.ANDROID_RECYCLER_VIEW)
     api(Deps.ANDROID_PREFERENCE)
-    api(Deps.ANDROID_MATERIAL)
-
     api(Deps.ANDROID_NAVIGATION_FRAGMENT)
     api(Deps.ANDROID_NAVIGATION_UI)
+    api(Deps.ANDROID_MATERIAL)
 
     kapt(Deps.ANDROID_ROOM_COMPILER)
     implementation(Deps.ANDROID_ROOM)
     implementation(Deps.ANDROID_ROOM_KTX)
-    implementation(Deps.ANDROID_ROOM_RXJAVA)
-
-    implementation(Deps.RXJAVA)
 }

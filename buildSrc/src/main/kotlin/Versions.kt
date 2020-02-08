@@ -1,28 +1,26 @@
 object Versions
 {
 	// Common
-	const val KOTLIN = "1.3.41"
-	const val KOTLINX_SERIALIZATION = "0.11.1"
-	const val KTOR = "1.2.2"
+	const val KOTLIN = "1.3.61"
+	const val KOTLINX_SERIALIZATION = "0.14.0"
+	const val KTOR = "1.3.0"
 	const val KOIN = "2.0.1"
 
 	// Client
-	const val COROUTINES = "1.3.0-RC"
+	const val COROUTINES = "1.3.3"
 
 	// Android
-	const val ANDROID_BUILD_TOOLS = "3.4.2"
-	const val ANDROID_KTX = "1.0.2"
-	const val ANDROID_APPCOMPAT = "1.1.0-rc01"
-	const val ANDROID_FRAGMENT = "1.0.0"
-	const val ANDROID_LIFECYCLE = "2.0.0"
-	const val ANDROID_VIEWMODEL = "2.0.0"
-	const val ANDROID_CONSTRAINT_LAYOUT = "2.0.0-beta2"
-	const val ANDROID_RECYCLER_VIEW = "1.0.0"
-	const val ANDROID_PREFERENCE = "1.0.0"
-	const val ANDROID_MATERIAL = "1.0.0"
-	const val ANDROID_NAVIGATION = "2.0.0"
-	const val ANDROID_ROOM = "2.1.0"
-	const val RXJAVA = "2.2.10"
+	const val ANDROID_GRADLE_PLUGIN = "3.5.3"
+	const val ANDROID_KTX = "1.2.0"
+	const val ANDROID_APPCOMPAT = "1.1.0"
+	const val ANDROID_FRAGMENT = "1.2.1"
+	const val ANDROID_VIEWMODEL = "2.2.0"
+	const val ANDROID_CONSTRAINT_LAYOUT = "2.0.0-beta4"
+	const val ANDROID_RECYCLER_VIEW = "1.1.0"
+	const val ANDROID_PREFERENCE = "1.1.0"
+	const val ANDROID_NAVIGATION = "2.2.1"
+	const val ANDROID_MATERIAL = "1.1.0"
+	const val ANDROID_ROOM = "2.2.3"
 
 	// JS
 	const val KOTLIN_FRONTEND = "0.0.45"
@@ -42,7 +40,7 @@ object Versions
 	const val SHA1 = "1.1.1"
 
 	// Server
-	const val SHADOW = "4.0.2"
-	const val KMONGO = "3.10.2"
+	const val SHADOW = "5.2.0"
+	const val KMONGO = "3.12.0"
 	const val LOGBACK = "1.2.3"
 }

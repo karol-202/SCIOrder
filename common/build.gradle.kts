@@ -1,6 +1,6 @@
 plugins {
     id(Plugins.KOTLIN_MULTIPLATFORM)
-	id(Plugins.KOTLINX_SERIALIZATION)
+	id(Plugins.KOTLIN_SERIALIZATION)
 }
 
 kotlin {

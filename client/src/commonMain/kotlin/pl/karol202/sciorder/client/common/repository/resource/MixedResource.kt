@@ -5,7 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.combineLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -47,7 +47,7 @@ abstract class MixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<
 	private var autoReloadJob: Job? = null
 
 	private val stateChannel = ConflatedBroadcastChannel<State>(State.Success)
-	override val asFlow = databaseFlow.combineLatest(stateChannel.asFlow()) { data, state -> state.toResourceState(data) }
+	override val asFlow = databaseFlow.combine(stateChannel.asFlow()) { data, state -> state.toResourceState(data) }
 
 	override suspend fun autoReloadIn(coroutineScope: CoroutineScope)
 	{

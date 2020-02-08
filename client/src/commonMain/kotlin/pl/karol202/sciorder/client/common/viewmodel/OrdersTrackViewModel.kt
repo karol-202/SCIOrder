@@ -22,7 +22,7 @@ abstract class OrdersTrackViewModel(ownerRepository: OwnerRepository,
 															 .map { it?.let { orderRepository.getTrackedOrdersResource(it.id) } }
 															 .onEach { ordersResource = it }
 															 .onEach { it?.autoReloadIn(coroutineScope) }
-															 .switchMap { it?.asFlow ?: flowOf(null) }
+															 .flatMapLatest { it?.asFlow ?: flowOf(null) }
 															 .conflate()
 															 .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 	

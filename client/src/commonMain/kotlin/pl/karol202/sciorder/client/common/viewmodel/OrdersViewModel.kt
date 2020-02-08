@@ -28,7 +28,7 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 															 .map { it?.let { orderRepository.getOrdersResource(it.id, it.hash) } }
 															 .onEach { it?.autoReloadIn(coroutineScope) }
 															 .onEach { ordersResource = it }
-															 .switchMap { it?.asFlow ?: flowOf(null) }
+															 .flatMapLatest { it?.asFlow ?: flowOf(null) }
 															 .conflate()
 															 .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 	private val orderFilterBroadcastChannel = ConflatedBroadcastChannel(Order.Status.DEFAULT_FILTER)
@@ -40,7 +40,7 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 	protected val filterFlow = orderFilterBroadcastChannel.asFlow()
 	protected val anyOrdersPresentFlow = rawOrdersFlow.map { it.isNotEmpty() }
 													  .distinctUntilChanged()
-	protected val ordersFlow = rawOrdersFlow.combineLatest(filterFlow) { orders, filter -> orders.filter { it.status in filter } }
+	protected val ordersFlow = rawOrdersFlow.combine(filterFlow) { orders, filter -> orders.filter { it.status in filter } }
 											.distinctUntilChanged()
 	protected val loadingFlow = ordersStateFlow.map { it is Resource.State.Loading }
 											   .distinctUntilChanged()

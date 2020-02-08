@@ -25,7 +25,7 @@ abstract class ProductsViewModel(ownerRepository: OwnerRepository,
 															   .map { it?.let { productRepository.getProductsResource(it.id) } }
 															   .onEach { it?.autoReloadIn(coroutineScope) }
 															   .onEach { productsResource = it }
-															   .switchMap { it?.asFlow ?: flowOf(null) }
+															   .flatMapLatest { it?.asFlow ?: flowOf(null) }
 															   .conflate()
 															   .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 	
