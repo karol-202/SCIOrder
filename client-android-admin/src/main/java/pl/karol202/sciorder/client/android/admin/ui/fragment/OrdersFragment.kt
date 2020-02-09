@@ -13,7 +13,7 @@ import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.OrdersAndroidViewModel
 import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 {

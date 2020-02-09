@@ -10,7 +10,7 @@ import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.OrderFilterAdapter
 import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetListener
 import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 class OrderFilterDialog(context: Context,
                         filter: Set<Order.Status>,

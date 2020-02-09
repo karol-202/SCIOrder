@@ -1,9 +1,9 @@
 package pl.karol202.sciorder.client.common.repository.owner
 
-import pl.karol202.sciorder.client.common.model.local.OwnerDao
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.common.model.remote.owner.OwnerApi
-import pl.karol202.sciorder.common.Owner
+import pl.karol202.sciorder.client.common.api.ApiResponse
+import pl.karol202.sciorder.client.common.api.owner.OwnerApi
+import pl.karol202.sciorder.client.common.database.owner.OwnerDao
+import pl.karol202.sciorder.common.model.Owner
 
 class OwnerRepositoryImpl(private val ownerDao: OwnerDao,
                           private val ownerApi: OwnerApi) : OwnerRepository

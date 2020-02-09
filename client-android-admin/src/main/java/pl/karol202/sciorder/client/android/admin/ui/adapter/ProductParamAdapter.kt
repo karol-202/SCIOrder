@@ -12,8 +12,8 @@ import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
 import pl.karol202.sciorder.client.common.model.NEW_PARAMETER
 import pl.karol202.sciorder.client.common.util.uuid
-import pl.karol202.sciorder.common.Product
-import pl.karol202.sciorder.common.duplicatedParameterNames
+import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.model.duplicatedParameterNames
 
 class ProductParamAdapter(initialParameters: List<Product.Parameter>,
                           private val onParamsUpdate: (List<Product.Parameter>) -> Unit) :

@@ -12,7 +12,7 @@ import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithout
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class ProductParamAttrAdapter(private val attrs: List<Attr>,
                               private val onAttrsUpdate: (Product.Parameter.Attributes) -> Unit) :
@@ -140,12 +140,12 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 		{
 			Product.Parameter.Type.TEXT -> listOf(Attr.DefaultValue.Text(param.attributes.defaultValue))
 			Product.Parameter.Type.INT -> listOf(Attr.DefaultValue.Int(param.attributes.defaultValue?.toIntOrNull()),
-			                                     Attr.Range.Int(param.attributes.minimalValue?.toInt(), param.attributes.maximalValue?.toInt()))
+			                                                                                          Attr.Range.Int(param.attributes.minimalValue?.toInt(), param.attributes.maximalValue?.toInt()))
 			Product.Parameter.Type.FLOAT -> listOf(Attr.DefaultValue.Float(param.attributes.defaultValue?.toFloatOrNull()),
-			                                       Attr.Range.Float(param.attributes.minimalValue, param.attributes.maximalValue))
+			                                                                                            Attr.Range.Float(param.attributes.minimalValue, param.attributes.maximalValue))
 			Product.Parameter.Type.BOOL -> listOf(Attr.DefaultValue.Bool(param.attributes.defaultValue?.toBoolean() ?: false))
 			Product.Parameter.Type.ENUM -> listOf(Attr.Enum(param.attributes.enumValues ?: listOf(),
-			                                                param.attributes.defaultValue))
+			                                                                                                     param.attributes.defaultValue))
 		}
 	}
 

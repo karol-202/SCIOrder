@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.common.model
 
 import pl.karol202.sciorder.client.android.common.R
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 val Product.Parameter.Type.visibleName get() = when(this)
 {

@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.item_order_filter.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.common.model.visibleName
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 class OrderFilterAdapter(filter: Set<Order.Status>) : BasicAdapter<OrderFilterAdapter.FilterEntry>()
 {

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
+import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.util.tryDoLocking
 
 abstract class MixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<T>

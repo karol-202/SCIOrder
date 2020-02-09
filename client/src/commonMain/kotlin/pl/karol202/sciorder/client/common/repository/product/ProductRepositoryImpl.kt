@@ -2,17 +2,17 @@ package pl.karol202.sciorder.client.common.repository.product
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import pl.karol202.sciorder.client.common.model.local.ProductDao
-import pl.karol202.sciorder.client.common.model.local.delete
-import pl.karol202.sciorder.client.common.model.local.insert
-import pl.karol202.sciorder.client.common.model.local.update
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
-import pl.karol202.sciorder.client.common.model.remote.product.ProductApi
+import pl.karol202.sciorder.client.common.api.ApiResponse
+import pl.karol202.sciorder.client.common.api.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
+import pl.karol202.sciorder.client.common.api.product.ProductApi
+import pl.karol202.sciorder.client.common.database.delete
+import pl.karol202.sciorder.client.common.database.insert
+import pl.karol202.sciorder.client.common.database.product.ProductDao
+import pl.karol202.sciorder.client.common.database.update
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
 import pl.karol202.sciorder.client.common.util.minutes
-import pl.karol202.sciorder.common.Owner
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Owner
+import pl.karol202.sciorder.common.model.Product
 
 class ProductRepositoryImpl(private val productDao: ProductDao,
                             private val productApi: ProductApi) : ProductRepository

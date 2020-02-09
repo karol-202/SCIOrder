@@ -9,7 +9,7 @@ import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.common.util.setArguments
 import pl.karol202.sciorder.client.android.common.util.setTargetFragment
 import pl.karol202.sciorder.client.android.common.util.to
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 class OrderFilterDialogFragment : ExtendedDialogFragment()
 {

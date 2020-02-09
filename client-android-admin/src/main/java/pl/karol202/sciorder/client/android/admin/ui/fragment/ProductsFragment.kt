@@ -13,7 +13,7 @@ import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
 import pl.karol202.sciorder.client.common.viewmodel.ProductsEditViewModel
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class ProductsFragment : InflatedFragment()
 {

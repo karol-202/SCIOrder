@@ -3,7 +3,7 @@ object Versions
 	// Common
 	const val KOTLIN = "1.3.61"
 	const val KOTLINX_SERIALIZATION = "0.14.0"
-	const val KTOR = "1.3.0"
+	const val KTOR = "1.3.1"
 	const val KOIN = "2.0.1"
 
 	// Client

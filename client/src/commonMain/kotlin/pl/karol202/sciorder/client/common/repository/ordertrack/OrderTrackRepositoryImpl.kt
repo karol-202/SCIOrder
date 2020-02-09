@@ -1,15 +1,15 @@
 package pl.karol202.sciorder.client.common.repository.ordertrack
 
 import kotlinx.coroutines.delay
-import pl.karol202.sciorder.client.common.model.local.OrderDao
-import pl.karol202.sciorder.client.common.model.local.delete
-import pl.karol202.sciorder.client.common.model.local.insert
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
+import pl.karol202.sciorder.client.common.api.ApiResponse
+import pl.karol202.sciorder.client.common.api.order.OrderApi
+import pl.karol202.sciorder.client.common.database.delete
+import pl.karol202.sciorder.client.common.database.insert
+import pl.karol202.sciorder.client.common.database.order.OrderDao
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
 import pl.karol202.sciorder.client.common.util.seconds
-import pl.karol202.sciorder.common.Order
-import pl.karol202.sciorder.common.Owner
+import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.model.Owner
 
 class OrderTrackRepositoryImpl(private val orderDao: OrderDao,
                                private val orderApi: OrderApi) : OrderTrackRepository

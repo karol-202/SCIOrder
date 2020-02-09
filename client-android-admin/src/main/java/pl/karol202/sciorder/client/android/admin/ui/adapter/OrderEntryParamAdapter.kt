@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.item_order_entry_param.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class OrderEntryParamAdapter(parameters: List<Pair<Product.Parameter, String?>>) :
 		StaticAdapter<Pair<Product.Parameter, String?>>(parameters)

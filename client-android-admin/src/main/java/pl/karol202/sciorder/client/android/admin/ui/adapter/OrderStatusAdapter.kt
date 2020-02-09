@@ -7,7 +7,7 @@ import pl.karol202.sciorder.client.android.common.model.color
 import pl.karol202.sciorder.client.android.common.model.visibleName
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicSpinnerAdapter
 import pl.karol202.sciorder.client.android.common.util.getColorCompat
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 class OrderStatusAdapter : BasicSpinnerAdapter<Order.Status>()
 {

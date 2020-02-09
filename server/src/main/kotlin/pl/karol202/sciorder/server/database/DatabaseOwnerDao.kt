@@ -4,7 +4,7 @@ import com.mongodb.client.model.IndexOptions
 import org.litote.kmongo.ascendingIndex
 import org.litote.kmongo.eq
 import org.litote.kmongo.setValue
-import pl.karol202.sciorder.common.Owner
+import pl.karol202.sciorder.common.model.Owner
 
 class DatabaseOwnerDao(database: KMongoDatabase): OwnerDao
 {

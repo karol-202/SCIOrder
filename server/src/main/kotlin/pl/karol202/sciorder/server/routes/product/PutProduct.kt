@@ -4,7 +4,7 @@ import io.ktor.application.call
 import io.ktor.request.receive
 import io.ktor.routing.Route
 import io.ktor.routing.put
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.notFound

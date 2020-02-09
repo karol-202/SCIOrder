@@ -13,7 +13,7 @@ import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class ProductOrderDialog(context: Context,
                          private val product: Product,

@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.server.model
 
-import pl.karol202.sciorder.common.Order
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.common.util.isValidFloat
 import pl.karol202.sciorder.common.util.isValidInt
 import pl.karol202.sciorder.server.database.ProductDao

@@ -4,7 +4,7 @@ import io.ktor.application.call
 import io.ktor.request.receive
 import io.ktor.routing.Route
 import io.ktor.routing.post
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.server.database.OrderDao
 import pl.karol202.sciorder.server.database.ProductDao
 import pl.karol202.sciorder.server.model.isValid
@@ -21,5 +21,5 @@ fun Route.postOrder(productDao: ProductDao, orderDao: OrderDao) = post {
 }
 
 private fun Order.overwrite(ownerId: String) = copy(_id = newStringId<Order>(),
-                                                    ownerId = ownerId,
-                                                    status = Order.Status.WAITING)
+                                                                                                         ownerId = ownerId,
+                                                                                                         status = Order.Status.WAITING)

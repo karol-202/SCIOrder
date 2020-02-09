@@ -3,11 +3,11 @@ package pl.karol202.sciorder.client.common.viewmodel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
+import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 abstract class ProductsEditViewModel(ownerRepository: OwnerRepository,
                                      private val productRepository: ProductRepository) :

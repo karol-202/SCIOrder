@@ -3,18 +3,22 @@ package pl.karol202.sciorder.client.common.viewmodel
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
-import pl.karol202.sciorder.client.common.model.DEFAULT_FILTER
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
+import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.common.Order
-import pl.karol202.sciorder.common.Owner
+import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.model.Owner
 
 abstract class OrdersViewModel(ownerRepository: OwnerRepository,
-                               private val orderRepository: OrderRepository) : CoroutineViewModel()
+                               private val orderRepository: OrderRepository) : ViewModel()
 {
+	companion object
+	{
+		val DEFAULT_FILTER = Order.Status.values().toSet() - Order.Status.DONE - Order.Status.REJECTED
+	}
+	
 	private var owner: Owner? = null
 	private var ordersResource: Resource<List<Order>>? = null
 		set(value)
@@ -31,7 +35,7 @@ abstract class OrdersViewModel(ownerRepository: OwnerRepository,
 															 .flatMapLatest { it?.asFlow ?: flowOf(null) }
 															 .conflate()
 															 .broadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
-	private val orderFilterBroadcastChannel = ConflatedBroadcastChannel(Order.Status.DEFAULT_FILTER)
+	private val orderFilterBroadcastChannel = ConflatedBroadcastChannel(DEFAULT_FILTER)
 	private val updateErrorEventBroadcastChannel = ConflatedBroadcastChannel<Event<Unit>>()
 	
 	private val ordersStateFlow = ordersStateBroadcastChannel.asFlow()

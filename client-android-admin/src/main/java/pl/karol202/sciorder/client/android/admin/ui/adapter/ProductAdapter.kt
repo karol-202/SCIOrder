@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.item_product.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class ProductAdapter(private val productEditListener: (Product) -> Unit,
                      private val productRemoveListener: (Product) -> Unit) : DynamicAdapter<Product>()

@@ -2,20 +2,19 @@ package pl.karol202.sciorder.client.common.repository.order
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import pl.karol202.sciorder.client.common.model.local.OrderDao
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
-import pl.karol202.sciorder.client.common.model.remote.order.OrderApi
+import pl.karol202.sciorder.client.common.api.ApiResponse
+import pl.karol202.sciorder.client.common.api.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
+import pl.karol202.sciorder.client.common.api.order.OrderApi
+import pl.karol202.sciorder.client.common.database.order.OrderDao
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
 import pl.karol202.sciorder.client.common.util.seconds
-import pl.karol202.sciorder.common.Order
-import pl.karol202.sciorder.common.Owner
+import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.model.Owner
 
 class OrderRepositoryImpl(private val orderDao: OrderDao,
                           private val orderApi: OrderApi) : OrderRepository
 {
 	override fun getOrdersResource(ownerId: String, hash: String) = object : DaoMixedResource<Order>(orderDao) {
-
 		override suspend fun waitForNextUpdate() = delay(10.seconds)
 
 		override suspend fun loadFromNetwork(oldData: List<Order>) = orderApi.getAllOrders(ownerId, hash)

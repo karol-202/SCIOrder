@@ -1,9 +1,9 @@
 package pl.karol202.sciorder.client.common.repository.product
 
-import pl.karol202.sciorder.client.common.model.remote.ApiResponse
+import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.repository.resource.Resource
-import pl.karol202.sciorder.common.Owner
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Owner
+import pl.karol202.sciorder.common.model.Product
 
 interface ProductRepository
 {

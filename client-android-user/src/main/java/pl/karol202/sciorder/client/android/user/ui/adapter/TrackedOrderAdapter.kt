@@ -11,8 +11,8 @@ import pl.karol202.sciorder.client.android.common.util.getColorCompat
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.model.create
-import pl.karol202.sciorder.common.Order
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.model.Product
 
 class TrackedOrderAdapter(private val orderRemoveListener: (Order) -> Unit) : DynamicAdapter<Order>()
 {

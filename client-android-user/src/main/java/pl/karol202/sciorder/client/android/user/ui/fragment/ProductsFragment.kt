@@ -23,8 +23,8 @@ import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderEditLi
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
 import pl.karol202.sciorder.client.common.model.OrderedProduct
 import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel.OrderResult.SUCCESS
-import pl.karol202.sciorder.common.Order
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.model.Product
 
 class ProductsFragment : InflatedFragment(), OnProductOrderListener, OnProductOrderEditListener, OnOrderDetailsSetListener
 {

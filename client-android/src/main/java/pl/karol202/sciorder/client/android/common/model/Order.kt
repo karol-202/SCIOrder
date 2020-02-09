@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.common.model
 
 import pl.karol202.sciorder.client.android.common.R
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 val Order.Status.visibleName get() = when(this)
 {

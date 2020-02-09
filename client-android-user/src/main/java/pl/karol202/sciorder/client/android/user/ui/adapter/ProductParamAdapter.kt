@@ -17,7 +17,7 @@ import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.ui.ctx
 import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
 import pl.karol202.sciorder.client.android.user.R
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class ProductParamAdapter(context: Context,
                           product: Product,
@@ -201,9 +201,9 @@ class ProductParamAdapter(context: Context,
 	                                  var value: Any?)
 
 	private val allParams = product.parameters + Product.Parameter(context.getString(R.string.text_quantity),
-	                                                               Product.Parameter.Type.INT,
-	                                                               Product.Parameter.Attributes(minimalValue = 1f,
-	                                                                                            defaultValue = initialQuantity.toString()))
+	                                                                                                                    Product.Parameter.Type.INT,
+	                                                                                                                    Product.Parameter.Attributes(minimalValue = 1f,
+	                                                                                                                                                                                                      defaultValue = initialQuantity.toString()))
 	private val items = allParams.map { ParamWithValue(it, null) }
 
 	val quantity get() = items.last().value as? Int

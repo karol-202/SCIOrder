@@ -1,6 +1,6 @@
 package pl.karol202.sciorder.server.database
 
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 interface OrderDao
 {

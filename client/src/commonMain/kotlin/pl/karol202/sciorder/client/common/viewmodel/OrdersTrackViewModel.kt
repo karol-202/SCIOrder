@@ -6,10 +6,10 @@ import pl.karol202.sciorder.client.common.repository.ordertrack.OrderTrackReposi
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.common.Order
+import pl.karol202.sciorder.common.model.Order
 
 abstract class OrdersTrackViewModel(ownerRepository: OwnerRepository,
-                                    private val orderRepository: OrderTrackRepository) : CoroutineViewModel()
+                                    private val orderRepository: OrderTrackRepository) : ViewModel()
 {
 	private var ordersResource: Resource<List<Order>>? = null
 		set(value)

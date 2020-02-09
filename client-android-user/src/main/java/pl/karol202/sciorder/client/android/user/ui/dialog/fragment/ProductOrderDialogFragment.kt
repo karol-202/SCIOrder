@@ -9,7 +9,7 @@ import pl.karol202.sciorder.client.android.common.util.setTargetFragment
 import pl.karol202.sciorder.client.android.common.util.to
 import pl.karol202.sciorder.client.android.user.ui.dialog.ProductOrderDialog
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class ProductOrderDialogFragment : ExtendedDialogFragment()
 {

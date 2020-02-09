@@ -2,7 +2,7 @@ package pl.karol202.sciorder.server.database
 
 import org.litote.kmongo.and
 import org.litote.kmongo.eq
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class DatabaseProductDao(database: KMongoDatabase) : ProductDao
 {

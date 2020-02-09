@@ -6,11 +6,11 @@ import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.common.Owner
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Owner
+import pl.karol202.sciorder.common.model.Product
 
 abstract class ProductsViewModel(ownerRepository: OwnerRepository,
-                                 private val productRepository: ProductRepository) : CoroutineViewModel()
+                                 private val productRepository: ProductRepository) : ViewModel()
 {
 	protected var owner: Owner? = null
 	private var productsResource: Resource<List<Product>>? = null

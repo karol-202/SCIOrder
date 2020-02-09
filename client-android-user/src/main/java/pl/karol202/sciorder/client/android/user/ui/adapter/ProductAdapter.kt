@@ -7,7 +7,7 @@ import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.ui.ctx
 import pl.karol202.sciorder.client.android.common.util.getColorCompat
 import pl.karol202.sciorder.client.android.user.R
-import pl.karol202.sciorder.common.Product
+import pl.karol202.sciorder.common.model.Product
 
 class ProductAdapter : DynamicAdapter<Product>()
 {
