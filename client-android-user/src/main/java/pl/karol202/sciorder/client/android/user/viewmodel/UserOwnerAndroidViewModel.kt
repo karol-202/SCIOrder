@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.user.viewmodel
 
 import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
-import pl.karol202.sciorder.client.common.database.product.ProductDao
+import pl.karol202.sciorder.client.common.database.dao.ProductDao
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 
 class UserOwnerAndroidViewModel(ownerRepository: OwnerRepository,

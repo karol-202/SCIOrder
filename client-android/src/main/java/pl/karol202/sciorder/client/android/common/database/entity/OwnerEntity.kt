@@ -1,10 +1,10 @@
-package pl.karol202.sciorder.client.android.common.database.owner
+package pl.karol202.sciorder.client.android.common.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 // Table stores at most one owner
-@Entity(tableName = OwnerEntity.TABLE_NAME)
+@Entity
 data class OwnerEntity(val id: String?, // Null id indicates absence of owner
                        val name: String,
                        val hash: String)
@@ -17,7 +17,6 @@ data class OwnerEntity(val id: String?, // Null id indicates absence of owner
 
 	companion object
 	{
-		const val TABLE_NAME = "owner"
 		private const val FAKE_ID = 0
 	}
 }

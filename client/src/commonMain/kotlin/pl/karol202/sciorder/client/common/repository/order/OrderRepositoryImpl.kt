@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.first
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.api.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
 import pl.karol202.sciorder.client.common.api.order.OrderApi
-import pl.karol202.sciorder.client.common.database.order.OrderDao
+import pl.karol202.sciorder.client.common.database.dao.OrderDao
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
 import pl.karol202.sciorder.client.common.util.seconds
 import pl.karol202.sciorder.common.model.Order

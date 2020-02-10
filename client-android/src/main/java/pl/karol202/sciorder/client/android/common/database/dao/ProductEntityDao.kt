@@ -1,7 +1,8 @@
-package pl.karol202.sciorder.client.android.common.database.product
+package pl.karol202.sciorder.client.android.common.database.dao
 
 import androidx.room.*
 import io.reactivex.Flowable
+import pl.karol202.sciorder.client.android.common.database.entity.ProductEntity
 
 @Dao
 interface ProductEntityDao

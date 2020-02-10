@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.common.database
+package pl.karol202.sciorder.client.common.database.dao
 
 import kotlinx.coroutines.flow.Flow
 

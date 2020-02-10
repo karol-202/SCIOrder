@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.first
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.api.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
 import pl.karol202.sciorder.client.common.api.product.ProductApi
-import pl.karol202.sciorder.client.common.database.delete
-import pl.karol202.sciorder.client.common.database.insert
-import pl.karol202.sciorder.client.common.database.product.ProductDao
-import pl.karol202.sciorder.client.common.database.update
+import pl.karol202.sciorder.client.common.database.dao.ProductDao
+import pl.karol202.sciorder.client.common.database.dao.delete
+import pl.karol202.sciorder.client.common.database.dao.insert
+import pl.karol202.sciorder.client.common.database.dao.update
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
 import pl.karol202.sciorder.client.common.util.minutes
 import pl.karol202.sciorder.common.model.Owner

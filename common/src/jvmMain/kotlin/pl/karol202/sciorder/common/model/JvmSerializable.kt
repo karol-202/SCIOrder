@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.common
+package pl.karol202.sciorder.common.model
 
 import java.io.Serializable
 

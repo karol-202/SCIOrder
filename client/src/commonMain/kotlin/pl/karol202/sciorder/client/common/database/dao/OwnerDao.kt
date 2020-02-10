@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.common.database.owner
+package pl.karol202.sciorder.client.common.database.dao
 
 import kotlinx.coroutines.flow.Flow
 import pl.karol202.sciorder.common.model.Owner

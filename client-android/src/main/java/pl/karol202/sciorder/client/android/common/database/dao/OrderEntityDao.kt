@@ -1,7 +1,8 @@
-package pl.karol202.sciorder.client.android.common.database.order
+package pl.karol202.sciorder.client.android.common.database.dao
 
 import androidx.room.*
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import pl.karol202.sciorder.client.android.common.database.entity.OrderEntity
 import pl.karol202.sciorder.common.model.Order
 
 @Dao
@@ -23,11 +24,11 @@ interface OrderEntityDao
 	suspend fun deleteAll()
 
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME}")
-	fun getAll(): Flowable<List<OrderEntity>>
+	fun getAll(): Flow<List<OrderEntity>>
 
 	@Query("SELECT * FROM ${OrderEntity.TABLE_NAME} WHERE ownerId = :ownerId")
-	fun getByOwnerId(ownerId: String): Flowable<List<OrderEntity>>
+	fun getByOwnerId(ownerId: String): Flow<List<OrderEntity>>
 	
-	@Query("SELECT status FROM ${OrderEntity.TABLE_NAME} WHERE id = :id LIMIT 1")
-	fun getStatus(id: String): Flowable<List<Order.Status>>
+	@Query("SELECT status FROM ${OrderEntity.TABLE_NAME} WHERE id = :id")
+	fun getStatus(id: String): Flow<Order.Status?>
 }

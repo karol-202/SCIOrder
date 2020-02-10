@@ -1,7 +1,9 @@
-package pl.karol202.sciorder.client.android.common.database.product
+package pl.karol202.sciorder.client.android.common.database.daoimpl
 
 import kotlinx.coroutines.reactive.flow.asFlow
-import pl.karol202.sciorder.client.common.database.product.ProductDao
+import pl.karol202.sciorder.client.android.common.database.dao.ProductEntityDao
+import pl.karol202.sciorder.client.android.common.database.entity.ProductEntity
+import pl.karol202.sciorder.client.common.database.dao.ProductDao
 import pl.karol202.sciorder.common.model.Product
 
 fun ProductEntityDao.toProductDao(): ProductDao = RoomProductDao(this)

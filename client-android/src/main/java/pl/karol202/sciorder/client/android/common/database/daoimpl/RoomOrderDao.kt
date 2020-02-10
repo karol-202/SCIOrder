@@ -1,7 +1,9 @@
-package pl.karol202.sciorder.client.android.common.database.order
+package pl.karol202.sciorder.client.android.common.database.daoimpl
 
-import kotlinx.coroutines.reactive.flow.asFlow
-import pl.karol202.sciorder.client.common.database.order.OrderDao
+import kotlinx.coroutines.flow.map
+import pl.karol202.sciorder.client.android.common.database.dao.OrderEntityDao
+import pl.karol202.sciorder.client.android.common.database.entity.OrderEntity
+import pl.karol202.sciorder.client.common.database.dao.OrderDao
 import pl.karol202.sciorder.common.model.Order
 
 fun OrderEntityDao.toOrderDao(): OrderDao = RoomOrderDao(this)
@@ -19,13 +21,12 @@ class RoomOrderDao(private val orderEntityDao: OrderEntityDao) : OrderDao
 	override suspend fun deleteAll() = orderEntityDao.deleteAll()
 
 	override fun getAll() =
-			orderEntityDao.getAll().asFlow().map { it.toOrders() }
+			orderEntityDao.getAll().map { it.toOrders() }
 
 	override fun getByOwnerId(ownerId: String) =
-			orderEntityDao.getByOwnerId(ownerId).asFlow().map { it.toOrders() }
+			orderEntityDao.getByOwnerId(ownerId).map { it.toOrders() }
 	
-	override fun getStatus(id: String) =
-			orderEntityDao.getStatus(id).asFlow().map { it.singleOrNull() }
+	override fun getStatus(id: String) = orderEntityDao.getStatus(id)
 	
 	private fun List<OrderEntity>.toOrders() = map { it.toOrder() }
 	

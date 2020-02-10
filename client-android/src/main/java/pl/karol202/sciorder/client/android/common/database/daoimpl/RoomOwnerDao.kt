@@ -1,7 +1,9 @@
-package pl.karol202.sciorder.client.android.common.database.owner
+package pl.karol202.sciorder.client.android.common.database.daoimpl
 
 import kotlinx.coroutines.reactive.flow.asFlow
-import pl.karol202.sciorder.client.common.database.owner.OwnerDao
+import pl.karol202.sciorder.client.android.common.database.dao.OwnerEntityDao
+import pl.karol202.sciorder.client.android.common.database.entity.OwnerEntity
+import pl.karol202.sciorder.client.common.database.dao.OwnerDao
 import pl.karol202.sciorder.common.model.Owner
 
 fun OwnerEntityDao.toOwnerDao(): OwnerDao = RoomOwnerDao(this)

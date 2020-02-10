@@ -5,15 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import pl.karol202.sciorder.client.android.common.database.order.OrderEntity
-import pl.karol202.sciorder.client.android.common.database.order.OrderEntityDao
-import pl.karol202.sciorder.client.android.common.database.order.OrderEntriesListConverter
-import pl.karol202.sciorder.client.android.common.database.order.OrderStatusConverter
-import pl.karol202.sciorder.client.android.common.database.owner.OwnerEntity
-import pl.karol202.sciorder.client.android.common.database.owner.OwnerEntityDao
-import pl.karol202.sciorder.client.android.common.database.product.ProductEntity
-import pl.karol202.sciorder.client.android.common.database.product.ProductEntityDao
-import pl.karol202.sciorder.client.android.common.database.product.ProductParametersListConverter
+import pl.karol202.sciorder.client.android.common.database.converter.OrderStatusConverter
+import pl.karol202.sciorder.client.android.common.database.converter.ProductParameterTypeConverter
+import pl.karol202.sciorder.client.android.common.database.converter.StringListConverter
+import pl.karol202.sciorder.client.android.common.database.dao.OrderEntityDao
+import pl.karol202.sciorder.client.android.common.database.dao.OwnerEntityDao
+import pl.karol202.sciorder.client.android.common.database.dao.ProductEntityDao
+import pl.karol202.sciorder.client.android.common.database.entity.OrderEntity
+import pl.karol202.sciorder.client.android.common.database.entity.OwnerEntity
+import pl.karol202.sciorder.client.android.common.database.entity.ProductEntity
 
 private object DatabaseInfo
 {
@@ -24,7 +24,7 @@ private object DatabaseInfo
 @Database(entities = [ProductEntity::class, OrderEntity::class, OwnerEntity::class],
           version = DatabaseInfo.VERSION,
           exportSchema = false)
-@TypeConverters(ProductParametersListConverter::class, OrderEntriesListConverter::class, OrderStatusConverter::class)
+@TypeConverters(StringListConverter::class, OrderStatusConverter::class, ProductParameterTypeConverter::class)
 abstract class LocalDatabase : RoomDatabase()
 {
 	companion object
