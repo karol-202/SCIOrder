@@ -1,7 +1,6 @@
 package pl.karol202.sciorder.client.common.api.owner
 
 import pl.karol202.sciorder.client.common.api.ApiResponse
-import pl.karol202.sciorder.common.model.Owner
 
 interface OwnerApi
 {

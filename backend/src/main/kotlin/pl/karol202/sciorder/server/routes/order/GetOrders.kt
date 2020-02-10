@@ -2,7 +2,6 @@ package pl.karol202.sciorder.server.routes.order
 
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
-import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.util.pipeline.PipelineContext

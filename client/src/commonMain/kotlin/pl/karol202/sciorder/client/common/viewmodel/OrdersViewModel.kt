@@ -2,14 +2,16 @@ package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onEach
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.common.model.Owner
 
 abstract class OrdersViewModel(ownerRepository: OwnerRepository,
                                private val orderRepository: OrderRepository) : ViewModel()

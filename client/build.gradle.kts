@@ -59,7 +59,7 @@ kotlin {
         }
 
         if(includeAndroid) getByName("androidMain").dependencies {
-            api(Deps.COROUTINES_CORE_ANDROID)
+            api(Deps.COROUTINES_ANDROID)
 
             implementation(Deps.KTOR_CLIENT_CORE_JVM)
             implementation(Deps.KTOR_CLIENT_JSON_JVM)

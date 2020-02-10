@@ -32,7 +32,7 @@ androidExtensions {
 
 dependencies {
     api(project(":client"))
-    implementation(Deps.COROUTINES_CORE_ANDROID)
+    implementation(Deps.COROUTINES_ANDROID)
 
     implementation(Deps.KTOR_CLIENT_ENGINE_OKHTTP)
 

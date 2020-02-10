@@ -2,7 +2,6 @@ package pl.karol202.sciorder.client.common.repository.owner
 
 import kotlinx.coroutines.flow.Flow
 import pl.karol202.sciorder.client.common.api.ApiResponse
-import pl.karol202.sciorder.common.model.Owner
 
 interface OwnerRepository
 {

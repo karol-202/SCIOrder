@@ -12,7 +12,7 @@ object Deps
 
 	// Client
 	const val COROUTINES_CORE_COMMON = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.COROUTINES}"
-	const val COROUTINES_CORE_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-core-android:${Versions.COROUTINES}"
+	const val COROUTINES_ANDROID = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.COROUTINES}"
 	const val COROUTINES_CORE_JS = "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:${Versions.COROUTINES}"
 
 	const val KTOR_CLIENT_CORE_COMMON = "io.ktor:ktor-client-core:${Versions.KTOR}"

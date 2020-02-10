@@ -1,8 +1,6 @@
 package pl.karol202.sciorder.server.database
 
-import org.litote.kmongo.`in`
 import org.litote.kmongo.and
-import org.litote.kmongo.eq
 import org.litote.kmongo.setValue
 import pl.karol202.sciorder.common.model.Order
 

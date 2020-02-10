@@ -11,7 +11,6 @@ import pl.karol202.sciorder.client.common.database.dao.insert
 import pl.karol202.sciorder.client.common.database.dao.update
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
 import pl.karol202.sciorder.client.common.util.minutes
-import pl.karol202.sciorder.common.model.Owner
 import pl.karol202.sciorder.common.model.Product
 
 class ProductRepositoryImpl(private val productDao: ProductDao,

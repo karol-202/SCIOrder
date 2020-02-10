@@ -10,7 +10,6 @@ import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.observe
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.common.model.Owner
 
 abstract class OrderComposeViewModel(ownerRepository: OwnerRepository,
                                      private val orderTrackRepository: OrderTrackRepository) : ViewModel()

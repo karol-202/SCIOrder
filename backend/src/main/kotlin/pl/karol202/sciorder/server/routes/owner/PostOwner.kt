@@ -9,7 +9,6 @@ import pl.karol202.sciorder.server.database.OwnerDao
 import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.conflict
 import pl.karol202.sciorder.server.util.created
-import pl.karol202.sciorder.server.util.newStringId
 
 fun Route.postOwner(ownerDao: OwnerDao) = post {
 	val owner = call.receive<Owner>().overwrite()

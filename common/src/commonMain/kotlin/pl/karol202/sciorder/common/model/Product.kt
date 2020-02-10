@@ -5,8 +5,8 @@ import pl.karol202.sciorder.common.util.isValidFloat
 import pl.karol202.sciorder.common.util.isValidInt
 
 @Serializable
-data class Product(val _id: String,
-                   val ownerId: String,
+data class Product(override val id: Int,
+                   val storeId: Int,
 				   val name: String,
 				   val available: Boolean,
 				   val parameters: List<Parameter>) : JvmSerializable, IdProvider
@@ -14,9 +14,10 @@ data class Product(val _id: String,
 	companion object;
 
 	@Serializable
-	data class Parameter(val name: String,
+	data class Parameter(override val id: Int,
+	                     val name: String,
 	                     val type: Type,
-	                     val attributes: Attributes) : JvmSerializable
+	                     val attributes: Attributes) : JvmSerializable, IdProvider
 	{
 		enum class Type
 		{
@@ -76,8 +77,6 @@ data class Product(val _id: String,
 		val areAttributesValid get() = attributes.areValidFor(type)
 		val isValid get() = isNameValid && areAttributesValid
 	}
-
-	override val id get() = _id
 	
 	val isNameValid get() = name.isNotBlank()
 	val areParametersValid get() = parameters.all { it.isValid }

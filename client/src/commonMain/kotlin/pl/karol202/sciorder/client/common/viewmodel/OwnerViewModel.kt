@@ -3,11 +3,9 @@ package pl.karol202.sciorder.client.common.viewmodel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import pl.karol202.sciorder.client.common.api.ApiResponse
-import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.sha1
-import pl.karol202.sciorder.common.model.Owner
 
 abstract class OwnerViewModel(private val ownerRepository: OwnerRepository) : ViewModel()
 {

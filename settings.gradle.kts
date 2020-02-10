@@ -4,7 +4,6 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
-        //maven("https://dl.bintray.com/kotlin/kotlin-eap")
     }
     resolutionStrategy {
         eachPlugin {
@@ -14,9 +13,6 @@ pluginManagement {
             when(requested.id.id)
             {
                 "com.android.application", "com.android.library" -> useModule("com.android.tools.build:gradle:${requested.version}")
-                //"kotlin2js", "kotlin-dce-js" -> useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-                //"org.jetbrains.kotlin.frontend" -> useModule("org.jetbrains.kotlin:kotlin-frontend-plugin:${requested.version}")
-                //"kotlinx-serialization" -> useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
                 "androidx.navigation.safeargs.kotlin" -> useModule("androidx.navigation:navigation-safe-args-gradle-plugin:${requested.version}")
             }
         }
@@ -24,7 +20,7 @@ pluginManagement {
 }
 
 include(":common")
-include(":server")
+include(":backend")
 include(":client")
 //include(":client-js")
 

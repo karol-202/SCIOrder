@@ -4,7 +4,6 @@ import io.ktor.client.request.parameter
 import pl.karol202.sciorder.client.common.api.KtorBasicApi
 import pl.karol202.sciorder.client.common.api.jsonBody
 import pl.karol202.sciorder.client.common.api.relativePath
-import pl.karol202.sciorder.common.model.Owner
 
 class KtorOwnerApi(private val basicApi: KtorBasicApi) : OwnerApi
 {

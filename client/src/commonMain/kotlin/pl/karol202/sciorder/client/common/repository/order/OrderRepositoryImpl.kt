@@ -9,7 +9,6 @@ import pl.karol202.sciorder.client.common.database.dao.OrderDao
 import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
 import pl.karol202.sciorder.client.common.util.seconds
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.common.model.Owner
 
 class OrderRepositoryImpl(private val orderDao: OrderDao,
                           private val orderApi: OrderApi) : OrderRepository

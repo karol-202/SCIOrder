@@ -3,8 +3,8 @@ package pl.karol202.sciorder.common.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Order(val _id: String,
-                 val ownerId: String,
+data class Order(override val id: Int,
+                 val storeId: Int,
                  val entries: List<Entry>,
                  val details: Details,
                  val status: Status) : JvmSerializable, IdProvider
@@ -12,9 +12,9 @@ data class Order(val _id: String,
 	companion object;
 
 	@Serializable
-	data class Entry(val productId: String,
+	data class Entry(val productId: Int,
 	                 val quantity: Int,
-	                 val parameters: Map<String, String>) : JvmSerializable
+	                 val parameters: Map<Int, String>) : JvmSerializable
 
 	@Serializable
 	data class Details(val location: String,
@@ -29,6 +29,4 @@ data class Order(val _id: String,
 			fun getByName(name: String) = values().find { it.name == name }
 		}
 	}
-
-	override val id get() = _id
 }
