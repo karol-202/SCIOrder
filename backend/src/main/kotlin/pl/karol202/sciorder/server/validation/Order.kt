@@ -1,15 +1,20 @@
-package pl.karol202.sciorder.server.model
+package pl.karol202.sciorder.server.validation
 
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.common.util.isValidFloat
 import pl.karol202.sciorder.common.util.isValidInt
-import pl.karol202.sciorder.server.database.ProductDao
+import pl.karol202.sciorder.common.validation.areParametersValuesShortEnough
+import pl.karol202.sciorder.common.validation.areValid
+import pl.karol202.sciorder.server.dao.ProductDao
 import pl.karol202.sciorder.server.util.equalsIgnoreOrder
 
-suspend fun Order.isValid(productDao: ProductDao) = entries.all { it.isValid(productDao, ownerId) }
+suspend fun Order.isValid(productDao: ProductDao) =
+		details.areValid &&
+		entries.all { it.isValid(productDao, ownerId) }
 
 private suspend fun Order.Entry.isValid(productDao: ProductDao, ownerId: String) =
+		areParametersValuesShortEnough &&
 		productDao.getProductById(ownerId, productId)?.let { isValid(it) } ?: false
 
 private fun Order.Entry.isValid(product: Product) = product.available && quantity > 0 && isParamsListValid(product)

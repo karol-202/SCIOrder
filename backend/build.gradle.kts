@@ -30,9 +30,8 @@ dependencies {
     implementation(Deps.KTOR_SERVER_NETTY)
     implementation(Deps.KTOR_GSON)
 
-    implementation(Deps.KMONGO)
-    implementation(Deps.KMONGO_ASYNC)
-    implementation(Deps.KMONGO_COROUTINE)
+    implementation(Deps.EXPOSED_CORE)
+    implementation(Deps.EXPOSED_JDBC)
 
     implementation(Deps.KOIN)
     implementation(Deps.KOIN_KTOR)

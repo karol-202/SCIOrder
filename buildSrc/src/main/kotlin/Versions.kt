@@ -41,6 +41,6 @@ object Versions
 
 	// Server
 	const val SHADOW = "5.2.0"
-	const val KMONGO = "3.12.0"
+	const val EXPOSED = "0.21.1"
 	const val LOGBACK = "1.2.3"
 }

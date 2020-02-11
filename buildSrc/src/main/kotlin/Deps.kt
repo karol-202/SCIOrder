@@ -72,9 +72,8 @@ object Deps
 
 	const val KOIN_KTOR = "org.koin:koin-ktor:${Versions.KOIN}"
 
-	const val KMONGO = "org.litote.kmongo:kmongo:${Versions.KMONGO}"
-	const val KMONGO_ASYNC = "org.litote.kmongo:kmongo-async:${Versions.KMONGO}"
-	const val KMONGO_COROUTINE = "org.litote.kmongo:kmongo-coroutine:${Versions.KMONGO}"
+	const val EXPOSED_CORE = "org.jetbrains.exposed:exposed-core:${Versions.EXPOSED}"
+	const val EXPOSED_JDBC = "org.jetbrains.exposed:exposed-jdbc:${Versions.EXPOSED}"
 
 	const val LOGBACK = "ch.qos.logback:logback-classic:${Versions.LOGBACK}"
 }

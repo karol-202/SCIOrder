@@ -1,9 +1,10 @@
-package pl.karol202.sciorder.server.database
+package pl.karol202.sciorder.server.dao.impl
 
 import com.mongodb.client.model.IndexOptions
 import org.litote.kmongo.ascendingIndex
 import org.litote.kmongo.setValue
 import pl.karol202.sciorder.common.model.Owner
+import pl.karol202.sciorder.server.dao.OwnerDao
 
 class DatabaseOwnerDao(database: KMongoDatabase): OwnerDao
 {

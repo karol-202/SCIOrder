@@ -5,7 +5,7 @@ import io.ktor.request.receive
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import pl.karol202.sciorder.common.model.Owner
-import pl.karol202.sciorder.server.database.OwnerDao
+import pl.karol202.sciorder.server.dao.OwnerDao
 import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.conflict
 import pl.karol202.sciorder.server.util.created

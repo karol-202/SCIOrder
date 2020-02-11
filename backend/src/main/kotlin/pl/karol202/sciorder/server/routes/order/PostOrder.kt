@@ -5,12 +5,12 @@ import io.ktor.request.receive
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.server.database.OrderDao
-import pl.karol202.sciorder.server.database.ProductDao
-import pl.karol202.sciorder.server.model.isValid
+import pl.karol202.sciorder.server.dao.OrderDao
+import pl.karol202.sciorder.server.dao.ProductDao
 import pl.karol202.sciorder.server.util.badRequest
 import pl.karol202.sciorder.server.util.created
 import pl.karol202.sciorder.server.util.newStringId
+import pl.karol202.sciorder.server.validation.isValid
 
 fun Route.postOrder(productDao: ProductDao, orderDao: OrderDao) = post {
 	val ownerId = call.parameters["ownerId"] ?: return@post badRequest()

@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.server.database
+package pl.karol202.sciorder.server.dao
 
 import pl.karol202.sciorder.common.model.Owner
 
