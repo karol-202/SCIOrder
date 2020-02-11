@@ -19,7 +19,6 @@ import io.ktor.util.KtorExperimentalAPI
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import org.koin.ktor.ext.inject
-import pl.karol202.sciorder.server.dao.OwnerDao
 import pl.karol202.sciorder.server.routes.order.deleteOrders
 import pl.karol202.sciorder.server.routes.order.getOrders
 import pl.karol202.sciorder.server.routes.order.postOrder

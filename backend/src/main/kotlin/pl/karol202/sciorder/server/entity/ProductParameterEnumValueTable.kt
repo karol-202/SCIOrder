@@ -9,14 +9,14 @@ import pl.karol202.sciorder.common.validation.MAX_VALUE_LENGTH
 // for consistency with OrderEntryTable and ProductParameterTable
 object ProductParameterEnumValueTable : IntIdTable()
 {
-	val parameterId = integer("parameterId").references(ProductParameterTable.id,
-	                                                    onUpdate = ReferenceOption.CASCADE,
-	                                                    onDelete = ReferenceOption.CASCADE)
-	val enumValueOrdinal = integer("enumValueOrdinal")
+	val productParameterId = integer("productParameterId").references(ProductParameterTable.id,
+	                                                                  onUpdate = ReferenceOption.CASCADE,
+	                                                                  onDelete = ReferenceOption.CASCADE)
+	val ordinal = integer("ordinal")
 	val value = varchar("value", Product.Parameter.MAX_VALUE_LENGTH)
 	
 	init
 	{
-		uniqueIndex(parameterId, enumValueOrdinal)
+		uniqueIndex(productParameterId, ordinal)
 	}
 }

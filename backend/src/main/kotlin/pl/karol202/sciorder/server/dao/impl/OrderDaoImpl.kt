@@ -9,7 +9,7 @@ import pl.karol202.sciorder.server.entity.OrderTable
 
 class OrderDaoImpl : OrderDao
 {
-	override suspend fun insertOrder(order: Order)
+	override suspend fun insertOrder(order: Order): Order
 	{
 		val orderId = OrderTable.insertAndGetId {
 			it[storeId] = order.storeId
@@ -19,6 +19,8 @@ class OrderDaoImpl : OrderDao
 		}.value
 		
 		order.entries.forEachIndexed { ordinal, entry -> insertOrderEntry(orderId, ordinal, entry) }
+		
+		return order.copy(id = orderId)
 	}
 	
 	private fun insertOrderEntry(targetOrderId: Int, entryOrdinal: Int, entry: Order.Entry)
@@ -42,12 +44,11 @@ class OrderDaoImpl : OrderDao
 		}
 	}
 	
-	override suspend fun updateOrderStatus(storeId: Int, orderId: Int, status: Order.Status): Boolean
+	override suspend fun updateOrderStatus(orderId: Int, status: Order.Status)
 	{
-		val updated = OrderTable.update({ (OrderTable.storeId eq storeId) and (OrderTable.id eq orderId) }) {
+		OrderTable.update({ OrderTable.id eq orderId }) {
 			it[OrderTable.status] = status
 		}
-		return updated > 0
 	}
 	
 	override suspend fun deleteOrdersByStore(storeId: Int)
@@ -55,20 +56,14 @@ class OrderDaoImpl : OrderDao
 		OrderTable.deleteWhere { OrderTable.storeId eq storeId }
 	}
 	
-	override suspend fun getOrdersByStore(storeId: Int): List<Order>
-	{
-		return (OrderTable leftJoin OrderEntryTable leftJoin OrderParameterValueTable)
-				.select { OrderTable.storeId eq storeId }
-				.toList()
-				.getOrders()
-	}
+	override suspend fun getOrdersByStore(storeId: Int) = getOrders { OrderTable.storeId eq storeId }
 	
-	override suspend fun getOrdersByStoreAndIds(storeId: Int, ids: List<Int>): List<Order>
+	override suspend fun getOrdersByIds(orderIds: List<Int>) = getOrders { OrderTable.id inList orderIds }
+	
+	private fun getOrders(where: SqlExpressionBuilder.() -> Op<Boolean>): List<Order>
 	{
 		return (OrderTable leftJoin OrderEntryTable leftJoin OrderParameterValueTable)
-				.select { (OrderTable.storeId eq storeId) and (OrderTable.id inList ids) }
-				.toList()
-				.getOrders()
+				.select(where).toList().getOrders()
 	}
 	
 	private fun List<ResultRow>.getOrders() = this
@@ -84,11 +79,14 @@ class OrderDaoImpl : OrderDao
 	
 	private fun List<ResultRow>.getOrderEntries() = this
 			.groupBy { Order.Entry(productId = it[OrderEntryTable.productId],
-			                      quantity = it[OrderEntryTable.quantity],
-			                      parameters = emptyMap()) }
-			.map { (entry, rows) ->
-				entry.copy(parameters = rows.getOrderEntryParams())
+			                       quantity = it[OrderEntryTable.quantity],
+			                       parameters = emptyMap()) to it[OrderEntryTable.ordinal] }
+			.map { (entryAndOrdinal, rows) ->
+				val (entry, ordinal) = entryAndOrdinal
+				entry.copy(parameters = rows.getOrderEntryParams()) to ordinal
 			}
+			.sortedBy { (_, ordinal) -> ordinal }
+			.map { (entry, _) -> entry }
 	
 	private fun List<ResultRow>.getOrderEntryParams() =
 			associate { it[OrderParameterValueTable.productParameterId] to it[OrderParameterValueTable.value] }
