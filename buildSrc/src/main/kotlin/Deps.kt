@@ -73,6 +73,7 @@ object Deps
 	const val KOIN_KTOR = "org.koin:koin-ktor:${Versions.KOIN}"
 
 	const val EXPOSED_CORE = "org.jetbrains.exposed:exposed-core:${Versions.EXPOSED}"
+	const val EXPOSED_DAO = "org.jetbrains.exposed:exposed-dao:${Versions.EXPOSED}"
 	const val EXPOSED_JDBC = "org.jetbrains.exposed:exposed-jdbc:${Versions.EXPOSED}"
 
 	const val LOGBACK = "ch.qos.logback:logback-classic:${Versions.LOGBACK}"

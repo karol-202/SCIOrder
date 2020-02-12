@@ -3,8 +3,8 @@ package pl.karol202.sciorder.common.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Product(override val id: Int,
-                   val storeId: Int,
+data class Product(override val id: Long,
+                   val storeId: Long,
 				   val name: String,
 				   val available: Boolean,
 				   val parameters: List<Parameter>) : JvmSerializable, IdProvider
@@ -12,7 +12,8 @@ data class Product(override val id: Int,
 	companion object;
 
 	@Serializable
-	data class Parameter(val name: String,
+	data class Parameter(val id: Long,
+	                     val name: String,
 	                     val type: Type,
 	                     val attributes: Attributes) : JvmSerializable
 	{

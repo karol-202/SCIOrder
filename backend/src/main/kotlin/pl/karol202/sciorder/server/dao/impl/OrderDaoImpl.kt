@@ -3,15 +3,15 @@ package pl.karol202.sciorder.server.dao.impl
 import org.jetbrains.exposed.sql.*
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.server.dao.OrderDao
-import pl.karol202.sciorder.server.entity.OrderEntryTable
-import pl.karol202.sciorder.server.entity.OrderParameterValueTable
-import pl.karol202.sciorder.server.entity.OrderTable
+import pl.karol202.sciorder.server.table.OrderEntries
+import pl.karol202.sciorder.server.table.OrderEntryParameterValues
+import pl.karol202.sciorder.server.table.Orders
 
 class OrderDaoImpl : OrderDao
 {
 	override suspend fun insertOrder(order: Order): Order
 	{
-		val orderId = OrderTable.insertAndGetId {
+		val orderId = Orders.insertAndGetId {
 			it[storeId] = order.storeId
 			it[location] = order.details.location
 			it[recipient] = order.details.recipient
@@ -25,7 +25,7 @@ class OrderDaoImpl : OrderDao
 	
 	private fun insertOrderEntry(targetOrderId: Int, entryOrdinal: Int, entry: Order.Entry)
 	{
-		val entryId = OrderEntryTable.insertAndGetId {
+		val entryId = OrderEntries.insertAndGetId {
 			it[orderId] = targetOrderId
 			it[ordinal] = entryOrdinal
 			it[productId] = entry.productId
@@ -37,7 +37,7 @@ class OrderDaoImpl : OrderDao
 	
 	private fun insertOrderEntryParameter(entryId: Int, paramId: Int, paramValue: String)
 	{
-		OrderParameterValueTable.insert {
+		OrderEntryParameterValues.insert {
 			it[orderEntryId] = entryId
 			it[productParameterId] = paramId
 			it[value] = paramValue
@@ -46,41 +46,41 @@ class OrderDaoImpl : OrderDao
 	
 	override suspend fun updateOrderStatus(orderId: Int, status: Order.Status)
 	{
-		OrderTable.update({ OrderTable.id eq orderId }) {
-			it[OrderTable.status] = status
+		Orders.update({ Orders.id eq orderId }) {
+			it[Orders.status] = status
 		}
 	}
 	
 	override suspend fun deleteOrdersByStore(storeId: Int)
 	{
-		OrderTable.deleteWhere { OrderTable.storeId eq storeId }
+		Orders.deleteWhere { Orders.storeId eq storeId }
 	}
 	
-	override suspend fun getOrdersByStore(storeId: Int) = getOrders { OrderTable.storeId eq storeId }
+	override suspend fun getOrdersByStore(storeId: Int) = getOrders { Orders.storeId eq storeId }
 	
-	override suspend fun getOrdersByIds(orderIds: List<Int>) = getOrders { OrderTable.id inList orderIds }
+	override suspend fun getOrdersByIds(orderIds: List<Int>) = getOrders { Orders.id inList orderIds }
 	
 	private fun getOrders(where: SqlExpressionBuilder.() -> Op<Boolean>): List<Order>
 	{
-		return (OrderTable leftJoin OrderEntryTable leftJoin OrderParameterValueTable)
+		return (Orders leftJoin OrderEntries leftJoin OrderEntryParameterValues)
 				.select(where).toList().getOrders()
 	}
 	
 	private fun List<ResultRow>.getOrders() = this
-			.groupBy { Order(id = it[OrderTable.id].value,
-			                 storeId = it[OrderTable.storeId],
+			.groupBy { Order(id = it[Orders.id].value,
+			                 storeId = it[Orders.storeId],
 			                 entries = emptyList(),
-			                 details = Order.Details(location = it[OrderTable.location],
-			                                         recipient = it[OrderTable.recipient]),
-			                 status = it[OrderTable.status]) }
+			                 details = Order.Details(location = it[Orders.location],
+			                                         recipient = it[Orders.recipient]),
+			                 status = it[Orders.status]) }
 			.map { (order, rows) ->
 				order.copy(entries = rows.getOrderEntries())
 			}
 	
 	private fun List<ResultRow>.getOrderEntries() = this
-			.groupBy { Order.Entry(productId = it[OrderEntryTable.productId],
-			                       quantity = it[OrderEntryTable.quantity],
-			                       parameters = emptyMap()) to it[OrderEntryTable.ordinal] }
+			.groupBy { Order.Entry(productId = it[OrderEntries.productId],
+			                       quantity = it[OrderEntries.quantity],
+			                       parameters = emptyMap()) to it[OrderEntries.ordinal] }
 			.map { (entryAndOrdinal, rows) ->
 				val (entry, ordinal) = entryAndOrdinal
 				entry.copy(parameters = rows.getOrderEntryParams()) to ordinal
@@ -89,5 +89,5 @@ class OrderDaoImpl : OrderDao
 			.map { (entry, _) -> entry }
 	
 	private fun List<ResultRow>.getOrderEntryParams() =
-			associate { it[OrderParameterValueTable.productParameterId] to it[OrderParameterValueTable.value] }
+			associate { it[OrderEntryParameterValues.productParameterId] to it[OrderEntryParameterValues.value] }
 }

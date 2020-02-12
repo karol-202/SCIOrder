@@ -31,6 +31,7 @@ dependencies {
     implementation(Deps.KTOR_GSON)
 
     implementation(Deps.EXPOSED_CORE)
+    implementation(Deps.EXPOSED_DAO)
     implementation(Deps.EXPOSED_JDBC)
 
     implementation(Deps.KOIN)

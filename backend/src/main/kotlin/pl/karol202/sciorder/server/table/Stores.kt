@@ -1,10 +1,10 @@
-package pl.karol202.sciorder.server.entity
+package pl.karol202.sciorder.server.table
 
-import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.dao.id.LongIdTable
 import pl.karol202.sciorder.common.model.Store
 import pl.karol202.sciorder.common.validation.MAX_NAME_LENGTH
 
-object StoreTable : IntIdTable()
+object Stores : LongIdTable()
 {
 	val name = varchar("name", Store.MAX_NAME_LENGTH)
 }
