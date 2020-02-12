@@ -4,7 +4,7 @@ import pl.karol202.sciorder.server.controller.RequestHandler
 
 interface ProductController
 {
-	fun postProduct(handler: RequestHandler)
+	suspend fun postProduct(handler: RequestHandler)
 	
-	fun getProducts(handler: RequestHandler)
+	suspend fun getProducts(handler: RequestHandler)
 }

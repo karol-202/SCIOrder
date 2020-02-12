@@ -68,6 +68,8 @@ object Deps
 
 	// Server
 	const val KTOR_SERVER_NETTY = "io.ktor:ktor-server-netty:${Versions.KTOR}"
+	const val KTOR_AUTH = "io.ktor:ktor-auth:${Versions.KTOR}"
+	const val KTOR_AUTH_JWT = "io.ktor:ktor-auth-jwt:${Versions.KTOR}"
 	const val KTOR_GSON = "io.ktor:ktor-gson:${Versions.KTOR}"
 
 	const val KOIN_KTOR = "org.koin:koin-ktor:${Versions.KOIN}"

@@ -10,7 +10,8 @@ interface SortableEntity
 	val ordinal: Int
 }
 
-inline fun <reified M : Any, E : MappableEntity<M>> Iterable<E>.toModels() = map { it.toModel() }
+inline fun <reified M : Any, E : MappableEntity<M>> Iterable<E>.toModels() =
+		map { it.toModel() }
 
 @JvmName("toSortedModels")
 inline fun <reified M : Any, E> Iterable<E>.toModels() where E : MappableEntity<M>, E : SortableEntity =

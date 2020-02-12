@@ -28,6 +28,8 @@ dependencies {
     implementation(Deps.STDLIB_JVM)
 
     implementation(Deps.KTOR_SERVER_NETTY)
+    implementation(Deps.KTOR_AUTH)
+    implementation(Deps.KTOR_AUTH_JWT)
     implementation(Deps.KTOR_GSON)
 
     implementation(Deps.EXPOSED_CORE)
