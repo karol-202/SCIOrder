@@ -11,10 +11,7 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.http.HttpMethod
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.route
-import io.ktor.routing.routing
+import io.ktor.routing.*
 import io.ktor.util.KtorExperimentalAPI
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
@@ -90,11 +87,11 @@ private fun Application.routing() = routing {
 		route("{storeId}") {
 			route("products") {
 				userAuth { get { productController.getProducts(requestHandler) } }
-				//postProduct(get()) // Admin-only
+				adminAuth { post { productController.postProduct(requestHandler) } }
 
 				route("{productId}") {
-					//putProduct(get()) // Admin-only
-					//deleteProduct(get()) // Admin-only
+					adminAuth { put { productController.postProduct(requestHandler) } }
+					adminAuth { delete { productController.deleteProduct(requestHandler) } }
 				}
 			}
 			route("orders") {

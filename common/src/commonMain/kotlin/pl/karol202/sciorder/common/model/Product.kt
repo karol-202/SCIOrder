@@ -12,10 +12,10 @@ data class Product(override val id: Long,
 	companion object;
 
 	@Serializable
-	data class Parameter(val id: Long,
+	data class Parameter(override val id: Long,
 	                     val name: String,
 	                     val type: Type,
-	                     val attributes: Attributes) : JvmSerializable
+	                     val attributes: Attributes) : JvmSerializable, IdProvider
 	{
 		enum class Type
 		{

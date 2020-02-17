@@ -4,13 +4,13 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.server.entity.mapping.Mappable
+import pl.karol202.sciorder.server.entity.mapping.map
 import pl.karol202.sciorder.server.table.OrderEntries
 import pl.karol202.sciorder.server.table.OrderEntryParameterValues
-import pl.karol202.sciorder.server.util.MappableEntity
 import pl.karol202.sciorder.server.util.SortableEntity
-import pl.karol202.sciorder.server.util.toModels
 
-class OrderEntryEntity(id: EntityID<Long>) : LongEntity(id), MappableEntity<Order.Entry>, SortableEntity
+class OrderEntryEntity(id: EntityID<Long>) : LongEntity(id), Mappable<Order.Entry>, SortableEntity
 {
 	companion object : LongEntityClass<OrderEntryEntity>(OrderEntries)
 	
@@ -21,7 +21,7 @@ class OrderEntryEntity(id: EntityID<Long>) : LongEntity(id), MappableEntity<Orde
 	
 	val parameters by OrderEntryParameterValueEntity referrersOn OrderEntryParameterValues.orderEntryId
 	
-	override fun toModel() = Order.Entry(productId = product.id.value,
-	                                     quantity = quantity,
-	                                     parameters = parameters.toModels().toMap())
+	override fun map() = Order.Entry(productId = product.id.value,
+	                                 quantity = quantity,
+	                                 parameters = parameters.map().toMap())
 }

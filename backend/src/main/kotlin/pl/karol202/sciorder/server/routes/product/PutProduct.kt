@@ -13,6 +13,7 @@ import pl.karol202.sciorder.server.util.ok
 fun Route.putProduct(productDao: ProductDao) = put {
 	val ownerId = call.parameters["ownerId"] ?: return@put badRequest()
 	val productId = call.parameters["productId"] ?: return@put badRequest()
+	
 	val product = call.receive<Product>().overwrite(ownerId)
 	if(!product.isValid || product.id != productId) return@put badRequest()
 	val success = productDao.updateProduct(ownerId, product)

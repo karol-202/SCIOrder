@@ -4,13 +4,16 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.server.entity.mapping.OrderedMappable
+import pl.karol202.sciorder.server.entity.mapping.OrderedUpdatable
+import pl.karol202.sciorder.server.entity.mapping.dispatchTo
+import pl.karol202.sciorder.server.entity.mapping.map
 import pl.karol202.sciorder.server.table.ProductParameterEnumValues
 import pl.karol202.sciorder.server.table.ProductParameters
-import pl.karol202.sciorder.server.util.MappableEntity
-import pl.karol202.sciorder.server.util.SortableEntity
-import pl.karol202.sciorder.server.util.toModels
 
-class ProductParameterEntity(id: EntityID<Long>) : LongEntity(id), MappableEntity<Product.Parameter>, SortableEntity
+class ProductParameterEntity(id: EntityID<Long>) : LongEntity(id),
+                                                   OrderedMappable<Product.Parameter>,
+                                                   OrderedUpdatable<Product.Parameter>
 {
 	companion object : LongEntityClass<ProductParameterEntity>(ProductParameters)
 	
@@ -24,10 +27,23 @@ class ProductParameterEntity(id: EntityID<Long>) : LongEntity(id), MappableEntit
 	
 	val enumValues by ProductParameterEnumValueEntity referrersOn ProductParameterEnumValues.productParameterId
 	
-	override fun toModel() = Product.Parameter(id = id.value,
-	                                           name = name,
-	                                           type = type,
-	                                           attributes = Product.Parameter.Attributes(minimalValue = minimalValue,
-	                                                                                     maximalValue = maximalValue,
-	                                                                                     enumValues = enumValues.toModels()))
+	override fun map() = Product.Parameter(id = id.value,
+	                                       name = name,
+	                                       type = type,
+	                                       attributes = Product.Parameter.Attributes(minimalValue = minimalValue,
+	                                                                                 maximalValue = maximalValue,
+	                                                                                 enumValues = enumValues.map()))
+	
+	override fun update(model: Product.Parameter)
+	{
+		name = model.name
+		type = model.type
+		minimalValue = model.attributes.minimalValue
+		maximalValue = model.attributes.maximalValue
+		defaultValue = model.attributes.defaultValue
+		
+		enumValues.dispatchTo(model.attributes.enumValues.orEmpty()) {
+			ProductParameterEnumValueEntity.new { productParameter = this@ProductParameterEntity }
+		}
+	}
 }

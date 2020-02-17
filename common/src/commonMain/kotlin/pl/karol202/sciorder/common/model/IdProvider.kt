@@ -4,3 +4,5 @@ interface IdProvider
 {
 	val id: Any
 }
+
+val Iterable<IdProvider>.ids get() = map { it.id }
