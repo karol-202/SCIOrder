@@ -5,7 +5,6 @@ import pl.karol202.sciorder.server.config.Config
 import pl.karol202.sciorder.server.config.getProperty
 
 fun authModule() = module {
-	single { JWTProvider(realmAdmin = getProperty(Config.JWT_REALM_ADMIN),
-	                     realmUser = getProperty(Config.JWT_REALM_USER),
+	single { JWTProvider(realm = getProperty(Config.JWT_REALM),
 	                     secret = getProperty(Config.JWT_SECRET)) }
 }

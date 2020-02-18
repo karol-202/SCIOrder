@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.common.database
 
 import pl.karol202.sciorder.client.common.database.dao.CrudDao
-import pl.karol202.sciorder.common.model.IdProvider
+import pl.karol202.sciorder.common.util.IdProvider
 
 suspend fun <T : IdProvider> CrudDao<T>.dispatchDiff(oldData: List<T>, newData: List<T>)
 {

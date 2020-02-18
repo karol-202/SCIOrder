@@ -6,8 +6,7 @@ import org.koin.core.scope.Scope
 
 enum class Config(val path: String)
 {
-	JWT_REALM_ADMIN("jwt.realm.admin"),
-	JWT_REALM_USER("jwt.realm.user"),
+	JWT_REALM("jwt.realm"),
 	JWT_SECRET("jwt.secret"),
 	ARG_DB("database.uri");
 	

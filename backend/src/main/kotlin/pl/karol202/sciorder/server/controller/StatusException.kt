@@ -12,3 +12,13 @@ sealed class StatusException : RuntimeException()
 	
 	class Conflict : StatusException()
 }
+
+fun badRequest(): Nothing = throw StatusException.BadRequest()
+
+fun unauthorized(): Nothing = throw StatusException.Unauthorized()
+
+fun forbidden(): Nothing = throw StatusException.Forbidden()
+
+fun notFound(): Nothing = throw StatusException.NotFound()
+
+fun conflict(): Nothing = throw StatusException.Conflict()

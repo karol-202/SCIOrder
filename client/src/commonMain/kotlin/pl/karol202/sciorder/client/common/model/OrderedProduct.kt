@@ -1,8 +1,8 @@
 package pl.karol202.sciorder.client.common.model
 
 import pl.karol202.sciorder.client.common.util.uuid
-import pl.karol202.sciorder.common.model.JvmSerializable
 import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.util.JvmSerializable
 
 data class OrderedProduct(val id: String,
                           val product: Product,
