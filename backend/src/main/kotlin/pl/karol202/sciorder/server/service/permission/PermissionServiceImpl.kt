@@ -29,6 +29,12 @@ class PermissionServiceImpl : PermissionService
 	
 	override fun canGetAllOrders(principal: AbstractPrincipal, storeId: Long) = handleAdminAction(principal, storeId)
 	
+	override fun canInsertStore(principal: AbstractPrincipal) = handleAdminAction(principal)
+	
+	override fun canDeleteStore(principal: AbstractPrincipal, storeId: Long) = handleAdminAction(principal, storeId)
+	
+	private fun handleAdminAction(principal: AbstractPrincipal) = principal is AbstractPrincipal.AdminPrincipal
+	
 	private fun handleAdminAction(principal: AbstractPrincipal, storeId: Long) = when(principal)
 	{
 		is AbstractPrincipal.StorePrincipal -> false

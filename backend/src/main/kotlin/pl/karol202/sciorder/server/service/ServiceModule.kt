@@ -9,10 +9,13 @@ import pl.karol202.sciorder.server.service.product.ProductService
 import pl.karol202.sciorder.server.service.product.ProductServiceImpl
 import pl.karol202.sciorder.server.service.product.parameter.ProductParameterService
 import pl.karol202.sciorder.server.service.product.parameter.ProductParameterServiceImpl
+import pl.karol202.sciorder.server.service.store.StoreService
+import pl.karol202.sciorder.server.service.store.StoreServiceImpl
 
 fun serviceModule() = module {
 	single<PermissionService> { PermissionServiceImpl() }
 	single<ProductService> { ProductServiceImpl() }
 	single<ProductParameterService> { ProductParameterServiceImpl() }
 	single<OrderService> { OrderServiceImpl() }
+	single<StoreService> { StoreServiceImpl() }
 }

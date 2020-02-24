@@ -23,6 +23,7 @@ import pl.karol202.sciorder.server.controller.order.OrderController
 import pl.karol202.sciorder.server.controller.product.ProductController
 import pl.karol202.sciorder.server.controller.product.parameter.ProductParameterController
 import pl.karol202.sciorder.server.controller.requestHandler
+import pl.karol202.sciorder.server.controller.store.StoreController
 import pl.karol202.sciorder.server.service.serviceModule
 
 @KtorExperimentalAPI
@@ -66,13 +67,15 @@ private fun Application.routing() = routing {
 	val productController by inject<ProductController>()
 	val productParameterController by inject<ProductParameterController>()
 	val orderController by inject<OrderController>()
+	val storeController by inject<StoreController>()
 	
 	authenticate {
 		route("api/stores") {
-			//getOwner(get())
-			//postOwner(get())
+			post { storeController.postStore(requestHandler) }
 			
 			route("{storeId}") {
+				delete { storeController.deleteStore(requestHandler) }
+				
 				route("products") {
 					get { productController.getProducts(requestHandler) }
 					post { productController.postProduct(requestHandler) }
@@ -100,6 +103,9 @@ private fun Application.routing() = routing {
 					route("{orderId}/status") {
 						put { orderController.putOrderStatus(requestHandler) }
 					}
+				}
+				route("admins") {
+				
 				}
 			}
 		}
