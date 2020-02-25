@@ -31,4 +31,6 @@ interface PermissionService
 	fun canInsertStore(principal: AbstractPrincipal): Boolean
 	
 	fun canDeleteStore(principal: AbstractPrincipal, storeId: Long): Boolean
+	
+	fun canDeleteAdmin(principal: AbstractPrincipal, adminId: Long): Boolean
 }

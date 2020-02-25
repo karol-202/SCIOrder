@@ -1,6 +1,8 @@
 package pl.karol202.sciorder.server.service
 
 import org.koin.dsl.module
+import pl.karol202.sciorder.server.service.admin.AdminService
+import pl.karol202.sciorder.server.service.admin.AdminServiceImpl
 import pl.karol202.sciorder.server.service.order.OrderService
 import pl.karol202.sciorder.server.service.order.OrderServiceImpl
 import pl.karol202.sciorder.server.service.permission.PermissionService
@@ -18,4 +20,5 @@ fun serviceModule() = module {
 	single<ProductParameterService> { ProductParameterServiceImpl() }
 	single<OrderService> { OrderServiceImpl() }
 	single<StoreService> { StoreServiceImpl() }
+	single<AdminService> { AdminServiceImpl(get()) }
 }

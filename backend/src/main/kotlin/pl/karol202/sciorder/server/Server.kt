@@ -18,6 +18,7 @@ import org.koin.ktor.ext.inject
 import pl.karol202.sciorder.server.auth.JWTProvider
 import pl.karol202.sciorder.server.auth.authModule
 import pl.karol202.sciorder.server.config.propertiesFromConfig
+import pl.karol202.sciorder.server.controller.admin.AdminController
 import pl.karol202.sciorder.server.controller.controllerModule
 import pl.karol202.sciorder.server.controller.order.OrderController
 import pl.karol202.sciorder.server.controller.product.ProductController
@@ -68,8 +69,9 @@ private fun Application.routing() = routing {
 	val productParameterController by inject<ProductParameterController>()
 	val orderController by inject<OrderController>()
 	val storeController by inject<StoreController>()
+	val adminController by inject<AdminController>()
 	
-	authenticate {
+	authenticate(optional = true) {
 		route("api/stores") {
 			post { storeController.postStore(requestHandler) }
 			
@@ -105,7 +107,11 @@ private fun Application.routing() = routing {
 					}
 				}
 				route("admins") {
-				
+					post { adminController.postAdmin(requestHandler) }
+					
+					route("{adminId}") {
+						delete { adminController.deleteAdmin(requestHandler) }
+					}
 				}
 			}
 		}

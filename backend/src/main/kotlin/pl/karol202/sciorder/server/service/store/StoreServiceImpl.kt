@@ -1,10 +1,9 @@
 package pl.karol202.sciorder.server.service.store
 
-import org.jetbrains.exposed.sql.deleteWhere
 import pl.karol202.sciorder.common.model.Store
 import pl.karol202.sciorder.common.request.StoreRequest
+import pl.karol202.sciorder.server.controller.notFound
 import pl.karol202.sciorder.server.entity.StoreEntity
-import pl.karol202.sciorder.server.table.Stores
 
 class StoreServiceImpl : StoreService
 {
@@ -18,6 +17,13 @@ class StoreServiceImpl : StoreService
 	
 	override fun deleteStore(storeId: Long)
 	{
-		Stores.deleteWhere { Stores.id eq storeId }
+		val store = StoreEntity.findById(storeId) ?: notFound()
+		store.delete()
+	}
+	
+	override fun deleteStoreIfNoAdmins(storeId: Long)
+	{
+		val store = StoreEntity.findById(storeId) ?: notFound()
+		if(store.admins.empty()) store.delete()
 	}
 }

@@ -1,6 +1,8 @@
 package pl.karol202.sciorder.server.controller
 
 import org.koin.dsl.module
+import pl.karol202.sciorder.server.controller.admin.AdminController
+import pl.karol202.sciorder.server.controller.admin.AdminControllerImpl
 import pl.karol202.sciorder.server.controller.order.OrderController
 import pl.karol202.sciorder.server.controller.order.OrderControllerImpl
 import pl.karol202.sciorder.server.controller.product.ProductController
@@ -15,4 +17,5 @@ fun controllerModule() = module {
 	single<ProductParameterController> { ProductParameterControllerImpl(get(), get()) }
 	single<OrderController> { OrderControllerImpl(get(), get(), get()) }
 	single<StoreController> { StoreControllerImpl(get(), get()) }
+	single<AdminController> { AdminControllerImpl(get(), get()) }
 }

@@ -57,6 +57,7 @@ class OrderServiceImpl : OrderService
 	
 	override suspend fun deleteOrders(storeId: Long)
 	{
+		StoreEntity.findById(storeId) ?: notFound()
 		Orders.deleteWhere { Orders.storeId eq storeId }
 	}
 	

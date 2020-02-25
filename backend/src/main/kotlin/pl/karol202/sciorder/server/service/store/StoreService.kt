@@ -8,4 +8,6 @@ interface StoreService
 	fun insertStore(store: StoreRequest): Store
 	
 	fun deleteStore(storeId: Long)
+	
+	fun deleteStoreIfNoAdmins(storeId: Long)
 }
