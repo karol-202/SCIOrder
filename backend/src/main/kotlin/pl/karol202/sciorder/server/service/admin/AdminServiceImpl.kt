@@ -12,6 +12,7 @@ class AdminServiceImpl(private val storeService: StoreService) : AdminService
 	{
 		val adminEntity = AdminEntity.new {
 			name = admin.name
+			password = admin.password
 		}
 		return adminEntity.map()
 	}

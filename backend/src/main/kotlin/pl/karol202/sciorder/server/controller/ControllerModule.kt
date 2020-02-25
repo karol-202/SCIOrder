@@ -11,6 +11,8 @@ import pl.karol202.sciorder.server.controller.product.parameter.ProductParameter
 import pl.karol202.sciorder.server.controller.product.parameter.ProductParameterControllerImpl
 import pl.karol202.sciorder.server.controller.store.StoreController
 import pl.karol202.sciorder.server.controller.store.StoreControllerImpl
+import pl.karol202.sciorder.server.controller.user.UserController
+import pl.karol202.sciorder.server.controller.user.UserControllerImpl
 
 fun controllerModule() = module {
 	single<ProductController> { ProductControllerImpl(get(), get()) }
@@ -18,4 +20,5 @@ fun controllerModule() = module {
 	single<OrderController> { OrderControllerImpl(get(), get(), get()) }
 	single<StoreController> { StoreControllerImpl(get(), get()) }
 	single<AdminController> { AdminControllerImpl(get(), get()) }
+	single<UserController> { UserControllerImpl(get()) }
 }

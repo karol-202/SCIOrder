@@ -4,5 +4,4 @@ import kotlinx.serialization.Serializable
 import pl.karol202.sciorder.common.util.JvmSerializable
 
 @Serializable
-data class AdminRequest(val name: String,
-                        val password: String): JvmSerializable
+data class UserRequest(val password: String) : JvmSerializable

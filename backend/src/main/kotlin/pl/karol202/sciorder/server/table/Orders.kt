@@ -10,6 +10,9 @@ object Orders : LongIdTable()
 	val storeId = reference("storeId", Stores,
 	                        onUpdate = ReferenceOption.CASCADE,
 	                        onDelete = ReferenceOption.CASCADE)
+	val userId = reference("userId", Users,
+	                       onUpdate = ReferenceOption.SET_NULL,
+	                       onDelete = ReferenceOption.SET_NULL)
 	val location = varchar("location", Order.Details.MAX_DETAIL_LENGTH)
 	val recipient = varchar("recipient", Order.Details.MAX_DETAIL_LENGTH)
 	val status = enumeration("status", Order.Status::class)

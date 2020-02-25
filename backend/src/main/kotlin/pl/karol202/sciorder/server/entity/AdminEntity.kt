@@ -13,6 +13,7 @@ class AdminEntity(id: EntityID<Long>) : LongEntity(id), Mappable<Admin>
 	companion object : LongEntityClass<AdminEntity>(Admins)
 	
 	var name by Admins.name
+	var password by Admins.password
 	
 	var stores by StoreEntity via AdminStoreJoins
 	

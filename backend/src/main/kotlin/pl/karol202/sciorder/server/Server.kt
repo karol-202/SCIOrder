@@ -25,6 +25,7 @@ import pl.karol202.sciorder.server.controller.product.ProductController
 import pl.karol202.sciorder.server.controller.product.parameter.ProductParameterController
 import pl.karol202.sciorder.server.controller.requestHandler
 import pl.karol202.sciorder.server.controller.store.StoreController
+import pl.karol202.sciorder.server.controller.user.UserController
 import pl.karol202.sciorder.server.service.serviceModule
 
 @KtorExperimentalAPI
@@ -70,49 +71,55 @@ private fun Application.routing() = routing {
 	val orderController by inject<OrderController>()
 	val storeController by inject<StoreController>()
 	val adminController by inject<AdminController>()
+	val userController by inject<UserController>()
 	
 	authenticate(optional = true) {
-		route("api/stores") {
-			post { storeController.postStore(requestHandler) }
-			
-			route("{storeId}") {
-				delete { storeController.deleteStore(requestHandler) }
+		route("api") {
+			route("stores") {
+				post { storeController.postStore(requestHandler) }
 				
-				route("products") {
-					get { productController.getProducts(requestHandler) }
-					post { productController.postProduct(requestHandler) }
+				route("{storeId}") {
+					delete { storeController.deleteStore(requestHandler) }
 					
-					route("{productId}") {
-						put { productController.postProduct(requestHandler) }
-						delete { productController.deleteProduct(requestHandler) }
+					route("products") {
+						get { productController.getProducts(requestHandler) }
+						post { productController.postProduct(requestHandler) }
 						
-						route("parameters") {
-							get { productParameterController.getParameters(requestHandler) }
-							post { productParameterController.postParameter(requestHandler) }
+						route("{productId}") {
+							put { productController.postProduct(requestHandler) }
+							delete { productController.deleteProduct(requestHandler) }
 							
-							route("{parameterId}") {
-								put { productParameterController.putParameter(requestHandler) }
-								delete { productParameterController.deleteParameter(requestHandler) }
+							route("parameters") {
+								get { productParameterController.getParameters(requestHandler) }
+								post { productParameterController.postParameter(requestHandler) }
+								
+								route("{parameterId}") {
+									put { productParameterController.putParameter(requestHandler) }
+									delete { productParameterController.deleteParameter(requestHandler) }
+								}
 							}
 						}
 					}
-				}
-				route("orders") {
-					get { orderController.getOrders(requestHandler) }
-					post { orderController.postOrder(requestHandler) }
-					delete { orderController.deleteOrders(requestHandler) }
-					
-					route("{orderId}/status") {
-						put { orderController.putOrderStatus(requestHandler) }
+					route("orders") {
+						get { orderController.getOrders(requestHandler) }
+						post { orderController.postOrder(requestHandler) }
+						delete { orderController.deleteOrders(requestHandler) }
+						
+						route("{orderId}/status") {
+							put { orderController.putOrderStatus(requestHandler) }
+						}
 					}
 				}
-				route("admins") {
-					post { adminController.postAdmin(requestHandler) }
-					
-					route("{adminId}") {
-						delete { adminController.deleteAdmin(requestHandler) }
-					}
+			}
+			route("admins") {
+				post("register") { adminController.postAdmin(requestHandler) }
+				
+				route("{adminId}") {
+					delete { adminController.deleteAdmin(requestHandler) }
 				}
+			}
+			route("users") {
+				post("register") { userController.postUser(requestHandler) }
 			}
 		}
 	}

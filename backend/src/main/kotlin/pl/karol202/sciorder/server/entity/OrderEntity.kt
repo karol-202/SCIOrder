@@ -14,6 +14,7 @@ class OrderEntity(id: EntityID<Long>) : LongEntity(id), Mappable<Order>
 	companion object : LongEntityClass<OrderEntity>(Orders)
 	
 	var store by StoreEntity referencedOn Orders.storeId
+	var user by UserEntity referencedOn Orders.userId
 	var location by Orders.location
 	var recipient by Orders.recipient
 	var status by Orders.status
