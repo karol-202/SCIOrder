@@ -7,4 +7,9 @@ import pl.karol202.sciorder.common.validation.MAX_NAME_LENGTH
 object Stores : LongIdTable()
 {
 	val name = varchar("name", Store.MAX_NAME_LENGTH)
+	
+	init
+	{
+		uniqueIndex(name)
+	}
 }

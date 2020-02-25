@@ -9,4 +9,9 @@ object Admins : LongIdTable()
 {
 	val name = varchar("name", Admin.MAX_NAME_LENGTH)
 	val password = varchar("password", Admin.PASSWORD_LENGTH)
+	
+	init
+	{
+		uniqueIndex(name)
+	}
 }

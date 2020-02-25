@@ -4,6 +4,7 @@ import pl.karol202.sciorder.common.model.Admin
 import pl.karol202.sciorder.common.request.AdminLoginRequest
 import pl.karol202.sciorder.common.request.AdminRequest
 import pl.karol202.sciorder.server.auth.JWTProvider
+import pl.karol202.sciorder.server.controller.conflict
 import pl.karol202.sciorder.server.controller.forbidden
 import pl.karol202.sciorder.server.controller.notFound
 import pl.karol202.sciorder.server.entity.AdminEntity
@@ -15,6 +16,7 @@ class AdminServiceImpl(private val storeService: StoreService,
 {
 	override suspend fun insertAdmin(admin: AdminRequest): Admin
 	{
+		if(!AdminEntity.find { Admins.name eq admin.name }.empty()) conflict()
 		val adminEntity = AdminEntity.new {
 			name = admin.name
 			password = admin.password
