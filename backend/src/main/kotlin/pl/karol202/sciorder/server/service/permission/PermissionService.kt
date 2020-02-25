@@ -4,6 +4,8 @@ import pl.karol202.sciorder.server.auth.AbstractPrincipal
 
 interface PermissionService
 {
+	fun isValidPrincipal(principal: AbstractPrincipal): Boolean
+	
 	fun canInsertProduct(principal: AbstractPrincipal, storeId: Long): Boolean
 	
 	fun canUpdateProduct(principal: AbstractPrincipal, storeId: Long): Boolean
@@ -27,6 +29,8 @@ interface PermissionService
 	fun canDeleteOrders(principal: AbstractPrincipal, storeId: Long): Boolean
 	
 	fun canGetAllOrders(principal: AbstractPrincipal, storeId: Long): Boolean
+	
+	fun canGetOwnOrders(principal: AbstractPrincipal, storeId: Long): Boolean
 	
 	fun canInsertStore(principal: AbstractPrincipal): Boolean
 	

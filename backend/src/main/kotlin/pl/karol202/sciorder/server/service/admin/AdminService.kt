@@ -6,9 +6,9 @@ import pl.karol202.sciorder.common.request.AdminRequest
 
 interface AdminService
 {
-	fun insertAdmin(admin: AdminRequest): Admin
+	suspend fun insertAdmin(admin: AdminRequest): Admin
 	
-	fun deleteAdmin(adminId: Long)
+	suspend fun deleteAdmin(adminId: Long)
 	
-	fun loginAdmin(request: AdminLoginRequest): String
+	suspend fun loginAdmin(request: AdminLoginRequest): String
 }

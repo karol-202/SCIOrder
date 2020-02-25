@@ -11,6 +11,8 @@ sealed class StatusException : RuntimeException()
 	class NotFound : StatusException()
 	
 	class Conflict : StatusException()
+	
+	class InternalError : StatusException()
 }
 
 fun badRequest(): Nothing = throw StatusException.BadRequest()
@@ -22,3 +24,5 @@ fun forbidden(): Nothing = throw StatusException.Forbidden()
 fun notFound(): Nothing = throw StatusException.NotFound()
 
 fun conflict(): Nothing = throw StatusException.Conflict()
+
+fun internalError(): Nothing = throw StatusException.InternalError()

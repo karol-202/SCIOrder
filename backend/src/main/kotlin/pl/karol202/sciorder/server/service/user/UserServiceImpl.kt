@@ -5,11 +5,13 @@ import pl.karol202.sciorder.common.request.UserLoginRequest
 import pl.karol202.sciorder.common.request.UserRequest
 import pl.karol202.sciorder.server.auth.JWTProvider
 import pl.karol202.sciorder.server.controller.forbidden
+import pl.karol202.sciorder.server.entity.StoreEntity
 import pl.karol202.sciorder.server.entity.UserEntity
+import pl.karol202.sciorder.server.table.Stores
 
 class UserServiceImpl(private val jwtProvider: JWTProvider) : UserService
 {
-	override fun insertUser(user: UserRequest): User
+	override suspend fun insertUser(user: UserRequest): User
 	{
 		val userEntity = UserEntity.new {
 			password = user.password
@@ -17,10 +19,13 @@ class UserServiceImpl(private val jwtProvider: JWTProvider) : UserService
 		return userEntity.map()
 	}
 	
-	override fun loginUser(request: UserLoginRequest): String
+	override suspend fun loginUser(request: UserLoginRequest): String
 	{
 		val userEntity = UserEntity.findById(request.userId) ?: forbidden()
 		if(userEntity.password != request.password) forbidden()
-		return jwtProvider.signForUser(userEntity.id.value)
+		
+		val storeEntity = StoreEntity.find { Stores.name eq request.storeName }.limit(1).singleOrNull() ?: forbidden()
+		
+		return jwtProvider.signForUser(userEntity.id.value, storeEntity.id.value)
 	}
 }

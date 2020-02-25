@@ -2,6 +2,7 @@ package pl.karol202.sciorder.server.controller.order
 
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.request.OrderRequest
+import pl.karol202.sciorder.server.auth.AbstractPrincipal
 import pl.karol202.sciorder.server.controller.*
 import pl.karol202.sciorder.server.service.order.OrderService
 import pl.karol202.sciorder.server.service.permission.PermissionService
@@ -41,9 +42,16 @@ class OrderControllerImpl(private val permissionService: PermissionService,
 	
 	override suspend fun getOrders(requestHandler: RequestHandler) = requestHandler {
 		val storeId = requireLongParameter("storeId")
-		requirePrincipal { permissionService.canGetAllOrders(it, storeId) }
+		val principal = requirePrincipal { permissionService.isValidPrincipal(it) }
 		
-		val orders = orderService.getAllOrders(storeId)
+		val orders = when
+		{
+			principal is AbstractPrincipal.AdminPrincipal && permissionService.canGetAllOrders(principal, storeId) ->
+				orderService.getAllOrders(storeId)
+			principal is AbstractPrincipal.UserPrincipal && permissionService.canGetOwnOrders(principal, storeId) ->
+				orderService.getOrdersByUser(storeId, principal.userId)
+			else -> internalError() // Should not happen with proper permission service
+		}
 		ok(orders)
 	}
 }

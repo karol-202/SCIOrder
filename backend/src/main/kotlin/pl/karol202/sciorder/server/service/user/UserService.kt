@@ -6,7 +6,7 @@ import pl.karol202.sciorder.common.request.UserRequest
 
 interface UserService
 {
-	fun insertUser(user: UserRequest): User
+	suspend fun insertUser(user: UserRequest): User
 	
-	fun loginUser(request: UserLoginRequest): String
+	suspend fun loginUser(request: UserLoginRequest): String
 }

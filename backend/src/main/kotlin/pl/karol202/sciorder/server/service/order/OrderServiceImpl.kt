@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.server.service.order
 
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.request.OrderEntryRequest
@@ -65,6 +66,13 @@ class OrderServiceImpl : OrderService
 	{
 		StoreEntity.findById(storeId) ?: notFound()
 		return OrderEntity.find { Orders.storeId eq storeId }.map()
+	}
+	
+	override suspend fun getOrdersByUser(storeId: Long, userId: Long): List<Order>
+	{
+		StoreEntity.findById(storeId) ?: notFound()
+		UserEntity.findById(userId) ?: notFound()
+		return OrderEntity.find { (Orders.storeId eq storeId) and (Orders.userId eq userId) }.map()
 	}
 	
 	private fun ProductEntity.takeIf(storeId: Long) = takeIf { it.store.id.value == storeId }

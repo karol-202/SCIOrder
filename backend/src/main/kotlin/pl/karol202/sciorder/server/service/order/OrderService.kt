@@ -12,4 +12,6 @@ interface OrderService
 	suspend fun deleteOrders(storeId: Long)
 	
 	suspend fun getAllOrders(storeId: Long): List<Order>
+	
+	suspend fun getOrdersByUser(storeId: Long, userId: Long): List<Order>
 }

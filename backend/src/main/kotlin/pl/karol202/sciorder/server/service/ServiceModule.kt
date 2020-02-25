@@ -22,6 +22,6 @@ fun serviceModule() = module {
 	single<ProductParameterService> { ProductParameterServiceImpl() }
 	single<OrderService> { OrderServiceImpl() }
 	single<StoreService> { StoreServiceImpl() }
-	single<AdminService> { AdminServiceImpl(get()) }
-	single<UserService> { UserServiceImpl() }
+	single<AdminService> { AdminServiceImpl(get(), get()) }
+	single<UserService> { UserServiceImpl(get()) }
 }

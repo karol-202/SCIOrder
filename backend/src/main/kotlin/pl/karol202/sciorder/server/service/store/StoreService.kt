@@ -5,9 +5,9 @@ import pl.karol202.sciorder.common.request.StoreRequest
 
 interface StoreService
 {
-	fun insertStore(store: StoreRequest): Store
+	suspend fun insertStore(store: StoreRequest): Store
 	
-	fun deleteStore(storeId: Long)
+	suspend fun deleteStore(storeId: Long)
 	
-	fun deleteStoreIfNoAdmins(storeId: Long)
+	suspend fun deleteStoreIfNoAdmins(storeId: Long)
 }

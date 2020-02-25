@@ -13,7 +13,7 @@ import pl.karol202.sciorder.server.table.Admins
 class AdminServiceImpl(private val storeService: StoreService,
                        private val jwtProvider: JWTProvider) : AdminService
 {
-	override fun insertAdmin(admin: AdminRequest): Admin
+	override suspend fun insertAdmin(admin: AdminRequest): Admin
 	{
 		val adminEntity = AdminEntity.new {
 			name = admin.name
@@ -22,7 +22,7 @@ class AdminServiceImpl(private val storeService: StoreService,
 		return adminEntity.map()
 	}
 	
-	override fun deleteAdmin(adminId: Long)
+	override suspend fun deleteAdmin(adminId: Long)
 	{
 		val admin = AdminEntity.findById(adminId) ?: notFound()
 		val storeIds = admin.stores.map { it.id.value }
@@ -31,7 +31,7 @@ class AdminServiceImpl(private val storeService: StoreService,
 		storeIds.forEach { storeService.deleteStoreIfNoAdmins(it) }
 	}
 	
-	override fun loginAdmin(request: AdminLoginRequest): String
+	override suspend fun loginAdmin(request: AdminLoginRequest): String
 	{
 		val adminEntity = AdminEntity.find { Admins.name eq request.name }.limit(1).singleOrNull() ?: forbidden()
 		if(adminEntity.password != request.password) forbidden()
