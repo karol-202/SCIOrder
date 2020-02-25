@@ -39,19 +39,19 @@ class PermissionServiceImpl : PermissionService
 	
 	private fun handleAdminActionOnAdmin(principal: AbstractPrincipal, adminId: Long) = when(principal)
 	{
-		is AbstractPrincipal.StorePrincipal -> false
+		is AbstractPrincipal.UserPrincipal -> false
 		is AbstractPrincipal.AdminPrincipal -> principal.adminId == adminId
 	}
 	
 	private fun handleAdminActionInStore(principal: AbstractPrincipal, storeId: Long) = when(principal)
 	{
-		is AbstractPrincipal.StorePrincipal -> false
+		is AbstractPrincipal.UserPrincipal -> false
 		is AbstractPrincipal.AdminPrincipal -> hasAdminRightsToStore(principal.adminId, storeId)
 	}
 	
 	private fun handleUserActionInStore(principal: AbstractPrincipal, storeId: Long) = when(principal)
 	{
-		is AbstractPrincipal.StorePrincipal -> storeId == principal.storeId
+		is AbstractPrincipal.UserPrincipal -> storeId == principal.storeId
 		is AbstractPrincipal.AdminPrincipal -> doesAdminExist(principal.adminId)
 	}
 	

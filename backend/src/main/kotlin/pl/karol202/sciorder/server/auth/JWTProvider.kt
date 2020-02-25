@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.auth.jwt.JWTCredential
 
 private const val CLAIM_ADMIN_ID = "admin_id"
-private const val CLAIM_STORE_ID = "store_id"
+private const val CLAIM_USER_ID = "store_id"
 
 class JWTProvider(val realm: String,
                   secret: String)
@@ -20,5 +20,9 @@ class JWTProvider(val realm: String,
 			credentials.payload.getClaim(CLAIM_ADMIN_ID).asLong()?.let { AbstractPrincipal.AdminPrincipal(it) }
 	
 	private fun validateStoreCredentials(credentials: JWTCredential) =
-			credentials.payload.getClaim(CLAIM_STORE_ID).asLong()?.let { AbstractPrincipal.StorePrincipal(it) }
+			credentials.payload.getClaim(CLAIM_USER_ID).asLong()?.let { AbstractPrincipal.UserPrincipal(it) }
+	
+	fun signForAdmin(adminId: Long) = JWT.create().withClaim(CLAIM_ADMIN_ID, adminId).sign(algorithm)
+	
+	fun signForUser(userId: Long) = JWT.create().withClaim(CLAIM_USER_ID, userId).sign(algorithm)
 }

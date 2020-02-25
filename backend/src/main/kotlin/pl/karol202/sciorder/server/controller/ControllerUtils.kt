@@ -5,6 +5,7 @@ import io.ktor.application.call
 import io.ktor.auth.principal
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveOrNull
+import io.ktor.response.header
 import io.ktor.response.respond
 import io.ktor.util.pipeline.PipelineContext
 import io.ktor.util.pipeline.PipelineInterceptor
@@ -21,6 +22,8 @@ suspend fun Context.ok() = call.respond(HttpStatusCode.OK)
 suspend fun Context.ok(message: Any) = call.respond(HttpStatusCode.OK, message)
 
 suspend fun Context.created(message: Any) = call.respond(HttpStatusCode.Created, message)
+
+fun Context.setHeader(header: String, value: String) = call.response.header(header, value)
 
 fun Context.requireLongParameter(paramName: String) =
 		call.parameters[paramName]?.toLongOrNull() ?: badRequest()

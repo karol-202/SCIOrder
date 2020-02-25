@@ -7,4 +7,6 @@ interface AdminController
 	suspend fun postAdmin(requestHandler: RequestHandler)
 	
 	suspend fun deleteAdmin(requestHandler: RequestHandler)
+	
+	suspend fun loginAdmin(requestHandler: RequestHandler)
 }

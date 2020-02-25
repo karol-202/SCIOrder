@@ -113,6 +113,7 @@ private fun Application.routing() = routing {
 			}
 			route("admins") {
 				post("register") { adminController.postAdmin(requestHandler) }
+				post("login") { adminController.loginAdmin(requestHandler) }
 				
 				route("{adminId}") {
 					delete { adminController.deleteAdmin(requestHandler) }
@@ -120,6 +121,7 @@ private fun Application.routing() = routing {
 			}
 			route("users") {
 				post("register") { userController.postUser(requestHandler) }
+				post("login") { userController.loginUser(requestHandler) }
 			}
 		}
 	}

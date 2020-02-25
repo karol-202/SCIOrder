@@ -1,11 +1,11 @@
 package pl.karol202.sciorder.server.controller.user
 
+import pl.karol202.sciorder.common.request.UserLoginRequest
 import pl.karol202.sciorder.common.request.UserRequest
 import pl.karol202.sciorder.common.validation.isValid
-import pl.karol202.sciorder.server.controller.RequestHandler
-import pl.karol202.sciorder.server.controller.created
-import pl.karol202.sciorder.server.controller.requireBody
+import pl.karol202.sciorder.server.controller.*
 import pl.karol202.sciorder.server.service.user.UserService
+import pl.karol202.sciorder.server.util.Headers
 
 class UserControllerImpl(private val userService: UserService) : UserController
 {
@@ -14,5 +14,13 @@ class UserControllerImpl(private val userService: UserService) : UserController
 		
 		val newUser = userService.insertUser(user)
 		created(newUser)
+	}
+	
+	override suspend fun loginUser(requestHandler: RequestHandler) = requestHandler {
+		val loginRequest = requireBody<UserLoginRequest>()
+		
+		val token = userService.loginUser(loginRequest)
+		setHeader(Headers.WWW_AUTHENTICATE, token)
+		ok()
 	}
 }
