@@ -8,18 +8,22 @@ import pl.karol202.sciorder.server.controller.conflict
 import pl.karol202.sciorder.server.controller.forbidden
 import pl.karol202.sciorder.server.controller.notFound
 import pl.karol202.sciorder.server.entity.AdminEntity
+import pl.karol202.sciorder.server.service.hash.HashService
 import pl.karol202.sciorder.server.service.store.StoreService
 import pl.karol202.sciorder.server.table.Admins
 
-class AdminServiceImpl(private val storeService: StoreService,
+class AdminServiceImpl(private val hashService: HashService,
+                       private val storeService: StoreService,
                        private val jwtProvider: JWTProvider) : AdminService
 {
 	override suspend fun insertAdmin(admin: AdminRequest): Admin
 	{
 		if(!AdminEntity.find { Admins.name eq admin.name }.empty()) conflict()
+		
+		val hash = hashService.hash(admin.password)
 		val adminEntity = AdminEntity.new {
 			name = admin.name
-			password = admin.password
+			password = hash
 		}
 		return adminEntity.map()
 	}
@@ -27,16 +31,16 @@ class AdminServiceImpl(private val storeService: StoreService,
 	override suspend fun deleteAdmin(adminId: Long)
 	{
 		val admin = AdminEntity.findById(adminId) ?: notFound()
-		val storeIds = admin.stores.map { it.id.value }
-		
 		admin.delete()
-		storeIds.forEach { storeService.deleteStoreIfNoAdmins(it) }
 	}
 	
-	override suspend fun loginAdmin(request: AdminLoginRequest): String
+	override suspend fun loginAdmin(request: AdminLoginRequest): Pair<Admin, String>
 	{
+		val hash = hashService.hash(request.password)
 		val adminEntity = AdminEntity.find { Admins.name eq request.name }.limit(1).singleOrNull() ?: forbidden()
-		if(adminEntity.password != request.password) forbidden()
-		return jwtProvider.signForAdmin(adminEntity.id.value)
+		if(adminEntity.password != hash) forbidden()
+		
+		val token = jwtProvider.signForAdmin(adminEntity.id.value)
+		return adminEntity.map() to token
 	}
 }

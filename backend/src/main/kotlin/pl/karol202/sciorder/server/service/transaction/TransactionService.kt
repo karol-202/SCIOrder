@@ -4,5 +4,5 @@ import org.jetbrains.exposed.sql.Transaction
 
 interface TransactionService
 {
-	suspend fun <T> runTransaction(transaction: suspend Transaction.() -> T): T
+	suspend fun <T> runTransaction(block: suspend Transaction.() -> T): T
 }

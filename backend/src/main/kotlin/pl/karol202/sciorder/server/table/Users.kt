@@ -2,9 +2,9 @@ package pl.karol202.sciorder.server.table
 
 import org.jetbrains.exposed.dao.id.LongIdTable
 import pl.karol202.sciorder.common.model.User
-import pl.karol202.sciorder.common.validation.PASSWORD_LENGTH
+import pl.karol202.sciorder.common.validation.MAX_PASSWORD_LENGTH
 
-object Users : LongIdTable()
+object Users : LongIdTable("user")
 {
-	val password = varchar("password", User.PASSWORD_LENGTH)
+	val password = varchar("password", User.MAX_PASSWORD_LENGTH)
 }

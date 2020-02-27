@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.ReferenceOption
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.common.validation.MAX_NAME_LENGTH
 
-object Products : LongIdTable()
+object Products : LongIdTable("product")
 {
 	val storeId = reference("storeId", Stores,
 	                        onUpdate = ReferenceOption.CASCADE,

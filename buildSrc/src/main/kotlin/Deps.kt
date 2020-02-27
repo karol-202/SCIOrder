@@ -70,7 +70,7 @@ object Deps
 	const val KTOR_SERVER_NETTY = "io.ktor:ktor-server-netty:${Versions.KTOR}"
 	const val KTOR_AUTH = "io.ktor:ktor-auth:${Versions.KTOR}"
 	const val KTOR_AUTH_JWT = "io.ktor:ktor-auth-jwt:${Versions.KTOR}"
-	const val KTOR_GSON = "io.ktor:ktor-gson:${Versions.KTOR}"
+	const val KTOR_SERIALIZATION = "io.ktor:ktor-serialization:${Versions.KTOR}"
 
 	const val KOIN_KTOR = "org.koin:koin-ktor:${Versions.KOIN}"
 
@@ -78,5 +78,7 @@ object Deps
 	const val EXPOSED_DAO = "org.jetbrains.exposed:exposed-dao:${Versions.EXPOSED}"
 	const val EXPOSED_JDBC = "org.jetbrains.exposed:exposed-jdbc:${Versions.EXPOSED}"
 
+	const val JDBC_MYSQL = "mysql:mysql-connector-java:${Versions.JDBC_MYSQL}"
+	
 	const val LOGBACK = "ch.qos.logback:logback-classic:${Versions.LOGBACK}"
 }

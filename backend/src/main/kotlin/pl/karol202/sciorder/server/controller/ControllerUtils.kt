@@ -31,5 +31,5 @@ fun Context.requireLongParameter(paramName: String) =
 suspend inline fun <reified T : Any> Context.requireBody(validate: T.() -> Boolean = { true }) =
 		call.receiveOrNull<T>()?.takeIf(validate) ?: badRequest()
 
-fun Context.requirePrincipal(validate: (AbstractPrincipal) -> Boolean) =
+suspend fun Context.requirePrincipal(validate: suspend (AbstractPrincipal) -> Boolean) =
 		call.principal<AbstractPrincipal>()?.also { if(!validate(it)) forbidden() } ?: unauthorized()

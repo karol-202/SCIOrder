@@ -8,7 +8,10 @@ enum class Config(val path: String)
 {
 	JWT_REALM("jwt.realm"),
 	JWT_SECRET("jwt.secret"),
-	ARG_DB("database.uri");
+	DB_URI("database.uri"),
+	DB_DRIVER("database.driver"),
+	DB_USER("database.user"),
+	DB_PASSWORD("database.password");
 	
 	companion object
 	{

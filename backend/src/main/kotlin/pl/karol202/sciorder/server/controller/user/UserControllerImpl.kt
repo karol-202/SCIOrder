@@ -19,8 +19,8 @@ class UserControllerImpl(private val userService: UserService) : UserController
 	override suspend fun loginUser(requestHandler: RequestHandler) = requestHandler {
 		val loginRequest = requireBody<UserLoginRequest>()
 		
-		val token = userService.loginUser(loginRequest)
+		val (user, token) = userService.loginUser(loginRequest)
 		setHeader(Headers.WWW_AUTHENTICATE, token)
-		ok()
+		ok(user)
 	}
 }

@@ -30,7 +30,7 @@ dependencies {
     implementation(Deps.KTOR_SERVER_NETTY)
     implementation(Deps.KTOR_AUTH)
     implementation(Deps.KTOR_AUTH_JWT)
-    implementation(Deps.KTOR_GSON)
+    implementation(Deps.KTOR_SERIALIZATION)
 
     implementation(Deps.EXPOSED_CORE)
     implementation(Deps.EXPOSED_DAO)
@@ -38,6 +38,7 @@ dependencies {
 
     implementation(Deps.KOIN)
     implementation(Deps.KOIN_KTOR)
-
+    
+    implementation(Deps.JDBC_MYSQL)
     implementation(Deps.LOGBACK)
 }

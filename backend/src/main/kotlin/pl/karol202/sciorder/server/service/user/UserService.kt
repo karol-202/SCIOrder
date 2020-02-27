@@ -8,5 +8,5 @@ interface UserService
 {
 	suspend fun insertUser(user: UserRequest): User
 	
-	suspend fun loginUser(request: UserLoginRequest): String
+	suspend fun loginUser(request: UserLoginRequest): Pair<User, String>
 }

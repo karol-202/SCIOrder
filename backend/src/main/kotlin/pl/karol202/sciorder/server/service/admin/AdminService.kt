@@ -10,5 +10,5 @@ interface AdminService
 	
 	suspend fun deleteAdmin(adminId: Long)
 	
-	suspend fun loginAdmin(request: AdminLoginRequest): String
+	suspend fun loginAdmin(request: AdminLoginRequest): Pair<Admin, String>
 }

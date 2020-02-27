@@ -42,7 +42,7 @@ class OrderControllerImpl(private val permissionService: PermissionService,
 	
 	override suspend fun getOrders(requestHandler: RequestHandler) = requestHandler {
 		val storeId = requireLongParameter("storeId")
-		val principal = requirePrincipal { permissionService.isValidPrincipal(it) }
+		val principal = requirePrincipal { permissionService.canUsePrincipal(it) }
 		
 		val orders = when
 		{

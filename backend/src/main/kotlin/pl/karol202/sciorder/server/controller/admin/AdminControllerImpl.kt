@@ -29,8 +29,8 @@ class AdminControllerImpl(private val permissionService: PermissionService,
 	override suspend fun loginAdmin(requestHandler: RequestHandler) = requestHandler {
 		val loginRequest = requireBody<AdminLoginRequest>()
 		
-		val token = adminService.loginAdmin(loginRequest)
+		val (admin, token) = adminService.loginAdmin(loginRequest)
 		setHeader(Headers.WWW_AUTHENTICATE, token)
-		ok()
+		ok(admin)
 	}
 }

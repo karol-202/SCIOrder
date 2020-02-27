@@ -1,23 +1,25 @@
 package pl.karol202.sciorder.server
 
 import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.authenticate
 import io.ktor.auth.jwt.jwt
-import io.ktor.features.CORS
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
-import io.ktor.gson.gson
+import io.ktor.features.*
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.response.respond
 import io.ktor.routing.*
+import io.ktor.serialization.serialization
 import io.ktor.util.KtorExperimentalAPI
+import kotlinx.serialization.SerializationException
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import pl.karol202.sciorder.server.auth.JWTProvider
 import pl.karol202.sciorder.server.auth.authModule
 import pl.karol202.sciorder.server.config.propertiesFromConfig
+import pl.karol202.sciorder.server.controller.StatusException
 import pl.karol202.sciorder.server.controller.admin.AdminController
 import pl.karol202.sciorder.server.controller.controllerModule
 import pl.karol202.sciorder.server.controller.order.OrderController
@@ -45,7 +47,7 @@ private fun Application.configure()
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {
-        gson()
+        serialization()
     }
 	install(CORS) {
 		anyHost()
@@ -62,6 +64,12 @@ private fun Application.configure()
 			verifier(jwtProvider.verifier)
 			validate { jwtProvider.validate(it) }
 		}
+	}
+	install(StatusPages) {
+		StatusException.allExceptions.forEach { (klass, code) ->
+			exception(klass.java) { call.respond(code) }
+		}
+		exception<SerializationException> { call.respond(HttpStatusCode.BadRequest, it) }
 	}
 }
 

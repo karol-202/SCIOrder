@@ -42,5 +42,6 @@ object Versions
 	// Server
 	const val SHADOW = "5.2.0"
 	const val EXPOSED = "0.21.1"
+	const val JDBC_MYSQL = "5.1.46"
 	const val LOGBACK = "1.2.3"
 }

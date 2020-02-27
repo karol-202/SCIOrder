@@ -14,7 +14,7 @@ class UserEntity(id: EntityID<Long>) : LongEntity(id), Mappable<User>
 	
 	var password by Users.password
 	
-	val orders by OrderEntity referrersOn Orders.userId
+	val orders by OrderEntity optionalReferrersOn Orders.userId
 	
 	override fun map() = User(id = id.value)
 }

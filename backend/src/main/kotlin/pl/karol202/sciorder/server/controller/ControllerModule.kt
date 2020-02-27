@@ -18,7 +18,7 @@ fun controllerModule() = module {
 	single<ProductController> { ProductControllerImpl(get(), get()) }
 	single<ProductParameterController> { ProductParameterControllerImpl(get(), get()) }
 	single<OrderController> { OrderControllerImpl(get(), get(), get()) }
-	single<StoreController> { StoreControllerImpl(get(), get()) }
+	single<StoreController> { StoreControllerImpl(get(), get(), get()) }
 	single<AdminController> { AdminControllerImpl(get(), get()) }
 	single<UserController> { UserControllerImpl(get()) }
 }

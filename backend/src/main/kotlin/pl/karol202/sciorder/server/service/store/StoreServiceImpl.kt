@@ -23,10 +23,4 @@ class StoreServiceImpl : StoreService
 		val store = StoreEntity.findById(storeId) ?: notFound()
 		store.delete()
 	}
-	
-	override suspend fun deleteStoreIfNoAdmins(storeId: Long)
-	{
-		val store = StoreEntity.findById(storeId) ?: notFound()
-		if(store.admins.empty()) store.delete()
-	}
 }
