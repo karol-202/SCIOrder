@@ -5,7 +5,7 @@ import pl.karol202.sciorder.common.request.OrderRequest
 
 interface OrderService
 {
-	suspend fun insertOrder(storeId: Long, order: OrderRequest): Order
+	suspend fun insertOrder(storeId: Long, userId: Long?, order: OrderRequest): Order
 	
 	suspend fun updateOrderStatus(storeId: Long, orderId: Long, status: Order.Status)
 	

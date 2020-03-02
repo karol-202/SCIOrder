@@ -15,6 +15,7 @@ data class Order(override val id: Long,
 	data class Details(val location: String,
 	                   val recipient: String) : JvmSerializable
 
+	@Serializable
 	enum class Status
 	{
 		WAITING, IN_PROGRESS, DELIVERING, DONE, REJECTED;

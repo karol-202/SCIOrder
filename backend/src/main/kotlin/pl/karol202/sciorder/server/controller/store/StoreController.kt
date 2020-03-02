@@ -7,4 +7,6 @@ interface StoreController
 	suspend fun postStore(requestHandler: RequestHandler)
 	
 	suspend fun deleteStore(requestHandler: RequestHandler)
+	
+	suspend fun getStores(requestHandler: RequestHandler)
 }

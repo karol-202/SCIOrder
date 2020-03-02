@@ -30,7 +30,7 @@ class AdminControllerImpl(private val permissionService: PermissionService,
 		val loginRequest = requireBody<AdminLoginRequest>()
 		
 		val (admin, token) = adminService.loginAdmin(loginRequest)
-		setHeader(Headers.WWW_AUTHENTICATE, token)
+		setHeader(Headers.AUTH_TOKEN, token)
 		ok(admin)
 	}
 }

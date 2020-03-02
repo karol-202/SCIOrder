@@ -36,5 +36,7 @@ interface PermissionService
 	
 	suspend fun canDeleteStore(principal: AbstractPrincipal, storeId: Long): Boolean
 	
+	suspend fun canGetOwnStores(principal: AbstractPrincipal): Boolean
+	
 	suspend fun canDeleteAdmin(principal: AbstractPrincipal, adminId: Long): Boolean
 }

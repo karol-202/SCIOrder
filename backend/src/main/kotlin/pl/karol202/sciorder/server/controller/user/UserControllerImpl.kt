@@ -20,7 +20,7 @@ class UserControllerImpl(private val userService: UserService) : UserController
 		val loginRequest = requireBody<UserLoginRequest>()
 		
 		val (user, token) = userService.loginUser(loginRequest)
-		setHeader(Headers.WWW_AUTHENTICATE, token)
+		setHeader(Headers.AUTH_TOKEN, token)
 		ok(user)
 	}
 }

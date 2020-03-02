@@ -7,8 +7,8 @@ import pl.karol202.sciorder.server.service.transaction.TransactionService
 class TransactionOrderService(private val delegate: OrderService,
                               private val transactionService: TransactionService) : OrderService
 {
-	override suspend fun insertOrder(storeId: Long, order: OrderRequest) = transactionService.runTransaction {
-		delegate.insertOrder(storeId, order)
+	override suspend fun insertOrder(storeId: Long, userId: Long?, order: OrderRequest) = transactionService.runTransaction {
+		delegate.insertOrder(storeId, userId, order)
 	}
 	
 	override suspend fun updateOrderStatus(storeId: Long, orderId: Long, status: Order.Status) = transactionService.runTransaction {

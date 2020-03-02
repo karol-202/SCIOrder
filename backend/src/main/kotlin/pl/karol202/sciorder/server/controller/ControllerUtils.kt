@@ -26,10 +26,10 @@ suspend fun Context.created(message: Any) = call.respond(HttpStatusCode.Created,
 fun Context.setHeader(header: String, value: String) = call.response.header(header, value)
 
 fun Context.requireLongParameter(paramName: String) =
-		call.parameters[paramName]?.toLongOrNull() ?: badRequest()
+		call.parameters[paramName]?.toLongOrNull() ?: badRequest("Missing numeric parameter: $paramName")
 
 suspend inline fun <reified T : Any> Context.requireBody(validate: T.() -> Boolean = { true }) =
-		call.receiveOrNull<T>()?.takeIf(validate) ?: badRequest()
+		call.receiveOrNull<T>()?.takeIf(validate) ?: badRequest("Missing or invalid body of type ${T::class.simpleName}")
 
 suspend fun Context.requirePrincipal(validate: suspend (AbstractPrincipal) -> Boolean) =
 		call.principal<AbstractPrincipal>()?.also { if(!validate(it)) forbidden() } ?: unauthorized()

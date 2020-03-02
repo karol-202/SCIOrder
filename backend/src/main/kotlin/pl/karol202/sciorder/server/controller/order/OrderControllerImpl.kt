@@ -16,9 +16,10 @@ class OrderControllerImpl(private val permissionService: PermissionService,
 	override suspend fun postOrder(requestHandler: RequestHandler) = requestHandler {
 		val storeId = requireLongParameter("storeId")
 		val order = requireBody<OrderRequest> { isValid { productService.getProduct(storeId, it) } }
-		requirePrincipal { permissionService.canInsertOrder(it, storeId) }
+		val principal = requirePrincipal { permissionService.canInsertOrder(it, storeId) }
+		val userId = (principal as? AbstractPrincipal.UserPrincipal)?.userId
 		
-		val newOrder = orderService.insertOrder(storeId, order)
+		val newOrder = orderService.insertOrder(storeId, userId, order)
 		created(newOrder)
 	}
 	

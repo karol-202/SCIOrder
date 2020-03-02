@@ -57,6 +57,9 @@ class PermissionServiceImpl(private val transactionService: TransactionService) 
 	override suspend fun canDeleteStore(principal: AbstractPrincipal, storeId: Long) =
 			transaction { handleAdminActionInStore(principal, storeId) }
 	
+	override suspend fun canGetOwnStores(principal: AbstractPrincipal) =
+			transaction { handleAdminAction(principal) }
+	
 	override suspend fun canDeleteAdmin(principal: AbstractPrincipal, adminId: Long) =
 			transaction { handleAdminActionOnAdmin(principal, adminId) }
 	

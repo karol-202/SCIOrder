@@ -66,10 +66,10 @@ private fun Application.configure()
 		}
 	}
 	install(StatusPages) {
-		StatusException.allExceptions.forEach { (klass, code) ->
-			exception(klass.java) { call.respond(code) }
+		StatusException.allExceptions.forEach { klass ->
+			exception(klass.java) { it.handle(requestHandler) }
 		}
-		exception<SerializationException> { call.respond(HttpStatusCode.BadRequest, it) }
+		exception<SerializationException> { call.respond(HttpStatusCode.BadRequest, it.message ?: "") }
 	}
 }
 
@@ -84,6 +84,7 @@ private fun Application.routing() = routing {
 	authenticate(optional = true) {
 		route("api") {
 			route("stores") {
+				get { storeController.getStores(requestHandler) }
 				post { storeController.postStore(requestHandler) }
 				
 				route("{storeId}") {
@@ -94,7 +95,7 @@ private fun Application.routing() = routing {
 						post { productController.postProduct(requestHandler) }
 						
 						route("{productId}") {
-							put { productController.postProduct(requestHandler) }
+							put { productController.putProduct(requestHandler) }
 							delete { productController.deleteProduct(requestHandler) }
 							
 							route("parameters") {

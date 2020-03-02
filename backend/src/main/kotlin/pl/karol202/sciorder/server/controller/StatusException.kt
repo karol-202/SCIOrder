@@ -1,50 +1,62 @@
 package pl.karol202.sciorder.server.controller
 
+import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
-import kotlin.reflect.full.companionObjectInstance
+import io.ktor.response.respond
 
-sealed class StatusException : RuntimeException()
+sealed class StatusException(message: String? = null) : RuntimeException(message)
 {
-	abstract class StatusCodeProvider(val statusCode: HttpStatusCode)
-	
-	class BadRequest : StatusException()
+	class BadRequest(message: String) : StatusException(message)
 	{
-		companion object : StatusCodeProvider(HttpStatusCode.BadRequest)
+		override suspend fun handle(requestHandler: RequestHandler) = requestHandler {
+			call.respond(HttpStatusCode.BadRequest, message ?: "")
+		}
 	}
 	
 	class Unauthorized : StatusException()
 	{
-		companion object : StatusCodeProvider(HttpStatusCode.Unauthorized)
+		override suspend fun handle(requestHandler: RequestHandler) = requestHandler {
+			call.respond(HttpStatusCode.Unauthorized)
+		}
 	}
 	
 	class Forbidden : StatusException()
 	{
-		companion object : StatusCodeProvider(HttpStatusCode.Forbidden)
+		override suspend fun handle(requestHandler: RequestHandler) = requestHandler {
+			call.respond(HttpStatusCode.Forbidden)
+		}
 	}
 	
 	class NotFound : StatusException()
 	{
-		companion object : StatusCodeProvider(HttpStatusCode.NotFound)
+		override suspend fun handle(requestHandler: RequestHandler) = requestHandler {
+			call.respond(HttpStatusCode.NotFound)
+		}
 	}
 	
 	class Conflict : StatusException()
 	{
-		companion object : StatusCodeProvider(HttpStatusCode.Conflict)
+		override suspend fun handle(requestHandler: RequestHandler) = requestHandler {
+			call.respond(HttpStatusCode.Conflict)
+		}
 	}
 	
 	class InternalError : StatusException()
 	{
-		companion object : StatusCodeProvider(HttpStatusCode.InternalServerError)
+		override suspend fun handle(requestHandler: RequestHandler) = requestHandler {
+			call.respond(HttpStatusCode.InternalServerError)
+		}
 	}
 	
 	companion object
 	{
 		val allExceptions = StatusException::class.sealedSubclasses
-				.associateWith { (it.companionObjectInstance as StatusCodeProvider).statusCode }
 	}
+	
+	abstract suspend fun handle(requestHandler: RequestHandler)
 }
 
-fun badRequest(): Nothing = throw StatusException.BadRequest()
+fun badRequest(message: String): Nothing = throw StatusException.BadRequest(message)
 
 fun unauthorized(): Nothing = throw StatusException.Unauthorized()
 

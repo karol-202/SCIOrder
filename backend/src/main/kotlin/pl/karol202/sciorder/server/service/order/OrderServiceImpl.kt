@@ -12,11 +12,13 @@ import pl.karol202.sciorder.server.util.map
 
 class OrderServiceImpl : OrderService
 {
-	override suspend fun insertOrder(storeId: Long, order: OrderRequest): Order
+	override suspend fun insertOrder(storeId: Long, userId: Long?, order: OrderRequest): Order
 	{
 		val storeEntity = StoreEntity.findById(storeId) ?: notFound()
+		val userEntity = userId?.let { UserEntity.findById(it) }
 		val orderEntity = OrderEntity.new {
 			store = storeEntity
+			user = userEntity
 			location = order.details.location
 			recipient = order.details.recipient
 			status = Order.Status.WAITING

@@ -29,4 +29,15 @@ class StoreControllerImpl(private val permissionService: PermissionService,
 		storeService.deleteStore(storeId)
 		ok()
 	}
+	
+	override suspend fun getStores(requestHandler: RequestHandler) = requestHandler {
+		val principal = requirePrincipal { permissionService.canGetOwnStores(it) }
+		
+		val stores = when(principal)
+		{
+			is AbstractPrincipal.AdminPrincipal -> storeService.getStoresByAdmin(principal.adminId)
+			else -> forbidden()
+		}
+		ok(stores)
+	}
 }

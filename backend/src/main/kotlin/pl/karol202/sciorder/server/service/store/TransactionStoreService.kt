@@ -13,4 +13,8 @@ class TransactionStoreService(private val delegate: StoreService,
 	override suspend fun deleteStore(storeId: Long) = transactionService.runTransaction {
 		delegate.deleteStore(storeId)
 	}
+	
+	override suspend fun getStoresByAdmin(adminId: Long) = transactionService.runTransaction {
+		delegate.getStoresByAdmin(adminId)
+	}
 }
