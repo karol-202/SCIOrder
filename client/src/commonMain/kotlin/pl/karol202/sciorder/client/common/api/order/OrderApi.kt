@@ -2,16 +2,15 @@ package pl.karol202.sciorder.client.common.api.order
 
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.common.model.Order
+import pl.karol202.sciorder.common.request.OrderRequest
 
 interface OrderApi
 {
-	suspend fun addOrder(ownerId: String, order: Order): ApiResponse<Order>
+	suspend fun addOrder(token: String, storeId: Long, order: OrderRequest): ApiResponse<Order>
 
-	suspend fun updateOrderStatus(ownerId: String, orderId: String, hash: String, status: Order.Status): ApiResponse<Unit>
+	suspend fun updateOrderStatus(token: String, storeId: Long, orderId: Long, status: Order.Status): ApiResponse<Unit>
 
-	suspend fun removeAllOrders(ownerId: String, hash: String): ApiResponse<Unit>
+	suspend fun removeAllOrders(token: String, storeId: Long): ApiResponse<Unit>
 
-	suspend fun getAllOrders(ownerId: String, hash: String): ApiResponse<List<Order>>
-
-	suspend fun getOrdersByIds(ownerId: String, ids: List<String>): ApiResponse<List<Order>>
+	suspend fun getOrders(token: String, storeId: Long): ApiResponse<List<Order>>
 }

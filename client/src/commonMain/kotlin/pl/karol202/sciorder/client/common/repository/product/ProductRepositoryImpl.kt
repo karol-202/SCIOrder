@@ -20,7 +20,7 @@ class ProductRepositoryImpl(private val productDao: ProductDao,
 	{
 		override suspend fun waitForNextUpdate() = delay(5.minutes)
 		
-		override suspend fun loadFromNetwork(oldData: List<Product>) = productApi.getAllProducts(ownerId)
+		override suspend fun loadFromNetwork(oldData: List<Product>) = productApi.getProducts(ownerId)
 	}
 	
 	override suspend fun addProduct(owner: Owner, product: Product): ApiResponse<Product>

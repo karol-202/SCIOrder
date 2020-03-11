@@ -43,6 +43,6 @@ fun serviceModule() = module {
 	single<OrderService> { TransactionOrderService(OrderServiceImpl(), get()) }
 	single<StoreService> { TransactionStoreService(StoreServiceImpl(), get()) }
 	single<StoreAdminService> { TransactionStoreAdminService(StoreAdminServiceImpl(), get()) }
-	single<AdminService> { TransactionAdminService(AdminServiceImpl(get(), get(), get()), get()) }
+	single<AdminService> { TransactionAdminService(AdminServiceImpl(get(), get()), get()) }
 	single<UserService> { TransactionUserService(UserServiceImpl(get(), get()), get()) }
 }

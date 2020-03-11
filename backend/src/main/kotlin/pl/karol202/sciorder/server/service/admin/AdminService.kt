@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.server.service.admin
 
 import pl.karol202.sciorder.common.model.Admin
+import pl.karol202.sciorder.common.model.AdminLoginResult
 import pl.karol202.sciorder.common.request.AdminLoginRequest
 import pl.karol202.sciorder.common.request.AdminRequest
 
@@ -10,5 +11,5 @@ interface AdminService
 	
 	suspend fun deleteAdmin(adminId: Long)
 	
-	suspend fun loginAdmin(request: AdminLoginRequest): Pair<Admin, String>
+	suspend fun loginAdmin(request: AdminLoginRequest): AdminLoginResult
 }

@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.server.service.user
 
 import pl.karol202.sciorder.common.model.User
+import pl.karol202.sciorder.common.model.UserLoginResult
 import pl.karol202.sciorder.common.request.UserLoginRequest
 import pl.karol202.sciorder.common.request.UserRequest
 import pl.karol202.sciorder.server.auth.JWTProvider
@@ -22,7 +23,7 @@ class UserServiceImpl(private val hashService: HashService,
 		return userEntity.map()
 	}
 	
-	override suspend fun loginUser(request: UserLoginRequest): Pair<User, String>
+	override suspend fun loginUser(request: UserLoginRequest): UserLoginResult
 	{
 		val hash = hashService.hash(request.password)
 		val userEntity = UserEntity.findById(request.userId) ?: forbidden()
@@ -31,6 +32,6 @@ class UserServiceImpl(private val hashService: HashService,
 		val storeEntity = StoreEntity.find { Stores.name eq request.storeName }.limit(1).singleOrNull() ?: forbidden()
 		
 		val token = jwtProvider.signForUser(userEntity.id.value, storeEntity.id.value)
-		return userEntity.map() to token
+		return UserLoginResult(userEntity.map(), token)
 	}
 }

@@ -1,31 +1,33 @@
 package pl.karol202.sciorder.client.common.api.product
 
-import io.ktor.client.request.parameter
 import pl.karol202.sciorder.client.common.api.KtorBasicApi
+import pl.karol202.sciorder.client.common.api.authToken
 import pl.karol202.sciorder.client.common.api.jsonBody
 import pl.karol202.sciorder.client.common.api.relativePath
 import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.request.ProductRequest
 
 class KtorProductApi(private val basicApi: KtorBasicApi) : ProductApi
 {
-	override suspend fun addProduct(ownerId: String, hash: String, product: Product) = basicApi.post<Product> {
-		relativePath("owner/$ownerId/products")
-		parameter("hash", hash)
+	override suspend fun addProduct(token: String, storeId: Long, product: ProductRequest) = basicApi.post<Product> {
+		relativePath("api/stores/$storeId/products")
+		authToken(token)
 		jsonBody(product)
 	}
 
-	override suspend fun updateProduct(ownerId: String, productId: String, hash: String, product: Product) = basicApi.put<Unit> {
-		relativePath("owner/$ownerId/products/$productId")
-		parameter("hash", hash)
+	override suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductRequest) = basicApi.put<Unit> {
+		relativePath("api/stores/$storeId/products/$productId")
+		authToken(token)
 		jsonBody(product)
 	}
 
-	override suspend fun removeProduct(ownerId: String, productId: String, hash: String) = basicApi.delete<Unit> {
-		relativePath("owner/$ownerId/products/$productId")
-		parameter("hash", hash)
+	override suspend fun removeProduct(token: String, storeId: Long, productId: Long) = basicApi.delete<Unit> {
+		relativePath("api/stores/$storeId/products/$productId")
+		authToken(token)
 	}
 
-	override suspend fun getAllProducts(ownerId: String) = basicApi.get<List<Product>> {
-		relativePath("owner/$ownerId/products")
+	override suspend fun getProducts(token: String, storeId: Long) = basicApi.get<List<Product>> {
+		relativePath("api/stores/$storeId/products")
+		authToken(token)
 	}
 }

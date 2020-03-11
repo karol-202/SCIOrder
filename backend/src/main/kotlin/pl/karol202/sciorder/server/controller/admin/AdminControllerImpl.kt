@@ -6,7 +6,6 @@ import pl.karol202.sciorder.common.validation.isValid
 import pl.karol202.sciorder.server.controller.*
 import pl.karol202.sciorder.server.service.admin.AdminService
 import pl.karol202.sciorder.server.service.permission.PermissionService
-import pl.karol202.sciorder.server.util.Headers
 
 class AdminControllerImpl(private val permissionService: PermissionService,
                           private val adminService: AdminService) : AdminController
@@ -29,8 +28,7 @@ class AdminControllerImpl(private val permissionService: PermissionService,
 	override suspend fun loginAdmin(requestHandler: RequestHandler) = requestHandler {
 		val loginRequest = requireBody<AdminLoginRequest>()
 		
-		val (admin, token) = adminService.loginAdmin(loginRequest)
-		setHeader(Headers.AUTH_TOKEN, token)
-		ok(admin)
+		val result = adminService.loginAdmin(loginRequest)
+		ok(result)
 	}
 }
