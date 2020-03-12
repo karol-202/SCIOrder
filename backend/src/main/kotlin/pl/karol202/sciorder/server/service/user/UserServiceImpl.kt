@@ -32,6 +32,6 @@ class UserServiceImpl(private val hashService: HashService,
 		val storeEntity = StoreEntity.find { Stores.name eq request.storeName }.limit(1).singleOrNull() ?: forbidden()
 		
 		val token = jwtProvider.signForUser(userEntity.id.value, storeEntity.id.value)
-		return UserLoginResult(userEntity.map(), token)
+		return UserLoginResult(userEntity.map(), storeEntity.map(), token)
 	}
 }
