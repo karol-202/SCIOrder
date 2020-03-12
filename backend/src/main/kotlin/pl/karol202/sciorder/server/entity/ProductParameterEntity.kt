@@ -23,6 +23,7 @@ class ProductParameterEntity(id: EntityID<Long>) : LongEntity(id), Mappable<Prod
 	val enumValues by ProductParameterEnumValueEntity referrersOn ProductParameterEnumValues.productParameterId
 	
 	override fun map() = ProductParameter(id = id.value,
+	                                      productId = product.id.value,
 	                                      name = name,
 	                                      type = type,
 	                                      attributes = ProductParameter.Attributes(minimalValue = minimalValue,

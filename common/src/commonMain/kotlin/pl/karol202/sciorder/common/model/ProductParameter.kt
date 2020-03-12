@@ -6,6 +6,7 @@ import pl.karol202.sciorder.common.util.JvmSerializable
 
 @Serializable
 data class ProductParameter(override val id: Long,
+                            val productId: Long,
                             val name: String,
                             val type: Type,
                             val attributes: Attributes) : JvmSerializable, IdProvider

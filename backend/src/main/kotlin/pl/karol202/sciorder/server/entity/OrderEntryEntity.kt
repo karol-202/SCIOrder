@@ -20,6 +20,7 @@ class OrderEntryEntity(id: EntityID<Long>) : LongEntity(id), Mappable<OrderEntry
 	val parameters by OrderEntryParameterValueEntity referrersOn OrderEntryParameterValues.orderEntryId
 	
 	override fun map() = OrderEntry(id = id.value,
+	                                orderId = order.id.value,
 	                                productId = product.id.value,
 	                                quantity = quantity,
 	                                parameters = parameters.map().toMap())
