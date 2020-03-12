@@ -5,11 +5,11 @@ import pl.karol202.sciorder.common.model.Order
 
 interface OrderDao : CrudDao<Order>
 {
-	suspend fun updateStatus(id: String, status: Order.Status)
+	suspend fun updateStatus(orderId: Long, status: Order.Status)
 
-	suspend fun deleteAll()
-
-	fun getByOwnerId(ownerId: String): Flow<List<Order>>
+	suspend fun deleteByStoreId(storeId: Long)
 	
-	fun getStatus(id: String): Flow<Order.Status?>
+	fun getById(orderId: Long): Flow<Order?>
+	
+	fun getByStoreId(storeId: Long): Flow<List<Order>>
 }

@@ -18,6 +18,9 @@ sealed class ApiResponse<out T>
 			is IOException -> Error.Type.NETWORK
 			is ResponseException -> when(response.status)
 			{
+				HttpStatusCode.BadRequest -> Error.Type.BAD_REQUEST
+				HttpStatusCode.Unauthorized -> Error.Type.UNAUTHORIZED
+				HttpStatusCode.Forbidden -> Error.Type.FORBIDDEN
 				HttpStatusCode.NotFound -> Error.Type.NOT_FOUND
 				HttpStatusCode.Conflict -> Error.Type.CONFLICT
 				else -> Error.Type.OTHER
@@ -39,7 +42,7 @@ sealed class ApiResponse<out T>
 		enum class Type
 		{
 			NETWORK,
-			NOT_FOUND, CONFLICT,
+			BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT,
 			LOCAL_INCONSISTENCY, // Indicates that local client's state makes request impossible or pointless,
 								 // may be caused for instance by trying to update order that has been just deleted.
 			OTHER

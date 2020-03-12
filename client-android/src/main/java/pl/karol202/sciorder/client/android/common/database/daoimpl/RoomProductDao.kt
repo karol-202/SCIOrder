@@ -20,7 +20,7 @@ private class RoomProductDao(private val productEntityDao: ProductEntityDao) : P
 
 	override fun getAll() = productEntityDao.getAll().asFlow().map { it.toProducts() }
 	
-	override fun getById(id: String) = productEntityDao.getById(id).asFlow().map { it.singleOrNull()?.toProduct() }
+	override fun getById(productId: String) = productEntityDao.getById(productId).asFlow().map { it.singleOrNull()?.toProduct() }
 	
 	private fun List<ProductEntity>.toProducts() = map { it.toProduct() }
 	

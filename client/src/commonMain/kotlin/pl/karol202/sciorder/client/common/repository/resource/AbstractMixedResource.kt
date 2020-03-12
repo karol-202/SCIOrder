@@ -6,13 +6,12 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.util.tryDoLocking
 
-abstract class MixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<T>
+abstract class AbstractMixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<T>
 {
 	private sealed class State
 	{
@@ -68,12 +67,12 @@ abstract class MixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<
 	private suspend fun executeReload()
 	{
 		stateChannel.send(State.Loading)
-		val response = loadFromNetwork(databaseFlow.first())
+		val response = loadFromApi()
 		response.ifSuccess { saveToDatabase(it) }
 		stateChannel.send(State.fromApiResponse(response))
 	}
 
-	protected abstract suspend fun loadFromNetwork(oldData: T): ApiResponse<T>
+	protected abstract suspend fun loadFromApi(): ApiResponse<T>
 
 	protected abstract suspend fun saveToDatabase(data: T)
 

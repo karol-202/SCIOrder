@@ -1,6 +1,5 @@
 package pl.karol202.sciorder.client.common.repository.product
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.api.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
@@ -9,52 +8,47 @@ import pl.karol202.sciorder.client.common.database.dao.ProductDao
 import pl.karol202.sciorder.client.common.database.dao.delete
 import pl.karol202.sciorder.client.common.database.dao.insert
 import pl.karol202.sciorder.client.common.database.dao.update
-import pl.karol202.sciorder.client.common.repository.resource.DaoMixedResource
+import pl.karol202.sciorder.client.common.repository.resource.StandardMixedResource
 import pl.karol202.sciorder.client.common.util.minutes
 import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.request.ProductRequest
 
 class ProductRepositoryImpl(private val productDao: ProductDao,
                             private val productApi: ProductApi) : ProductRepository
 {
-	override fun getProductsResource(ownerId: String) = object : DaoMixedResource<Product>(productDao)
-	{
-		override suspend fun waitForNextUpdate() = delay(5.minutes)
-		
-		override suspend fun loadFromNetwork(oldData: List<Product>) = productApi.getProducts(ownerId)
-	}
+	override fun getProductsResource(token: String, storeId: Long) =
+			StandardMixedResource(dao = productDao,
+			databaseProvider = { getByStoreId(storeId) },
+			apiProvider = { productApi.getProducts(token, storeId) },
+			updateIntervalMillis = 5.minutes)
 	
-	override suspend fun addProduct(owner: Owner, product: Product): ApiResponse<Product>
+	override suspend fun addProduct(token: String, storeId: Long, product: ProductRequest): ApiResponse<Product>
 	{
 		suspend fun addLocally(product: Product) = productDao.insert(product)
-		suspend fun revertLocally(product: Product) = productDao.delete(product)
-		suspend fun patchLocally(patched: Product)
-		{
-			revertLocally(product)
-			addLocally(patched)
-		}
 		
-		addLocally(product)
-		return productApi.addProduct(owner.id, owner.hash, product).ifSuccess { patchLocally(it) }
-																   .ifFailure { revertLocally(product) }
+		return productApi.addProduct(token, storeId, product).ifSuccess { addLocally(it) }
 	}
 	
-	override suspend fun updateProduct(owner: Owner, product: Product): ApiResponse<Unit>
+	override suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductRequest): ApiResponse<Unit>
 	{
-		val previousProduct = productDao.getById(product.id).first() ?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
+		val previousProduct = productDao.getById(productId).first() ?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
+		val updatedProduct = previousProduct.copy(name = product.name, available = product.available)
 		
-		suspend fun updateLocally() = productDao.update(product)
+		suspend fun updateLocally() = productDao.update(updatedProduct)
 		suspend fun revertLocally() = productDao.update(previousProduct)
 		
 		updateLocally()
-		return productApi.updateProduct(owner.id, product.id, owner.hash, product).ifFailure { revertLocally() }
+		return productApi.updateProduct(token, storeId, productId, product).ifFailure { revertLocally() }
 	}
 	
-	override suspend fun removeProduct(owner: Owner, product: Product): ApiResponse<Unit>
+	override suspend fun removeProduct(token: String, storeId: Long, productId: Long): ApiResponse<Unit>
 	{
-		suspend fun removeLocally() = productDao.delete(product)
-		suspend fun revertLocally() = productDao.insert(product)
+		val removedProduct = productDao.getById(productId).first() ?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
+		
+		suspend fun removeLocally() = productDao.delete(removedProduct)
+		suspend fun revertLocally() = productDao.insert(removedProduct)
 		
 		removeLocally()
-		return productApi.removeProduct(owner.id, product.id, owner.hash).ifFailure { revertLocally() }
+		return productApi.removeProduct(token, storeId, productId).ifFailure { revertLocally() }
 	}
 }
