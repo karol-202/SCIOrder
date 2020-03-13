@@ -22,7 +22,7 @@ import pl.karol202.sciorder.client.android.user.ui.listener.OnOrderDetailsSetLis
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderEditListener
 import pl.karol202.sciorder.client.android.user.ui.listener.OnProductOrderListener
 import pl.karol202.sciorder.client.common.model.OrderedProduct
-import pl.karol202.sciorder.client.common.viewmodel.OrderComposeViewModel.OrderResult.SUCCESS
+import pl.karol202.sciorder.client.common.viewmodel.UserOrderComposeViewModel.OrderResult.SUCCESS
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.model.Product
 

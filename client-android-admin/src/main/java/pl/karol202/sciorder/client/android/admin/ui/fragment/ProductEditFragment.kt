@@ -15,7 +15,7 @@ import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
 import pl.karol202.sciorder.client.common.model.create
-import pl.karol202.sciorder.client.common.viewmodel.ProductsEditViewModel
+import pl.karol202.sciorder.client.common.viewmodel.AdminProductsViewModel
 import pl.karol202.sciorder.common.model.Product
 
 class ProductEditFragment : ExtendedFragment()
@@ -75,7 +75,7 @@ class ProductEditFragment : ExtendedFragment()
 	private fun observeUpdateEvent()
 	{
 		productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-			if(it == ProductsEditViewModel.UpdateResult.SUCCESS) navigateBack()
+			if(it == AdminProductsViewModel.UpdateResult.SUCCESS) navigateBack()
 			else showSnackbar(R.string.text_update_error)
 		}
 	}

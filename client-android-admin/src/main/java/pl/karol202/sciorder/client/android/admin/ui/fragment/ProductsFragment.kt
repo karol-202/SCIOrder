@@ -12,7 +12,7 @@ import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
-import pl.karol202.sciorder.client.common.viewmodel.ProductsEditViewModel
+import pl.karol202.sciorder.client.common.viewmodel.AdminProductsViewModel
 import pl.karol202.sciorder.common.model.Product
 
 class ProductsFragment : InflatedFragment()
@@ -66,7 +66,7 @@ class ProductsFragment : InflatedFragment()
 
 	private fun observeUpdateError() =
 			productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-				if(it == ProductsEditViewModel.UpdateResult.FAILURE) showSnackbar(R.string.text_update_error)
+				if(it == AdminProductsViewModel.UpdateResult.FAILURE) showSnackbar(R.string.text_update_error)
 			}
 
 	private fun navigateToProductEditFragment(product: Product?) =

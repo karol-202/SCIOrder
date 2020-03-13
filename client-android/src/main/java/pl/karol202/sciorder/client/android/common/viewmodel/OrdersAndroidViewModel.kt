@@ -3,10 +3,10 @@ package pl.karol202.sciorder.client.android.common.viewmodel
 import pl.karol202.sciorder.client.android.common.util.asLiveData
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
-import pl.karol202.sciorder.client.common.viewmodel.OrdersViewModel
+import pl.karol202.sciorder.client.common.viewmodel.AdminOrdersViewModel
 
 class OrdersAndroidViewModel(ownerRepository: OwnerRepository,
-                             orderRepository: OrderRepository) : OrdersViewModel(ownerRepository, orderRepository)
+                             orderRepository: OrderRepository) : AdminOrdersViewModel(ownerRepository, orderRepository)
 {
 	val ordersLiveData = ordersFlow.asLiveData(coroutineScope)
 	val loadingLiveData = loadingFlow.asLiveData(coroutineScope)

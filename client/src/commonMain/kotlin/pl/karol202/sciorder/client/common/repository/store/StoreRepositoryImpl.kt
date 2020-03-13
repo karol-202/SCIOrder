@@ -15,6 +15,8 @@ import pl.karol202.sciorder.common.request.StoreRequest
 class StoreRepositoryImpl(private val storeDao: StoreDao,
                           private val storeApi: StoreApi) : StoreRepository
 {
+	override fun getSelectedStoreFlow() = storeDao.getSelected()
+	
 	override fun getStoresResource(token: String) =
 			StandardMixedResource(dao = storeDao,
 			                      databaseProvider = { getAll() },
