@@ -7,5 +7,5 @@ interface AdminAuthDao
 {
 	suspend fun set(authData: AdminLoginResult)
 	
-	fun get(): Flow<AdminLoginResult>
+	fun get(): Flow<AdminLoginResult?>
 }

@@ -2,8 +2,6 @@ package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.onEach
-import pl.karol202.sciorder.client.common.repository.owner.OwnerRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.util.Event

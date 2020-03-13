@@ -9,5 +9,5 @@ interface UserDao
 {
 	suspend fun set(user: User)
 	
-	fun get(): Flow<User>
+	fun get(): Flow<User?>
 }

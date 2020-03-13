@@ -7,5 +7,5 @@ interface UserAuthDao
 {
 	suspend fun set(authData: UserLoginResult)
 	
-	fun get(): Flow<UserLoginResult>
+	fun get(): Flow<UserLoginResult?>
 }
