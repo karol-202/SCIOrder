@@ -22,7 +22,7 @@ abstract class UserLoginViewModel(private val userRepository: UserRepository,
 {
 	enum class Error
 	{
-		NETWORK, FORBIDDEN, OTHER
+		NETWORK, CANNOT_LOGIN, OTHER
 	}
 	
 	private val errorEventChannel = ConflatedBroadcastChannel<Event<Error>>()
@@ -53,14 +53,16 @@ abstract class UserLoginViewModel(private val userRepository: UserRepository,
 		userAuthRepository.login(request).handleLoginError()
 	}
 	
-	private suspend fun <T> ApiResponse<T>.handleRegisterError() = ifFailure { errorEventChannel.offer(Event(Error.OTHER)) }
+	private suspend fun <T> ApiResponse<T>.handleRegisterError() =
+			ifFailure { errorEventChannel.offer(Event(it.mapError())) }
 	
-	private suspend fun <T> ApiResponse<T>.handleLoginError() = ifFailure { errorEventChannel.offer(Event(it.mapError())) }
+	private suspend fun <T> ApiResponse<T>.handleLoginError() =
+			ifFailure { errorEventChannel.offer(Event(it.mapError())) }
 	
 	private fun ApiResponse.Error.mapError() = when(type)
 	{
 		ApiResponse.Error.Type.NETWORK -> Error.NETWORK
-		ApiResponse.Error.Type.FORBIDDEN -> Error.FORBIDDEN
+		ApiResponse.Error.Type.FORBIDDEN -> Error.CANNOT_LOGIN
 		else -> Error.OTHER
 	}
 	

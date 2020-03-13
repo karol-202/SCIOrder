@@ -15,4 +15,6 @@ interface StoreRepository
 	suspend fun addStore(token: String, store: StoreRequest): ApiResponse<Store>
 	
 	suspend fun removeStore(token: String, storeId: Long): ApiResponse<Unit>
+	
+	suspend fun cleanLocalStores()
 }

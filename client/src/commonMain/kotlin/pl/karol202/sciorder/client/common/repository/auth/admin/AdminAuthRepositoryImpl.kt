@@ -17,4 +17,6 @@ class AdminAuthRepositoryImpl(private val adminAuthDao: AdminAuthDao,
 		
 		return adminApi.loginAdmin(request).ifSuccess { saveLocally(it) }
 	}
+	
+	override suspend fun logout() = adminAuthDao.set(null)
 }

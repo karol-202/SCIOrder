@@ -10,4 +10,6 @@ interface AdminAuthRepository
 	fun getAdminAuthFlow(): Flow<AdminLoginResult?>
 	
 	suspend fun login(request: AdminLoginRequest): ApiResponse<AdminLoginResult>
+	
+	suspend fun logout()
 }

@@ -40,4 +40,6 @@ class StoreRepositoryImpl(private val storeDao: StoreDao,
 		removeLocally()
 		return storeApi.removeStore(token, storeId).ifFailure { revertLocally() }
 	}
+	
+	override suspend fun cleanLocalStores() = storeDao.deleteAll()
 }
