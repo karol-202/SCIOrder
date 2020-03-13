@@ -12,7 +12,9 @@ import pl.karol202.sciorder.common.model.Product
 abstract class UserProductsViewModel(userAuthRepository: UserAuthRepository,
                                      private val productRepository: ProductRepository) : ViewModel()
 {
-	private val productsResourceChannel = userAuthRepository.getUserAuthFlow()
+	private val userAuthFlow = userAuthRepository.getUserAuthFlow()
+	
+	private val productsResourceChannel = userAuthFlow
 			.map { it?.let { productRepository.getProductsResource(it.authToken, it.store.id) } }
 			.scan(null as Resource<List<Product>>?) { previous, current -> previous?.close(); current }
 			.onEach { it?.autoReloadIn(coroutineScope) }

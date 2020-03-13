@@ -41,5 +41,7 @@ class StoreRepositoryImpl(private val storeDao: StoreDao,
 		return storeApi.removeStore(token, storeId).ifFailure { revertLocally() }
 	}
 	
+	override suspend fun selectStore(storeId: Long?) = storeDao.updateSelection(storeId)
+	
 	override suspend fun cleanLocalStores() = storeDao.deleteAll()
 }

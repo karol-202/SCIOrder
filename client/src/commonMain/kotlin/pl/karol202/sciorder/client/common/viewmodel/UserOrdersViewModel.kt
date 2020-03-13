@@ -12,7 +12,9 @@ import pl.karol202.sciorder.common.model.Order
 abstract class UserOrdersViewModel(userAuthRepository: UserAuthRepository,
                                    private val orderRepository: OrderRepository) : ViewModel()
 {
-	private val ordersResourceChannel = userAuthRepository.getUserAuthFlow()
+	private val userAuthFlow = userAuthRepository.getUserAuthFlow()
+	
+	private val ordersResourceChannel = userAuthFlow
 			.map { it?.let { orderRepository.getOrdersResource(it.authToken, it.store.id) } }
 			.scan(null as Resource<List<Order>>?) { previous, current -> previous?.close(); current }
 			.onEach { it?.autoReloadIn(coroutineScope) }
