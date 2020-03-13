@@ -5,7 +5,7 @@ import pl.karol202.sciorder.common.model.UserLoginResult
 
 interface UserAuthDao
 {
-	suspend fun set(authData: UserLoginResult)
+	suspend fun set(authData: UserLoginResult?)
 	
 	fun get(): Flow<UserLoginResult?>
 }

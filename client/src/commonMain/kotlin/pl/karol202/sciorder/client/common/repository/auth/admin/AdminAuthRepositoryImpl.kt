@@ -11,7 +11,7 @@ class AdminAuthRepositoryImpl(private val adminAuthDao: AdminAuthDao,
 {
 	override fun getAdminAuthFlow() = adminAuthDao.get()
 	
-	override suspend fun loginAdmin(request: AdminLoginRequest): ApiResponse<AdminLoginResult>
+	override suspend fun login(request: AdminLoginRequest): ApiResponse<AdminLoginResult>
 	{
 		suspend fun saveLocally(result: AdminLoginResult) = adminAuthDao.set(result)
 		

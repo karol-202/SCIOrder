@@ -14,4 +14,6 @@ interface OrderRepository
 	suspend fun updateOrderStatus(token: String, storeId: Long, orderId: Long, status: Order.Status): ApiResponse<Unit>
 
 	suspend fun removeAllOrders(token: String, storeId: Long): ApiResponse<Unit>
+	
+	suspend fun cleanLocalOrders()
 }

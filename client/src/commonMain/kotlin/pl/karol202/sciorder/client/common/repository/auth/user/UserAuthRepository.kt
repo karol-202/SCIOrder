@@ -9,5 +9,7 @@ interface UserAuthRepository
 {
 	fun getUserAuthFlow(): Flow<UserLoginResult?>
 	
-	suspend fun loginUser(request: UserLoginRequest): ApiResponse<UserLoginResult>
+	suspend fun login(request: UserLoginRequest): ApiResponse<UserLoginResult>
+	
+	suspend fun logout()
 }

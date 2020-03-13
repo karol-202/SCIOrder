@@ -62,4 +62,6 @@ class ProductParameterRepositoryImpl(private val productParameterDao: ProductPar
 		removeLocally()
 		return productParameterApi.removeParameter(token, storeId, productId, parameterId).ifFailure { revertLocally() }
 	}
+	
+	override suspend fun cleanLocalParameters() = productParameterDao.deleteAll()
 }

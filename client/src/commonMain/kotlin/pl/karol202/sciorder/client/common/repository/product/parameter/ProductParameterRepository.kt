@@ -21,4 +21,6 @@ interface ProductParameterRepository
 	                            parameter: ProductParameterRequest): ApiResponse<Unit>
 	
 	suspend fun removeParameter(token: String, storeId: Long, productId: Long, parameterId: Long): ApiResponse<Unit>
+	
+	suspend fun cleanLocalParameters()
 }

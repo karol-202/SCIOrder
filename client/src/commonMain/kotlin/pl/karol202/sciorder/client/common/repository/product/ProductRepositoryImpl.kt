@@ -51,4 +51,6 @@ class ProductRepositoryImpl(private val productDao: ProductDao,
 		removeLocally()
 		return productApi.removeProduct(token, storeId, productId).ifFailure { revertLocally() }
 	}
+	
+	override suspend fun cleanLocalProducts() = productDao.deleteAll()
 }

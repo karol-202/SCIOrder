@@ -14,4 +14,6 @@ interface ProductRepository
 	suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductRequest): ApiResponse<Unit>
 
 	suspend fun removeProduct(token: String, storeId: Long, productId: Long): ApiResponse<Unit>
+	
+	suspend fun cleanLocalProducts()
 }

@@ -48,4 +48,6 @@ class OrderRepositoryImpl(private val orderDao: OrderDao,
 		removeLocally()
 		return orderApi.removeAllOrders(token, storeId).ifFailure { revertLocally() }
 	}
+	
+	override suspend fun cleanLocalOrders() = orderDao.deleteAll()
 }

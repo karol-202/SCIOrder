@@ -11,10 +11,12 @@ class UserAuthRepositoryImpl(private val userAuthDao: UserAuthDao,
 {
 	override fun getUserAuthFlow() = userAuthDao.get()
 	
-	override suspend fun loginUser(request: UserLoginRequest): ApiResponse<UserLoginResult>
+	override suspend fun login(request: UserLoginRequest): ApiResponse<UserLoginResult>
 	{
 		suspend fun saveLocally(result: UserLoginResult) = userAuthDao.set(result)
 		
 		return userApi.loginUser(request).ifSuccess { saveLocally(it) }
 	}
+	
+	override suspend fun logout() = userAuthDao.set(null)
 }
