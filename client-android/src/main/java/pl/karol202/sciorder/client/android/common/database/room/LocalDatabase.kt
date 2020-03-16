@@ -1,19 +1,16 @@
-package pl.karol202.sciorder.client.android.common.database
+package pl.karol202.sciorder.client.android.common.database.room
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import pl.karol202.sciorder.client.android.common.database.converter.OrderStatusConverter
-import pl.karol202.sciorder.client.android.common.database.converter.ProductParameterTypeConverter
-import pl.karol202.sciorder.client.android.common.database.converter.StringListConverter
-import pl.karol202.sciorder.client.android.common.database.dao.OrderEntityDao
-import pl.karol202.sciorder.client.android.common.database.dao.OwnerEntityDao
-import pl.karol202.sciorder.client.android.common.database.dao.ProductEntityDao
-import pl.karol202.sciorder.client.android.common.database.entity.OrderEntity
-import pl.karol202.sciorder.client.android.common.database.entity.OwnerEntity
-import pl.karol202.sciorder.client.android.common.database.entity.ProductEntity
+import pl.karol202.sciorder.client.android.common.database.room.converter.OrderStatusConverter
+import pl.karol202.sciorder.client.android.common.database.room.converter.ProductParameterTypeConverter
+import pl.karol202.sciorder.client.android.common.database.room.dao.OrderEntityDao
+import pl.karol202.sciorder.client.android.common.database.room.dao.ProductEntityDao
+import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntity
+import pl.karol202.sciorder.client.android.common.database.room.entity.ProductEntity
 
 private object DatabaseInfo
 {

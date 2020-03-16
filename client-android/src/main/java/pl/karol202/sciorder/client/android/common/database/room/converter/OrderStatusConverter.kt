@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.android.common.database.converter
+package pl.karol202.sciorder.client.android.common.database.room.converter
 
 import androidx.room.TypeConverter
 import pl.karol202.sciorder.common.model.Order

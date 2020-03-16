@@ -6,7 +6,7 @@ import kotlinx.coroutines.cancel
 
 actual abstract class ViewModel
 {
-	protected actual val coroutineScope = CoroutineScope(SupervisorJob())
+	actual val coroutineScope = CoroutineScope(SupervisorJob())
 	
 	fun clear()
 	{

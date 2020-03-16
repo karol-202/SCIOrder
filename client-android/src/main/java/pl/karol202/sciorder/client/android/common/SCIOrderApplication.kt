@@ -6,10 +6,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import pl.karol202.sciorder.client.android.common.database.LocalDatabase
-import pl.karol202.sciorder.client.android.common.database.daoimpl.toOrderDao
-import pl.karol202.sciorder.client.android.common.database.daoimpl.toOwnerDao
-import pl.karol202.sciorder.client.android.common.database.daoimpl.toProductDao
+import pl.karol202.sciorder.client.android.common.database.dao.toOrderDao
+import pl.karol202.sciorder.client.android.common.database.dao.toOwnerDao
+import pl.karol202.sciorder.client.android.common.database.dao.toProductDao
+import pl.karol202.sciorder.client.android.common.database.room.LocalDatabase
 import pl.karol202.sciorder.client.common.api.createApiHttpClient
 import pl.karol202.sciorder.client.common.api.order.KtorOrderApi
 import pl.karol202.sciorder.client.common.api.order.OrderApi
