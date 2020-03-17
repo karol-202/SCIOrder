@@ -9,4 +9,4 @@ data class Product(override val id: Long,
                    val storeId: Long,
 				   val name: String,
 				   val available: Boolean,
-				   val parameters: List<ProductParameter>) : JvmSerializable, IdProvider
+				   val parameters: List<ProductParameter>) : JvmSerializable, IdProvider<Long>

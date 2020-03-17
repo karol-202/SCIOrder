@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Update
 import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntryEntity
-import pl.karol202.sciorder.client.common.database.dao.CrudDao
 
 @Dao
 interface OrderEntryEntityDao : CrudDao<OrderEntryEntity>

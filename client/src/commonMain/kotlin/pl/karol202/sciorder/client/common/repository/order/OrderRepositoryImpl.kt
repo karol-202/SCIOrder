@@ -15,10 +15,10 @@ class OrderRepositoryImpl(private val orderDao: OrderDao,
                           private val orderApi: OrderApi) : OrderRepository
 {
 	override fun getOrdersResource(token: String, storeId: Long) =
-			StandardMixedResource(dao = orderDao,
-			                      databaseProvider = { getByStoreId(storeId) },
-			                      apiProvider = { orderApi.getOrders(token, storeId) },
-			                      updateIntervalMillis = 10.seconds)
+			StandardMixedResource(updateIntervalMillis = 10.seconds,
+			                      getFromApi = { orderApi.getOrders(token, storeId) },
+			                      getFromDB = { orderDao.getByStoreId(storeId) },
+			                      saveToDB = { orderDao.dispatchByStoreId(storeId, it) })
 	
 	override suspend fun addOrder(token: String, storeId: Long, order: OrderRequest): ApiResponse<Order>
 	{

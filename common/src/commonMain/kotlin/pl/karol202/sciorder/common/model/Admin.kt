@@ -6,4 +6,4 @@ import pl.karol202.sciorder.common.util.JvmSerializable
 
 @Serializable
 data class Admin(override val id: Long,
-                 val name: String) : JvmSerializable, IdProvider
+                 val name: String) : JvmSerializable, IdProvider<Long>

@@ -17,10 +17,10 @@ class ProductRepositoryImpl(private val productDao: ProductDao,
                             private val productApi: ProductApi) : ProductRepository
 {
 	override fun getProductsResource(token: String, storeId: Long) =
-			StandardMixedResource(dao = productDao,
-			                      databaseProvider = { getByStoreId(storeId) },
-			                      apiProvider = { productApi.getProducts(token, storeId) },
-			                      updateIntervalMillis = 5.minutes)
+			StandardMixedResource(updateIntervalMillis = 5.minutes,
+			                      getFromApi = { productApi.getProducts(token, storeId) },
+			                      getFromDB = { productDao.getByStoreId(storeId) },
+			                      saveToDB = { productDao.dispatchByStoreId(storeId, it) })
 	
 	override suspend fun addProduct(token: String, storeId: Long, product: ProductRequest): ApiResponse<Product>
 	{

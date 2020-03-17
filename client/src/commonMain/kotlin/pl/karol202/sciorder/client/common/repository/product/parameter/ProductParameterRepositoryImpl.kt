@@ -8,20 +8,12 @@ import pl.karol202.sciorder.client.common.database.dao.ProductParameterDao
 import pl.karol202.sciorder.client.common.database.dao.delete
 import pl.karol202.sciorder.client.common.database.dao.insert
 import pl.karol202.sciorder.client.common.database.dao.update
-import pl.karol202.sciorder.client.common.repository.resource.StandardMixedResource
-import pl.karol202.sciorder.client.common.util.minutes
 import pl.karol202.sciorder.common.model.ProductParameter
 import pl.karol202.sciorder.common.request.ProductParameterRequest
 
 class ProductParameterRepositoryImpl(private val productParameterDao: ProductParameterDao,
                                      private val productParameterApi: ProductParameterApi) : ProductParameterRepository
 {
-	override fun getParametersResource(token: String, storeId: Long, productId: Long) =
-			StandardMixedResource(dao = productParameterDao,
-			                      databaseProvider = { getByProductId(productId) },
-			                      apiProvider = { productParameterApi.getParameters(token, storeId, productId) },
-			                      updateIntervalMillis = 5.minutes)
-	
 	override suspend fun addParameter(token: String,
 	                                  storeId: Long,
 	                                  productId: Long,
@@ -38,8 +30,8 @@ class ProductParameterRepositoryImpl(private val productParameterDao: ProductPar
 	                                     parameterId: Long,
 	                                     parameter: ProductParameterRequest): ApiResponse<Unit>
 	{
-		val previousParameter =
-				productParameterDao.getById(parameterId).first() ?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
+		val previousParameter = productParameterDao.getById(parameterId).first()
+				?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
 		val updatedParameter =
 				previousParameter.copy(name = parameter.name, type = parameter.type, attributes = parameter.attributes)
 		
@@ -53,8 +45,8 @@ class ProductParameterRepositoryImpl(private val productParameterDao: ProductPar
 	
 	override suspend fun removeParameter(token: String, storeId: Long, productId: Long, parameterId: Long): ApiResponse<Unit>
 	{
-		val removedParameter =
-				productParameterDao.getById(parameterId).first() ?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
+		val removedParameter = productParameterDao.getById(parameterId).first()
+				?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
 		
 		suspend fun removeLocally() = productParameterDao.delete(removedParameter)
 		suspend fun revertLocally() = productParameterDao.insert(removedParameter)
@@ -62,6 +54,4 @@ class ProductParameterRepositoryImpl(private val productParameterDao: ProductPar
 		removeLocally()
 		return productParameterApi.removeParameter(token, storeId, productId, parameterId).ifFailure { revertLocally() }
 	}
-	
-	override suspend fun cleanLocalParameters() = productParameterDao.deleteAll()
 }

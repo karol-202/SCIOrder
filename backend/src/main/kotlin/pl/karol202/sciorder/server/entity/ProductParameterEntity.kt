@@ -4,10 +4,10 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import pl.karol202.sciorder.common.model.ProductParameter
+import pl.karol202.sciorder.common.util.Mappable
+import pl.karol202.sciorder.common.util.map
 import pl.karol202.sciorder.server.table.ProductParameterEnumValues
 import pl.karol202.sciorder.server.table.ProductParameters
-import pl.karol202.sciorder.server.util.Mappable
-import pl.karol202.sciorder.server.util.map
 
 class ProductParameterEntity(id: EntityID<Long>) : LongEntity(id), Mappable<ProductParameter>
 {

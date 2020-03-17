@@ -3,7 +3,6 @@ package pl.karol202.sciorder.client.android.common.database.room.entity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import pl.karol202.sciorder.client.android.common.util.EntityModelMapper
 import pl.karol202.sciorder.common.model.OrderEntry
 import pl.karol202.sciorder.common.util.IdProvider
 
@@ -22,16 +21,4 @@ import pl.karol202.sciorder.common.util.IdProvider
 data class OrderEntryEntity(@PrimaryKey override val id: Long,
                             val orderId: Long,
                             val productId: Long,
-                            val quantity: Int) : IdProvider
-{
-	companion object : EntityModelMapper<OrderEntryEntity, OrderEntry>
-	{
-		override fun toModel(entity: OrderEntryEntity) = with(entity) {
-			OrderEntry(id, orderId, productId, quantity, emptyMap())
-		}
-		
-		override fun toEntity(model: OrderEntry) = with(model) {
-			OrderEntryEntity(id, orderId, productId, quantity)
-		}
-	}
-}
+                            val quantity: Int) : IdProvider<Long>

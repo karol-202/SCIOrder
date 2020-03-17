@@ -20,4 +20,4 @@ import pl.karol202.sciorder.common.util.IdProvider
 data class OrderEntryParameterValueEntity(@PrimaryKey(autoGenerate = true) override val id: Long,
                                           val orderEntryId: Long,
                                           val productParameterId: Long,
-                                          val value: String) : IdProvider
+                                          val value: String) : IdProvider<Long>

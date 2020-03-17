@@ -14,4 +14,4 @@ import pl.karol202.sciorder.common.util.IdProvider
 ])
 data class ProductParameterEnumValueEntity(@PrimaryKey(autoGenerate = true) override val id: Long,
                                            val productParameterId: Long,
-                                           val value: String) : IdProvider
+                                           val value: String) : IdProvider<Long>

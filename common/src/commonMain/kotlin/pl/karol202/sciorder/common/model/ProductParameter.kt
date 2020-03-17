@@ -9,7 +9,7 @@ data class ProductParameter(override val id: Long,
                             val productId: Long,
                             val name: String,
                             val type: Type,
-                            val attributes: Attributes) : JvmSerializable, IdProvider
+                            val attributes: Attributes) : JvmSerializable, IdProvider<Long>
 {
 	enum class Type
 	{

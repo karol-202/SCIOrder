@@ -1,8 +1,8 @@
 package pl.karol202.sciorder.common.util
 
-interface IdProvider
+interface IdProvider<I : Any>
 {
-	val id: Any
+	val id: I
 }
 
-val Iterable<IdProvider>.ids get() = map { it.id }
+fun <I : Any> Iterable<IdProvider<I>>.ids() = map { it.id }

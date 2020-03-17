@@ -3,19 +3,14 @@ package pl.karol202.sciorder.client.android.common.database.room.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.Update
 import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntryParameterValueEntity
-import pl.karol202.sciorder.client.common.database.dao.CrudDao
 
 @Dao
-interface OrderEntryParameterValueEntityDao : CrudDao<OrderEntryParameterValueEntity>
+interface OrderEntryParameterValueEntityDao
 {
 	@Insert
-	override suspend fun insert(items: List<OrderEntryParameterValueEntity>)
-	
-	@Update
-	override suspend fun update(items: List<OrderEntryParameterValueEntity>)
+	suspend fun insert(items: List<OrderEntryParameterValueEntity>)
 	
 	@Delete
-	override suspend fun delete(items: List<OrderEntryParameterValueEntity>)
+	suspend fun delete(items: List<OrderEntryParameterValueEntity>)
 }

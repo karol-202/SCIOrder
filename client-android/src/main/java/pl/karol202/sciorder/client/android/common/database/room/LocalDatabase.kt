@@ -7,20 +7,17 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import pl.karol202.sciorder.client.android.common.database.room.converter.OrderStatusConverter
 import pl.karol202.sciorder.client.android.common.database.room.converter.ProductParameterTypeConverter
-import pl.karol202.sciorder.client.android.common.database.room.dao.OrderEntityDao
-import pl.karol202.sciorder.client.android.common.database.room.dao.ProductEntityDao
 import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntity
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductEntity
 
 private object DatabaseInfo
 {
-	const val NAME = "local"
-	const val VERSION = 6
+	const val NAME = "sciorder.local"
+	const val VERSION = 1
 }
 
 @Database(entities = [ProductEntity::class, OrderEntity::class, OwnerEntity::class],
-          version = DatabaseInfo.VERSION,
-          exportSchema = false)
+          version = DatabaseInfo.VERSION)
 @TypeConverters(StringListConverter::class, OrderStatusConverter::class, ProductParameterTypeConverter::class)
 abstract class LocalDatabase : RoomDatabase()
 {

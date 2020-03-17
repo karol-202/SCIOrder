@@ -2,12 +2,12 @@ package pl.karol202.sciorder.server.service.store
 
 import pl.karol202.sciorder.common.model.Store
 import pl.karol202.sciorder.common.request.StoreRequest
+import pl.karol202.sciorder.common.util.map
 import pl.karol202.sciorder.server.controller.conflict
 import pl.karol202.sciorder.server.controller.notFound
 import pl.karol202.sciorder.server.entity.AdminEntity
 import pl.karol202.sciorder.server.entity.StoreEntity
 import pl.karol202.sciorder.server.table.Stores
-import pl.karol202.sciorder.server.util.map
 
 class StoreServiceImpl : StoreService
 {

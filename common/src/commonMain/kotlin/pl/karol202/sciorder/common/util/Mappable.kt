@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.server.util
+package pl.karol202.sciorder.common.util
 
 interface Mappable<M : Any>
 {

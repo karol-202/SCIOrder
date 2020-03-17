@@ -9,7 +9,7 @@ data class Order(override val id: Long,
                  val storeId: Long,
                  val entries: List<OrderEntry>,
                  val details: Details,
-                 val status: Status) : JvmSerializable, IdProvider
+                 val status: Status) : JvmSerializable, IdProvider<Long>
 {
 	@Serializable
 	data class Details(val location: String,

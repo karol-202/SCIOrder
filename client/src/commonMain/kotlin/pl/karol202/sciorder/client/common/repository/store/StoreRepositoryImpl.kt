@@ -18,10 +18,10 @@ class StoreRepositoryImpl(private val storeDao: StoreDao,
 	override fun getSelectedStoreFlow() = storeDao.getSelected()
 	
 	override fun getStoresResource(token: String) =
-			StandardMixedResource(dao = storeDao,
-			                      databaseProvider = { getAll() },
-			                      apiProvider = { storeApi.getStores(token) },
-			                      updateIntervalMillis = 5.minutes)
+			StandardMixedResource(updateIntervalMillis = 5.minutes,
+			                      getFromApi = { storeApi.getStores(token) },
+			                      getFromDB = { storeDao.getAll() },
+			                      saveToDB = { storeDao.dispatch(it) })
 	
 	override suspend fun addStore(token: String, store: StoreRequest): ApiResponse<Store>
 	{
