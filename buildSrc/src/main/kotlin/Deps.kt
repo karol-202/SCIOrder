@@ -45,6 +45,8 @@ object Deps
 	const val ANDROID_ROOM_COMPILER = "androidx.room:room-compiler:${Versions.ANDROID_ROOM}"
 	const val ANDROID_ROOM = "androidx.room:room-runtime:${Versions.ANDROID_ROOM}"
 	const val ANDROID_ROOM_KTX = "androidx.room:room-ktx:${Versions.ANDROID_ROOM}"
+	
+	const val FLOW_PREFERENCES = "com.github.tfcporciuncula:flow-preferences:${Versions.FLOW_PREFERENCES}"
 
 	// JS
 	const val NPM_CORE_JS = "core-js"

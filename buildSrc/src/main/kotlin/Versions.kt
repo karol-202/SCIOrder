@@ -21,6 +21,8 @@ object Versions
 	const val ANDROID_NAVIGATION = "2.2.1"
 	const val ANDROID_MATERIAL = "1.1.0"
 	const val ANDROID_ROOM = "2.2.3"
+	
+	const val FLOW_PREFERENCES = "1.1.0"
 
 	// JS
 	const val KOTLIN_FRONTEND = "0.0.45"

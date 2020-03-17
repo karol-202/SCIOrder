@@ -62,4 +62,6 @@ dependencies {
     kapt(Deps.ANDROID_ROOM_COMPILER)
     implementation(Deps.ANDROID_ROOM)
     implementation(Deps.ANDROID_ROOM_KTX)
+    
+    implementation(Deps.FLOW_PREFERENCES)
 }
