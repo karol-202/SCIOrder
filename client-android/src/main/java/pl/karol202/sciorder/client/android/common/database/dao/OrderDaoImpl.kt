@@ -8,13 +8,15 @@ import pl.karol202.sciorder.client.android.common.database.room.dao.OrderEntityD
 import pl.karol202.sciorder.client.android.common.database.room.dao.OrderEntryEntityDao
 import pl.karol202.sciorder.client.android.common.database.room.dao.OrderEntryParameterValueEntityDao
 import pl.karol202.sciorder.client.android.common.database.room.dao.dispatch
-import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntity
-import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntryEntity
-import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntryParameterValueEntity
+import pl.karol202.sciorder.client.android.common.database.room.relations.OrderWithEntries
+import pl.karol202.sciorder.client.android.common.database.room.relations.entries
+import pl.karol202.sciorder.client.android.common.database.room.relations.orders
+import pl.karol202.sciorder.client.android.common.database.room.relations.parameterValues
+import pl.karol202.sciorder.client.android.common.util.toEntities
+import pl.karol202.sciorder.client.android.common.util.toModel
+import pl.karol202.sciorder.client.android.common.util.toModels
 import pl.karol202.sciorder.client.common.database.dao.OrderDao
 import pl.karol202.sciorder.common.model.Order
-import pl.karol202.sciorder.common.model.OrderEntry
-import pl.karol202.sciorder.common.util.map
 
 class OrderDaoImpl(private val localDatabase: LocalDatabase,
                    private val orderEntityDao: OrderEntityDao,
@@ -22,14 +24,11 @@ class OrderDaoImpl(private val localDatabase: LocalDatabase,
                    private val orderEntryParameterValueEntityDao: OrderEntryParameterValueEntityDao) : OrderDao
 {
 	override suspend fun insert(items: List<Order>) = localDatabase.withTransaction {
-		val orderEntities = items.map { it.toEntity() }
-		orderEntityDao.insert(orderEntities)
+		val entities = items.toEntities(OrderWithEntries)
 		
-		val entryEntities = items.flatMap { it.entries }.map { it.toEntity() }
-		orderEntryEntityDao.insert(entryEntities)
-		
-		val parameterEntities = items.flatMap { it.entries }.flatMap { it.parameters.toEntities(it.id) }
-		orderEntryParameterValueEntityDao.insert(parameterEntities)
+		orderEntityDao.insert(entities.orders)
+		orderEntryEntityDao.insert(entities.entries)
+		orderEntryParameterValueEntityDao.insert(entities.parameterValues)
 	}
 	
 	override suspend fun updateStatus(orderId: Long, status: Order.Status) = orderEntityDao.updateStatus(orderId, status)
@@ -39,31 +38,15 @@ class OrderDaoImpl(private val localDatabase: LocalDatabase,
 	override suspend fun deleteByStoreId(storeId: Long) = orderEntityDao.deleteByStoreId(storeId)
 	
 	override suspend fun dispatchByStoreId(storeId: Long, newOrders: List<Order>) = localDatabase.withTransaction {
-		val oldData = orderEntityDao.getByStoreId(storeId).first()
+		val oldEntities = orderEntityDao.getByStoreId(storeId).first()
+		val newEntities = newOrders.toEntities(OrderWithEntries)
 		
-		val oldOrderEntities = oldData.map { it.order }
-		val newOrderEntities = newOrders.map { it.toEntity() }
-		orderEntityDao.dispatch(oldOrderEntities, newOrderEntities)
-		
-		val oldEntryEntities = oldData.flatMap { it.entries }.map { it.orderEntry }
-		val newEntryEntities = newOrders.flatMap { it.entries }.map { it.toEntity() }
-		orderEntryEntityDao.dispatch(oldEntryEntities, newEntryEntities)
-		
-		val oldParameterEntities = oldData.flatMap { it.entries }.flatMap { it.parameters }
-		val newParameterEntities = newOrders.flatMap { it.entries }.flatMap { it.parameters.toEntities(it.id) }
-		orderEntryParameterValueEntityDao.delete(oldParameterEntities)
-		orderEntryParameterValueEntityDao.insert(newParameterEntities)
+		orderEntityDao.dispatch(oldEntities.orders, newEntities.orders)
+		orderEntryEntityDao.dispatch(oldEntities.entries, oldEntities.entries)
+		orderEntryParameterValueEntityDao.dispatch(oldEntities.parameterValues, newEntities.parameterValues)
 	}
 	
-	override fun getById(orderId: Long) = orderEntityDao.getById(orderId).map { it?.map() }
+	override fun getById(orderId: Long) = orderEntityDao.getById(orderId).map { it?.toModel(OrderWithEntries) }
 	
-	override fun getByStoreId(storeId: Long) = orderEntityDao.getByStoreId(storeId).map { it.map() }
-	
-	private fun Order.toEntity() = OrderEntity(id, storeId, details, status)
-	
-	private fun OrderEntry.toEntity() = OrderEntryEntity(id, orderId, productId, quantity)
-	
-	private fun Map<Long, String>.toEntities(orderEntryId: Long) = map { (productParameterId, value) ->
-		OrderEntryParameterValueEntity(0, orderEntryId, productParameterId, value)
-	}
+	override fun getByStoreId(storeId: Long) = orderEntityDao.getByStoreId(storeId).map { it.toModels(OrderWithEntries) }
 }

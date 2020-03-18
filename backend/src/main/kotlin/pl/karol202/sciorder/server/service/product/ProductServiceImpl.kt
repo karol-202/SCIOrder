@@ -2,11 +2,11 @@ package pl.karol202.sciorder.server.service.product
 
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.common.request.ProductRequest
-import pl.karol202.sciorder.common.util.map
 import pl.karol202.sciorder.server.controller.notFound
 import pl.karol202.sciorder.server.entity.ProductEntity
 import pl.karol202.sciorder.server.entity.StoreEntity
 import pl.karol202.sciorder.server.table.Products
+import pl.karol202.sciorder.server.util.map
 
 class ProductServiceImpl : ProductService
 {

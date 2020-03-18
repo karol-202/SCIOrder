@@ -2,13 +2,13 @@ package pl.karol202.sciorder.server.service.product.parameter
 
 import pl.karol202.sciorder.common.model.ProductParameter
 import pl.karol202.sciorder.common.request.ProductParameterRequest
-import pl.karol202.sciorder.common.util.map
 import pl.karol202.sciorder.server.controller.notFound
 import pl.karol202.sciorder.server.entity.ProductEntity
 import pl.karol202.sciorder.server.entity.ProductParameterEntity
 import pl.karol202.sciorder.server.entity.ProductParameterEnumValueEntity
 import pl.karol202.sciorder.server.entity.StoreEntity
 import pl.karol202.sciorder.server.table.ProductParameters
+import pl.karol202.sciorder.server.util.map
 
 class ProductParameterServiceImpl : ProductParameterService
 {

@@ -9,13 +9,16 @@ import pl.karol202.sciorder.client.android.common.database.room.dao.ProductParam
 import pl.karol202.sciorder.client.android.common.database.room.dao.ProductParameterEnumValueEntityDao
 import pl.karol202.sciorder.client.android.common.database.room.dao.dispatch
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductEntity
-import pl.karol202.sciorder.client.android.common.database.room.entity.ProductParameterEntity
-import pl.karol202.sciorder.client.android.common.database.room.entity.ProductParameterEnumValueEntity
+import pl.karol202.sciorder.client.android.common.database.room.relations.ProductWithParameters
+import pl.karol202.sciorder.client.android.common.database.room.relations.enumValues
+import pl.karol202.sciorder.client.android.common.database.room.relations.parameters
+import pl.karol202.sciorder.client.android.common.database.room.relations.products
+import pl.karol202.sciorder.client.android.common.util.toEntities
+import pl.karol202.sciorder.client.android.common.util.toModel
+import pl.karol202.sciorder.client.android.common.util.toModels
 import pl.karol202.sciorder.client.common.database.dao.ProductDao
 import pl.karol202.sciorder.common.model.Product
-import pl.karol202.sciorder.common.model.ProductParameter
 import pl.karol202.sciorder.common.util.ids
-import pl.karol202.sciorder.common.util.map
 
 class ProductDaoImpl(private val localDatabase: LocalDatabase,
                      private val productEntityDao: ProductEntityDao,
@@ -23,66 +26,37 @@ class ProductDaoImpl(private val localDatabase: LocalDatabase,
                      private val productParameterEnumValueEntityDao: ProductParameterEnumValueEntityDao) : ProductDao
 {
 	override suspend fun insert(items: List<Product>) = localDatabase.withTransaction {
-		val productEntities = items.map { it.toEntity() }
-		productEntityDao.insert(productEntities)
+		val entities = items.toEntities(ProductWithParameters)
 		
-		val parameterEntities = items.flatMap { it.parameters }.map { it.toEntity() }
-		productParameterEntityDao.insert(parameterEntities)
-		
-		val enumValueEntities =
-				items.flatMap { it.parameters }.flatMap { it.attributes.enumValues?.toEntities(it.id).orEmpty() }
-		productParameterEnumValueEntityDao.insert(enumValueEntities)
+		productEntityDao.insert(entities.products)
+		productParameterEntityDao.insert(entities.parameters)
+		productParameterEnumValueEntityDao.insert(entities.enumValues)
 	}
 	
 	override suspend fun update(items: List<Product>) = localDatabase.withTransaction {
-		val oldData = productEntityDao.getByIds(items.ids()).first()
+		val oldEntities = productEntityDao.getByIds(items.ids()).first()
+		val newEntities = items.toEntities(ProductWithParameters).filter { it.product.id in oldEntities.products.ids() }
 		
-		val newProductEntities = items.filter { it.id in oldData.map { it.product }.ids() }.map { it.toEntity() }
-		productEntityDao.update(newProductEntities)
-		
-		val oldParameterEntities = oldData.flatMap { it.parameters }.map { it.parameter }
-		val newParameterEntities = items.filter { it.id in items.ids() }.flatMap { it.parameters }.map { it.toEntity() }
-		productParameterEntityDao.dispatch(oldParameterEntities, newParameterEntities)
-		
-		val oldEnumValueEntities = oldData.flatMap { it.parameters }.flatMap { it.enumValues }
-		val newEnumValueEntities = items.filter { it.id in items.ids() }.flatMap { it.parameters }
-				.flatMap { it.attributes.enumValues?.toEntities(it.id).orEmpty() }
-		productParameterEnumValueEntityDao.dispatch(oldEnumValueEntities, newEnumValueEntities)
+		productEntityDao.update(newEntities.products)
+		productParameterEntityDao.dispatch(oldEntities.parameters, newEntities.parameters)
+		productParameterEnumValueEntityDao.dispatch(oldEntities.enumValues, newEntities.enumValues)
 	}
 	
-	override suspend fun delete(items: List<Product>) = productEntityDao.delete(items.map { it.toEntity() })
+	override suspend fun delete(items: List<Product>) = productEntityDao.delete(items.toEntities(ProductEntity))
 	
 	override suspend fun deleteAll() = productEntityDao.deleteAll()
 	
 	override suspend fun dispatchByStoreId(storeId: Long, newProducts: List<Product>) = localDatabase.withTransaction {
-		val oldData = productEntityDao.getByStoreId(storeId).first()
+		val oldEntities = productEntityDao.getByStoreId(storeId).first()
+		val newEntities = newProducts.toEntities(ProductWithParameters)
 		
-		val oldProductEntities = oldData.map { it.product }
-		val newProductEntities = newProducts.map { it.toEntity() }
-		productEntityDao.dispatch(oldProductEntities, newProductEntities)
-		
-		val oldParameterEntities = oldData.flatMap { it.parameters }.map { it.parameter }
-		val newParameterEntities = newProducts.flatMap { it.parameters }.map { it.toEntity() }
-		productParameterEntityDao.dispatch(oldParameterEntities, newParameterEntities)
-		
-		val oldEnumValueEntities = oldData.flatMap { it.parameters }.flatMap { it.enumValues }
-		val newEnumValueEntities =
-				newProducts.flatMap { it.parameters }.flatMap { it.attributes.enumValues?.toEntities(it.id).orEmpty() }
-		productParameterEnumValueEntityDao.dispatch(oldEnumValueEntities, newEnumValueEntities)
+		productEntityDao.dispatch(oldEntities.products, newEntities.products)
+		productParameterEntityDao.dispatch(oldEntities.parameters, newEntities.parameters)
+		productParameterEnumValueEntityDao.dispatch(oldEntities.enumValues, newEntities.enumValues)
 	}
 	
-	override fun getById(productId: Long) = productEntityDao.getById(productId).map { it?.map() }
+	override fun getById(productId: Long) = productEntityDao.getById(productId).map { it?.toModel(ProductWithParameters) }
 	
-	override fun getByStoreId(storeId: Long) = productEntityDao.getByStoreId(storeId).map { it.map() }
-	
-	private fun Product.toEntity() = ProductEntity(id, storeId, name, available)
-	
-	private fun ProductParameter.toEntity() =
-			ProductParameterEntity(id, productId, name, type,
-			                       attributes.minimalValue, attributes.maximalValue, attributes.defaultValue)
-	
-	private fun List<String>.toEntities(productParameterId: Long) = map {
-		ProductParameterEnumValueEntity(0, productParameterId, it)
-	}
+	override fun getByStoreId(storeId: Long) = productEntityDao.getByStoreId(storeId).map { it.toModels(ProductWithParameters) }
 }
 

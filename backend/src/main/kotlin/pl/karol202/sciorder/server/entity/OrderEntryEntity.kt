@@ -4,10 +4,10 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import pl.karol202.sciorder.common.model.OrderEntry
-import pl.karol202.sciorder.common.util.Mappable
-import pl.karol202.sciorder.common.util.map
 import pl.karol202.sciorder.server.table.OrderEntries
 import pl.karol202.sciorder.server.table.OrderEntryParameterValues
+import pl.karol202.sciorder.server.util.Mappable
+import pl.karol202.sciorder.server.util.map
 
 class OrderEntryEntity(id: EntityID<Long>) : LongEntity(id), Mappable<OrderEntry>
 {

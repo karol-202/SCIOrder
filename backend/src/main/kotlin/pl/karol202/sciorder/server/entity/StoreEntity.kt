@@ -4,11 +4,11 @@ import org.jetbrains.exposed.dao.LongEntity
 import org.jetbrains.exposed.dao.LongEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import pl.karol202.sciorder.common.model.Store
-import pl.karol202.sciorder.common.util.Mappable
 import pl.karol202.sciorder.server.table.AdminStoreJoins
 import pl.karol202.sciorder.server.table.Orders
 import pl.karol202.sciorder.server.table.Products
 import pl.karol202.sciorder.server.table.Stores
+import pl.karol202.sciorder.server.util.Mappable
 
 class StoreEntity(id: EntityID<Long>) : LongEntity(id), Mappable<Store>
 {

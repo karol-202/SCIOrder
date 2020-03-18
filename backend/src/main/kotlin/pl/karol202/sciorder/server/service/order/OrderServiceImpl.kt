@@ -5,10 +5,10 @@ import org.jetbrains.exposed.sql.deleteWhere
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.request.OrderEntryRequest
 import pl.karol202.sciorder.common.request.OrderRequest
-import pl.karol202.sciorder.common.util.map
 import pl.karol202.sciorder.server.controller.notFound
 import pl.karol202.sciorder.server.entity.*
 import pl.karol202.sciorder.server.table.Orders
+import pl.karol202.sciorder.server.util.map
 
 class OrderServiceImpl : OrderService
 {
