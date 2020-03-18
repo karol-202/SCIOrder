@@ -13,6 +13,13 @@ android {
         targetSdkVersion(29)
         versionCode = 1
         versionName = "1.0"
+    
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+                arg("room.incremental", true)
+            }
+        }
     }
 
     buildTypes["release"].apply {

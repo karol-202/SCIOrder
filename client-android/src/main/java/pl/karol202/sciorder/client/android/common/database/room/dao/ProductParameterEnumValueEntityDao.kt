@@ -1,10 +1,12 @@
 package pl.karol202.sciorder.client.android.common.database.room.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Update
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductParameterEnumValueEntity
 
+@Dao
 interface ProductParameterEnumValueEntityDao : CrudDao<ProductParameterEnumValueEntity>
 {
 	@Insert

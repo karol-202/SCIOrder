@@ -31,7 +31,7 @@ class KtorProductParameterApi(private val basicApi: KtorBasicApi) : ProductParam
 	override suspend fun removeParameter(token: String,
 	                                     storeId: Long,
 	                                     productId: Long,
-	                                     parameterId: String) = basicApi.delete<Unit> {
+	                                     parameterId: Long) = basicApi.delete<Unit> {
 		relativePath("api/stores/$storeId/products/$productId/parameters/$parameterId")
 		authToken(token)
 	}

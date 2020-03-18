@@ -5,11 +5,11 @@ import pl.karol202.sciorder.common.util.ids
 
 interface CrudDao<T>
 {
-	suspend fun insert(items: List<T>)
+	suspend fun insert(items: List<@JvmSuppressWildcards T>)
 	
-	suspend fun update(items: List<T>)
+	suspend fun update(items: List<@JvmSuppressWildcards T>)
 	
-	suspend fun delete(items: List<T>)
+	suspend fun delete(items: List<@JvmSuppressWildcards T>)
 }
 
 suspend fun <T> CrudDao<T>.insert(item: T) = insert(listOf(item))

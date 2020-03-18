@@ -70,6 +70,5 @@ abstract class UserLoginViewModel(private val userRepository: UserRepository,
 		userAuthRepository.logout()
 		orderRepository.cleanLocalOrders()
 		productRepository.cleanLocalProducts()
-		productParameterRepository.cleanLocalParameters()
 	}
 }

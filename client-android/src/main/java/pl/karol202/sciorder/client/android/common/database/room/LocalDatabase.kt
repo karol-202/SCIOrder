@@ -7,8 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import pl.karol202.sciorder.client.android.common.database.room.converter.OrderStatusConverter
 import pl.karol202.sciorder.client.android.common.database.room.converter.ProductParameterTypeConverter
-import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntity
-import pl.karol202.sciorder.client.android.common.database.room.entity.ProductEntity
+import pl.karol202.sciorder.client.android.common.database.room.dao.*
+import pl.karol202.sciorder.client.android.common.database.room.entity.*
 
 private object DatabaseInfo
 {
@@ -16,22 +16,35 @@ private object DatabaseInfo
 	const val VERSION = 1
 }
 
-@Database(entities = [ProductEntity::class, OrderEntity::class, OwnerEntity::class],
+@Database(entities =
+          [
+	          StoreEntity::class,
+	          ProductEntity::class, ProductParameterEntity::class, ProductParameterEnumValueEntity::class,
+	          OrderEntity::class, OrderEntryEntity::class, OrderEntryParameterValueEntity::class
+          ],
           version = DatabaseInfo.VERSION)
-@TypeConverters(StringListConverter::class, OrderStatusConverter::class, ProductParameterTypeConverter::class)
+@TypeConverters(OrderStatusConverter::class, ProductParameterTypeConverter::class)
 abstract class LocalDatabase : RoomDatabase()
 {
 	companion object
 	{
 		fun create(context: Context) =
 				Room.databaseBuilder(context, LocalDatabase::class.java, DatabaseInfo.NAME)
-						.fallbackToDestructiveMigration()
+						.fallbackToDestructiveMigration() // TODO Remove it before deployment
 						.build()
 	}
+	
+	abstract fun storeEntityDao(): StoreEntityDao
 
 	abstract fun productEntityDao(): ProductEntityDao
 
+	abstract fun productParameterEntityDao(): ProductParameterEntityDao
+	
+	abstract fun productParameterEnumValueEntityDao(): ProductParameterEnumValueEntityDao
+	
 	abstract fun orderEntityDao(): OrderEntityDao
 
-	abstract fun ownerEntityDao(): OwnerEntityDao
+	abstract fun orderEntryEntityDao(): OrderEntryEntityDao
+	
+	abstract fun orderEntryParameterValueEntityDao(): OrderEntryParameterValueEntityDao
 }

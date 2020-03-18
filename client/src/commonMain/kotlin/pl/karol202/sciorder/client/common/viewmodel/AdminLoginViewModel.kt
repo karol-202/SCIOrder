@@ -65,6 +65,5 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
 		storeRepository.cleanLocalStores()
 		orderRepository.cleanLocalOrders()
 		productRepository.cleanLocalProducts()
-		productParameterRepository.cleanLocalParameters()
 	}
 }

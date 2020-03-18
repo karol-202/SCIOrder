@@ -27,9 +27,11 @@ interface OrderEntityDao : CrudDao<OrderEntity>
 	@Query("DELETE FROM OrderEntity WHERE storeId = :storeId")
 	suspend fun deleteByStoreId(storeId: Long)
 	
+	@Transaction
 	@Query("SELECT * FROM OrderEntity WHERE id = :orderId")
 	fun getById(orderId: Long): Flow<OrderWithEntries?>
 	
+	@Transaction
 	@Query("SELECT * FROM OrderEntity WHERE storeId = :storeId")
 	fun getByStoreId(storeId: Long): Flow<List<OrderWithEntries>>
 }
