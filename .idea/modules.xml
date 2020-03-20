@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/client-js/SCIOrder.client-js.iml" filepath="$PROJECT_DIR$/client-js/SCIOrder.client-js.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server/SCIOrder.server.iml" filepath="$PROJECT_DIR$/server/SCIOrder.server.iml" />
       <module fileurl="file://$PROJECT_DIR$/buildSrc/buildSrc.iml" filepath="$PROJECT_DIR$/buildSrc/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
       <module fileurl="file://$PROJECT_DIR$/client-android/client-android.iml" filepath="$PROJECT_DIR$/client-android/client-android.iml" />

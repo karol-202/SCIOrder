@@ -11,6 +11,9 @@ import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.content.defaultResource
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.request.ApplicationRequest
 import io.ktor.request.httpMethod
 import io.ktor.routing.Route
@@ -102,6 +105,10 @@ private fun Application.routing() = routing {
 				}
 			}
 		}
+	}
+	static {
+		resources("static")
+		defaultResource("index.html", "static")
 	}
 }
 
