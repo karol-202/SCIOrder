@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.android.common.util
+package pl.karol202.sciorder.client.android.common.database.room
 
 interface ToEntityMapper<E, M>
 {

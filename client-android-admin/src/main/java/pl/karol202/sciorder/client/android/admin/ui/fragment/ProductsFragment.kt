@@ -10,8 +10,9 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
-import pl.karol202.sciorder.client.android.common.util.*
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
+import pl.karol202.sciorder.client.android.common.util.alertDialog
+import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.common.viewmodel.AdminProductsViewModel
 import pl.karol202.sciorder.common.model.Product
 

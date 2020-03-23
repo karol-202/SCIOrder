@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.common.database.room.entity
 
 import androidx.room.*
-import pl.karol202.sciorder.client.android.common.util.ToEntityMapper
+import pl.karol202.sciorder.client.android.common.database.room.ToEntityMapper
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.util.IdProvider
 

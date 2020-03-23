@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import pl.karol202.sciorder.client.android.common.util.ToEntityMapper
+import pl.karol202.sciorder.client.android.common.database.room.ToEntityMapper
 import pl.karol202.sciorder.common.model.ProductParameter
 import pl.karol202.sciorder.common.util.IdProvider
 

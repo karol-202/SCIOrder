@@ -7,7 +7,6 @@ import pl.karol202.sciorder.client.common.repository.admin.AdminRepository
 import pl.karol202.sciorder.client.common.repository.auth.admin.AdminAuthRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
-import pl.karol202.sciorder.client.common.repository.product.parameter.ProductParameterRepository
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.common.request.AdminLoginRequest
@@ -17,8 +16,7 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
                                    private val adminAuthRepository: AdminAuthRepository,
                                    private val storeRepository: StoreRepository,
                                    private val orderRepository: OrderRepository,
-                                   private val productRepository: ProductRepository,
-                                   private val productParameterRepository: ProductParameterRepository) : ViewModel()
+                                   private val productRepository: ProductRepository) : ViewModel()
 {
 	enum class Error
 	{

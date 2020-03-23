@@ -2,9 +2,9 @@ package pl.karol202.sciorder.client.android.common.database.room.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import pl.karol202.sciorder.client.android.common.database.room.*
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductEntity
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductParameterEntity
-import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.common.model.Product
 
 data class ProductWithParameters(@Embedded val product: ProductEntity,

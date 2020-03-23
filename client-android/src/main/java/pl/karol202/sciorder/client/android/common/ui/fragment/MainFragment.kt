@@ -8,8 +8,6 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.common.R
 import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
-import pl.karol202.sciorder.client.android.common.util.observe
-import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
 import pl.karol202.sciorder.common.model.Owner
 
 abstract class MainFragment : FragmentWithMenu()

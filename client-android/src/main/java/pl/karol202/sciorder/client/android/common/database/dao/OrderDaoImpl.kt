@@ -12,9 +12,9 @@ import pl.karol202.sciorder.client.android.common.database.room.relations.OrderW
 import pl.karol202.sciorder.client.android.common.database.room.relations.entries
 import pl.karol202.sciorder.client.android.common.database.room.relations.orders
 import pl.karol202.sciorder.client.android.common.database.room.relations.parameterValues
-import pl.karol202.sciorder.client.android.common.util.toEntities
-import pl.karol202.sciorder.client.android.common.util.toModel
-import pl.karol202.sciorder.client.android.common.util.toModels
+import pl.karol202.sciorder.client.android.common.database.room.toEntities
+import pl.karol202.sciorder.client.android.common.database.room.toModel
+import pl.karol202.sciorder.client.android.common.database.room.toModels
 import pl.karol202.sciorder.client.common.database.dao.OrderDao
 import pl.karol202.sciorder.common.model.Order
 

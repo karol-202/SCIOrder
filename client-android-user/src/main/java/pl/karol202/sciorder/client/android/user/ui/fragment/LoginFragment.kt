@@ -6,10 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
-import pl.karol202.sciorder.client.android.common.util.observeEvent
-import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
-import pl.karol202.sciorder.client.android.common.viewmodel.OwnerAndroidViewModel
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.common.viewmodel.OwnerViewModel
 

@@ -160,6 +160,7 @@
       <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
       <option name="METHOD_PARAMETERS_WRAP" value="5" />
       <option name="METHOD_CALL_CHAIN_WRAP" value="1" />
+      <option name="WRAP_ON_TYPING" value="0" />
       <indentOptions>
         <option name="USE_TAB_CHARACTER" value="true" />
         <option name="SMART_TABS" value="true" />

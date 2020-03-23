@@ -2,9 +2,9 @@ package pl.karol202.sciorder.client.android.common.database.room.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import pl.karol202.sciorder.client.android.common.database.room.*
 import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntryEntity
 import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntryParameterValueEntity
-import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.common.model.OrderEntry
 
 data class OrderEntryWithParameters(@Embedded val orderEntry: OrderEntryEntity,
@@ -13,8 +13,7 @@ data class OrderEntryWithParameters(@Embedded val orderEntry: OrderEntryEntity,
                                               entityColumn = "orderEntryId")
                                     val parameters: List<OrderEntryParameterValueEntity>)
 {
-    companion object : ToModelMapper<OrderEntryWithParameters, OrderEntry>,
-                       ToEntityMapper<OrderEntryWithParameters, OrderEntry>
+    companion object : ToModelMapper<OrderEntryWithParameters, OrderEntry>, ToEntityMapper<OrderEntryWithParameters, OrderEntry>
     {
         override fun toModel(entity: OrderEntryWithParameters) = with(entity) {
             OrderEntry(orderEntry.id, orderEntry.orderId, orderEntry.productId, orderEntry.quantity,

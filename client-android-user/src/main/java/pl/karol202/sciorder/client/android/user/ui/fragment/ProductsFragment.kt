@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
-import pl.karol202.sciorder.client.android.common.util.*
-import pl.karol202.sciorder.client.android.common.viewmodel.OrderComposeAndroidViewModel
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsAndroidViewModel
+import pl.karol202.sciorder.client.android.common.util.alertDialog
+import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.OrderedProductAdapter
 import pl.karol202.sciorder.client.android.user.ui.adapter.ProductAdapter

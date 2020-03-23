@@ -2,9 +2,9 @@ package pl.karol202.sciorder.client.android.common.database.room.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import pl.karol202.sciorder.client.android.common.database.room.*
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductParameterEntity
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductParameterEnumValueEntity
-import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.common.model.ProductParameter
 
 data class ProductParameterWithEnumValues(@Embedded val parameter: ProductParameterEntity,
@@ -13,8 +13,7 @@ data class ProductParameterWithEnumValues(@Embedded val parameter: ProductParame
                                                     entityColumn = "productParameterId")
                                           val enumValues: List<ProductParameterEnumValueEntity>)
 {
-	companion object : ToModelMapper<ProductParameterWithEnumValues, ProductParameter>,
-	                   ToEntityMapper<ProductParameterWithEnumValues, ProductParameter>
+	companion object : ToModelMapper<ProductParameterWithEnumValues, ProductParameter>, ToEntityMapper<ProductParameterWithEnumValues, ProductParameter>
 	{
 		override fun toEntity(model: ProductParameter) = ProductParameterWithEnumValues(
 				model.toEntity(ProductParameterEntity),

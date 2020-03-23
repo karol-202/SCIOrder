@@ -11,9 +11,7 @@ import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
 import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.util.ctx
-import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
-import pl.karol202.sciorder.client.android.common.viewmodel.ProductsEditAndroidViewModel
 import pl.karol202.sciorder.client.common.model.create
 import pl.karol202.sciorder.client.common.viewmodel.AdminProductsViewModel
 import pl.karol202.sciorder.common.model.Product

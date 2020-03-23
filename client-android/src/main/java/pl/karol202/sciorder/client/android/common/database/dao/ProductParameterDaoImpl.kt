@@ -11,8 +11,8 @@ import pl.karol202.sciorder.client.android.common.database.room.entity.ProductPa
 import pl.karol202.sciorder.client.android.common.database.room.relations.ProductParameterWithEnumValues
 import pl.karol202.sciorder.client.android.common.database.room.relations.enumValues
 import pl.karol202.sciorder.client.android.common.database.room.relations.parameters
-import pl.karol202.sciorder.client.android.common.util.toEntities
-import pl.karol202.sciorder.client.android.common.util.toModel
+import pl.karol202.sciorder.client.android.common.database.room.toEntities
+import pl.karol202.sciorder.client.android.common.database.room.toModel
 import pl.karol202.sciorder.client.common.database.dao.ProductParameterDao
 import pl.karol202.sciorder.common.model.ProductParameter
 import pl.karol202.sciorder.common.util.ids
