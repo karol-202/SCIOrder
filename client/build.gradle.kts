@@ -45,6 +45,14 @@ kotlin {
             sourceMapEmbedSources = "always"
         }
     }
+    
+    targets.all {
+        compilations.all {
+            kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                                                     "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                                                     "-Xopt-in=kotlinx.serialization.UnstableDefault")
+        }
+    }
 
     sourceSets {
         commonMain {

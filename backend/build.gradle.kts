@@ -10,11 +10,11 @@ plugins {
 application.mainClassName = "io.ktor.server.netty.EngineMain"
 
 tasks {
-    "compileKotlin"(KotlinCompile::class) {
+    withType(KotlinCompile::class) {
         kotlinOptions.jvmTarget = "1.8"
     }
 
-    "shadowJar"(ShadowJar::class) {
+    withType(ShadowJar::class) {
         manifest.attributes("Main-Class" to application.mainClassName)
     }
 

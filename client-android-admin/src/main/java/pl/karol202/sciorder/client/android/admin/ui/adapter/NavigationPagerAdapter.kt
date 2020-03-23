@@ -8,7 +8,8 @@ import pl.karol202.sciorder.client.android.admin.ui.fragment.OrdersFragment
 import pl.karol202.sciorder.client.android.admin.ui.fragment.ProductsFragment
 
 class NavigationPagerAdapter(private val context: Context,
-                             fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+                             fragmentManager: FragmentManager) :
+		FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
 {
 	override fun getItem(position: Int) = when(position)
 	{

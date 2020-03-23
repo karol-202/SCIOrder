@@ -1,22 +1,16 @@
 package pl.karol202.sciorder.client.android.common.database.dao
 
 import com.tfcporciuncula.flow.FlowSharedPreferences
-import kotlinx.coroutines.flow.map
 import kotlinx.serialization.internal.nullable
-import kotlinx.serialization.json.Json
+import pl.karol202.sciorder.client.android.common.database.flowsharedpreferences.FlowSharedPreferencesDao
 import pl.karol202.sciorder.client.common.database.dao.UserDao
 import pl.karol202.sciorder.client.common.model.UserWithPassword
 
-private const val KEY_USER = "dao.user"
-
-class UserDaoImpl(private val flowSharedPreferences: FlowSharedPreferences) : UserDao
+class UserDaoImpl(preferences: FlowSharedPreferences) : UserDao
 {
-	override suspend fun set(user: UserWithPassword)
-	{
-		val serialized = Json.stringify(UserWithPassword.serializer(), user)
-		flowSharedPreferences.getString(KEY_USER).setAndCommit(serialized)
-	}
+	private val delegate = FlowSharedPreferencesDao(preferences, UserWithPassword.serializer().nullable, "dao.user")
 	
-	override fun get() = flowSharedPreferences.getString(KEY_USER).asFlow()
-			.map { Json.parse(UserWithPassword.serializer().nullable, it) }
+	override suspend fun set(user: UserWithPassword) = delegate.set(user)
+	
+	override fun get() = delegate.get()
 }

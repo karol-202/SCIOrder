@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Base.User.AppTheme" parent="Base.AppTheme">
-        <item name="navigation">@navigation/navigation</item>
-    </style>
-
-    <style name="AppTheme" parent="Base.User.AppTheme"/>
+    <style name="AppTheme" parent="Base.AppTheme"/>
 </resources>

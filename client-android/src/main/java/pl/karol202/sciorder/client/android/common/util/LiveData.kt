@@ -35,7 +35,7 @@ fun <T> Flow<T>.asLiveData(coroutineScope: CoroutineScope): LiveData<T> = FlowLi
 // LiveData observing
 
 fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, observer: (T?) -> Unit) = apply {
-	observe(lifecycleOwner, Observer<T> { observer(it) })
+	observe(lifecycleOwner, Observer { observer(it) })
 }
 
 fun <T : Any> LiveData<out T?>.observeNonNull(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) =

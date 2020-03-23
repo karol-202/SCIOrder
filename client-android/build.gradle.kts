@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id(Plugins.ANDROID_LIBRARY)
     id(Plugins.KOTLIN_ANDROID)
@@ -33,11 +35,20 @@ android {
     }
 }
 
+tasks {
+    withType(KotlinCompile::class) {
+        kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                                                 "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                                                 "-Xopt-in=kotlinx.serialization.UnstableDefault")
+    }
+}
+
 androidExtensions {
     isExperimental = true
 }
 
 dependencies {
+    api(project(":common"))
     api(project(":client"))
     implementation(Deps.COROUTINES_ANDROID)
 
