@@ -46,12 +46,10 @@ kotlin {
         }
     }
     
-    targets.all {
-        compilations.all {
-            kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                                                     "-Xopt-in=kotlinx.coroutines.FlowPreview",
-                                                     "-Xopt-in=kotlinx.serialization.UnstableDefault")
-        }
+    sourceSets.all {
+        languageSettings.useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+        languageSettings.useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
+        languageSettings.useExperimentalAnnotation("kotlinx.serialization.UnstableDefault")
     }
 
     sourceSets {
@@ -67,6 +65,7 @@ kotlin {
         }
 
         if(includeAndroid) getByName("androidMain").dependencies {
+            api(project(":common"))
             api(Deps.COROUTINES_ANDROID)
 
             implementation(Deps.KTOR_CLIENT_CORE_JVM)

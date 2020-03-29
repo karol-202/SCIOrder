@@ -9,6 +9,7 @@ import android.widget.TextView
 
 val View.ctx: Context get() = context
 
+@Deprecated("Use doAfterTextChanged() instead")
 fun TextView.addAfterTextChangedListener(listener: (String) -> Unit) = addTextChangedListener(object : TextWatcher {
 	override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
 

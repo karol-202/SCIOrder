@@ -6,7 +6,7 @@
         android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editLayoutLoginAdminName"
+            android:id="@+id/editLayoutRegisterAdminName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -15,19 +15,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/editLayoutLoginPassword"
+            app:layout_constraintBottom_toTopOf="@+id/editLayoutRegisterPassword"
             app:layout_constraintVertical_chainStyle="packed"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:hint="@string/text_admin_name">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextLoginAdminName"
+                android:id="@+id/editTextRegisterAdminName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editLayoutLoginPassword"
+            android:id="@+id/editLayoutRegisterPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -35,38 +35,29 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/buttonLogin"
-            app:layout_constraintTop_toBottomOf="@+id/editLayoutLoginAdminName"
+            app:layout_constraintBottom_toBottomOf="@id/buttonRegister"
+            app:layout_constraintTop_toBottomOf="@+id/editLayoutRegisterAdminName"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:endIconMode="password_toggle"
             android:hint="@string/text_password">
 
         <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextLoginPassword"
+                android:id="@+id/editTextRegisterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-            android:id="@+id/buttonLogin"
+            android:id="@+id/buttonRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editLayoutLoginPassword"
-            app:layout_constraintBottom_toTopOf="@id/buttonGoToRegister"
-            android:text="@string/action_login"/>
-    <Button
-            android:id="@+id/buttonGoToRegister"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toBottomOf="@id/buttonLogin"
+            app:layout_constraintTop_toBottomOf="@id/editLayoutRegisterPassword"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/action_go_to_register"/>
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:text="@string/action_register"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,4 +16,5 @@ class AdminLoginAndroidViewModel(adminRepository: AdminRepository,
 		AdminLoginViewModel(adminRepository, adminAuthRepository, storeRepository, orderRepository, productRepository)
 {
 	val adminLiveData = adminFlow.asLiveData(coroutineScope)
+	val errorEventLiveData = errorEventFlow.asLiveData(coroutineScope)
 }

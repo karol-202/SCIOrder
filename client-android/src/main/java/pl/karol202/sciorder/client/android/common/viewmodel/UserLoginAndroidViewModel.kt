@@ -16,4 +16,5 @@ class UserLoginAndroidViewModel(userRepository: UserRepository,
 		UserLoginViewModel(userRepository, userAuthRepository, orderRepository, productRepository, productParameterRepository)
 {
 	val storeLiveData = storeFlow.asLiveData(coroutineScope)
+	val errorEventLiveData = errorEventFlow.asLiveData(coroutineScope)
 }

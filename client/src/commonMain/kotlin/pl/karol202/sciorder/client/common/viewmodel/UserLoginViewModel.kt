@@ -1,6 +1,8 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import pl.karol202.sciorder.client.common.api.ApiResponse
@@ -32,6 +34,10 @@ abstract class UserLoginViewModel(private val userRepository: UserRepository,
 	
 	protected val storeFlow = userAuthFlow
 			.map { it?.store }
+	
+	protected val errorEventFlow = errorEventChannel
+			.asFlow()
+			.distinctUntilChanged()
 	
 	init
 	{

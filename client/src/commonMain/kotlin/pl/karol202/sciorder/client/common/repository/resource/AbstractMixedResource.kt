@@ -11,7 +11,7 @@ import kotlinx.coroutines.sync.Mutex
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.util.tryDoLocking
 
-abstract class AbstractMixedResource<T>(protected val databaseFlow: Flow<T>) : Resource<T>
+abstract class AbstractMixedResource<T>(databaseFlow: Flow<T>) : Resource<T>
 {
 	private sealed class State
 	{

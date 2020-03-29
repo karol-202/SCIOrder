@@ -1,13 +1,11 @@
 <resources>
-    <style name="Base.AppTheme" parent="Theme.MaterialComponents">
+    <style name="Base.AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
 
         <item name="colorControlNormal">@color/color_control_normal_toolbar</item>
-
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
 
         <item name="selectableItemBackgroundBorderless">?android:attr/selectableItemBackgroundBorderless</item>
     </style>

@@ -3,6 +3,7 @@
 	<string name="app_name_admin">SCIOrder Admin</string>
 
 	<string name="fragment_login">Logowanie</string>
+	<string name="fragment_register">Rejestracja</string>
     <string name="fragment_products">Produkty</string>
 	<string name="fragment_order_track">Zamówienia</string>
 	<string name="fragment_orders">Zamówienia</string>
@@ -20,8 +21,8 @@
 	<string name="menu_item_orders_remove">Usuń wszystkie zamówienia</string>
 	<string name="menu_item_logout">Wyloguj</string>
 
-	<string name="text_login_owner">Konto</string>
-	<string name="text_login_password">Hasło</string>
+	<string name="text_admin_name">Nazwa użytkownika</string>
+	<string name="text_password">Hasło</string>
     <string name="text_status">Status</string>
 	<string name="text_location">Miejsce dostawy</string>
 	<string name="text_recipient">Adresat</string>
@@ -56,11 +57,13 @@
     <string name="text_product_param_true">Tak</string>
     <string name="text_product_param_false">Nie</string>
 
+	<string name="text_network_error">Błąd połączenia</string>
 	<string name="text_login_error">Błąd logowania</string>
-	<string name="text_login_error_not_found">Dane nieprawidłowe</string>
-	<string name="text_login_error_name_busy">Nazwa zajęta</string>
-	<string name="text_login_error_name_invalid">Nazwa za krótka</string>
-	<string name="text_login_error_password_too_short">Hasło za krótkie</string>
+	<string name="text_login_error_cannot_login">Nie udało się zalogować</string>
+	<string name="text_register_error">Błąd rejestracji</string>
+	<string name="text_register_error_name_busy">Nazwa zajęta</string>
+	<string name="text_register_error_name_invalid">Nazwa nieprawidłowa</string>
+	<string name="text_register_error_password_invalid">Hasło nieprawidłowe</string>
     <string name="text_loading_error">Błąd ładowania</string>
 	<string name="text_order_success">Zamówino pomyślnie</string>
     <string name="text_order_error">Błąd zamówienia</string>
@@ -79,6 +82,7 @@
 	<string name="action_filter_edit">Zatwierdź</string>
 	<string name="action_enum_value_add">Dodaj</string>
 	<string name="action_login">Zaloguj</string>
+	<string name="action_go_to_register">Chcę się zarejestrować</string>
 	<string name="action_register">Zarejestruj</string>
 	<string name="action_remove">Usuń</string>
 	<string name="action_cancel">Anuluj</string>

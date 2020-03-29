@@ -48,7 +48,6 @@ androidExtensions {
 }
 
 dependencies {
-    api(project(":common"))
     api(project(":client"))
     implementation(Deps.COROUTINES_ANDROID)
 

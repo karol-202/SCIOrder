@@ -1,6 +1,8 @@
 package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.repository.admin.AdminRepository
@@ -11,6 +13,8 @@ import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.common.request.AdminLoginRequest
 import pl.karol202.sciorder.common.request.AdminRequest
+import pl.karol202.sciorder.common.validation.isNameValid
+import pl.karol202.sciorder.common.validation.isPasswordValid
 
 abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
                                    private val adminAuthRepository: AdminAuthRepository,
@@ -20,7 +24,7 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
 {
 	enum class Error
 	{
-		NETWORK, CANNOT_LOGIN, NAME_BUSY, OTHER
+		NETWORK, CANNOT_LOGIN, NAME_BUSY, NAME_INVALID, PASSWORD_INVALID, OTHER
 	}
 	
 	private val errorEventChannel = ConflatedBroadcastChannel<Event<Error>>()
@@ -30,8 +34,18 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
 	protected val adminFlow = adminAuthFlow
 			.map { it?.admin }
 	
-	fun register(request: AdminRequest) = launch {
-		adminRepository.registerAdmin(request).handleRegisterError()
+	protected val errorEventFlow = errorEventChannel
+			.asFlow()
+			.distinctUntilChanged()
+	
+	fun register(name: String, password: String) = launch {
+		val request = AdminRequest(name, password)
+		when
+		{
+			!request.isNameValid -> broadcastError(Error.NAME_INVALID)
+			!request.isPasswordValid -> broadcastError(Error.PASSWORD_INVALID)
+			else -> adminRepository.registerAdmin(request).handleRegisterError().ifSuccess { login(name, password) }
+		}
 	}
 	
 	fun login(name: String, password: String) = launch {
@@ -40,7 +54,7 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
 	}
 	
 	private suspend fun <T> ApiResponse<T>.handleRegisterError() =
-			ifFailure { errorEventChannel.offer(Event(it.mapRegisterError())) }
+			ifFailure { broadcastError(it.mapRegisterError()) }
 	
 	private fun ApiResponse.Error.mapRegisterError() = when(type)
 	{
@@ -49,7 +63,7 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
 		else -> Error.OTHER
 	}
 	
-	private suspend fun <T> ApiResponse<T>.handleLoginError() = ifFailure { errorEventChannel.offer(Event(it.mapLoginError())) }
+	private suspend fun <T> ApiResponse<T>.handleLoginError() = ifFailure { broadcastError(it.mapLoginError()) }
 	
 	private fun ApiResponse.Error.mapLoginError() = when(type)
 	{
@@ -57,6 +71,8 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
 		ApiResponse.Error.Type.FORBIDDEN -> Error.CANNOT_LOGIN
 		else -> Error.OTHER
 	}
+	
+	private fun broadcastError(error: Error) = errorEventChannel.offer(Event(error))
 	
 	fun logout() = launch {
 		adminAuthRepository.logout()
