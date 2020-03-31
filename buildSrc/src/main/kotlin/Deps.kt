@@ -37,6 +37,7 @@ object Deps
 	const val ANDROID_LIFECYCLE_VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.ANDROID_VIEWMODEL}"
 	const val ANDROID_CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout:${Versions.ANDROID_CONSTRAINT_LAYOUT}"
 	const val ANDROID_RECYCLER_VIEW = "androidx.recyclerview:recyclerview:${Versions.ANDROID_RECYCLER_VIEW}"
+	const val ANDROID_SWIPE_REFRESH_LAYOUT = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.ANDROID_SWIPE_REFRESH_LAYOUT}"
 	const val ANDROID_PREFERENCE = "androidx.preference:preference-ktx:${Versions.ANDROID_PREFERENCE}"
 	const val ANDROID_NAVIGATION_FRAGMENT = "androidx.navigation:navigation-fragment-ktx:${Versions.ANDROID_NAVIGATION}"
 	const val ANDROID_NAVIGATION_UI = "androidx.navigation:navigation-ui-ktx:${Versions.ANDROID_NAVIGATION}"

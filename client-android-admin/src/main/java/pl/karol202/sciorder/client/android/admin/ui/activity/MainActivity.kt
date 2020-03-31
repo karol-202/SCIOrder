@@ -18,13 +18,12 @@ class MainActivity : AppCompatActivity()
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 		
-		setSupportActionBar(toolbar)
+		initToolbar()
 	}
 	
-	override fun onResume()
+	private fun initToolbar()
 	{
-		super.onResume()
-		// If toolbar was set up in onCreate, title would be overwritten by Activity's onPostCreate()
+		setSupportActionBar(toolbar)
 		toolbar.setupWithNavController(navController, appBarConfiguration)
 	}
 	

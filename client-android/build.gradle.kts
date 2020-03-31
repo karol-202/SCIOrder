@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id(Plugins.ANDROID_LIBRARY)
     id(Plugins.KOTLIN_ANDROID)
@@ -33,10 +31,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-}
-
-tasks {
-    withType(KotlinCompile::class) {
+    
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
         kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                                                  "-Xopt-in=kotlinx.coroutines.FlowPreview",
                                                  "-Xopt-in=kotlinx.serialization.UnstableDefault")
@@ -64,6 +61,7 @@ dependencies {
 	api(Deps.ANDROID_LIFECYCLE_VIEWMODEL)
     api(Deps.ANDROID_CONSTRAINT_LAYOUT)
     api(Deps.ANDROID_RECYCLER_VIEW)
+    api(Deps.ANDROID_SWIPE_REFRESH_LAYOUT)
     api(Deps.ANDROID_PREFERENCE)
     api(Deps.ANDROID_NAVIGATION_FRAGMENT)
     api(Deps.ANDROID_NAVIGATION_UI)

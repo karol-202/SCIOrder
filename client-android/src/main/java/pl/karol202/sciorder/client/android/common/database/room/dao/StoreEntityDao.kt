@@ -3,6 +3,7 @@ package pl.karol202.sciorder.client.android.common.database.room.dao
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import pl.karol202.sciorder.client.android.common.database.room.entity.StoreEntity
+import pl.karol202.sciorder.client.android.common.database.room.relations.StoreWithProductsAndOrders
 
 @Dao
 interface StoreEntityDao : CrudDao<StoreEntity>
@@ -23,13 +24,15 @@ interface StoreEntityDao : CrudDao<StoreEntity>
 	@Query("DELETE FROM StoreEntity")
 	suspend fun deleteAll()
 	
+	@Transaction
 	@Query("SELECT * FROM StoreEntity WHERE id = :storeId")
-	fun getById(storeId: Long): Flow<StoreEntity?>
+	fun getById(storeId: Long): Flow<StoreWithProductsAndOrders?>
 	
-	// TODO Verify behaviour when multiple rows have selected set to true (isn't LIMIT 1 required?)
+	@Transaction
 	@Query("SELECT * FROM StoreEntity WHERE selected = 1")
-	fun getSelected(): Flow<StoreEntity?>
+	fun getSelected(): Flow<StoreWithProductsAndOrders?>
 	
+	@Transaction
 	@Query("SELECT * FROM StoreEntity")
-	fun getAll(): Flow<List<StoreEntity>>
+	fun getAll(): Flow<List<StoreWithProductsAndOrders>>
 }

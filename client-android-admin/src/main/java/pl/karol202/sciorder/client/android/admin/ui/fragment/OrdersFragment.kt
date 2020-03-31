@@ -13,12 +13,12 @@ import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.alertDialog
 import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.viewmodel.AdminOrdersAndroidViewModel
 import pl.karol202.sciorder.common.model.Order
 
 class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 {
-	private val productsViewModel by sharedViewModel<ProductsEditAndroidViewModel>()
-	private val ordersViewModel by sharedViewModel<OrdersAndroidViewModel>()
+	private val ordersViewModel by sharedViewModel<AdminOrdersAndroidViewModel>()
 
 	private val adapter = OrderAdapter { order, status -> ordersViewModel.updateOrderStatus(order, status) }
 
@@ -31,19 +31,12 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 		initRecycler()
 
 		observeOrders()
-		observeProducts()
 		observeLoading()
 		observeLoadingError()
 		observeUpdateError()
 	}
 
-	private fun initRefreshLayout()
-	{
-		refreshLayoutOrders.setOnRefreshListener {
-			productsViewModel.refreshProducts()
-			ordersViewModel.refreshOrders()
-		}
-	}
+	private fun initRefreshLayout() = refreshLayoutOrders.setOnRefreshListener { ordersViewModel.refreshOrders() }
 
 	private fun initRecycler()
 	{
@@ -53,9 +46,6 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 
 	private fun observeOrders() =
 			ordersViewModel.ordersLiveData.observeNonNull(viewLifecycleOwner) { adapter.orders = it }
-
-	private fun observeProducts() =
-			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.products = it }
 
 	private fun observeLoading() =
 			ordersViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { if(!it) refreshLayoutOrders.isRefreshing = false }
@@ -84,7 +74,7 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 	}
 
 	private fun showOrderFilterDialog() =
-			OrderFilterDialogFragment.create(ordersViewModel.orderFilter, this).show(fragmentManager)
+			OrderFilterDialogFragment.create(ordersViewModel.orderFilter, this).show(parentFragmentManager)
 
 	override fun onOrderFilterSet(filter: Set<Order.Status>)
 	{

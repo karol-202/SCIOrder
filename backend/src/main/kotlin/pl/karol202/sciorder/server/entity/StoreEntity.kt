@@ -9,6 +9,7 @@ import pl.karol202.sciorder.server.table.Orders
 import pl.karol202.sciorder.server.table.Products
 import pl.karol202.sciorder.server.table.Stores
 import pl.karol202.sciorder.server.util.Mappable
+import pl.karol202.sciorder.server.util.map
 
 class StoreEntity(id: EntityID<Long>) : LongEntity(id), Mappable<Store>
 {
@@ -21,5 +22,7 @@ class StoreEntity(id: EntityID<Long>) : LongEntity(id), Mappable<Store>
 	val products by ProductEntity referrersOn Products.storeId
 	
 	override fun map() = Store(id = id.value,
-	                           name = name)
+	                           name = name,
+	                           products = products.map(),
+	                           orders = orders.map())
 }

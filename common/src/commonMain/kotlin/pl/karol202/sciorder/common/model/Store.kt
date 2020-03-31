@@ -6,4 +6,6 @@ import pl.karol202.sciorder.common.util.JvmSerializable
 
 @Serializable
 data class Store(override val id: Long,
-                 val name: String) : JvmSerializable, IdProvider<Long>
+                 val name: String,
+                 val products: List<Product>,
+                 val orders: List<Order>) : JvmSerializable, IdProvider<Long>

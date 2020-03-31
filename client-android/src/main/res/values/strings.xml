@@ -4,6 +4,7 @@
 
 	<string name="fragment_login">Logowanie</string>
 	<string name="fragment_register">Rejestracja</string>
+	<string name="fragment_stores">Sklepy</string>
     <string name="fragment_products">Produkty</string>
 	<string name="fragment_order_track">Zamówienia</string>
 	<string name="fragment_orders">Zamówienia</string>
@@ -28,6 +29,18 @@
 	<string name="text_recipient">Adresat</string>
     <string name="text_quantity">Liczba</string>
     <string name="text_quantity_value">x%d</string>
+
+	<plurals name="text_products">
+		<item quantity="one">%d produkt</item>
+		<item quantity="few">%d produkty</item>
+		<item quantity="other">%d produktów</item>
+	</plurals>
+
+	<plurals name="text_active_orders">
+		<item quantity="one">%d aktywne zamówienie</item>
+		<item quantity="few">%d aktywne zamówienia</item>
+		<item quantity="other">%d aktywnych zamówień</item>
+	</plurals>
 
     <string name="text_product_edit_name">Nazwa</string>
     <string name="text_product_edit_name_no_value">Podaj nazwę</string>
@@ -69,12 +82,6 @@
     <string name="text_order_error">Błąd zamówienia</string>
 	<string name="text_update_error">Błąd aktualizacji</string>
 	<string name="text_product_edit_error">Produkt zawiera błędy</string>
-
-	<plurals name="text_products">
-		<item quantity="one">%d produkt</item>
-		<item quantity="few">%d produkty</item>
-		<item quantity="other">%d produktów</item>
-	</plurals>
 
 	<string name="action_order">Zamów</string>
 	<string name="action_add_to_order">Dodaj do zamówienia</string>

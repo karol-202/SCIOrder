@@ -16,13 +16,19 @@ data class Order(override val id: Long,
 	                   val recipient: String) : JvmSerializable
 
 	@Serializable
-	enum class Status
+	enum class Status(val isActive: Boolean)
 	{
-		WAITING, IN_PROGRESS, DELIVERING, DONE, REJECTED;
+		WAITING(true),
+		IN_PROGRESS(true),
+		DELIVERING(true),
+		DONE(false),
+		REJECTED(false);
 
 		companion object
 		{
 			fun getByName(name: String) = values().find { it.name == name }
 		}
 	}
+	
+	val isActive get() = status.isActive
 }

@@ -17,6 +17,7 @@ object Versions
 	const val ANDROID_VIEWMODEL = "2.2.0"
 	const val ANDROID_CONSTRAINT_LAYOUT = "2.0.0-beta4"
 	const val ANDROID_RECYCLER_VIEW = "1.1.0"
+	const val ANDROID_SWIPE_REFRESH_LAYOUT = "1.0.0"
 	const val ANDROID_PREFERENCE = "1.1.0"
 	const val ANDROID_NAVIGATION = "2.2.1"
 	const val ANDROID_MATERIAL = "1.1.0"

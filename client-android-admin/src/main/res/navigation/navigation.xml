@@ -8,14 +8,14 @@
               android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.LoginFragment"
               android:label="@string/fragment_login">
 
-        <action android:id="@+id/action_loginFragment_to_mainFragment"
-                app:destination="@id/mainFragment"
+        <action android:id="@+id/action_login_to_stores"
+                app:destination="@id/storesFragment"
                 app:enterAnim="@anim/nav_default_enter_anim"
                 app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
-        <action android:id="@+id/action_loginFragment_to_registerFragment"
+        <action android:id="@+id/action_login_to_register"
                 app:destination="@id/registerFragment"
                 app:enterAnim="@anim/nav_default_enter_anim"
                 app:exitAnim="@anim/nav_default_exit_anim"
@@ -27,18 +27,31 @@
               android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.RegisterFragment"
               android:label="@string/fragment_register">
 
-        <action android:id="@+id/action_registerFragment_to_mainFragment"
-                app:destination="@id/mainFragment"
+        <action android:id="@+id/action_register_to_stores"
+                app:destination="@id/storesFragment"
                 app:enterAnim="@anim/nav_default_enter_anim"
                 app:exitAnim="@anim/nav_default_exit_anim"
                 app:popEnterAnim="@anim/nav_default_pop_enter_anim"
                 app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
-    <fragment android:id="@+id/mainFragment"
-              android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.MainFragment">
+    <fragment android:id="@+id/storesFragment"
+              android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.StoresFragment"
+              android:label="@string/fragment_stores">
 
-        <action android:id="@+id/action_mainFragment_to_productEditFragment"
+        <action android:id="@+id/action_stores_to_store"
+                app:destination="@id/storeFragment"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+
+    </fragment>
+
+    <fragment android:id="@+id/storeFragment"
+              android:name="pl.karol202.sciorder.client.android.admin.ui.fragment.StoreFragment">
+
+        <action android:id="@+id/action_store_to_productEdit"
                 app:destination="@id/productEditFragment"
                 app:enterAnim="@anim/nav_default_enter_anim"
                 app:exitAnim="@anim/nav_default_exit_anim"

@@ -30,6 +30,9 @@ android {
     
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+        kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                                                 "-Xopt-in=kotlinx.coroutines.FlowPreview",
+                                                 "-Xopt-in=kotlinx.serialization.UnstableDefault")
     }
     
     /*lintOptions {

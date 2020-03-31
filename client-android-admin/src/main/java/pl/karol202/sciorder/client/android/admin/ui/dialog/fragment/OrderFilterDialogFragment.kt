@@ -25,5 +25,6 @@ class OrderFilterDialogFragment : ExtendedDialogFragment()
 	private val filter by argumentsOrThrow<Set<Order.Status>>()
 	private val filterSetListener by lazy { targetFragment as OnOrderFilterSetListener }
 
-	override fun onCreateDialog(savedInstanceState: Bundle?) = OrderFilterDialog(ctx, filter, filterSetListener)
+	override fun onCreateDialog(savedInstanceState: Bundle?) =
+			OrderFilterDialog(ctx, filter) { filterSetListener.onOrderFilterSet(it) }
 }

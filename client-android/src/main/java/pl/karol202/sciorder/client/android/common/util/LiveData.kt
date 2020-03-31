@@ -2,7 +2,7 @@ package pl.karol202.sciorder.client.android.common.util
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -34,12 +34,8 @@ fun <T> Flow<T>.asLiveData(coroutineScope: CoroutineScope): LiveData<T> = FlowLi
 
 // LiveData observing
 
-fun <T> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, observer: (T?) -> Unit) = apply {
-	observe(lifecycleOwner, Observer { observer(it) })
-}
-
 fun <T : Any> LiveData<out T?>.observeNonNull(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) =
 		observe(lifecycleOwner) { it?.let(observer) }
 
 fun <T> LiveData<Event<T>>.observeEvent(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) =
-		observe(lifecycleOwner) { it?.getIfNotConsumed()?.let(observer) }
+		observe(lifecycleOwner) { it.getIfNotConsumed()?.let(observer) }

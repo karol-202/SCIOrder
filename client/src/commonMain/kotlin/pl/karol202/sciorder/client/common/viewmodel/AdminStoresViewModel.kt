@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.api.ApiResponse
+import pl.karol202.sciorder.client.common.model.storeInfo
 import pl.karol202.sciorder.client.common.repository.auth.admin.AdminAuthRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
@@ -36,6 +37,7 @@ abstract class AdminStoresViewModel(adminAuthRepository: AdminAuthRepository,
 	
 	protected val storesFlow = storesStateFlow
 			.map { it?.data.orEmpty() }
+			.map { stores -> stores.map { it.storeInfo } }
 			.distinctUntilChanged()
 	
 	protected val loadingFlow = storesStateFlow

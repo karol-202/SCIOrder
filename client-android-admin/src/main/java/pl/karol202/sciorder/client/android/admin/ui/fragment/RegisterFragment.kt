@@ -28,40 +28,40 @@ class RegisterFragment : InflatedFragment()
 		observeAdmin()
 		observeError()
 	}
+	
+	override fun onResume()
+	{
+		super.onResume()
+		initAdminNameEditText()
+		initPasswordEditText()
+	}
 
 	private fun initRegisterButton() = buttonRegister.setOnClickListener { register() }
+	
+	private fun initAdminNameEditText() = editTextRegisterAdminName.text?.clear()
+	
+	private fun initPasswordEditText() = editTextRegisterPassword.text?.clear()
 
-	private fun observeAdmin() =
-			loginViewModel.adminLiveData.observeNonNull(viewLifecycleOwner) {
-				clearLoginData()
-				goToMainFragment()
-			}
+	private fun observeAdmin() = loginViewModel.adminLiveData.observeNonNull(viewLifecycleOwner) { goToMainFragment() }
 
-	private fun observeError() =
-			loginViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) {
-				when(it)
-				{
-					AdminLoginViewModel.Error.NETWORK -> showSnackbar(R.string.text_network_error)
-					AdminLoginViewModel.Error.NAME_BUSY -> showSnackbar(R.string.text_register_error_name_busy)
-					AdminLoginViewModel.Error.NAME_INVALID -> showSnackbar(R.string.text_register_error_name_invalid)
-					AdminLoginViewModel.Error.PASSWORD_INVALID -> showSnackbar(R.string.text_register_error_password_invalid)
-					else -> showSnackbar(R.string.text_register_error)
-				}
-			}
-
-	private fun register()
+	private fun observeError() = loginViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showError(it) }
+	
+	private fun showError(error: AdminLoginViewModel.Error) = showSnackbar(getErrorText(error))
+	
+	private fun getErrorText(error: AdminLoginViewModel.Error) = when(error)
 	{
-		val adminName = editTextRegisterAdminName.text?.toString() ?: ""
-		val password = editTextRegisterPassword.text?.toString() ?: ""
-		loginViewModel.register(adminName, password)
+		AdminLoginViewModel.Error.NETWORK -> R.string.text_network_error
+		AdminLoginViewModel.Error.NAME_BUSY -> R.string.text_register_error_name_busy
+		AdminLoginViewModel.Error.NAME_INVALID -> R.string.text_register_error_name_invalid
+		AdminLoginViewModel.Error.PASSWORD_INVALID -> R.string.text_register_error_password_invalid
+		else -> R.string.text_register_error
 	}
 
-	private fun clearLoginData()
-	{
-		editTextRegisterAdminName.text = null
-		editTextRegisterPassword.text = null
-	}
+	private fun register() = loginViewModel.register(getAdminName(), getPassword())
+	
+	private fun getAdminName() = editTextRegisterAdminName.text?.toString().orEmpty()
+	
+	private fun getPassword() = editTextRegisterPassword.text?.toString().orEmpty()
 
-	private fun goToMainFragment() =
-			navController.navigate(RegisterFragmentDirections.actionRegisterFragmentToMainFragment())
+	private fun goToMainFragment() = navController.navigate(RegisterFragmentDirections.actionRegisterToMain())
 }
