@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.android.admin.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_orders.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -12,6 +13,7 @@ import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetLis
 import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.alertDialog
 import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminOrdersAndroidViewModel
 import pl.karol202.sciorder.common.model.Order
@@ -45,10 +47,10 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 	}
 
 	private fun observeOrders() =
-			ordersViewModel.ordersLiveData.observeNonNull(viewLifecycleOwner) { adapter.orders = it }
+			ordersViewModel.ordersLiveData.observe(viewLifecycleOwner) { adapter.orders = it }
 
 	private fun observeLoading() =
-			ordersViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { if(!it) refreshLayoutOrders.isRefreshing = false }
+			ordersViewModel.loadingLiveData.observe(viewLifecycleOwner) { if(!it) refreshLayoutOrders.isRefreshing = false }
 
 	private fun observeLoadingError() =
 			ordersViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }

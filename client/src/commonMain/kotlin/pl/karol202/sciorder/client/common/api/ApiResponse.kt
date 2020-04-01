@@ -31,9 +31,6 @@ sealed class ApiResponse<out T>
 	}
 
 	class Success<T>(val data: T) : ApiResponse<T>()
-	{
-		override fun <X> map(mapper: (T) -> X) = Success(mapper(data))
-	}
 
 	// Message is for debugging purposes
 	class Error(val type: Type,
@@ -47,22 +44,31 @@ sealed class ApiResponse<out T>
 								 // may be caused for instance by trying to update order that has been just deleted.
 			OTHER
 		}
-
-		override fun <X> map(mapper: (Nothing) -> X) = this
 	}
 
-	abstract fun <X> map(mapper: (T) -> X): ApiResponse<X>
+	suspend fun <R> map(mapper: suspend (T) -> R): ApiResponse<R> = when(this)
+	{
+		is Success -> Success(mapper(data))
+		is Error -> this
+	}
+	
+	suspend fun <R> flatMap(mapper: suspend (T) -> ApiResponse<R>): ApiResponse<R> = when(this)
+	{
+		is Success -> mapper(data)
+		is Error -> this
+	}
 
 	suspend fun fold(onSuccess: suspend (T) -> Unit = { },
-	                 onError: suspend (Error) -> Unit = { }): ApiResponse<T> = apply {
-		when(this)
-		{
-			is Success -> onSuccess(data)
-			is Error -> onError(this)
-		}
+	                 onError: suspend (Error) -> Unit = { }): ApiResponse<T> = when(this)
+	{
+		is Success -> apply { onSuccess(data) }
+		is Error -> apply { onError(this) }
 	}
 
 	suspend fun ifSuccess(onSuccess: suspend (T) -> Unit) = fold(onSuccess = onSuccess)
 
 	suspend fun ifFailure(onFailure: suspend (Error) -> Unit) = fold(onError = onFailure)
 }
+
+suspend fun <T1, T2, T> merge(first: ApiResponse<T1>, second: ApiResponse<T2>, mapper: suspend (T1, T2) -> T) =
+		first.flatMap { t -> second.map { t2 -> mapper(t, t2) } }

@@ -20,7 +20,6 @@ interface Resource<T>
 				NETWORK,
 				NOT_FOUND,
 				OTHER;
-				// ApiResponse's CONFLICT is not applicable to fetching data
 
 				companion object
 				{
@@ -32,6 +31,13 @@ interface Resource<T>
 					}
 				}
 			}
+		}
+		
+		fun <R> map(transform: (T) -> R): State<R> = when(this)
+		{
+			is Success -> Success(transform(data))
+			is Loading -> Loading(data?.let(transform))
+			is Failure -> Failure(data?.let(transform), type)
 		}
 	}
 

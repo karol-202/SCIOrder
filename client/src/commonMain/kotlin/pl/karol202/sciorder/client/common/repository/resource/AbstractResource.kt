@@ -11,21 +11,21 @@ import kotlinx.coroutines.sync.Mutex
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.util.tryDoLocking
 
-abstract class AbstractMixedResource<T>(databaseFlow: Flow<T>) : Resource<T>
+abstract class AbstractResource<T>(databaseFlow: Flow<T>) : Resource<T>
 {
-	private sealed class State
+	private sealed class StateType
 	{
-		object Success : State()
+		object Success : StateType()
 		{
 			override fun <T> toResourceState(data: T) = Resource.State.Success(data)
 		}
 
-		object Loading : State()
+		object Loading : StateType()
 		{
 			override fun <T> toResourceState(data: T) = Resource.State.Loading(data)
 		}
 
-		data class Failure(val type: Resource.State.Failure.Type) : State()
+		data class Failure(val type: Resource.State.Failure.Type) : StateType()
 		{
 			override fun <T> toResourceState(data: T) = Resource.State.Failure(data, type)
 		}
@@ -45,18 +45,21 @@ abstract class AbstractMixedResource<T>(databaseFlow: Flow<T>) : Resource<T>
 	private var reloadMutex = Mutex()
 	private var autoReloadJob: Job? = null
 
-	private val stateChannel = ConflatedBroadcastChannel<State>(State.Success)
+	private val stateChannel = ConflatedBroadcastChannel<StateType>(StateType.Success)
 	override val asFlow = databaseFlow.combine(stateChannel.asFlow()) { data, state -> state.toResourceState(data) }
 
 	override suspend fun autoReloadIn(coroutineScope: CoroutineScope)
 	{
 		autoReloadJob?.cancel()
-		autoReloadJob = coroutineScope.launch {
-			while(true)
-			{
-				reload()
-				waitForNextUpdate()
-			}
+		autoReloadJob = coroutineScope.launch { autoReload() }
+	}
+	
+	private suspend fun autoReload()
+	{
+		while(true)
+		{
+			reload()
+			waitForNextUpdate()
 		}
 	}
 
@@ -66,10 +69,10 @@ abstract class AbstractMixedResource<T>(databaseFlow: Flow<T>) : Resource<T>
 
 	private suspend fun executeReload()
 	{
-		stateChannel.send(State.Loading)
+		stateChannel.send(StateType.Loading)
 		val response = loadFromApi()
 		response.ifSuccess { saveToDatabase(it) }
-		stateChannel.send(State.fromApiResponse(response))
+		stateChannel.send(StateType.fromApiResponse(response))
 	}
 
 	protected abstract suspend fun loadFromApi(): ApiResponse<T>

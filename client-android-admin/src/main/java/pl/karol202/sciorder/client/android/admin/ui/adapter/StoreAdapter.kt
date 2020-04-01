@@ -7,13 +7,13 @@ import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.common.model.StoreInfo
 
-class StoreAdapter(private val storeSelectListener: (StoreInfo) -> Unit) : DynamicAdapter<StoreInfo>()
+class StoreAdapter(private val storeSelectListener: (Long) -> Unit) : DynamicAdapter<StoreInfo>()
 {
 	inner class ViewHolder(view: View) : BasicAdapter.ViewHolder<StoreInfo>(view)
 	{
 		override fun bind(item: StoreInfo)
 		{
-			containerView.setOnClickListener { storeSelectListener(item) }
+			containerView.setOnClickListener { storeSelectListener(item.id) }
 			
 			textStoreName.text = item.name
 			

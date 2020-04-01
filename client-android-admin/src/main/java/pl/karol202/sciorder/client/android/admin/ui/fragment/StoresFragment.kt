@@ -23,7 +23,7 @@ abstract class StoresFragment : FragmentWithMenu()
 	
 	private val navController by lazy { NavHostFragment.findNavController(this) }
 	
-	private val adapter = StoreAdapter { storesViewModel.selectStore(it.id) }
+	private val adapter = StoreAdapter { storesViewModel.selectStore(it) }
 	
 	override val layoutRes = R.layout.fragment_stores
 	override val menuRes = R.menu.menu_stores
@@ -70,13 +70,12 @@ abstract class StoresFragment : FragmentWithMenu()
 	}
 	
 	private fun observeSelectedStore() = storesViewModel.selectedStoreLiveData.observeNonNull(viewLifecycleOwner) {
-		goToStoreFragment(it.id)
+		goToStoreFragment()
 	}
 	
 	private fun navigateBack() = parentFragmentManager.popBackStack()
 	
-	private fun goToStoreFragment(storeId: Long) =
-			navController.navigate(StoresFragmentDirections.actionStoresToStore(storeId))
+	private fun goToStoreFragment() = navController.navigate(StoresFragmentDirections.actionStoresToStore())
 	
 	override fun onMenuItemSelected(itemId: Int) = when(itemId)
 	{

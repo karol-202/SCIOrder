@@ -8,7 +8,7 @@ import pl.karol202.sciorder.client.common.database.dao.ProductDao
 import pl.karol202.sciorder.client.common.database.dao.delete
 import pl.karol202.sciorder.client.common.database.dao.insert
 import pl.karol202.sciorder.client.common.database.dao.update
-import pl.karol202.sciorder.client.common.repository.resource.StandardMixedResource
+import pl.karol202.sciorder.client.common.repository.resource.StandardResource
 import pl.karol202.sciorder.client.common.util.minutes
 import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.common.request.ProductRequest
@@ -17,10 +17,10 @@ class ProductRepositoryImpl(private val productDao: ProductDao,
                             private val productApi: ProductApi) : ProductRepository
 {
 	override fun getProductsResource(token: String, storeId: Long) =
-			StandardMixedResource(updateIntervalMillis = 5.minutes,
-			                      getFromApi = { productApi.getProducts(token, storeId) },
-			                      getFromDB = { productDao.getByStoreId(storeId) },
-			                      saveToDB = { productDao.dispatchByStoreId(storeId, it) })
+			StandardResource(updateIntervalMillis = 5.minutes,
+			                 getFromApi = { productApi.getProducts(token, storeId) },
+			                 getFromDB = { productDao.getByStoreId(storeId) },
+			                 saveToDB = { productDao.dispatchByStoreId(storeId, it) })
 	
 	override suspend fun addProduct(token: String, storeId: Long, product: ProductRequest): ApiResponse<Product>
 	{

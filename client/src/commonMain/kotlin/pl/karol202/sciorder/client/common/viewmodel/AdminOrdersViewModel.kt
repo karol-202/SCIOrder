@@ -4,8 +4,10 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.*
 import pl.karol202.sciorder.client.common.api.ApiResponse
+import pl.karol202.sciorder.client.common.model.OrderWithProducts
 import pl.karol202.sciorder.client.common.repository.auth.admin.AdminAuthRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
+import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
@@ -14,7 +16,8 @@ import pl.karol202.sciorder.common.model.Order
 
 abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
                                     storeRepository: StoreRepository,
-                                    private val orderRepository: OrderRepository) : ViewModel()
+                                    private val orderRepository: OrderRepository,
+                                    private val productRepository: ProductRepository) : ViewModel()
 {
 	companion object
 	{
@@ -32,7 +35,7 @@ abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
 				if(adminAuth == null || selectedStore == null) null
 				else orderRepository.getOrdersResource(adminAuth.authToken, selectedStore.id)
 			}
-			.scan(null as Resource<List<Order>>?) { previous, current -> previous?.close(); current }
+			.scan(null as Resource<List<OrderWithProducts>>?) { previous, current -> previous?.close(); current }
 			.onEach { it?.autoReloadIn(coroutineScope) }
 			.conflatedBroadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
 	

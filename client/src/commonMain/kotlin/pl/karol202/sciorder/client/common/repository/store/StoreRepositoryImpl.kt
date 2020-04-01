@@ -7,7 +7,7 @@ import pl.karol202.sciorder.client.common.api.store.StoreApi
 import pl.karol202.sciorder.client.common.database.dao.StoreDao
 import pl.karol202.sciorder.client.common.database.dao.delete
 import pl.karol202.sciorder.client.common.database.dao.insert
-import pl.karol202.sciorder.client.common.repository.resource.StandardMixedResource
+import pl.karol202.sciorder.client.common.repository.resource.StandardResource
 import pl.karol202.sciorder.client.common.util.minutes
 import pl.karol202.sciorder.common.model.Store
 import pl.karol202.sciorder.common.request.StoreRequest
@@ -18,10 +18,10 @@ class StoreRepositoryImpl(private val storeDao: StoreDao,
 	override fun getSelectedStoreFlow() = storeDao.getSelected()
 	
 	override fun getStoresResource(token: String) =
-			StandardMixedResource(updateIntervalMillis = 5.minutes,
-			                      getFromApi = { storeApi.getStores(token) },
-			                      getFromDB = { storeDao.getAll() },
-			                      saveToDB = { storeDao.dispatch(it) })
+			StandardResource(updateIntervalMillis = 5.minutes,
+			                 getFromApi = { storeApi.getStores(token) },
+			                 getFromDB = { storeDao.getAll() },
+			                 saveToDB = { storeDao.dispatch(it) })
 	
 	override suspend fun addStore(token: String, store: StoreRequest): ApiResponse<Store>
 	{

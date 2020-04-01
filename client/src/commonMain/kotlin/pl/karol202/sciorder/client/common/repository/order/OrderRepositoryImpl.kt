@@ -4,21 +4,31 @@ import kotlinx.coroutines.flow.first
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.api.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
 import pl.karol202.sciorder.client.common.api.order.OrderApi
+import pl.karol202.sciorder.client.common.api.product.ProductApi
 import pl.karol202.sciorder.client.common.database.dao.OrderDao
+import pl.karol202.sciorder.client.common.database.dao.ProductDao
 import pl.karol202.sciorder.client.common.database.dao.insert
-import pl.karol202.sciorder.client.common.repository.resource.StandardMixedResource
+import pl.karol202.sciorder.client.common.model.withProducts
+import pl.karol202.sciorder.client.common.repository.resource.DualResource
 import pl.karol202.sciorder.client.common.util.seconds
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.request.OrderRequest
 
 class OrderRepositoryImpl(private val orderDao: OrderDao,
-                          private val orderApi: OrderApi) : OrderRepository
+                          private val orderApi: OrderApi,
+                          private val productDao: ProductDao,
+                          private val productApi: ProductApi) : OrderRepository
 {
 	override fun getOrdersResource(token: String, storeId: Long) =
-			StandardMixedResource(updateIntervalMillis = 10.seconds,
-			                      getFromApi = { orderApi.getOrders(token, storeId) },
-			                      getFromDB = { orderDao.getByStoreId(storeId) },
-			                      saveToDB = { orderDao.dispatchByStoreId(storeId, it) })
+			DualResource(updateIntervalMillis = 10.seconds,
+			             source1 = DualResource.Source(getFromApi = { orderApi.getOrders(token, storeId) },
+			                                           getFromDB = { orderDao.getByStoreId(storeId) },
+			                                           saveToDB = { orderDao.dispatchByStoreId(storeId, it) }),
+			             source2 = DualResource.Source(getFromApi = { productApi.getProducts(token, storeId) },
+			                                           getFromDB = { productDao.getByStoreId(storeId) },
+			                                           saveToDB = { productDao.dispatchByStoreId(storeId, it) }),
+			             mix = { orders, products -> orders.withProducts(products) }
+			)
 	
 	override suspend fun addOrder(token: String, storeId: Long, order: OrderRequest): ApiResponse<Order>
 	{
