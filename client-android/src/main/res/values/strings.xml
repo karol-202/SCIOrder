@@ -44,12 +44,13 @@
 
     <string name="text_product_edit_name">Nazwa</string>
     <string name="text_product_edit_name_no_value">Podaj nazwę</string>
+    <string name="text_product_edit_name_too_long">Nazwa za długa</string>
     <string name="text_product_edit_available">Dostępny</string>
     <string name="text_product_edit_params">Parametry</string>
     <string name="text_product_edit_param_new">Nowy parametr</string>
 	<string name="text_product_edit_param_name">Nazwa</string>
 	<string name="text_product_edit_param_name_no_value">Podaj nazwę</string>
-	<string name="text_product_edit_param_name_duplicated">Nazwy parametrów muszą być różne</string>
+	<string name="text_product_edit_param_name_too_long">Nazwa za długa</string>
     <string name="text_product_edit_param_type">Typ</string>
     <string name="text_product_edit_param_attr_default">Domyślna wartość</string>
 	<string name="text_product_edit_param_attr_min">Minimum</string>

@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.android.admin.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,17 +13,20 @@ import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.alertDialog
 import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
-import pl.karol202.sciorder.client.common.viewmodel.AdminProductsViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductEditAndroidViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductsAndroidViewModel
 import pl.karol202.sciorder.common.model.Product
 
 class ProductsFragment : InflatedFragment()
 {
-	private val productsViewModel by sharedViewModel<ProductsEditAndroidViewModel>()
+	private val productsViewModel by sharedViewModel<AdminProductsAndroidViewModel>()
+	private val productEditViewModel by sharedViewModel<AdminProductEditAndroidViewModel>()
 
 	private val navController by lazy { findNavController(this) }
 
-	private val adapter = ProductAdapter(productEditListener = { navigateToProductEditFragment(it) },
+	private val adapter = ProductAdapter(productEditListener = { editExistingProduct(it) },
 	                                     productRemoveListener = { showProductRemoveDialog(it) })
 
 	override val layoutRes = R.layout.fragment_products
@@ -36,13 +40,11 @@ class ProductsFragment : InflatedFragment()
 		observeProducts()
 		observeLoading()
 		observeLoadingError()
+		observeEditedProduct()
 		observeUpdateError()
 	}
 
-	private fun initRefreshLayout()
-	{
-		refreshLayoutProducts.setOnRefreshListener { productsViewModel.refreshProducts() }
-	}
+	private fun initRefreshLayout() = refreshLayoutProducts.setOnRefreshListener { productsViewModel.refreshProducts() }
 
 	private fun initRecycler()
 	{
@@ -51,33 +53,39 @@ class ProductsFragment : InflatedFragment()
 		recyclerProducts.addItemDecoration(DividerItemDecoration(ctx, DividerItemDecoration.VERTICAL))
 	}
 
-	private fun initAddButton()
-	{
-		buttonProductAdd.setOnClickListener { navigateToProductEditFragment(null) }
+	private fun initAddButton() = buttonProductAdd.setOnClickListener { editNewProduct() }
+
+	private fun observeProducts() = productsViewModel.productsLiveData.observe(viewLifecycleOwner) {
+		adapter.products = it
 	}
 
-	private fun observeProducts() =
-			productsViewModel.productsLiveData.observeNonNull(viewLifecycleOwner) { adapter.products = it }
+	private fun observeLoading() = productsViewModel.loadingLiveData.observe(viewLifecycleOwner) {
+		if(!it) refreshLayoutProducts.isRefreshing = false
+	}
 
-	private fun observeLoading() =
-			productsViewModel.loadingLiveData.observeNonNull(viewLifecycleOwner) { if(!it) refreshLayoutProducts.isRefreshing = false }
+	private fun observeLoadingError() = productsViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) {
+		showSnackbar(R.string.text_loading_error)
+	}
+	
+	private fun observeEditedProduct() = productEditViewModel.editedProductLiveData.observe(viewLifecycleOwner) {
+		navigateToProductEditFragment()
+	}
 
-	private fun observeLoadingError() =
-			productsViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) { showSnackbar(R.string.text_loading_error) }
+	private fun observeUpdateError() = productEditViewModel.updateErrorEventLiveData.observeEvent(viewLifecycleOwner) {
+		showSnackbar(R.string.text_update_error)
+	}
+	
+	private fun editNewProduct() = productEditViewModel.editNewProduct()
+	
+	private fun editExistingProduct(product: Product) = productEditViewModel.editExistingProduct(product)
 
-	private fun observeUpdateError() =
-			productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-				if(it == AdminProductsViewModel.UpdateResult.FAILURE) showSnackbar(R.string.text_update_error)
-			}
-
-	private fun navigateToProductEditFragment(product: Product?) =
-			navController.navigate(MainFragmentDirections.actionMainFragmentToProductEditFragment(product))
+	private fun navigateToProductEditFragment() = navController.navigate(StoreFragmentDirections.actionStoreToProductEdit())
 
 	private fun showProductRemoveDialog(product: Product)
 	{
 		ctx.alertDialog {
 			setMessage(ctx.getString(R.string.dialog_product_remove, product.name))
-			setPositiveButton(R.string.action_remove) { _, _ -> productsViewModel.removeProduct(product) }
+			setPositiveButton(R.string.action_remove) { _, _ -> productsViewModel.removeProduct(product.id) }
 			setNegativeButton(R.string.action_cancel, null)
 		}.show()
 	}

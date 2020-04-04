@@ -10,19 +10,14 @@ import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
+import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.model.Product
-import pl.karol202.sciorder.common.request.ProductRequest
 
 abstract class AdminProductsViewModel(adminAuthRepository: AdminAuthRepository,
                                       storeRepository: StoreRepository,
                                       private val productRepository: ProductRepository) : ViewModel()
 {
-	enum class UpdateResult
-	{
-		SUCCESS, FAILURE
-	}
-	
-	private val updateEventChannel = ConflatedBroadcastChannel<Event<UpdateResult>>()
+	private val updateErrorEventChannel = ConflatedBroadcastChannel<Event<Unit>>()
 	
 	private val adminAuthFlow = adminAuthRepository.getAdminAuthFlow()
 	private val selectedStoreFlow = storeRepository.getSelectedStoreFlow()
@@ -52,23 +47,11 @@ abstract class AdminProductsViewModel(adminAuthRepository: AdminAuthRepository,
 			.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
 			.distinctUntilChanged()
 	
-	protected val updateEventFlow = updateEventChannel
+	protected val updateEventFlow = updateErrorEventChannel
 			.asFlow()
 			.distinctUntilChanged()
 	
 	fun refreshProducts() = launch { productsResourceChannel.valueOrNull?.reload() }
-	
-	fun addProduct(product: ProductRequest) = launch {
-		val token = adminAuthFlow.first()?.authToken ?: return@launch
-		val storeId = selectedStoreFlow.first()?.id ?: return@launch
-		productRepository.addProduct(token, storeId, product).handleResponse()
-	}
-	
-	fun updateProduct(productId: Long, product: ProductRequest) = launch {
-		val token = adminAuthFlow.first()?.authToken ?: return@launch
-		val storeId = selectedStoreFlow.first()?.id ?: return@launch
-		productRepository.updateProduct(token, storeId, productId, product).handleResponse()
-	}
 	
 	fun removeProduct(productId: Long) = launch {
 		val token = adminAuthFlow.first()?.authToken ?: return@launch
@@ -76,15 +59,12 @@ abstract class AdminProductsViewModel(adminAuthRepository: AdminAuthRepository,
 		productRepository.removeProduct(token, storeId, productId).handleResponse()
 	}
 	
-	private suspend fun <T> ApiResponse<T>.handleResponse() =
-			fold(onSuccess = { updateEventChannel.offer(Event(UpdateResult.SUCCESS)) },
-			     onError = { updateEventChannel.offer(Event(UpdateResult.FAILURE)) })
+	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { updateErrorEventChannel.sendNow(Event(Unit)) }
 	
 	override fun onCleared()
 	{
 		super.onCleared()
 		productsResourceChannel.valueOrNull?.close()
 		productsResourceChannel.close()
-		updateEventChannel.cancel()
 	}
 }

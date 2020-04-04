@@ -38,7 +38,7 @@ fun serviceModule() = module {
 	                                                    dbUser = getProperty(Config.DB_USER),
 	                                                    dbPassword = getProperty(Config.DB_PASSWORD)) }
 	single<HashService> { SHA256HashService() }
-	single<ProductService> { TransactionProductService(ProductServiceImpl(), get()) }
+	single<ProductService> { TransactionProductService(ProductServiceImpl(get()), get()) }
 	single<ProductParameterService> { TransactionProductParameterService(ProductParameterServiceImpl(), get()) }
 	single<OrderService> { TransactionOrderService(OrderServiceImpl(), get()) }
 	single<StoreService> { TransactionStoreService(StoreServiceImpl(), get()) }

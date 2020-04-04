@@ -50,6 +50,7 @@ kotlin {
         languageSettings.useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
         languageSettings.useExperimentalAnnotation("kotlinx.coroutines.FlowPreview")
         languageSettings.useExperimentalAnnotation("kotlinx.serialization.UnstableDefault")
+        languageSettings.enableLanguageFeature("NewInference")
     }
 
     sourceSets {

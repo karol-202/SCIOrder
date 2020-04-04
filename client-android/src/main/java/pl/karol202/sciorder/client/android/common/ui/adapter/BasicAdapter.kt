@@ -28,10 +28,7 @@ abstract class BasicAdapter<T> : RecyclerView.Adapter<BasicAdapter.ViewHolder<T>
 
 	abstract fun createViewHolder(view: View, viewType: Int): ViewHolder<T>
 
-	override fun onBindViewHolder(holder: ViewHolder<T>, position: Int)
-	{
-		holder.bind(getItem(position))
-	}
+	override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) = holder.bind(getItem(position))
 
 	abstract fun getItem(position: Int): T
 }

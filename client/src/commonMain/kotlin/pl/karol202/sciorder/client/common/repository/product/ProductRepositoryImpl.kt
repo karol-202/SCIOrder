@@ -11,7 +11,8 @@ import pl.karol202.sciorder.client.common.database.dao.update
 import pl.karol202.sciorder.client.common.repository.resource.StandardResource
 import pl.karol202.sciorder.client.common.util.minutes
 import pl.karol202.sciorder.common.model.Product
-import pl.karol202.sciorder.common.request.ProductRequest
+import pl.karol202.sciorder.common.request.ProductCreateRequest
+import pl.karol202.sciorder.common.request.ProductUpdateRequest
 
 class ProductRepositoryImpl(private val productDao: ProductDao,
                             private val productApi: ProductApi) : ProductRepository
@@ -22,14 +23,15 @@ class ProductRepositoryImpl(private val productDao: ProductDao,
 			                 getFromDB = { productDao.getByStoreId(storeId) },
 			                 saveToDB = { productDao.dispatchByStoreId(storeId, it) })
 	
-	override suspend fun addProduct(token: String, storeId: Long, product: ProductRequest): ApiResponse<Product>
+	override suspend fun addProduct(token: String, storeId: Long, product: ProductCreateRequest): ApiResponse<Product>
 	{
 		suspend fun addLocally(product: Product) = productDao.insert(product)
 		
 		return productApi.addProduct(token, storeId, product).ifSuccess { addLocally(it) }
 	}
 	
-	override suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductRequest): ApiResponse<Unit>
+	override suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductUpdateRequest):
+			ApiResponse<Unit>
 	{
 		val previousProduct = productDao.getById(productId).first() ?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
 		val updatedProduct = previousProduct.copy(name = product.name, available = product.available)

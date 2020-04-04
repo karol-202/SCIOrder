@@ -25,7 +25,6 @@ fun databaseModule() = module {
 	single<AdminAuthDao> { AdminAuthDaoImpl(get()) }
 	single<OrderDao> { OrderDaoImpl(get(), get(), get(), get()) }
 	single<ProductDao> { ProductDaoImpl(get(), get(), get(), get()) }
-	single<ProductParameterDao> { ProductParameterDaoImpl(get(), get(), get()) }
 	single<StoreDao> { StoreDaoImpl(get(), get(), get(), get(), get(), get(), get(), get()) }
 	single<UserAuthDao> { UserAuthDaoImpl(get()) }
 	single<UserDao> { UserDaoImpl(get()) }

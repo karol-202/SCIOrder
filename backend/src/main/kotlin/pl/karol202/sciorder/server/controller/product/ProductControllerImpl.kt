@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.server.controller.product
 
-import pl.karol202.sciorder.common.request.ProductRequest
+import pl.karol202.sciorder.common.request.ProductCreateRequest
+import pl.karol202.sciorder.common.request.ProductUpdateRequest
 import pl.karol202.sciorder.common.validation.isValid
 import pl.karol202.sciorder.server.controller.*
 import pl.karol202.sciorder.server.service.permission.PermissionService
@@ -11,7 +12,7 @@ class ProductControllerImpl(private val permissionService: PermissionService,
 {
 	override suspend fun postProduct(handler: RequestHandler) = handler {
 		val storeId = requireLongParameter("storeId")
-		val product = requireBody<ProductRequest> { isValid }
+		val product = requireBody<ProductCreateRequest> { isValid }
 		requirePrincipal { permissionService.canInsertProduct(it, storeId) }
 		
 		val newProduct = productService.insertProduct(storeId, product)
@@ -21,7 +22,7 @@ class ProductControllerImpl(private val permissionService: PermissionService,
 	override suspend fun putProduct(handler: RequestHandler) = handler {
 		val storeId = requireLongParameter("storeId")
 		val productId = requireLongParameter("productId")
-		val product = requireBody<ProductRequest> { isValid }
+		val product = requireBody<ProductUpdateRequest> { isValid }
 		requirePrincipal { permissionService.canUpdateProduct(it, storeId) }
 		
 		productService.updateProduct(storeId, productId, product)

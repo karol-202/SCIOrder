@@ -5,17 +5,21 @@ import pl.karol202.sciorder.client.common.api.authToken
 import pl.karol202.sciorder.client.common.api.jsonBody
 import pl.karol202.sciorder.client.common.api.relativePath
 import pl.karol202.sciorder.common.model.Product
-import pl.karol202.sciorder.common.request.ProductRequest
+import pl.karol202.sciorder.common.request.ProductCreateRequest
+import pl.karol202.sciorder.common.request.ProductUpdateRequest
 
 class KtorProductApi(private val basicApi: KtorBasicApi) : ProductApi
 {
-	override suspend fun addProduct(token: String, storeId: Long, product: ProductRequest) = basicApi.post<Product> {
+	override suspend fun addProduct(token: String, storeId: Long, product: ProductCreateRequest) = basicApi.post<Product> {
 		relativePath("api/stores/$storeId/products")
 		authToken(token)
 		jsonBody(product)
 	}
 
-	override suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductRequest) = basicApi.put<Unit> {
+	override suspend fun updateProduct(token: String,
+	                                   storeId: Long,
+	                                   productId: Long,
+	                                   product: ProductUpdateRequest) = basicApi.put<Unit> {
 		relativePath("api/stores/$storeId/products/$productId")
 		authToken(token)
 		jsonBody(product)

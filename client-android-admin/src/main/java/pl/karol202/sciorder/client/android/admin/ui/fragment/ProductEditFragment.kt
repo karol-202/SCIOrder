@@ -2,38 +2,32 @@ package pl.karol202.sciorder.client.android.admin.ui.fragment
 
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.fragment.navArgs
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_product_edit.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
-import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
 import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
-import pl.karol202.sciorder.client.common.model.create
-import pl.karol202.sciorder.client.common.viewmodel.AdminProductsViewModel
+import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductEditAndroidViewModel
+import pl.karol202.sciorder.client.common.viewmodel.AdminProductEditViewModel.NameValidationError
+import pl.karol202.sciorder.client.common.viewmodel.AdminProductEditViewModel.UpdateError
 import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.request.ProductRequest
+import pl.karol202.sciorder.common.validation.MAX_NAME_LENGTH
 
 class ProductEditFragment : ExtendedFragment()
 {
-	private val productsViewModel by sharedViewModel<ProductsEditAndroidViewModel>()
+	private val viewModel by sharedViewModel<AdminProductEditAndroidViewModel>()
 
-	private val arguments by navArgs<ProductEditFragmentArgs>()
-	private val initialProduct by lazy { arguments.product }
-
-	private var product by instanceState { initialProduct ?: Product.create() }
-	private var name
-		get() = product.name
-		set(value) = updateProduct(product.copy(name = value))
-	private var available
-		get() = product.available
-		set(value) = updateProduct(product.copy(available = value))
-	private var parameters
-		get() = product.parameters
-		set(value) = updateProduct(product.copy(parameters = value))
-
+	private val adapter = ProductParamAdapter(onParamAdd = { viewModel.addParameter() },
+	                                          onParamEdit = { viewModel.updateParameter(it) },
+	                                          onParamRemove = { viewModel.removeParameter(it) })
+	
 	override val layoutRes = R.layout.fragment_product_edit
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
@@ -43,59 +37,71 @@ class ProductEditFragment : ExtendedFragment()
 		initParamsRecycler()
 		initApplyButton()
 
-		observeUpdateEvent()
+		observeEditedProduct()
+		observeEditedParameters()
+		observeNameValidationError()
+		observeUpdateErrorEvent()
 	}
 
 	private fun initNameEditText()
 	{
-		editTextProductEditName.setText(name)
-		editTextProductEditName.addAfterTextChangedListener { name = it }
+		editLayoutProductEditName.counterMaxLength = Product.MAX_NAME_LENGTH
+		editTextProductEditName.doAfterTextChanged { viewModel.updateProductName(it.toString()) }
 	}
 	
 	private fun initAvailabilityCheckbox()
 	{
-		checkProductEditAvailable.isChecked = available
-		checkProductEditAvailable.setOnCheckedChangeListener { _, checked -> available = checked }
+		checkProductEditAvailable.setOnCheckedChangeListener { _, checked -> viewModel.updateProductAvailability(checked) }
 	}
 
 	private fun initParamsRecycler()
 	{
 		recyclerProductEditParams.layoutManager = LinearLayoutManager(ctx)
 		recyclerProductEditParams.isNestedScrollingEnabled = false
-		recyclerProductEditParams.adapter = ProductParamAdapter(parameters) { parameters = it }
+		recyclerProductEditParams.adapter = adapter
 	}
 
 	private fun initApplyButton()
 	{
-		buttonProductEditApply.setOnClickListener { apply() }
+		buttonProductEditApply.setOnClickListener { viewModel.applyProduct() }
 	}
-
-	private fun observeUpdateEvent()
-	{
-		productsViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
-			if(it == AdminProductsViewModel.UpdateResult.SUCCESS) navigateBack()
-			else showSnackbar(R.string.text_update_error)
-		}
+	
+	private fun observeEditedProduct() = viewModel.editedProductLiveData.observe(viewLifecycleOwner) {
+		if(it != null) populateWithProduct(it)
+		else navigateBack()
 	}
-
-	private fun apply()
+	
+	private fun populateWithProduct(product: ProductRequest)
 	{
-		if(!product.isValid) return showSnackbar(R.string.text_product_edit_error)
-		if(initialProduct != null) productsViewModel.updateProduct(product)
-		else productsViewModel.addProduct(product)
+		editTextProductEditName.setText(product.name)
+		checkProductEditAvailable.isChecked = product.available
 	}
 
 	private fun navigateBack() = fragmentManager?.popBackStack()
 	
-	private fun updateProduct(product: Product)
-	{
-		this.product = product
-		validate()
+	private fun observeEditedParameters() = viewModel.editedParametersLiveData.observe(viewLifecycleOwner) {
+		adapter.parameters = it
 	}
 	
-	private fun validate()
+	private fun observeNameValidationError() = viewModel.validationErrorLiveData.observe(viewLifecycleOwner) {
+		editLayoutProductEditName.error = getNameValidationErrorText(it)
+	}
+	
+	private fun getNameValidationErrorText(error: NameValidationError?) = when(error)
 	{
-		editLayoutProductEditName.error =
-				if(!product.isNameValid) ctx.getString(R.string.text_product_edit_name_no_value) else null
+		NameValidationError.NAME_BLANK -> ctx.getString(R.string.text_product_edit_name_no_value)
+		NameValidationError.NAME_TOO_LONG -> ctx.getString(R.string.text_product_edit_name_too_long)
+		else -> null
+	}
+	
+	private fun observeUpdateErrorEvent() = viewModel.updateErrorEventLiveData.observeEvent(viewLifecycleOwner) {
+		showSnackbar(getUpdateErrorText(it))
+	}
+	
+	private fun getUpdateErrorText(error: UpdateError) = when(error)
+	{
+		UpdateError.NETWORK -> R.string.text_network_error
+		UpdateError.PRODUCT_INVALID -> R.string.text_product_edit_error
+		UpdateError.OTHER -> R.string.text_update_error
 	}
 }

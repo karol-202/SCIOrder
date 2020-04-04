@@ -7,12 +7,12 @@ import kotlinx.android.synthetic.main.item_order_entry.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
-import pl.karol202.sciorder.client.common.model.OrderedProduct
+import pl.karol202.sciorder.client.common.model.OrderEntryWithProduct
 
-class OrderEntryAdapter(entries: List<OrderedProduct?>) : StaticAdapter<OrderedProduct?>(entries)
+class OrderEntryAdapter(entries: List<OrderEntryWithProduct>) : StaticAdapter<OrderEntryWithProduct>(entries)
 {
 	private enum class ViewType(@LayoutRes val layout: Int,
-	                            val viewHolderCreator: (View) -> ViewHolder<OrderedProduct?>)
+	                            val viewHolderCreator: (View) -> ViewHolder<OrderEntryWithProduct>)
 	{
 		TYPE_ENTRY(R.layout.item_order_entry, { EntryViewHolder(it) }),
 		TYPE_NULL(R.layout.item_order_entry_null, { NullViewHolder(it) });
@@ -21,30 +21,30 @@ class OrderEntryAdapter(entries: List<OrderedProduct?>) : StaticAdapter<OrderedP
 		{
 			operator fun get(ordinal: Int) = values()[ordinal]
 
-			fun getForItem(item: OrderedProduct?) = if(item != null) TYPE_ENTRY.ordinal else TYPE_NULL.ordinal
+			fun getForItem(item: OrderEntryWithProduct) = if(item.product != null) TYPE_ENTRY.ordinal else TYPE_NULL.ordinal
 		}
 	}
 
-	class EntryViewHolder(view: View) : BasicAdapter.ViewHolder<OrderedProduct?>(view)
+	class EntryViewHolder(view: View) : BasicAdapter.ViewHolder<OrderEntryWithProduct>(view)
 	{
 		init
 		{
 			recyclerOrderEntryParams.layoutManager = LinearLayoutManager(ctx)
 		}
 
-		override fun bind(item: OrderedProduct?)
+		override fun bind(item: OrderEntryWithProduct)
 		{
-			if(item == null) throw IllegalArgumentException()
-			textOrderEntryName.text = item.product.name
+			val product = item.product ?: throw IllegalStateException()
+			val parametersWithValues = product.parameters.map { it to item.parameters[it.id] }
+			
+			textOrderEntryName.text = product.name
 			textOrderEntryQuantity.text = ctx.getString(R.string.text_quantity_value, item.quantity)
 
-			recyclerOrderEntryParams.adapter = OrderEntryParamAdapter(item.parametersWithValues)
+			recyclerOrderEntryParams.adapter = OrderEntryParamAdapter(parametersWithValues)
 		}
-
-		private val OrderedProduct.parametersWithValues get() = product.parameters.map { it to parameters[it.name] }
 	}
 
-	class NullViewHolder(view: View) : BasicAdapter.ViewHolder<OrderedProduct?>(view)
+	class NullViewHolder(view: View) : BasicAdapter.ViewHolder<OrderEntryWithProduct>(view)
 
 	override fun getLayout(viewType: Int) = ViewType[viewType].layout
 

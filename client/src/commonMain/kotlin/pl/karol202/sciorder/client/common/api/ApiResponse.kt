@@ -70,5 +70,5 @@ sealed class ApiResponse<out T>
 	suspend fun ifFailure(onFailure: suspend (Error) -> Unit) = fold(onError = onFailure)
 }
 
-suspend fun <T1, T2, T> merge(first: ApiResponse<T1>, second: ApiResponse<T2>, mapper: suspend (T1, T2) -> T) =
+suspend fun <T1, T2, R> merge(first: ApiResponse<T1>, second: ApiResponse<T2>, mapper: suspend (T1, T2) -> R) =
 		first.flatMap { t -> second.map { t2 -> mapper(t, t2) } }

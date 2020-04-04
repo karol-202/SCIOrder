@@ -11,6 +11,7 @@ import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
+import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.request.AdminLoginRequest
 import pl.karol202.sciorder.common.request.AdminRequest
 import pl.karol202.sciorder.common.validation.isNameValid
@@ -72,7 +73,7 @@ abstract class AdminLoginViewModel(private val adminRepository: AdminRepository,
 		else -> Error.OTHER
 	}
 	
-	private fun broadcastError(error: Error) = errorEventChannel.offer(Event(error))
+	private fun broadcastError(error: Error) = errorEventChannel.sendNow(Event(error))
 	
 	fun logout() = launch {
 		adminAuthRepository.logout()

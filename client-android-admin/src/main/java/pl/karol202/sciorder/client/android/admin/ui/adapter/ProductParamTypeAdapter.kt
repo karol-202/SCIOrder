@@ -5,13 +5,13 @@ import kotlinx.android.synthetic.main.item_product_param_type.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.common.model.visibleName
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicSpinnerAdapter
-import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.model.ProductParameter
 
-class ProductParamTypeAdapter : BasicSpinnerAdapter<Product.Parameter.Type>()
+class ProductParamTypeAdapter : BasicSpinnerAdapter<ProductParameter.Type>()
 {
-	class ViewHolder(view: View) : BasicSpinnerAdapter.ViewHolder<Product.Parameter.Type>(view)
+	class ViewHolder(view: View) : BasicSpinnerAdapter.ViewHolder<ProductParameter.Type>(view)
 	{
-		override fun bind(item: Product.Parameter.Type)
+		override fun bind(item: ProductParameter.Type)
 		{
 			textProductEditParamTypeName.text = ctx.getString(item.visibleName)
 		}
@@ -21,7 +21,7 @@ class ProductParamTypeAdapter : BasicSpinnerAdapter<Product.Parameter.Type>()
 
 	override fun createViewHolder(view: View) = ViewHolder(view)
 
-	override fun getCount() = Product.Parameter.Type.values().size
+	override fun getCount() = ProductParameter.Type.values().size
 
-	override fun getItem(position: Int) = Product.Parameter.Type.values()[position]
+	override fun getItem(position: Int) = ProductParameter.Type.values()[position]
 }

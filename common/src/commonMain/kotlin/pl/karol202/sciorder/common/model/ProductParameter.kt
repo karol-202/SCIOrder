@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.common.model
 
 import kotlinx.serialization.Serializable
+import pl.karol202.sciorder.common.request.ProductParameterRequest
 import pl.karol202.sciorder.common.util.IdProvider
 import pl.karol202.sciorder.common.util.JvmSerializable
 
@@ -26,4 +27,6 @@ data class ProductParameter(override val id: Long,
 	                      val maximalValue: Float? = null,
 	                      val enumValues: List<String>? = null,
 	                      val defaultValue: String? = null) : JvmSerializable
+	
+	val toRequest get() = ProductParameterRequest(name, type, attributes)
 }

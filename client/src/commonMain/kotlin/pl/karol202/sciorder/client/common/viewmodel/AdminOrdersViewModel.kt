@@ -12,6 +12,7 @@ import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
+import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.model.Order
 
 abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
@@ -62,7 +63,7 @@ abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
 	
 	var orderFilter: Set<Order.Status>
 		get() = filterChannel.value
-		set(value) { filterChannel.offer(value) }
+		set(value) { filterChannel.sendNow(value) }
 
 	fun refreshOrders() = launch { ordersResourceChannel.valueOrNull?.reload() }
 
@@ -78,7 +79,7 @@ abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
 		orderRepository.removeAllOrders(token, storeId).handleError()
 	}
 
-	private suspend fun <T> ApiResponse<T>.handleError() = ifFailure { updateErrorEventChannel.offer(Event(Unit)) }
+	private suspend fun <T> ApiResponse<T>.handleError() = ifFailure { updateErrorEventChannel.sendNow(Event(Unit)) }
 
 	override fun onCleared()
 	{

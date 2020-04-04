@@ -7,6 +7,7 @@ import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.repository.auth.user.UserAuthRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.util.Event
+import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.model.Order
 import pl.karol202.sciorder.common.request.OrderEntryRequest
 import pl.karol202.sciorder.common.request.OrderRequest
@@ -32,20 +33,20 @@ abstract class UserOrderComposeViewModel(userAuthRepository: UserAuthRepository,
 	fun addToOrder(orderedProduct: OrderedProduct)
 	{
 		val oldProducts = orderEntriesChannel.value
-		orderEntriesChannel.offer(oldProducts + orderedProduct)
+		orderEntriesChannel.sendNow(oldProducts + orderedProduct)
 	}
 
 	fun replaceInOrder(oldProduct: OrderedProduct, newProduct: OrderedProduct)
 	{
 		val oldProducts = orderEntriesChannel.value
 		val newProducts = oldProducts.map { if(it == oldProduct) newProduct else it }
-		orderEntriesChannel.offer(newProducts)
+		orderEntriesChannel.sendNow(newProducts)
 	}
 
 	fun removeFromOrder(orderedProduct: OrderedProduct)
 	{
 		val oldProducts = orderEntriesChannel.value
-		orderEntriesChannel.offer(oldProducts - orderedProduct)
+		orderEntriesChannel.sendNow(oldProducts - orderedProduct)
 	}
 
 	fun orderAll(details: Order.Details)
@@ -54,7 +55,7 @@ abstract class UserOrderComposeViewModel(userAuthRepository: UserAuthRepository,
 		val entries = orderedProducts.map { OrderEntryRequest(it.product.id, it.quantity, it.parameters) }
 		executeOrder(OrderRequest(entries, details))
 
-		orderEntriesChannel.offer(emptyList())
+		orderEntriesChannel.sendNow(emptyList())
 	}
 
 	fun orderSingleProduct(orderedProduct: OrderedProduct, details: Order.Details)
@@ -69,8 +70,8 @@ abstract class UserOrderComposeViewModel(userAuthRepository: UserAuthRepository,
 	}
 
 	private suspend fun <T> ApiResponse<T>.handleResponse() =
-			fold(onSuccess = { orderResultEventChannel.offer(Event(OrderResult.SUCCESS)) },
-			     onError = { orderResultEventChannel.offer(Event(OrderResult.FAILURE)) })
+			fold(onSuccess = { orderResultEventChannel.sendNow(Event(OrderResult.SUCCESS)) },
+			     onError = { orderResultEventChannel.sendNow(Event(OrderResult.FAILURE)) })
 
 	override fun onCleared()
 	{

@@ -13,6 +13,7 @@ import pl.karol202.sciorder.client.common.repository.product.parameter.ProductPa
 import pl.karol202.sciorder.client.common.repository.user.UserRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.generatePassword
+import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.request.UserLoginRequest
 import pl.karol202.sciorder.common.request.UserRequest
 
@@ -60,10 +61,10 @@ abstract class UserLoginViewModel(private val userRepository: UserRepository,
 	}
 	
 	private suspend fun <T> ApiResponse<T>.handleRegisterError() =
-			ifFailure { errorEventChannel.offer(Event(it.mapError())) }
+			ifFailure { errorEventChannel.sendNow(Event(it.mapError())) }
 	
 	private suspend fun <T> ApiResponse<T>.handleLoginError() =
-			ifFailure { errorEventChannel.offer(Event(it.mapError())) }
+			ifFailure { errorEventChannel.sendNow(Event(it.mapError())) }
 	
 	private fun ApiResponse.Error.mapError() = when(type)
 	{

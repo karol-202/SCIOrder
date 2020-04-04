@@ -10,6 +10,7 @@ import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
+import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.model.Store
 import pl.karol202.sciorder.common.request.StoreRequest
 
@@ -67,8 +68,8 @@ abstract class AdminStoresViewModel(adminAuthRepository: AdminAuthRepository,
 	}
 	
 	private suspend fun <T> ApiResponse<T>.handleResponse() =
-			fold(onSuccess = { updateEventChannel.offer(Event(UpdateResult.SUCCESS)) },
-			     onError = { updateEventChannel.offer(Event(UpdateResult.FAILURE)) })
+			fold(onSuccess = { updateEventChannel.sendNow(Event(UpdateResult.SUCCESS)) },
+			     onError = { updateEventChannel.sendNow(Event(UpdateResult.FAILURE)) })
 	
 	fun selectStore(storeId: Long?) = launch {
 		storeRepository.selectStore(storeId)

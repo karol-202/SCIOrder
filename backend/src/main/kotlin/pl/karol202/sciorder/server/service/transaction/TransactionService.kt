@@ -6,3 +6,5 @@ interface TransactionService
 {
 	suspend fun <T> runTransaction(block: suspend Transaction.() -> T): T
 }
+
+suspend operator fun <T> TransactionService.invoke(block: suspend Transaction.() -> T) = runTransaction(block)

@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.android.admin.ui.adapter
 
 import android.text.InputType
 import android.view.View
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_product_param_attr_default_bool.*
 import kotlinx.android.synthetic.main.item_product_param_attr_default_text.*
@@ -11,11 +12,10 @@ import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithoutLast
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
-import pl.karol202.sciorder.client.android.common.ui.addAfterTextChangedListener
-import pl.karol202.sciorder.common.model.Product
+import pl.karol202.sciorder.common.model.ProductParameter
 
 class ProductParamAttrAdapter(private val attrs: List<Attr>,
-                              private val onAttrsUpdate: (Product.Parameter.Attributes) -> Unit) :
+                              private val onAttrsUpdate: (ProductParameter.Attributes) -> Unit) :
 		StaticAdapter<ProductParamAttrAdapter.Attr>(attrs)
 {
 	sealed class Attr(val viewType: Int)
@@ -37,7 +37,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 
 				override val inputType = InputType.TYPE_CLASS_TEXT
 
-				override fun applyTo(attributes: Product.Parameter.Attributes) =
+				override fun applyTo(attributes: ProductParameter.Attributes) =
 						attributes.copy(defaultValue = default)
 			}
 
@@ -49,7 +49,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 
 				override val inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
 
-				override fun applyTo(attributes: Product.Parameter.Attributes) =
+				override fun applyTo(attributes: ProductParameter.Attributes) =
 						attributes.copy(defaultValue = defaultAsString)
 			}
 
@@ -63,13 +63,13 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 						InputType.TYPE_NUMBER_FLAG_SIGNED or
 						InputType.TYPE_NUMBER_FLAG_DECIMAL
 
-				override fun applyTo(attributes: Product.Parameter.Attributes) =
+				override fun applyTo(attributes: ProductParameter.Attributes) =
 						attributes.copy(defaultValue = defaultAsString)
 			}
 
 			data class Bool(var default: Boolean) : DefaultValue(VIEW_TYPE_DEFAULT_BOOL)
 			{
-				override fun applyTo(attributes: Product.Parameter.Attributes) =
+				override fun applyTo(attributes: ProductParameter.Attributes) =
 						attributes.copy(defaultValue = default.toString())
 			}
 		}
@@ -88,7 +88,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 					get() = maximum?.toString()
 					set(value) { maximum = value?.toIntOrNull() }
 
-				override fun applyTo(attributes: Product.Parameter.Attributes) =
+				override fun applyTo(attributes: ProductParameter.Attributes) =
 						attributes.copy(minimalValue = minimum?.toFloat(), maximalValue = maximum?.toFloat())
 			}
 
@@ -106,7 +106,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 					get() = maximum?.toString()
 					set(value) { maximum = value?.toFloatOrNull() }
 
-				override fun applyTo(attributes: Product.Parameter.Attributes) =
+				override fun applyTo(attributes: ProductParameter.Attributes) =
 						attributes.copy(minimalValue = minimum, maximalValue = maximum)
 			}
 
@@ -119,11 +119,11 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 		data class Enum(var values: List<String>,
 		                var defaultValue: String?) : Attr(VIEW_TYPE_ENUM)
 		{
-			override fun applyTo(attributes: Product.Parameter.Attributes) =
+			override fun applyTo(attributes: ProductParameter.Attributes) =
 					attributes.copy(enumValues = values, defaultValue = defaultValue)
 		}
 
-		abstract fun applyTo(attributes: Product.Parameter.Attributes): Product.Parameter.Attributes
+		abstract fun applyTo(attributes: ProductParameter.Attributes): ProductParameter.Attributes
 	}
 
 	companion object
@@ -133,19 +133,21 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 		private const val VIEW_TYPE_RANGE = 2
 		private const val VIEW_TYPE_ENUM = 3
 
-		fun fromParam(param: Product.Parameter, attrsUpdateListener: (Product.Parameter.Attributes) -> Unit) =
+		fun fromParam(param: ProductParameter, attrsUpdateListener: (ProductParameter.Attributes) -> Unit) =
 				ProductParamAttrAdapter(createAttrs(param), attrsUpdateListener)
 
-		private fun createAttrs(param: Product.Parameter) = when(param.type)
+		private fun createAttrs(param: ProductParameter) = when(param.type)
 		{
-			Product.Parameter.Type.TEXT -> listOf(Attr.DefaultValue.Text(param.attributes.defaultValue))
-			Product.Parameter.Type.INT -> listOf(Attr.DefaultValue.Int(param.attributes.defaultValue?.toIntOrNull()),
-			                                                                                          Attr.Range.Int(param.attributes.minimalValue?.toInt(), param.attributes.maximalValue?.toInt()))
-			Product.Parameter.Type.FLOAT -> listOf(Attr.DefaultValue.Float(param.attributes.defaultValue?.toFloatOrNull()),
-			                                                                                            Attr.Range.Float(param.attributes.minimalValue, param.attributes.maximalValue))
-			Product.Parameter.Type.BOOL -> listOf(Attr.DefaultValue.Bool(param.attributes.defaultValue?.toBoolean() ?: false))
-			Product.Parameter.Type.ENUM -> listOf(Attr.Enum(param.attributes.enumValues ?: listOf(),
-			                                                                                                     param.attributes.defaultValue))
+			ProductParameter.Type.TEXT -> listOf(Attr.DefaultValue.Text(param.attributes.defaultValue))
+			ProductParameter.Type.INT -> listOf(Attr.DefaultValue.Int(param.attributes.defaultValue?.toIntOrNull()),
+			                                    Attr.Range.Int(param.attributes.minimalValue?.toInt(),
+			                                                   param.attributes.maximalValue?.toInt()))
+			ProductParameter.Type.FLOAT -> listOf(Attr.DefaultValue.Float(param.attributes.defaultValue?.toFloatOrNull()),
+			                                      Attr.Range.Float(param.attributes.minimalValue,
+			                                                       param.attributes.maximalValue))
+			ProductParameter.Type.BOOL -> listOf(Attr.DefaultValue.Bool(param.attributes.defaultValue?.toBoolean() ?: false))
+			ProductParameter.Type.ENUM -> listOf(Attr.Enum(param.attributes.enumValues ?: listOf(),
+			                                               param.attributes.defaultValue))
 		}
 	}
 
@@ -155,7 +157,7 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 
 		init
 		{
-			editTextProductEditParamAttrDefaultText.addAfterTextChangedListener { setDefaultValue(it) }
+			editTextProductEditParamAttrDefaultText.doAfterTextChanged { setDefaultValue(it.toString()) }
 		}
 
 		override fun bind(item: Attr)
@@ -197,8 +199,8 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 
 		init
 		{
-			editTextProductEditParamAttrMin.addAfterTextChangedListener { setMinimum(it) }
-			editTextProductEditParamAttrMax.addAfterTextChangedListener { setMaximum(it) }
+			editTextProductEditParamAttrMin.doAfterTextChanged { setMinimum(it.toString()) }
+			editTextProductEditParamAttrMax.doAfterTextChanged { setMaximum(it.toString()) }
 		}
 
 		override fun bind(item: Attr)
@@ -277,5 +279,5 @@ class ProductParamAttrAdapter(private val attrs: List<Attr>,
 
 	private fun onAttrsUpdate() = onAttrsUpdate(createParamAttrs())
 
-	private fun createParamAttrs() = attrs.fold(Product.Parameter.Attributes()) { attrs, attr -> attr.applyTo(attrs) }
+	private fun createParamAttrs() = attrs.fold(ProductParameter.Attributes()) { attrs, attr -> attr.applyTo(attrs) }
 }

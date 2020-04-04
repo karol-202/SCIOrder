@@ -64,7 +64,7 @@ class LoginFragment : InflatedFragment()
 	
 	private fun getPassword() = editTextLoginPassword.text?.toString().orEmpty()
 
-	private fun goToMainFragment() = navController.navigate(LoginFragmentDirections.actionLoginToMain())
+	private fun goToMainFragment() = navController.navigate(LoginFragmentDirections.actionLoginToStores())
 	
 	private fun goToRegisterFragment() = navController.navigate(LoginFragmentDirections.actionLoginToRegister())
 }

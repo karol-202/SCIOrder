@@ -36,7 +36,8 @@
                 app:layout_constraintStart_toEndOf="@+id/textProductEditParamName"
                 app:layout_constraintEnd_toStartOf="@+id/buttonProductEditParamRemove"
                 app:errorEnabled="true"
-                app:hintEnabled="false">
+                app:hintEnabled="false"
+                app:counterEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextProductEditParamName"
