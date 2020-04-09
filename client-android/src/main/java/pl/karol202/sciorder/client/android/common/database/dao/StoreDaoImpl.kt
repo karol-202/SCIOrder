@@ -1,11 +1,11 @@
 package pl.karol202.sciorder.client.android.common.database.dao
 
 import androidx.room.withTransaction
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import pl.karol202.sciorder.client.android.common.database.room.LocalDatabase
 import pl.karol202.sciorder.client.android.common.database.room.dao.*
 import pl.karol202.sciorder.client.android.common.database.room.entity.StoreEntity
+import pl.karol202.sciorder.client.android.common.database.room.model.selected
 import pl.karol202.sciorder.client.android.common.database.room.relations.*
 import pl.karol202.sciorder.client.android.common.database.room.toEntities
 import pl.karol202.sciorder.client.android.common.database.room.toModel
@@ -23,7 +23,7 @@ class StoreDaoImpl(private val localDatabase: LocalDatabase,
                    private val orderEntryParameterValueEntityDao: OrderEntryParameterValueEntityDao) : StoreDao
 {
 	override suspend fun insert(items: List<Store>) = localDatabase.withTransaction {
-		val entities = items.toEntities(StoreWithProductsAndOrders)
+		val entities = items.map { it.selected(false) }.toEntities(StoreWithProductsAndOrders)
 		
 		storeEntityDao.insert(entities.stores)
 		productEntityDao.insert(entities.products)
@@ -34,15 +34,17 @@ class StoreDaoImpl(private val localDatabase: LocalDatabase,
 		orderEntryParameterValueEntityDao.insert(entities.ordersParameterValues)
 	}
 	
-	override suspend fun delete(items: List<Store>) = storeEntityDao.delete(items.toEntities(StoreEntity))
+	override suspend fun delete(items: List<Store>) =
+			storeEntityDao.delete(items.toEntities(StoreEntity.mapper(selected = false)))
 	
 	override suspend fun updateSelection(storeId: Long?) = storeEntityDao.updateSelection(storeId)
 	
 	override suspend fun deleteAll() = storeEntityDao.deleteAll()
 	
 	override suspend fun dispatch(newStores: List<Store>) = localDatabase.withTransaction {
-		val oldEntities = storeEntityDao.getAll().first()
-		val newEntities = newStores.toEntities(StoreWithProductsAndOrders)
+		val oldEntities = storeEntityDao.getAllNow()
+		val selectedId = oldEntities.map { it.store }.find { it.selected }?.id
+		val newEntities = newStores.map { it.selected(it.id == selectedId) }.toEntities(StoreWithProductsAndOrders)
 		
 		storeEntityDao.dispatch(oldEntities.stores, newEntities.stores)
 		productEntityDao.dispatch(oldEntities.products, newEntities.products)

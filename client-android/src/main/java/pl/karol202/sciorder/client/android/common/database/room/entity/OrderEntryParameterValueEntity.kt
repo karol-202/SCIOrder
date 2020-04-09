@@ -31,11 +31,9 @@ data class OrderEntryParameterValueEntity(@PrimaryKey(autoGenerate = true) overr
 	{
 		override fun toModel(entity: OrderEntryParameterValueEntity) = entity.productParameterId to entity.value
 		
-		fun mapper(orderEntryId: Long) = object : ToEntityMapper<OrderEntryParameterValueEntity, Map.Entry<Long, String>>
-		{
-			override fun toEntity(model: Map.Entry<Long, String>) = model.let { (productParameterId, value) ->
-				OrderEntryParameterValueEntity(0, orderEntryId, productParameterId, value)
-			}
-		}
+		fun mapper(orderEntryId: Long) =
+				ToEntityMapper<OrderEntryParameterValueEntity, Map.Entry<Long, String>> { (productParameterId, value) ->
+					OrderEntryParameterValueEntity(0, orderEntryId, productParameterId, value)
+				}
 	}
 }

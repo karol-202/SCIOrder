@@ -11,7 +11,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
 import io.ktor.routing.*
-import io.ktor.serialization.serialization
+import io.ktor.serialization.json
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.serialization.SerializationException
 import org.koin.ktor.ext.Koin
@@ -47,7 +47,7 @@ private fun Application.configure()
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {
-        serialization()
+        json()
     }
 	install(CORS) {
 		anyHost()

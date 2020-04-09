@@ -1,7 +1,6 @@
 package pl.karol202.sciorder.client.android.common.database.dao
 
 import androidx.room.withTransaction
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import pl.karol202.sciorder.client.android.common.database.room.LocalDatabase
 import pl.karol202.sciorder.client.android.common.database.room.dao.ProductEntityDao
@@ -34,7 +33,7 @@ class ProductDaoImpl(private val localDatabase: LocalDatabase,
 	}
 	
 	override suspend fun update(items: List<Product>) = localDatabase.withTransaction {
-		val oldEntities = productEntityDao.getByIds(items.ids()).first()
+		val oldEntities = productEntityDao.getByIdsNow(items.ids())
 		val newEntities = items.toEntities(ProductWithParameters).filter { it.product.id in oldEntities.products.ids() }
 		
 		productEntityDao.update(newEntities.products)
@@ -47,7 +46,7 @@ class ProductDaoImpl(private val localDatabase: LocalDatabase,
 	override suspend fun deleteAll() = productEntityDao.deleteAll()
 	
 	override suspend fun dispatchByStoreId(storeId: Long, newProducts: List<Product>) = localDatabase.withTransaction {
-		val oldEntities = productEntityDao.getByStoreId(storeId).first()
+		val oldEntities = productEntityDao.getByStoreIdNow(storeId)
 		val newEntities = newProducts.toEntities(ProductWithParameters)
 		
 		productEntityDao.dispatch(oldEntities.products, newEntities.products)

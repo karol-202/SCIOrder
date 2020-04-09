@@ -9,7 +9,6 @@ import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
 import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.model.Product
 
@@ -22,14 +21,17 @@ abstract class AdminProductsViewModel(adminAuthRepository: AdminAuthRepository,
 	private val adminAuthFlow = adminAuthRepository.getAdminAuthFlow()
 	private val selectedStoreFlow = storeRepository.getSelectedStoreFlow()
 	
+	private var productsResource: Resource<List<Product>>? = null
 	private val productsResourceChannel = adminAuthFlow
 			.combine(selectedStoreFlow) { adminAuth, selectedStore ->
 				if(adminAuth == null || selectedStore == null) null
 				else productRepository.getProductsResource(adminAuth.authToken, selectedStore.id)
 			}
 			.scan(null as Resource<List<Product>>?) { previous, current -> previous?.close(); current }
+			.onEach { productsResource = it }
 			.onEach { it?.autoReloadIn(coroutineScope) }
-			.conflatedBroadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+			.conflate()
+			.broadcastIn(coroutineScope, CoroutineStart.DEFAULT)
 	
 	private val productsStateFlow = productsResourceChannel
 			.asFlow()
@@ -51,7 +53,7 @@ abstract class AdminProductsViewModel(adminAuthRepository: AdminAuthRepository,
 			.asFlow()
 			.distinctUntilChanged()
 	
-	fun refreshProducts() = launch { productsResourceChannel.valueOrNull?.reload() }
+	fun refreshProducts() = launch { productsResource?.reload() }
 	
 	fun removeProduct(productId: Long) = launch {
 		val token = adminAuthFlow.first()?.authToken ?: return@launch
@@ -61,10 +63,9 @@ abstract class AdminProductsViewModel(adminAuthRepository: AdminAuthRepository,
 	
 	private suspend fun <T> ApiResponse<T>.handleResponse() = ifFailure { updateErrorEventChannel.sendNow(Event(Unit)) }
 	
-	override fun onCleared()
-	{
+	override fun onCleared() = launch {
 		super.onCleared()
-		productsResourceChannel.valueOrNull?.close()
-		productsResourceChannel.close()
+		productsResource?.close()
+		productsResourceChannel.cancel()
 	}
 }

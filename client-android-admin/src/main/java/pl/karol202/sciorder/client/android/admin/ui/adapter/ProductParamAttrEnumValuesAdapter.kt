@@ -45,12 +45,12 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 		private const val TYPE_VALUE = 0
 		private const val TYPE_NULL = 1
 		
-		private const val NULL_ITEM_ID = -1
+		private const val NULL_ITEM_ID = -1L
 	}
 
 	var values: List<String>
 		get() = items.mapNotNull { it?.value }
-		set(value) { items = value.map { it.asEntry() } + null }
+		set(value) { items = value.map { it.asEntry() }.plus(element = null) /* Fixed in new type inference */ }
 
 	var selection: String? = null
 		set(value)
@@ -82,7 +82,7 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 
 	private fun addNewValue(item: EnumEntry)
 	{
-		items = items.dropLast(1) + item + null
+		items = items.dropLast(1).plus(element = item).plus(element = null) /* Fixed in new type inference */
 		onValuesUpdate()
 	}
 

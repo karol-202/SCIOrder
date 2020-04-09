@@ -45,7 +45,7 @@ class LoginFragment : InflatedFragment()
 	
 	private fun initPasswordEditText() = editTextLoginPassword.text?.clear()
 	
-	private fun observeAdmin() = loginViewModel.adminLiveData.observeNonNull(viewLifecycleOwner) { goToMainFragment() }
+	private fun observeAdmin() = loginViewModel.adminLiveData.observeNonNull(viewLifecycleOwner) { goToStoresFragment() }
 	
 	private fun observeError() = loginViewModel.errorEventLiveData.observeEvent(viewLifecycleOwner) { showError(it) }
 	
@@ -64,7 +64,7 @@ class LoginFragment : InflatedFragment()
 	
 	private fun getPassword() = editTextLoginPassword.text?.toString().orEmpty()
 
-	private fun goToMainFragment() = navController.navigate(LoginFragmentDirections.actionLoginToStores())
+	private fun goToStoresFragment() = navController.navigate(LoginFragmentDirections.actionLoginToStores())
 	
 	private fun goToRegisterFragment() = navController.navigate(LoginFragmentDirections.actionLoginToRegister())
 }

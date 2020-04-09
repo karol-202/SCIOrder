@@ -2,14 +2,18 @@ package pl.karol202.sciorder.client.android.admin.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_product_edit.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
+import pl.karol202.sciorder.client.android.common.ui.setTextIfDiffer
+import pl.karol202.sciorder.client.android.common.ui.simpleItemAnimator
 import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
@@ -23,6 +27,8 @@ import pl.karol202.sciorder.common.validation.MAX_NAME_LENGTH
 class ProductEditFragment : ExtendedFragment()
 {
 	private val viewModel by sharedViewModel<AdminProductEditAndroidViewModel>()
+	
+	private val navController by lazy { NavHostFragment.findNavController(this) }
 
 	private val adapter = ProductParamAdapter(onParamAdd = { viewModel.addParameter() },
 	                                          onParamEdit = { viewModel.updateParameter(it) },
@@ -32,6 +38,8 @@ class ProductEditFragment : ExtendedFragment()
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
+		handleBackPress()
+		
 		initNameEditText()
 		initAvailabilityCheckbox()
 		initParamsRecycler()
@@ -41,6 +49,10 @@ class ProductEditFragment : ExtendedFragment()
 		observeEditedParameters()
 		observeNameValidationError()
 		observeUpdateErrorEvent()
+	}
+	
+	private fun handleBackPress() = requireActivity().onBackPressedDispatcher.addCallback(this) {
+		viewModel.stopEditing()
 	}
 
 	private fun initNameEditText()
@@ -59,6 +71,7 @@ class ProductEditFragment : ExtendedFragment()
 		recyclerProductEditParams.layoutManager = LinearLayoutManager(ctx)
 		recyclerProductEditParams.isNestedScrollingEnabled = false
 		recyclerProductEditParams.adapter = adapter
+		recyclerProductEditParams.simpleItemAnimator?.supportsChangeAnimations = false
 	}
 
 	private fun initApplyButton()
@@ -73,11 +86,11 @@ class ProductEditFragment : ExtendedFragment()
 	
 	private fun populateWithProduct(product: ProductRequest)
 	{
-		editTextProductEditName.setText(product.name)
+		editTextProductEditName.setTextIfDiffer(product.name)
 		checkProductEditAvailable.isChecked = product.available
 	}
 
-	private fun navigateBack() = fragmentManager?.popBackStack()
+	private fun navigateBack() = navController.popBackStack()
 	
 	private fun observeEditedParameters() = viewModel.editedParametersLiveData.observe(viewLifecycleOwner) {
 		adapter.parameters = it

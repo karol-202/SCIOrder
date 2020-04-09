@@ -9,6 +9,7 @@ import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
+import pl.karol202.sciorder.client.android.common.ui.setTextIfDiffer
 import pl.karol202.sciorder.common.model.ProductParameter
 import pl.karol202.sciorder.common.validation.*
 
@@ -34,7 +35,7 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 		{
 			this.parameter = item ?: throw IllegalArgumentException()
 
-			editTextProductEditParamName.setText(item.name)
+			editTextProductEditParamName.setTextIfDiffer(item.name)
 			
 			spinnerProductEditParamType.setOnItemSelectedListener { updateParameterType(it as ProductParameter.Type) }
 			spinnerProductEditParamType.setSelection(item.type.ordinal)
@@ -98,12 +99,12 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 		private const val TYPE_PARAM = 0
 		private const val TYPE_NULL = 1
 		
-		private const val NULL_ITEM_ID = -1
+		private const val NULL_ITEM_ID = -1L
 	}
 
 	var parameters: List<ProductParameter>
 		get() = items.filterNotNull()
-		set(value) { items = value + null }
+		set(value) { items = value.plus(element = null) /* Fixed in new type inference */ }
 
 	override fun getLayout(viewType: Int) = when(viewType)
 	{

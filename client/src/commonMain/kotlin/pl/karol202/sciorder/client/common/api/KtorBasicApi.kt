@@ -6,6 +6,8 @@ import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.http.HttpMethod
 import kotlinx.coroutines.withTimeout
+import pl.karol202.sciorder.client.common.Configuration
+import pl.karol202.sciorder.client.common.util.logDebug
 
 class KtorBasicApi(@PublishedApi internal val httpClient: HttpClient,
                    @PublishedApi internal val baseUrl: String,
@@ -45,5 +47,8 @@ class KtorBasicApi(@PublishedApi internal val httpClient: HttpClient,
 
 	@PublishedApi
 	internal inline fun <T> executeForApiResponse(block: () -> T) =
-			runCatching(block).map { ApiResponse.fromData(it) }.getOrElse { ApiResponse.fromThrowable(it) }
+			runCatching(block).map { ApiResponse.fromData(it) }.getOrElse { ApiResponse.fromThrowable(it).logIfDebug() }
+	
+	@PublishedApi
+	internal fun ApiResponse.Error.logIfDebug() = also { if(Configuration.debug) logDebug(this) }
 }

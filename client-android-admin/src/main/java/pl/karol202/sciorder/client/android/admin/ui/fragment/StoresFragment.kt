@@ -2,6 +2,7 @@ package pl.karol202.sciorder.client.android.admin.ui.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,12 +12,13 @@ import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.StoreAdapter
 import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeNonNull
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminLoginAndroidViewModel
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminStoresAndroidViewModel
 
-abstract class StoresFragment : FragmentWithMenu()
+class StoresFragment : FragmentWithMenu()
 {
 	private val loginViewModel by sharedViewModel<AdminLoginAndroidViewModel>()
 	private val storesViewModel by sharedViewModel<AdminStoresAndroidViewModel>()
@@ -30,6 +32,8 @@ abstract class StoresFragment : FragmentWithMenu()
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
+		handleBackPress()
+		
 		initRefreshLayout()
 		initRecycler()
 		
@@ -39,6 +43,10 @@ abstract class StoresFragment : FragmentWithMenu()
 		observeLoadingError()
 		observeUpdateError()
 		observeSelectedStore()
+	}
+	
+	private fun handleBackPress() = requireActivity().onBackPressedDispatcher.addCallback(this) {
+		requireActivity().finish()
 	}
 	
 	private fun initRefreshLayout() = refreshLayoutStores.setOnRefreshListener { storesViewModel.refreshStores() }
@@ -61,11 +69,11 @@ abstract class StoresFragment : FragmentWithMenu()
 		if(!it) refreshLayoutStores.isRefreshing = false
 	}
 	
-	private fun observeLoadingError() = storesViewModel.loadingErrorEventLiveData.observe(viewLifecycleOwner) {
+	private fun observeLoadingError() = storesViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) {
 		showSnackbar(R.string.text_loading_error)
 	}
 	
-	private fun observeUpdateError() = storesViewModel.updateEventLiveData.observe(viewLifecycleOwner) {
+	private fun observeUpdateError() = storesViewModel.updateEventLiveData.observeEvent(viewLifecycleOwner) {
 		showSnackbar(R.string.text_update_error)
 	}
 	
@@ -73,7 +81,7 @@ abstract class StoresFragment : FragmentWithMenu()
 		goToStoreFragment()
 	}
 	
-	private fun navigateBack() = parentFragmentManager.popBackStack()
+	private fun navigateBack() = navController.popBackStack()
 	
 	private fun goToStoreFragment() = navController.navigate(StoresFragmentDirections.actionStoresToStore())
 	

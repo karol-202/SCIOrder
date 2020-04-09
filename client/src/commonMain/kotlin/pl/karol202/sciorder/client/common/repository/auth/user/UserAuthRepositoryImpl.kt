@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.client.common.repository.auth.user
 
+import kotlinx.coroutines.flow.distinctUntilChanged
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.api.user.UserApi
 import pl.karol202.sciorder.client.common.database.dao.UserAuthDao
@@ -9,7 +10,7 @@ import pl.karol202.sciorder.common.request.UserLoginRequest
 class UserAuthRepositoryImpl(private val userAuthDao: UserAuthDao,
                              private val userApi: UserApi) : UserAuthRepository
 {
-	override fun getUserAuthFlow() = userAuthDao.get()
+	override fun getUserAuthFlow() = userAuthDao.get().distinctUntilChanged()
 	
 	override suspend fun login(request: UserLoginRequest): ApiResponse<UserLoginResult>
 	{

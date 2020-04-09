@@ -12,6 +12,7 @@ application.mainClassName = "io.ktor.server.netty.EngineMain"
 tasks {
     withType(KotlinCompile::class) {
         kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.freeCompilerArgs += listOf("-Xopt-in=io.ktor.util.KtorExperimentalAPI")
     }
 
     withType(ShadowJar::class) {

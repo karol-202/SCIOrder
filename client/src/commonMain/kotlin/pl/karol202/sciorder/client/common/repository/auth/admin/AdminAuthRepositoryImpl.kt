@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.client.common.repository.auth.admin
 
+import kotlinx.coroutines.flow.distinctUntilChanged
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.api.admin.AdminApi
 import pl.karol202.sciorder.client.common.database.dao.AdminAuthDao
@@ -9,7 +10,7 @@ import pl.karol202.sciorder.common.request.AdminLoginRequest
 class AdminAuthRepositoryImpl(private val adminAuthDao: AdminAuthDao,
                               private val adminApi: AdminApi) : AdminAuthRepository
 {
-	override fun getAdminAuthFlow() = adminAuthDao.get()
+	override fun getAdminAuthFlow() = adminAuthDao.get().distinctUntilChanged()
 	
 	override suspend fun login(request: AdminLoginRequest): ApiResponse<AdminLoginResult>
 	{

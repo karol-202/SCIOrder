@@ -47,5 +47,5 @@ interface Resource<T>
 
 	suspend fun reload()
 
-	fun close()
+	suspend fun close()
 }

@@ -6,7 +6,6 @@ import pl.karol202.sciorder.client.common.repository.auth.user.UserAuthRepositor
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
 import pl.karol202.sciorder.common.model.Product
 
 abstract class UserProductsViewModel(userAuthRepository: UserAuthRepository,
@@ -14,11 +13,14 @@ abstract class UserProductsViewModel(userAuthRepository: UserAuthRepository,
 {
 	private val userAuthFlow = userAuthRepository.getUserAuthFlow()
 	
+	private var productsResource: Resource<List<Product>>? = null
 	private val productsResourceChannel = userAuthFlow
 			.map { it?.let { productRepository.getProductsResource(it.authToken, it.store.id) } }
 			.scan(null as Resource<List<Product>>?) { previous, current -> previous?.close(); current }
+			.onEach { productsResource = it }
 			.onEach { it?.autoReloadIn(coroutineScope) }
-			.conflatedBroadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+			.conflate()
+			.broadcastIn(coroutineScope, CoroutineStart.DEFAULT)
 	
 	private val productsStateFlow = productsResourceChannel
 			.asFlow()
@@ -36,12 +38,11 @@ abstract class UserProductsViewModel(userAuthRepository: UserAuthRepository,
 			.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
 			.distinctUntilChanged()
 
-	fun refreshProducts() = launch { productsResourceChannel.valueOrNull?.reload() }
+	fun refreshProducts() = launch { productsResource?.reload() }
 	
-	override fun onCleared()
-	{
+	override fun onCleared() = launch {
 		super.onCleared()
-		productsResourceChannel.valueOrNull?.close()
-		productsResourceChannel.close()
+		productsResource?.close()
+		productsResourceChannel.cancel()
 	}
 }

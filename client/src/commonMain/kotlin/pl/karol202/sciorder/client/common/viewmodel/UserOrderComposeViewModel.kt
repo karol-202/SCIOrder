@@ -4,6 +4,7 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.first
 import pl.karol202.sciorder.client.common.api.ApiResponse
+import pl.karol202.sciorder.client.common.model.OrderEntryWithProduct
 import pl.karol202.sciorder.client.common.repository.auth.user.UserAuthRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.util.Event
@@ -22,7 +23,7 @@ abstract class UserOrderComposeViewModel(userAuthRepository: UserAuthRepository,
 	
 	private val userAuthFlow = userAuthRepository.getUserAuthFlow()
 
-	private val orderEntriesChannel = ConflatedBroadcastChannel<List<OrderedProduct>>(emptyList())
+	private val orderEntriesChannel = ConflatedBroadcastChannel<List<OrderEntryWithProduct>>(emptyList())
 	private val orderResultEventChannel = ConflatedBroadcastChannel<Event<OrderResult>>()
 	
 	protected val orderFlow = orderEntriesChannel.asFlow()
@@ -30,20 +31,20 @@ abstract class UserOrderComposeViewModel(userAuthRepository: UserAuthRepository,
 	
 	val orderEntriesOrNull get() = orderEntriesChannel.value.takeIf { it.isNotEmpty() }
 
-	fun addToOrder(orderedProduct: OrderedProduct)
+	fun addToOrder(orderedProduct: OrderEntryWithProduct)
 	{
 		val oldProducts = orderEntriesChannel.value
 		orderEntriesChannel.sendNow(oldProducts + orderedProduct)
 	}
 
-	fun replaceInOrder(oldProduct: OrderedProduct, newProduct: OrderedProduct)
+	fun replaceInOrder(oldProduct: OrderEntryWithProduct, newProduct: OrderEntryWithProduct)
 	{
 		val oldProducts = orderEntriesChannel.value
 		val newProducts = oldProducts.map { if(it == oldProduct) newProduct else it }
 		orderEntriesChannel.sendNow(newProducts)
 	}
 
-	fun removeFromOrder(orderedProduct: OrderedProduct)
+	fun removeFromOrder(orderedProduct: OrderEntryWithProduct)
 	{
 		val oldProducts = orderEntriesChannel.value
 		orderEntriesChannel.sendNow(oldProducts - orderedProduct)
@@ -52,15 +53,16 @@ abstract class UserOrderComposeViewModel(userAuthRepository: UserAuthRepository,
 	fun orderAll(details: Order.Details)
 	{
 		val orderedProducts = orderEntriesOrNull ?: return
-		val entries = orderedProducts.map { OrderEntryRequest(it.product.id, it.quantity, it.parameters) }
+		
+		val entries = orderedProducts.map { OrderEntryRequest(it.product!!.id, it.quantity, it.parameters) } // TODO Nullability
 		executeOrder(OrderRequest(entries, details))
 
 		orderEntriesChannel.sendNow(emptyList())
 	}
 
-	fun orderSingleProduct(orderedProduct: OrderedProduct, details: Order.Details)
+	fun orderSingleProduct(orderedProduct: OrderEntryWithProduct, details: Order.Details)
 	{
-		val entry = with(orderedProduct) { OrderEntryRequest(product.id, quantity, parameters) }
+		val entry = with(orderedProduct) { OrderEntryRequest(product!!.id, quantity, parameters) } // TODO Nullability
 		executeOrder(OrderRequest(listOf(entry), details))
 	}
 

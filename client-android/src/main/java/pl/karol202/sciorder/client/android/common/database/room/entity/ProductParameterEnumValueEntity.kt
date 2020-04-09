@@ -23,9 +23,8 @@ data class ProductParameterEnumValueEntity(@PrimaryKey(autoGenerate = true) over
 {
 	companion object : ToModelMapper<ProductParameterEnumValueEntity, String>
 	{
-		fun mapper(productParameterId: Long) = object : ToEntityMapper<ProductParameterEnumValueEntity, String>
-		{
-			override fun toEntity(model: String) = ProductParameterEnumValueEntity(0, productParameterId, model)
+		fun mapper(productParameterId: Long) = ToEntityMapper<ProductParameterEnumValueEntity, String> {
+			ProductParameterEnumValueEntity(0, productParameterId, it)
 		}
 		
 		override fun toModel(entity: ProductParameterEnumValueEntity) = entity.value

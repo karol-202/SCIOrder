@@ -15,7 +15,8 @@ abstract class DynamicAdapter<T> : BasicAdapter<T>()
 	override fun getItemCount() = items.size
 
 	override fun getItem(position: Int) = items[position]
-
-	// Returns value unique to each item, needed by diff calculator
-	abstract fun getItemId(item: T): Any
+	
+	override fun getItemId(position: Int) = getItemId(getItem(position))
+	
+	abstract fun getItemId(item: T): Long
 }

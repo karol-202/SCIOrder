@@ -11,8 +11,10 @@ data class StoreEntity(@PrimaryKey override val id: Long,
                        val name: String,
                        val selected: Boolean) : IdProvider<Long>
 {
-	companion object : ToEntityMapper<StoreEntity, Store>
+	companion object
 	{
-		override fun toEntity(model: Store) = StoreEntity(model.id, model.name, false)
+		fun mapper(selected: Boolean) = ToEntityMapper<StoreEntity, Store> {
+			StoreEntity(it.id, it.name, selected)
+		}
 	}
 }

@@ -31,16 +31,11 @@ class ProductRepositoryImpl(private val productDao: ProductDao,
 	}
 	
 	override suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductUpdateRequest):
-			ApiResponse<Unit>
+			ApiResponse<Product>
 	{
-		val previousProduct = productDao.getById(productId).first() ?: return ApiResponse.Error(LOCAL_INCONSISTENCY)
-		val updatedProduct = previousProduct.copy(name = product.name, available = product.available)
+		suspend fun updateLocally(product: Product) = productDao.update(product)
 		
-		suspend fun updateLocally() = productDao.update(updatedProduct)
-		suspend fun revertLocally() = productDao.update(previousProduct)
-		
-		updateLocally()
-		return productApi.updateProduct(token, storeId, productId, product).ifFailure { revertLocally() }
+		return productApi.updateProduct(token, storeId, productId, product).ifSuccess { updateLocally(it) }
 	}
 	
 	override suspend fun removeProduct(token: String, storeId: Long, productId: Long): ApiResponse<Unit>

@@ -2,23 +2,25 @@ package pl.karol202.sciorder.client.common.viewmodel
 
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.*
+import pl.karol202.sciorder.client.common.model.OrderWithProducts
 import pl.karol202.sciorder.client.common.repository.auth.user.UserAuthRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
-import pl.karol202.sciorder.common.model.Order
 
 abstract class UserOrdersViewModel(userAuthRepository: UserAuthRepository,
                                    private val orderRepository: OrderRepository) : ViewModel()
 {
 	private val userAuthFlow = userAuthRepository.getUserAuthFlow()
 	
+	private var ordersResource: Resource<List<OrderWithProducts>>? = null
 	private val ordersResourceChannel = userAuthFlow
 			.map { it?.let { orderRepository.getOrdersResource(it.authToken, it.store.id) } }
-			.scan(null as Resource<List<Order>>?) { previous, current -> previous?.close(); current }
+			.scan(null as Resource<List<OrderWithProducts>>?) { previous, current -> previous?.close(); current }
+			.onEach { ordersResource = it }
 			.onEach { it?.autoReloadIn(coroutineScope) }
-			.conflatedBroadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+			.conflate()
+			.broadcastIn(coroutineScope, CoroutineStart.DEFAULT)
 	
 	private val ordersStateFlow = ordersResourceChannel
 			.asFlow()
@@ -36,12 +38,11 @@ abstract class UserOrdersViewModel(userAuthRepository: UserAuthRepository,
 			.mapNotNull { if(it is Resource.State.Failure) Event(Unit) else null }
 			.distinctUntilChanged()
 
-	fun refreshOrders() = launch { ordersResourceChannel.valueOrNull?.reload() }
+	fun refreshOrders() = launch { ordersResource?.reload() }
 
-	override fun onCleared()
-	{
+	override fun onCleared() = launch {
 		super.onCleared()
-		ordersResourceChannel.valueOrNull?.close()
-		ordersResourceChannel.close()
+		ordersResource?.close()
+		ordersResourceChannel.cancel()
 	}
 }

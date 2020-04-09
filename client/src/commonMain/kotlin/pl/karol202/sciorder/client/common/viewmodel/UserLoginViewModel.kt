@@ -9,7 +9,6 @@ import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.repository.auth.user.UserAuthRepository
 import pl.karol202.sciorder.client.common.repository.order.OrderRepository
 import pl.karol202.sciorder.client.common.repository.product.ProductRepository
-import pl.karol202.sciorder.client.common.repository.product.parameter.ProductParameterRepository
 import pl.karol202.sciorder.client.common.repository.user.UserRepository
 import pl.karol202.sciorder.client.common.util.Event
 import pl.karol202.sciorder.client.common.util.generatePassword
@@ -20,8 +19,7 @@ import pl.karol202.sciorder.common.request.UserRequest
 abstract class UserLoginViewModel(private val userRepository: UserRepository,
                                   private val userAuthRepository: UserAuthRepository,
                                   private val orderRepository: OrderRepository,
-                                  private val productRepository: ProductRepository,
-                                  private val productParameterRepository: ProductParameterRepository) : ViewModel()
+                                  private val productRepository: ProductRepository) : ViewModel()
 {
 	enum class Error
 	{

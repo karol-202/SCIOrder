@@ -1,7 +1,7 @@
 package pl.karol202.sciorder.client.android.common.database.dao
 
 import com.tfcporciuncula.flow.FlowSharedPreferences
-import kotlinx.serialization.internal.nullable
+import kotlinx.serialization.builtins.nullable
 import pl.karol202.sciorder.client.android.common.database.flowsharedpreferences.FlowSharedPreferencesDao
 import pl.karol202.sciorder.client.common.database.dao.AdminAuthDao
 import pl.karol202.sciorder.common.model.AdminLoginResult

@@ -9,7 +9,7 @@ interface ProductApi
 {
 	suspend fun addProduct(token: String, storeId: Long, product: ProductCreateRequest): ApiResponse<Product>
 
-	suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductUpdateRequest): ApiResponse<Unit>
+	suspend fun updateProduct(token: String, storeId: Long, productId: Long, product: ProductUpdateRequest): ApiResponse<Product>
 
 	suspend fun removeProduct(token: String, storeId: Long, productId: Long): ApiResponse<Unit>
 

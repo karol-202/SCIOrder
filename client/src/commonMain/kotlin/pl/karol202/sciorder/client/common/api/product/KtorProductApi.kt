@@ -19,7 +19,7 @@ class KtorProductApi(private val basicApi: KtorBasicApi) : ProductApi
 	override suspend fun updateProduct(token: String,
 	                                   storeId: Long,
 	                                   productId: Long,
-	                                   product: ProductUpdateRequest) = basicApi.put<Unit> {
+	                                   product: ProductUpdateRequest) = basicApi.put<Product> {
 		relativePath("api/stores/$storeId/products/$productId")
 		authToken(token)
 		jsonBody(product)

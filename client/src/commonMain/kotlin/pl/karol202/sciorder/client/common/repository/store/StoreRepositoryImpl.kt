@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.client.common.repository.store
 
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.api.ApiResponse.Error.Type.LOCAL_INCONSISTENCY
@@ -15,7 +16,7 @@ import pl.karol202.sciorder.common.request.StoreRequest
 class StoreRepositoryImpl(private val storeDao: StoreDao,
                           private val storeApi: StoreApi) : StoreRepository
 {
-	override fun getSelectedStoreFlow() = storeDao.getSelected()
+	override fun getSelectedStoreFlow() = storeDao.getSelected().distinctUntilChanged()
 	
 	override fun getStoresResource(token: String) =
 			StandardResource(updateIntervalMillis = 5.minutes,

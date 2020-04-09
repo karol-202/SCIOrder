@@ -2,11 +2,27 @@ package pl.karol202.sciorder.client.android.common.database.room
 
 interface ToEntityMapper<E, M>
 {
+	companion object
+	{
+		operator fun <E, M> invoke(toEntity: (M) -> E) = object : ToEntityMapper<E, M>
+		{
+			override fun toEntity(model: M) = toEntity(model)
+		}
+	}
+	
 	fun toEntity(model: M): E
 }
 
 interface ToModelMapper<E, M>
 {
+	companion object
+	{
+		operator fun <E, M> invoke(toModel: (E) -> M) = object : ToModelMapper<E, M>
+		{
+			override fun toModel(entity: E) = toModel(entity)
+		}
+	}
+	
 	fun toModel(entity: E): M
 }
 

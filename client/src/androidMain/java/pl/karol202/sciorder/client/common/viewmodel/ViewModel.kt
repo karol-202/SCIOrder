@@ -2,12 +2,12 @@ package pl.karol202.sciorder.client.common.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.plus
 
-// Typealiasing to Android's ViewModel is impossible due to inconsistency between Java and Kotlin protected modifier
-// (protected void onCleared()).
 actual abstract class ViewModel : ViewModel()
 {
-	actual val coroutineScope get() = viewModelScope
+	actual val coroutineScope get() = viewModelScope + Dispatchers.Default
 	
 	actual override fun onCleared() { }
 }

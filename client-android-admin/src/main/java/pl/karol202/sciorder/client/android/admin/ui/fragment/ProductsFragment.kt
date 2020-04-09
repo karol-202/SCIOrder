@@ -11,10 +11,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductAdapter
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
-import pl.karol202.sciorder.client.android.common.util.alertDialog
-import pl.karol202.sciorder.client.android.common.util.ctx
-import pl.karol202.sciorder.client.android.common.util.observeEvent
-import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductEditAndroidViewModel
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductsAndroidViewModel
 import pl.karol202.sciorder.common.model.Product
@@ -67,7 +64,7 @@ class ProductsFragment : InflatedFragment()
 		showSnackbar(R.string.text_loading_error)
 	}
 	
-	private fun observeEditedProduct() = productEditViewModel.editedProductLiveData.observe(viewLifecycleOwner) {
+	private fun observeEditedProduct() = productEditViewModel.editedProductLiveData.observeNonNull(viewLifecycleOwner) {
 		navigateToProductEditFragment()
 	}
 

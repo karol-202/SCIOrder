@@ -25,8 +25,8 @@ class ProductControllerImpl(private val permissionService: PermissionService,
 		val product = requireBody<ProductUpdateRequest> { isValid }
 		requirePrincipal { permissionService.canUpdateProduct(it, storeId) }
 		
-		productService.updateProduct(storeId, productId, product)
-		ok()
+		val newProduct = productService.updateProduct(storeId, productId, product)
+		ok(newProduct)
 	}
 	
 	override suspend fun deleteProduct(handler: RequestHandler) = handler {

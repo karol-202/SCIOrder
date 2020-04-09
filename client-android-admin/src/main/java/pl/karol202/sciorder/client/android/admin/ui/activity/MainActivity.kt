@@ -1,17 +1,18 @@
 package pl.karol202.sciorder.client.android.admin.ui.activity
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.NavigationUI
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.karol202.sciorder.client.android.admin.R
 
 class MainActivity : AppCompatActivity()
 {
 	private val navController by lazy { findNavController(R.id.fragmentNavHost) }
-	private val appBarConfiguration by lazy { AppBarConfiguration(setOf(R.id.loginFragment, R.id.mainFragment)) }
+	private val appBarConfiguration by lazy { AppBarConfiguration(setOf(R.id.loginFragment, R.id.storesFragment)) }
 	
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
@@ -24,13 +25,13 @@ class MainActivity : AppCompatActivity()
 	private fun initToolbar()
 	{
 		setSupportActionBar(toolbar)
-		toolbar.setupWithNavController(navController, appBarConfiguration)
+		// setupWithNavController(Toolbar, NavController) not used in order to make up button calling onOptionsItemSelected
+		NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 	}
 	
-	override fun onBackPressed()
+	override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId)
 	{
-		if(!shouldBlockBackButton()) super.onBackPressed()
+		android.R.id.home -> onBackPressedDispatcher.onBackPressed().let { true }
+		else -> super.onOptionsItemSelected(item)
 	}
-	
-	private fun shouldBlockBackButton() = navController.currentDestination?.id == R.id.mainFragment
 }

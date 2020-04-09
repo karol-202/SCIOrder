@@ -6,8 +6,10 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import pl.karol202.sciorder.client.common.api.ApiResponse
 import pl.karol202.sciorder.client.common.util.tryDoLocking
 
@@ -46,7 +48,9 @@ abstract class AbstractResource<T>(databaseFlow: Flow<T>) : Resource<T>
 	private var autoReloadJob: Job? = null
 
 	private val stateChannel = ConflatedBroadcastChannel<StateType>(StateType.Success)
-	override val asFlow = databaseFlow.combine(stateChannel.asFlow()) { data, state -> state.toResourceState(data) }
+	override val asFlow = databaseFlow
+			.combine(stateChannel.asFlow()) { data, state -> state.toResourceState(data) }
+			.distinctUntilChanged()
 
 	override suspend fun autoReloadIn(coroutineScope: CoroutineScope)
 	{
@@ -79,9 +83,8 @@ abstract class AbstractResource<T>(databaseFlow: Flow<T>) : Resource<T>
 
 	protected abstract suspend fun saveToDatabase(data: T)
 
-	override fun close()
-	{
-		stateChannel.cancel()
+	override suspend fun close() = reloadMutex.withLock {
 		autoReloadJob?.cancel()
+		stateChannel.cancel()
 	}
 }

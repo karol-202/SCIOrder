@@ -16,7 +16,7 @@ internal fun HttpRequestBuilder.relativePath(path: String) = url {
 internal fun HttpRequestBuilder.parameters(key: String, values: List<Any?>) = values.forEach { parameter(key, it) }
 
 @PublishedApi
-internal fun HttpRequestBuilder.authToken(value: String) = header(HEADER_AUTHENTICATION, "${AuthScheme.Bearer} $value")
+internal fun HttpRequestBuilder.authToken(value: String) = header(HEADER_AUTHORIZATION, "${AuthScheme.Bearer} $value")
 
 @PublishedApi
 internal fun HttpRequestBuilder.jsonBody(body: Any)

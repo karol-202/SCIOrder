@@ -35,4 +35,7 @@ interface StoreEntityDao : CrudDao<StoreEntity>
 	@Transaction
 	@Query("SELECT * FROM StoreEntity")
 	fun getAll(): Flow<List<StoreWithProductsAndOrders>>
+	
+	@Query("SELECT * FROM StoreEntity")
+	fun getAllNow(): List<StoreWithProductsAndOrders>
 }

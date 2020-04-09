@@ -2,15 +2,15 @@ object Versions
 {
 	// Common
 	const val KOTLIN = "1.3.71"
-	const val KOTLINX_SERIALIZATION = "0.14.0"
-	const val KTOR = "1.3.1"
-	const val KOIN = "2.0.1"
+	const val KOTLINX_SERIALIZATION = "0.20.0"
+	const val KTOR = "1.3.2"
+	const val KOIN = "2.1.5"
 
 	// Client
-	const val COROUTINES = "1.3.3"
+	const val COROUTINES = "1.3.5"
 
 	// Android
-	const val ANDROID_GRADLE_PLUGIN = "3.5.3"
+	const val ANDROID_GRADLE_PLUGIN = "3.6.0"
 	const val ANDROID_KTX = "1.2.0"
 	const val ANDROID_APPCOMPAT = "1.1.0"
 	const val ANDROID_FRAGMENT = "1.2.1"

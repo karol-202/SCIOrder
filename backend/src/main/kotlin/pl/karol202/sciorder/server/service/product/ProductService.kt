@@ -8,7 +8,7 @@ interface ProductService
 {
 	suspend fun insertProduct(storeId: Long, product: ProductCreateRequest): Product
 	
-	suspend fun updateProduct(storeId: Long, productId: Long, product: ProductUpdateRequest)
+	suspend fun updateProduct(storeId: Long, productId: Long, product: ProductUpdateRequest): Product
 	
 	suspend fun deleteProduct(storeId: Long, productId: Long)
 	

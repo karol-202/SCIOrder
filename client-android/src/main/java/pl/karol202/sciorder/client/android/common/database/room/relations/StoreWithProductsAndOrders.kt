@@ -6,6 +6,7 @@ import pl.karol202.sciorder.client.android.common.database.room.*
 import pl.karol202.sciorder.client.android.common.database.room.entity.OrderEntity
 import pl.karol202.sciorder.client.android.common.database.room.entity.ProductEntity
 import pl.karol202.sciorder.client.android.common.database.room.entity.StoreEntity
+import pl.karol202.sciorder.client.android.common.database.room.model.StoreWithSelection
 import pl.karol202.sciorder.common.model.Store
 
 data class StoreWithProductsAndOrders(@Embedded val store: StoreEntity,
@@ -18,16 +19,17 @@ data class StoreWithProductsAndOrders(@Embedded val store: StoreEntity,
                                                 entityColumn = "storeId")
                                       val orders: List<OrderWithEntries>)
 {
-	companion object : ToModelMapper<StoreWithProductsAndOrders, Store>, ToEntityMapper<StoreWithProductsAndOrders, Store>
+	companion object : ToModelMapper<StoreWithProductsAndOrders, Store>,
+	                   ToEntityMapper<StoreWithProductsAndOrders, StoreWithSelection>
 	{
 		override fun toModel(entity: StoreWithProductsAndOrders) = with(entity) {
 			Store(store.id, store.name, products.toModels(ProductWithParameters), orders.toModels(OrderWithEntries))
 		}
 		
-		override fun toEntity(model: Store) =
-				StoreWithProductsAndOrders(model.toEntity(StoreEntity),
-				                           model.products.toEntities(ProductWithParameters),
-				                           model.orders.toEntities(OrderWithEntries))
+		override fun toEntity(model: StoreWithSelection) =
+				StoreWithProductsAndOrders(model.store.toEntity(StoreEntity.mapper(model.selected)),
+				                           model.store.products.toEntities(ProductWithParameters),
+				                           model.store.orders.toEntities(OrderWithEntries))
 	}
 }
 

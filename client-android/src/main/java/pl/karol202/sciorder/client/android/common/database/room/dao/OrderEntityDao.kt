@@ -34,4 +34,7 @@ interface OrderEntityDao : CrudDao<OrderEntity>
 	@Transaction
 	@Query("SELECT * FROM OrderEntity WHERE storeId = :storeId")
 	fun getByStoreId(storeId: Long): Flow<List<OrderWithEntries>>
+	
+	@Query("SELECT * FROM OrderEntity WHERE storeId = :storeId")
+	fun getByStoreIdNow(storeId: Long): List<OrderWithEntries>
 }

@@ -20,7 +20,7 @@ fun repositoryModule() = module {
 	single<AdminRepository> { AdminRepositoryImpl(get()) }
 	single<AdminAuthRepository> { AdminAuthRepositoryImpl(get(), get()) }
 	single<UserAuthRepository> { UserAuthRepositoryImpl(get(), get()) }
-	single<OrderRepository> { OrderRepositoryImpl(get(), get()) }
+	single<OrderRepository> { OrderRepositoryImpl(get(), get(), get(), get()) }
 	single<ProductRepository> { ProductRepositoryImpl(get(), get()) }
 	single<StoreRepository> { StoreRepositoryImpl(get(), get()) }
 	single<UserRepository> { UserRepositoryImpl(get(), get()) }

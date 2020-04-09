@@ -1,7 +1,6 @@
 package pl.karol202.sciorder.client.android.common.database.dao
 
 import androidx.room.withTransaction
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import pl.karol202.sciorder.client.android.common.database.room.LocalDatabase
 import pl.karol202.sciorder.client.android.common.database.room.dao.OrderEntityDao
@@ -38,7 +37,7 @@ class OrderDaoImpl(private val localDatabase: LocalDatabase,
 	override suspend fun deleteByStoreId(storeId: Long) = orderEntityDao.deleteByStoreId(storeId)
 	
 	override suspend fun dispatchByStoreId(storeId: Long, newOrders: List<Order>) = localDatabase.withTransaction {
-		val oldEntities = orderEntityDao.getByStoreId(storeId).first()
+		val oldEntities = orderEntityDao.getByStoreIdNow(storeId)
 		val newEntities = newOrders.toEntities(OrderWithEntries)
 		
 		orderEntityDao.dispatch(oldEntities.orders, newEntities.orders)

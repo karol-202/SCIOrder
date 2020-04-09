@@ -9,7 +9,6 @@ import pl.karol202.sciorder.client.common.repository.auth.admin.AdminAuthReposit
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
 import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.model.Store
 import pl.karol202.sciorder.common.request.StoreRequest
@@ -26,11 +25,14 @@ abstract class AdminStoresViewModel(adminAuthRepository: AdminAuthRepository,
 	
 	private val adminAuthFlow = adminAuthRepository.getAdminAuthFlow()
 	
+	private var storesResource: Resource<List<Store>>? = null
 	private val storesResourceChannel = adminAuthFlow
 			.map { it?.let { storeRepository.getStoresResource(it.authToken) } }
 			.scan(null as Resource<List<Store>>?) { previous, current -> previous?.close(); current }
+			.onEach { storesResource = it }
 			.onEach { it?.autoReloadIn(coroutineScope) }
-			.conflatedBroadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+			.conflate()
+			.broadcastIn(coroutineScope, CoroutineStart.DEFAULT)
 	
 	private val storesStateFlow = storesResourceChannel
 			.asFlow()
@@ -55,7 +57,7 @@ abstract class AdminStoresViewModel(adminAuthRepository: AdminAuthRepository,
 	
 	protected val selectedStoreFlow = storeRepository.getSelectedStoreFlow()
 	
-	fun refreshStores() = launch { storesResourceChannel.valueOrNull?.reload() }
+	fun refreshStores() = launch { storesResource?.reload() }
 	
 	fun addStore(store: StoreRequest) = launch {
 		val token = adminAuthFlow.first()?.authToken ?: return@launch
@@ -75,10 +77,9 @@ abstract class AdminStoresViewModel(adminAuthRepository: AdminAuthRepository,
 		storeRepository.selectStore(storeId)
 	}
 	
-	override fun onCleared()
-	{
+	override fun onCleared() = launch {
 		super.onCleared()
-		storesResourceChannel.valueOrNull?.close()
+		storesResource?.close()
 		storesResourceChannel.cancel()
 	}
 }

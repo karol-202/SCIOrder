@@ -1,5 +1,6 @@
 package pl.karol202.sciorder.server.service
 
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import pl.karol202.sciorder.server.config.Config
 import pl.karol202.sciorder.server.config.getProperty
@@ -31,6 +32,8 @@ import pl.karol202.sciorder.server.service.user.TransactionUserService
 import pl.karol202.sciorder.server.service.user.UserService
 import pl.karol202.sciorder.server.service.user.UserServiceImpl
 
+private val NO_TRANSACTION = named("no_transaction")
+
 fun serviceModule() = module {
 	single<PermissionService> { PermissionServiceImpl(get()) }
 	single<TransactionService> { TransactionServiceImpl(dbUri = getProperty(Config.DB_URI),
@@ -38,11 +41,20 @@ fun serviceModule() = module {
 	                                                    dbUser = getProperty(Config.DB_USER),
 	                                                    dbPassword = getProperty(Config.DB_PASSWORD)) }
 	single<HashService> { SHA256HashService() }
-	single<ProductService> { TransactionProductService(ProductServiceImpl(get()), get()) }
-	single<ProductParameterService> { TransactionProductParameterService(ProductParameterServiceImpl(), get()) }
-	single<OrderService> { TransactionOrderService(OrderServiceImpl(), get()) }
-	single<StoreService> { TransactionStoreService(StoreServiceImpl(), get()) }
-	single<StoreAdminService> { TransactionStoreAdminService(StoreAdminServiceImpl(), get()) }
-	single<AdminService> { TransactionAdminService(AdminServiceImpl(get(), get()), get()) }
-	single<UserService> { TransactionUserService(UserServiceImpl(get(), get()), get()) }
+	
+	single<ProductService>(NO_TRANSACTION) { ProductServiceImpl(get(NO_TRANSACTION)) }
+	single<ProductParameterService>(NO_TRANSACTION) { ProductParameterServiceImpl() }
+	single<OrderService>(NO_TRANSACTION) { OrderServiceImpl() }
+	single<StoreService>(NO_TRANSACTION) { StoreServiceImpl() }
+	single<StoreAdminService>(NO_TRANSACTION) { StoreAdminServiceImpl() }
+	single<AdminService>(NO_TRANSACTION) { AdminServiceImpl(get(), get()) }
+	single<UserService>(NO_TRANSACTION) { UserServiceImpl(get(), get()) }
+	
+	single<ProductService> { TransactionProductService(get(NO_TRANSACTION), get()) }
+	single<ProductParameterService> { TransactionProductParameterService(get(NO_TRANSACTION), get()) }
+	single<OrderService> { TransactionOrderService(get(NO_TRANSACTION), get()) }
+	single<StoreService> { TransactionStoreService(get(NO_TRANSACTION), get()) }
+	single<StoreAdminService> { TransactionStoreAdminService(get(NO_TRANSACTION), get()) }
+	single<AdminService> { TransactionAdminService(get(NO_TRANSACTION), get()) }
+	single<UserService> { TransactionUserService(get(NO_TRANSACTION), get()) }
 }

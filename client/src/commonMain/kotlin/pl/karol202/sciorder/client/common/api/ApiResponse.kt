@@ -2,8 +2,8 @@ package pl.karol202.sciorder.client.common.api
 
 import io.ktor.client.features.ResponseException
 import io.ktor.http.HttpStatusCode
+import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.io.IOException
 
 sealed class ApiResponse<out T>
 {
@@ -30,11 +30,10 @@ sealed class ApiResponse<out T>
 		}
 	}
 
-	class Success<T>(val data: T) : ApiResponse<T>()
-
-	// Message is for debugging purposes
-	class Error(val type: Type,
-	            val message: String = "") : ApiResponse<Nothing>()
+	data class Success<T>(val data: T) : ApiResponse<T>()
+	
+	data class Error(val type: Type,
+	                 val message: String = "") : ApiResponse<Nothing>()
 	{
 		enum class Type
 		{
@@ -62,7 +61,7 @@ sealed class ApiResponse<out T>
 	                 onError: suspend (Error) -> Unit = { }): ApiResponse<T> = when(this)
 	{
 		is Success -> apply { onSuccess(data) }
-		is Error -> apply { onError(this) }
+		is Error -> apply { onError(this as Error /*Fixed in new type inference*/) }
 	}
 
 	suspend fun ifSuccess(onSuccess: suspend (T) -> Unit) = fold(onSuccess = onSuccess)

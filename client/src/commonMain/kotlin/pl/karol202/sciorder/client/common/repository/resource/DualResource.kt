@@ -29,7 +29,7 @@ class DualResource<T1, T2, T>(updateIntervalMillis: Long,
 	
 	override suspend fun reload() = delegate.reload()
 	
-	override fun close() = delegate.close()
+	override suspend fun close() = delegate.close()
 	
 	private suspend fun loadFromApi() = coroutineScope {
 		val async1 = async { source1.getFromApi() }

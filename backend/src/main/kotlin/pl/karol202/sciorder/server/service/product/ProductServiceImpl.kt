@@ -25,7 +25,7 @@ class ProductServiceImpl(private val productParameterService: ProductParameterSe
 		return productEntity.map()
 	}
 	
-	override suspend fun updateProduct(storeId: Long, productId: Long, product: ProductUpdateRequest)
+	override suspend fun updateProduct(storeId: Long, productId: Long, product: ProductUpdateRequest): Product
 	{
 		val productEntity = ProductEntity.findById(productId)?.takeIf(storeId = storeId) ?: notFound()
 		productEntity.name = product.name
@@ -33,6 +33,7 @@ class ProductServiceImpl(private val productParameterService: ProductParameterSe
 		product.createdParameters.forEach { insertParameter(storeId, productEntity.id.value, it) }
 		product.updatedParameters.forEach { (id, param) -> updateParameter(storeId, productEntity.id.value, id, param) }
 		product.removedParameters.forEach { deleteParameter(storeId, productEntity.id.value, it) }
+		return productEntity.map()
 	}
 	
 	override suspend fun deleteProduct(storeId: Long, productId: Long)

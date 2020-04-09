@@ -15,5 +15,7 @@ class FlowSharedPreferencesDao<T>(private val flowSharedPreferences: FlowSharedP
 		flowSharedPreferences.getString(keyName).setAndCommit(serialized)
 	}
 	
-	fun get() = flowSharedPreferences.getString(keyName).asFlow().map { Json.parse(serializer, it) }
+	fun get() = flowSharedPreferences.getString(keyName)
+			.asFlow()
+			.map { if(it.isNotBlank()) Json.parse(serializer, it) else null }
 }

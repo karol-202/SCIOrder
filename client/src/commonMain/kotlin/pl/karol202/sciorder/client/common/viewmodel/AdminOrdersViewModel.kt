@@ -11,7 +11,6 @@ import pl.karol202.sciorder.client.common.repository.product.ProductRepository
 import pl.karol202.sciorder.client.common.repository.resource.Resource
 import pl.karol202.sciorder.client.common.repository.store.StoreRepository
 import pl.karol202.sciorder.client.common.util.Event
-import pl.karol202.sciorder.client.common.util.conflatedBroadcastIn
 import pl.karol202.sciorder.client.common.util.sendNow
 import pl.karol202.sciorder.common.model.Order
 
@@ -31,14 +30,17 @@ abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
 	private val adminAuthFlow = adminAuthRepository.getAdminAuthFlow()
 	private val selectedStoreFlow = storeRepository.getSelectedStoreFlow()
 	
+	private var ordersResource: Resource<List<OrderWithProducts>>? = null
 	private val ordersResourceChannel = adminAuthFlow
 			.combine(selectedStoreFlow) { adminAuth, selectedStore ->
 				if(adminAuth == null || selectedStore == null) null
 				else orderRepository.getOrdersResource(adminAuth.authToken, selectedStore.id)
 			}
 			.scan(null as Resource<List<OrderWithProducts>>?) { previous, current -> previous?.close(); current }
+			.onEach { ordersResource = it }
 			.onEach { it?.autoReloadIn(coroutineScope) }
-			.conflatedBroadcastIn(coroutineScope, start = CoroutineStart.DEFAULT)
+			.conflate()
+			.broadcastIn(coroutineScope, CoroutineStart.DEFAULT)
 	
 	private val ordersStateFlow = ordersResourceChannel
 			.asFlow()
@@ -65,7 +67,7 @@ abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
 		get() = filterChannel.value
 		set(value) { filterChannel.sendNow(value) }
 
-	fun refreshOrders() = launch { ordersResourceChannel.valueOrNull?.reload() }
+	fun refreshOrders() = launch { ordersResource?.reload() }
 
 	fun updateOrderStatus(orderId: Long, status: Order.Status) = launch {
 		val token = adminAuthFlow.first()?.authToken ?: return@launch
@@ -81,11 +83,10 @@ abstract class AdminOrdersViewModel(adminAuthRepository: AdminAuthRepository,
 
 	private suspend fun <T> ApiResponse<T>.handleError() = ifFailure { updateErrorEventChannel.sendNow(Event(Unit)) }
 
-	override fun onCleared()
-	{
+	override fun onCleared() = launch {
 		super.onCleared()
-		ordersResourceChannel.valueOrNull?.close()
-		ordersResourceChannel.close()
+		ordersResource?.close()
+		ordersResourceChannel.cancel()
 		filterChannel.cancel()
 		updateErrorEventChannel.cancel()
 	}

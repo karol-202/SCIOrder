@@ -28,7 +28,13 @@ interface ProductEntityDao : CrudDao<ProductEntity>
 	@Query("SELECT * FROM ProductEntity WHERE id IN(:productIds)")
 	fun getByIds(productIds: List<Long>): Flow<List<ProductWithParameters>>
 	
+	@Query("SELECT * FROM ProductEntity WHERE id IN(:productIds)")
+	fun getByIdsNow(productIds: List<Long>): List<ProductWithParameters>
+	
 	@Transaction
 	@Query("SELECT * FROM ProductEntity WHERE storeId = :storeId")
 	fun getByStoreId(storeId: Long): Flow<List<ProductWithParameters>>
+	
+	@Query("SELECT * FROM ProductEntity WHERE storeId = :storeId")
+	fun getByStoreIdNow(storeId: Long): List<ProductWithParameters>
 }

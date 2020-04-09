@@ -13,7 +13,8 @@ data class ProductParameterWithEnumValues(@Embedded val parameter: ProductParame
                                                     entityColumn = "productParameterId")
                                           val enumValues: List<ProductParameterEnumValueEntity>)
 {
-	companion object : ToModelMapper<ProductParameterWithEnumValues, ProductParameter>, ToEntityMapper<ProductParameterWithEnumValues, ProductParameter>
+	companion object : ToModelMapper<ProductParameterWithEnumValues, ProductParameter>,
+	                   ToEntityMapper<ProductParameterWithEnumValues, ProductParameter>
 	{
 		override fun toEntity(model: ProductParameter) = ProductParameterWithEnumValues(
 				model.toEntity(ProductParameterEntity),
