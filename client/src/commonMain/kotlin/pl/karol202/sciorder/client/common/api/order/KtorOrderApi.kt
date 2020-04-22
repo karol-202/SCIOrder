@@ -1,6 +1,5 @@
 package pl.karol202.sciorder.client.common.api.order
 
-import io.ktor.client.request.parameter
 import pl.karol202.sciorder.client.common.api.KtorBasicApi
 import pl.karol202.sciorder.client.common.api.authToken
 import pl.karol202.sciorder.client.common.api.jsonBody
@@ -12,6 +11,7 @@ class KtorOrderApi(private val basicApi: KtorBasicApi) : OrderApi
 {
 	override suspend fun addOrder(token: String, storeId: Long, order: OrderRequest) = basicApi.post<Order> {
 		relativePath("api/stores/$storeId/orders")
+		authToken(token)
 		jsonBody(order)
 	}
 
@@ -21,7 +21,7 @@ class KtorOrderApi(private val basicApi: KtorBasicApi) : OrderApi
 	                                       status: Order.Status) = basicApi.put<Unit> {
 		relativePath("api/stores/$storeId/orders/$orderId/status")
 		authToken(token)
-		parameter("status", status)
+		jsonBody(status)
 	}
 
 	override suspend fun removeAllOrders(token: String, storeId: Long) = basicApi.delete<Unit> {
