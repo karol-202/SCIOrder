@@ -10,8 +10,12 @@ import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
 import pl.karol202.sciorder.client.android.common.ui.setOnItemSelectedListener
 import pl.karol202.sciorder.client.android.common.ui.setTextIfDiffer
+import pl.karol202.sciorder.client.android.common.ui.simpleItemAnimator
 import pl.karol202.sciorder.common.model.ProductParameter
-import pl.karol202.sciorder.common.validation.*
+import pl.karol202.sciorder.common.validation.MAX_NAME_LENGTH
+import pl.karol202.sciorder.common.validation.areEnumValuesValidFor
+import pl.karol202.sciorder.common.validation.isNameNotBlank
+import pl.karol202.sciorder.common.validation.isNameShortEnough
 
 class ProductParamAdapter(private val onParamAdd: () -> Unit,
                           private val onParamEdit: (ProductParameter) -> Unit,
@@ -19,6 +23,8 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 {
 	inner class ParamViewHolder(view: View) : BasicAdapter.ViewHolder<ProductParameter?>(view)
 	{
+		private val attrsAdapter = ProductParamAttrAdapter { updateParameterAttributes(it) }
+		
 		private var parameter: ProductParameter? = null
 
 		init
@@ -29,6 +35,8 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 			spinnerProductEditParamType.adapter = ProductParamTypeAdapter()
 
 			recyclerProductEditParamAttrs.layoutManager = LinearLayoutManager(ctx)
+			recyclerProductEditParamAttrs.adapter = attrsAdapter
+			recyclerProductEditParamAttrs.simpleItemAnimator?.supportsChangeAnimations = false
 		}
 
 		override fun bind(item: ProductParameter?)
@@ -42,7 +50,7 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 
 			buttonProductEditParamRemove.setOnClickListener { onParamRemove(item.id) }
 			
-			recyclerProductEditParamAttrs.adapter = ProductParamAttrAdapter.fromParam(item) { updateParameterAttributes(it) }
+			attrsAdapter.parameter = item
 			
 			validate(item)
 		}
@@ -57,10 +65,7 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 			
 			val errorText = when
 			{
-				!attributes.isMinimalValueValidFor(type) || !attributes.isMaximalValueValidFor(type) ->
-					ctx.getString(R.string.text_product_edit_param_error_limits)
 				!attributes.areEnumValuesValidFor(type) -> ctx.getString(R.string.text_product_edit_param_error_empty_enum)
-				!attributes.isDefaultValueValidFor(type) -> ctx.getString(R.string.text_product_edit_param_error_default_value)
 				else -> null
 			}
 			textProductEditParamError.text = errorText
@@ -76,7 +81,8 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 		private fun updateParameterType(type: ProductParameter.Type)
 		{
 			val parameter = parameter ?: return
-			onParamEdit(parameter.copy(type = type, attributes = ProductParameter.Attributes()))
+			val attributes = if(type != parameter.type) ProductParameter.Attributes() else parameter.attributes
+			onParamEdit(parameter.copy(type = type, attributes = attributes))
 		}
 		
 		private fun updateParameterAttributes(attributes: ProductParameter.Attributes)

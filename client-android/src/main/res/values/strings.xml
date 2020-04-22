@@ -53,22 +53,16 @@
 	<string name="text_product_edit_param_name_no_value">Podaj nazwę</string>
 	<string name="text_product_edit_param_name_too_long">Nazwa za długa</string>
     <string name="text_product_edit_param_type">Typ</string>
-    <string name="text_product_edit_param_attr_default">Domyślna wartość</string>
-	<string name="text_product_edit_param_attr_min">Minimum</string>
-	<string name="text_product_edit_param_attr_max">Maksimum</string>
-	<string name="text_product_edit_param_attr_enum">Wartości</string>
-	<string name="text_product_edit_param_attr_enum_value_new">Nowa wartość</string>
-	<string name="text_product_edit_param_error_limits">Nieprawidłowe wartości graniczne</string>
+    <string name="text_product_edit_param_attrs_default">Domyślna wartość</string>
+	<string name="text_product_edit_param_attrs_range">Zakres</string>
+	<string name="text_product_edit_param_attrs_hyphen">-</string>
+	<string name="text_product_edit_param_attrs_enum">Wartości</string>
+	<string name="text_product_edit_param_attrs_enum_value_new">Nowa wartość</string>
+	<string name="text_product_edit_param_error_min_value">Nieprawidłowa wartość minimalna</string>
+	<string name="text_product_edit_param_error_max_value">Nieprawidłowa wartość maksymalna</string>
 	<string name="text_product_edit_param_error_empty_enum">Za mało elementów</string>
 	<string name="text_product_edit_param_error_default_value">Nieprawidłowa wartość domyślna</string>
 
-    <string name="text_product_param_int_range_closed">Od %1$d do %2$d</string>
-    <string name="text_product_param_int_range_left_closed">Minimalnie %d</string>
-    <string name="text_product_param_int_range_right_closed">Maksymalnie %d</string>
-    <string name="text_product_param_float_range_closed">Od %1$.2f do %2$.2f</string>
-    <string name="text_product_param_float_range_left_closed">Minimalnie %.2f</string>
-    <string name="text_product_param_float_range_right_closed">Maksymalnie %.2f</string>
-    <string name="text_product_param_no_value">Podaj wartość</string>
     <string name="text_product_param_true">Tak</string>
     <string name="text_product_param_false">Nie</string>
 

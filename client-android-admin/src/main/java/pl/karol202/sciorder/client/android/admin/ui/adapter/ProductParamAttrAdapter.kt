@@ -4,280 +4,245 @@ import android.text.InputType
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.item_product_param_attr_default_bool.*
-import kotlinx.android.synthetic.main.item_product_param_attr_default_text.*
-import kotlinx.android.synthetic.main.item_product_param_attr_enum.*
-import kotlinx.android.synthetic.main.item_product_param_attr_range.*
+import kotlinx.android.synthetic.main.item_product_param_attrs_bool.*
+import kotlinx.android.synthetic.main.item_product_param_attrs_enum.*
+import kotlinx.android.synthetic.main.item_product_param_attrs_numeric.*
+import kotlinx.android.synthetic.main.item_product_param_attrs_text.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.DividerItemDecorationWithoutLast
-import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
-import pl.karol202.sciorder.client.android.common.ui.adapter.StaticAdapter
+import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
+import pl.karol202.sciorder.client.android.common.ui.ctx
+import pl.karol202.sciorder.client.android.common.ui.setOnCheckedListener
+import pl.karol202.sciorder.client.android.common.ui.setTextIfDiffer
 import pl.karol202.sciorder.common.model.ProductParameter
+import pl.karol202.sciorder.common.util.isValidInt
+import pl.karol202.sciorder.common.validation.MAX_VALUE_LENGTH
+import pl.karol202.sciorder.common.validation.isDefaultValueValidFor
+import pl.karol202.sciorder.common.validation.isMaximalValueValidFor
+import pl.karol202.sciorder.common.validation.isMinimalValueValidFor
 
-class ProductParamAttrAdapter(private val attrs: List<Attr>,
-                              private val onAttrsUpdate: (ProductParameter.Attributes) -> Unit) :
-		StaticAdapter<ProductParamAttrAdapter.Attr>(attrs)
+private typealias AttrsUpdateListener = (ProductParameter.Attributes) -> Unit
+
+private fun Number.toStringWithNoZeros() = if(toFloat().isValidInt()) toInt().toString() else toFloat().toString()
+
+private fun String.toFloatIfValidOrNull() = when
 {
-	sealed class Attr(val viewType: Int)
+	endsWith('.') || endsWith(',') -> null
+	else -> toFloatOrNull()
+}
+
+class ProductParamAttrAdapter(private val onAttrsUpdate: AttrsUpdateListener) : DynamicAdapter<ProductParameter>()
+{
+	class ViewHolderText(view: View,
+	                     private val onAttrsUpdate: AttrsUpdateListener) : ViewHolder<ProductParameter>(view)
 	{
-		sealed class DefaultValue(viewType: kotlin.Int) : Attr(viewType)
+		private var attributes: ProductParameter.Attributes? = null
+		
+		init
 		{
-			interface Textual
-			{
-				var defaultAsString: String?
-
-				val inputType: kotlin.Int
-			}
-
-			data class Text(var default: String?) : DefaultValue(VIEW_TYPE_DEFAULT_TEXT), Textual
-			{
-				override var defaultAsString: String?
-					get() = default
-					set(value) { default = value }
-
-				override val inputType = InputType.TYPE_CLASS_TEXT
-
-				override fun applyTo(attributes: ProductParameter.Attributes) =
-						attributes.copy(defaultValue = default)
-			}
-
-			data class Int(var default: kotlin.Int?) : DefaultValue(VIEW_TYPE_DEFAULT_TEXT), Textual
-			{
-				override var defaultAsString: String?
-					get() = default?.toString()
-					set(value) { default = value?.toIntOrNull() }
-
-				override val inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
-
-				override fun applyTo(attributes: ProductParameter.Attributes) =
-						attributes.copy(defaultValue = defaultAsString)
-			}
-
-			data class Float(var default: kotlin.Float?) : DefaultValue(VIEW_TYPE_DEFAULT_TEXT), Textual
-			{
-				override var defaultAsString: String?
-					get() = default?.toString()
-					set(value) { default = value?.toFloatOrNull() }
-
-				override val inputType = InputType.TYPE_CLASS_NUMBER or
-						InputType.TYPE_NUMBER_FLAG_SIGNED or
-						InputType.TYPE_NUMBER_FLAG_DECIMAL
-
-				override fun applyTo(attributes: ProductParameter.Attributes) =
-						attributes.copy(defaultValue = defaultAsString)
-			}
-
-			data class Bool(var default: Boolean) : DefaultValue(VIEW_TYPE_DEFAULT_BOOL)
-			{
-				override fun applyTo(attributes: ProductParameter.Attributes) =
-						attributes.copy(defaultValue = default.toString())
-			}
+			editLayoutProductEditParamAttrsTextDefault.counterMaxLength = ProductParameter.MAX_VALUE_LENGTH
+			editTextProductEditParamAttrsTextDefault.doAfterTextChanged { updateDefaultValue(it.toString()) }
 		}
-
-		sealed class Range : Attr(VIEW_TYPE_RANGE)
+		
+		override fun bind(item: ProductParameter)
 		{
-			data class Int(var minimum: kotlin.Int?,
-			               var maximum: kotlin.Int?) : Range()
-			{
-				override val inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
-
-				override var minimumAsString: String?
-					get() = minimum?.toString()
-					set(value) { minimum = value?.toIntOrNull() }
-				override var maximumAsString: String?
-					get() = maximum?.toString()
-					set(value) { maximum = value?.toIntOrNull() }
-
-				override fun applyTo(attributes: ProductParameter.Attributes) =
-						attributes.copy(minimalValue = minimum?.toFloat(), maximalValue = maximum?.toFloat())
-			}
-
-			data class Float(var minimum: kotlin.Float?,
-			                 var maximum: kotlin.Float?) : Range()
-			{
-				override val inputType = InputType.TYPE_CLASS_NUMBER or
-						InputType.TYPE_NUMBER_FLAG_SIGNED or
-						InputType.TYPE_NUMBER_FLAG_DECIMAL
-
-				override var minimumAsString: String?
-					get() = minimum?.toString()
-					set(value) { minimum = value?.toFloatOrNull() }
-				override var maximumAsString: String?
-					get() = maximum?.toString()
-					set(value) { maximum = value?.toFloatOrNull() }
-
-				override fun applyTo(attributes: ProductParameter.Attributes) =
-						attributes.copy(minimalValue = minimum, maximalValue = maximum)
-			}
-
-			abstract val inputType: kotlin.Int
-
-			abstract var minimumAsString: String?
-			abstract var maximumAsString: String?
+			this.attributes = item.attributes
+			
+			editTextProductEditParamAttrsTextDefault.setTextIfDiffer(item.attributes.defaultValue.orEmpty())
+			
+			validate(item)
 		}
-
-		data class Enum(var values: List<String>,
-		                var defaultValue: String?) : Attr(VIEW_TYPE_ENUM)
+		
+		private fun validate(parameter: ProductParameter)
 		{
-			override fun applyTo(attributes: ProductParameter.Attributes) =
-					attributes.copy(enumValues = values, defaultValue = defaultValue)
+			editLayoutProductEditParamAttrsTextDefault.error =
+					if(parameter.attributes.isDefaultValueValidFor(parameter.type)) null
+					else ctx.getString(R.string.text_product_edit_param_error_default_value)
 		}
-
-		abstract fun applyTo(attributes: ProductParameter.Attributes): ProductParameter.Attributes
+		
+		private fun updateDefaultValue(value: String)
+		{
+			val attributes = attributes ?: return
+			onAttrsUpdate(attributes.copy(defaultValue = value))
+		}
 	}
-
+	
+	class ViewHolderNumeric(view: View,
+	                        private val onAttrsUpdate: AttrsUpdateListener) : ViewHolder<ProductParameter>(view)
+	{
+		private sealed class NumberType(val inputType: Int,
+		                                val parse: (String) -> Number?,
+		                                val toText: (Number?) -> String)
+		{
+			object Integer : NumberType(
+					inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED,
+					parse = { it.toIntOrNull() },
+					toText = { it?.toInt()?.toString().orEmpty() })
+			
+			object Decimal : NumberType(
+					inputType = Integer.inputType or InputType.TYPE_NUMBER_FLAG_DECIMAL,
+					parse = { it.toFloatIfValidOrNull() },
+					toText = { it?.toFloat()?.toStringWithNoZeros().orEmpty() })
+		}
+		
+		private data class BoundData(val attributes: ProductParameter.Attributes,
+		                             val numberType: NumberType)
+		
+		private var data: BoundData? = null
+		
+		init
+		{
+			editTextProductEditParamAttrsNumericDefault.doAfterTextChanged { updateDefaultValue(it?.toString()) }
+			editTextProductEditParamAttrsNumericMin.doAfterTextChanged { updateMinValue(it?.toString()) }
+			editTextProductEditParamAttrsNumericMax.doAfterTextChanged { updateMaxValue(it?.toString()) }
+		}
+		
+		override fun bind(item: ProductParameter)
+		{
+			val numberType = when(item.type)
+			{
+				ProductParameter.Type.INT -> NumberType.Integer
+				ProductParameter.Type.FLOAT -> NumberType.Decimal
+				else -> throw IllegalAccessException()
+			}
+			data = BoundData(item.attributes, numberType)
+			
+			editTextProductEditParamAttrsNumericDefault.inputType = numberType.inputType
+			editTextProductEditParamAttrsNumericMin.inputType = numberType.inputType
+			editTextProductEditParamAttrsNumericMax.inputType = numberType.inputType
+			
+			editTextProductEditParamAttrsNumericDefault.setTextIfDiffer(item.attributes.defaultValue.orEmpty())
+			editTextProductEditParamAttrsNumericMin.setTextIfDiffer(item.attributes.minimalValue.let(numberType.toText))
+			editTextProductEditParamAttrsNumericMax.setTextIfDiffer(item.attributes.maximalValue.let(numberType.toText))
+			
+			validate(item)
+		}
+		
+		private fun validate(parameter: ProductParameter)
+		{
+			validateDefaultValue(parameter)
+			validateMinimalValue(parameter)
+			validateMaximalValue(parameter)
+		}
+		
+		private fun validateDefaultValue(parameter: ProductParameter)
+		{
+			editLayoutProductEditParamAttrsNumericDefault.error =
+					if(parameter.attributes.isDefaultValueValidFor(parameter.type)) null
+					else ctx.getString(R.string.text_product_edit_param_error_default_value)
+		}
+		
+		private fun validateMinimalValue(parameter: ProductParameter)
+		{
+			editLayoutProductEditParamAttrsNumericMin.error =
+					if(parameter.attributes.isMinimalValueValidFor(parameter.type)) null
+					else ctx.getString(R.string.text_product_edit_param_error_min_value)
+		}
+		
+		private fun validateMaximalValue(parameter: ProductParameter)
+		{
+			editLayoutProductEditParamAttrsNumericMax.error =
+					if(parameter.attributes.isMaximalValueValidFor(parameter.type)) null
+					else ctx.getString(R.string.text_product_edit_param_error_max_value)
+		}
+		
+		private fun updateDefaultValue(text: String?) = updateValue(text) { copy(defaultValue = it?.toStringWithNoZeros()) }
+		
+		private fun updateMinValue(text: String?) = updateValue(text) { copy(minimalValue = it?.toFloat()) }
+		
+		private fun updateMaxValue(text: String?) = updateValue(text) { copy(maximalValue = it?.toFloat()) }
+		
+		private fun updateValue(text: String?,
+		                        attrsBuilder: ProductParameter.Attributes.(Number?) -> ProductParameter.Attributes)
+		{
+			val data = data ?: return
+			val value = if(text.isNullOrBlank()) null else data.numberType.parse(text) ?: return
+			onAttrsUpdate(data.attributes.attrsBuilder(value))
+		}
+	}
+	
+	class ViewHolderBool(view: View,
+	                     private val onAttrsUpdate: AttrsUpdateListener) : ViewHolder<ProductParameter>(view)
+	{
+		override fun bind(item: ProductParameter)
+		{
+			checkProductEditParamAttrsBoolDefault.isChecked = item.attributes.defaultValue.orEmpty().toBoolean()
+			checkProductEditParamAttrsBoolDefault.setOnCheckedListener { updateDefaultValue(item.attributes, it) }
+		}
+		
+		private fun updateDefaultValue(attributes: ProductParameter.Attributes, value: Boolean) =
+				onAttrsUpdate(attributes.copy(defaultValue = value.toString()))
+	}
+	
+	class ViewHolderEnum(view: View,
+	                     private val onAttrsUpdate: AttrsUpdateListener) : ViewHolder<ProductParameter>(view)
+	{
+		private val adapter = ProductParamAttrEnumValuesAdapter(view.ctx) { values, default -> updateValues(values, default) }
+		
+		private var attributes: ProductParameter.Attributes? = null
+		
+		init
+		{
+			recyclerProductEditParamAttrsEnum.layoutManager = LinearLayoutManager(ctx)
+			recyclerProductEditParamAttrsEnum.adapter = adapter
+			recyclerProductEditParamAttrsEnum.addItemDecoration(DividerItemDecorationWithoutLast(ctx))
+		}
+		
+		override fun bind(item: ProductParameter)
+		{
+			this.attributes = item.attributes
+			
+			adapter.values = item.attributes.enumValues ?: emptyList()
+			adapter.selection = item.attributes.defaultValue
+		}
+		
+		private fun updateValues(enumValues: List<String>, defaultValue: String?)
+		{
+			val attributes = attributes ?: return
+			onAttrsUpdate(attributes.copy(enumValues = enumValues, defaultValue = defaultValue))
+		}
+	}
+	
 	companion object
 	{
-		private const val VIEW_TYPE_DEFAULT_TEXT = 0
-		private const val VIEW_TYPE_DEFAULT_BOOL = 1
-		private const val VIEW_TYPE_RANGE = 2
+		private const val VIEW_TYPE_TEXT = 0
+		private const val VIEW_TYPE_NUMERIC = 1
+		private const val VIEW_TYPE_BOOL = 2
 		private const val VIEW_TYPE_ENUM = 3
-
-		fun fromParam(param: ProductParameter, attrsUpdateListener: (ProductParameter.Attributes) -> Unit) =
-				ProductParamAttrAdapter(createAttrs(param), attrsUpdateListener)
-
-		private fun createAttrs(param: ProductParameter) = when(param.type)
-		{
-			ProductParameter.Type.TEXT -> listOf(Attr.DefaultValue.Text(param.attributes.defaultValue))
-			ProductParameter.Type.INT -> listOf(Attr.DefaultValue.Int(param.attributes.defaultValue?.toIntOrNull()),
-			                                    Attr.Range.Int(param.attributes.minimalValue?.toInt(),
-			                                                   param.attributes.maximalValue?.toInt()))
-			ProductParameter.Type.FLOAT -> listOf(Attr.DefaultValue.Float(param.attributes.defaultValue?.toFloatOrNull()),
-			                                      Attr.Range.Float(param.attributes.minimalValue,
-			                                                       param.attributes.maximalValue))
-			ProductParameter.Type.BOOL -> listOf(Attr.DefaultValue.Bool(param.attributes.defaultValue?.toBoolean() ?: false))
-			ProductParameter.Type.ENUM -> listOf(Attr.Enum(param.attributes.enumValues ?: listOf(),
-			                                               param.attributes.defaultValue))
-		}
+		
+		private const val ITEM_ID = 0L
 	}
-
-	inner class ViewHolderDefaultText(view: View) : BasicAdapter.ViewHolder<Attr>(view)
-	{
-		private var item: Attr.DefaultValue.Textual? = null
-
-		init
-		{
-			editTextProductEditParamAttrDefaultText.doAfterTextChanged { setDefaultValue(it.toString()) }
-		}
-
-		override fun bind(item: Attr)
-		{
-			val textualItem = item as Attr.DefaultValue.Textual
-			this.item = textualItem
-
-			editTextProductEditParamAttrDefaultText.setText(textualItem.defaultAsString)
-			editTextProductEditParamAttrDefaultText.inputType = textualItem.inputType
-		}
-
-		private fun setDefaultValue(value: String?)
-		{
-			item?.defaultAsString = value?.takeIf { it.isNotBlank() }
-			onAttrsUpdate()
-		}
-	}
-
-	inner class ViewHolderDefaultBool(view: View) : BasicAdapter.ViewHolder<Attr>(view)
-	{
-		override fun bind(item: Attr)
-		{
-			val boolItem = item as Attr.DefaultValue.Bool
-
-			checkProductEditParamAttrDefaultBool.setOnCheckedChangeListener { _, checked -> setDefaultValue(boolItem, checked) }
-			checkProductEditParamAttrDefaultBool.isChecked = boolItem.default
-		}
-
-		private fun setDefaultValue(item: Attr.DefaultValue.Bool, value: Boolean)
-		{
-			item.default = value
-			onAttrsUpdate()
-		}
-	}
-
-	inner class ViewHolderRange(view: View) : BasicAdapter.ViewHolder<Attr>(view)
-	{
-		private var item: Attr.Range? = null
-
-		init
-		{
-			editTextProductEditParamAttrMin.doAfterTextChanged { setMinimum(it.toString()) }
-			editTextProductEditParamAttrMax.doAfterTextChanged { setMaximum(it.toString()) }
-		}
-
-		override fun bind(item: Attr)
-		{
-			val rangeItem = item as Attr.Range
-			this.item = rangeItem
-
-			editTextProductEditParamAttrMin.setText(rangeItem.minimumAsString)
-			editTextProductEditParamAttrMax.setText(rangeItem.maximumAsString)
-
-			editTextProductEditParamAttrMin.inputType = item.inputType
-			editTextProductEditParamAttrMax.inputType = item.inputType
-		}
-
-		private fun setMinimum(minimum: String?)
-		{
-			item?.minimumAsString = minimum
-			onAttrsUpdate()
-		}
-
-		private fun setMaximum(maximum: String?)
-		{
-			item?.maximumAsString = maximum
-			onAttrsUpdate()
-		}
-	}
-
-	inner class ViewHolderEnum(view: View) : BasicAdapter.ViewHolder<Attr>(view)
-	{
-		private var item: Attr.Enum? = null
-
-		private val adapter = ProductParamAttrEnumValuesAdapter(ctx) { values, default -> setEnumValuesAndDefault(values, default) }
-
-		init
-		{
-			recyclerProductEditParamAttrEnum.layoutManager = LinearLayoutManager(ctx)
-			recyclerProductEditParamAttrEnum.adapter = adapter
-			recyclerProductEditParamAttrEnum.addItemDecoration(DividerItemDecorationWithoutLast(ctx))
-		}
-
-		override fun bind(item: Attr)
-		{
-			this.item = item as Attr.Enum
-
-			adapter.values = item.values
-			adapter.selection = item.defaultValue
-		}
-
-		private fun setEnumValuesAndDefault(values: List<String>, default: String?)
-		{
-			item?.values = values
-			item?.defaultValue = default
-			onAttrsUpdate()
-		}
-	}
+	
+	var parameter: ProductParameter?
+		get() = items.singleOrNull()
+		set(value) { items = listOfNotNull(value) }
 
 	override fun getLayout(viewType: Int) = when(viewType)
 	{
-		VIEW_TYPE_DEFAULT_TEXT -> R.layout.item_product_param_attr_default_text
-		VIEW_TYPE_DEFAULT_BOOL -> R.layout.item_product_param_attr_default_bool
-		VIEW_TYPE_RANGE -> R.layout.item_product_param_attr_range
-		VIEW_TYPE_ENUM -> R.layout.item_product_param_attr_enum
+		VIEW_TYPE_TEXT -> R.layout.item_product_param_attrs_text
+		VIEW_TYPE_NUMERIC -> R.layout.item_product_param_attrs_numeric
+		VIEW_TYPE_BOOL -> R.layout.item_product_param_attrs_bool
+		VIEW_TYPE_ENUM -> R.layout.item_product_param_attrs_enum
 		else -> throw IllegalArgumentException()
 	}
 
 	override fun createViewHolder(view: View, viewType: Int) = when(viewType)
 	{
-		VIEW_TYPE_DEFAULT_TEXT -> ViewHolderDefaultText(view)
-		VIEW_TYPE_DEFAULT_BOOL -> ViewHolderDefaultBool(view)
-		VIEW_TYPE_RANGE -> ViewHolderRange(view)
-		VIEW_TYPE_ENUM -> ViewHolderEnum(view)
+		VIEW_TYPE_TEXT -> ViewHolderText(view, onAttrsUpdate)
+		VIEW_TYPE_NUMERIC -> ViewHolderNumeric(view, onAttrsUpdate)
+		VIEW_TYPE_BOOL -> ViewHolderBool(view, onAttrsUpdate)
+		VIEW_TYPE_ENUM -> ViewHolderEnum(view, onAttrsUpdate)
 		else -> throw IllegalArgumentException()
 	}
 
-	override fun getItemViewType(position: Int) = getItem(position).viewType
-
-	private fun onAttrsUpdate() = onAttrsUpdate(createParamAttrs())
-
-	private fun createParamAttrs() = attrs.fold(ProductParameter.Attributes()) { attrs, attr -> attr.applyTo(attrs) }
+	override fun getItemViewType(position: Int) = when(getItem(position).type)
+	{
+		ProductParameter.Type.TEXT -> VIEW_TYPE_TEXT
+		ProductParameter.Type.INT,
+		ProductParameter.Type.FLOAT -> VIEW_TYPE_NUMERIC
+		ProductParameter.Type.BOOL -> VIEW_TYPE_BOOL
+		ProductParameter.Type.ENUM -> VIEW_TYPE_ENUM
+	}
+	
+	override fun getItemId(item: ProductParameter) = ITEM_ID
 }

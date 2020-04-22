@@ -2,7 +2,7 @@ package pl.karol202.sciorder.client.android.admin.ui.adapter
 
 import android.content.Context
 import android.view.View
-import kotlinx.android.synthetic.main.item_product_param_attr_enum_value.*
+import kotlinx.android.synthetic.main.item_product_param_attrs_enum_value.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.dialog.ProductParamAttrEnumNewValueDialog
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
@@ -15,7 +15,7 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 	data class EnumEntry(val id: Long,
 	                     val value: String)
 
-	inner class ValueViewHolder(private val view: View) : BasicAdapter.ViewHolder<EnumEntry?>(view)
+	inner class ValueViewHolder(view: View) : BasicAdapter.ViewHolder<EnumEntry?>(view)
 	{
 		override fun bind(item: EnumEntry?)
 		{
@@ -31,13 +31,13 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 
 		private fun onSelectionChange(item: EnumEntry, selected: Boolean)
 		{
-			selection = item.value.takeIf { selected }
+			if(selected) selection = item.value
 		}
 	}
 
-	inner class NullViewHolder(private val view: View) : BasicAdapter.ViewHolder<EnumEntry?>(view)
+	inner class NullViewHolder(view: View) : BasicAdapter.ViewHolder<EnumEntry?>(view)
 	{
-		override fun bind(item: EnumEntry?) = view.setOnClickListener { showNewValueDialog() }
+		init { view.setOnClickListener { showNewValueDialog() } }
 	}
 
 	companion object
@@ -56,14 +56,15 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 		set(value)
 		{
 			if(field == value) return
+			val oldValue = field
 			field = value
-			updateViewIf { it.value == field || it.value == value }
+			updateViewIf { it.value == oldValue || it.value == value }
 		}
 	
 	override fun getLayout(viewType: Int) = when(viewType)
 	{
-		TYPE_VALUE -> R.layout.item_product_param_attr_enum_value
-		TYPE_NULL -> R.layout.item_product_param_attr_enum_value_null
+		TYPE_VALUE -> R.layout.item_product_param_attrs_enum_value
+		TYPE_NULL -> R.layout.item_product_param_attrs_enum_value_null
 		else -> throw IllegalArgumentException()
 	}
 
@@ -89,6 +90,7 @@ class ProductParamAttrEnumValuesAdapter(private val ctx: Context,
 	private fun removeValue(item: EnumEntry)
 	{
 		items = items - item
+		if(items.none { it?.value == selection }) selection = null
 		onValuesUpdate()
 	}
 
