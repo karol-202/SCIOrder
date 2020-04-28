@@ -4,20 +4,26 @@
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryVariant">@color/color_primary_variant</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
 
         <item name="colorSecondary">@color/color_secondary</item>
         <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
         <item name="colorOnSecondary">@color/color_on_secondary</item>
 
         <item name="materialCardViewStyle">@style/AppTheme.Card</item>
+        <item name="toolbarNavigationButtonStyle">@style/AppTheme.ToolbarNavigationButton</item>
     </style>
 
     <style name="AppTheme.Icon">
-        <item name="android:tint">?attr/colorOnSurface</item>
+        <item name="android:tint">?colorOnSurface</item>
     </style>
 
     <style name="AppTheme.Icon.Button" parent="AppTheme.Icon">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="AppTheme.ToolbarNavigationButton" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="tint">?colorOnPrimary</item> <!-- Works also on surface in night mode -->
     </style>
 
     <style name="AppTheme.Surface">
@@ -26,7 +32,7 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="AppTheme.Card">
+    <style name="AppTheme.Card" parent="Widget.MaterialComponents.CardView">
         <item name="strokeWidth">@dimen/card_stroke_width</item>
         <item name="strokeColor">@color/card_stroke_color</item>
         <item name="cardElevation">@dimen/card_elevation</item>

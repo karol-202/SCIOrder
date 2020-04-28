@@ -1,6 +1,7 @@
 package pl.karol202.sciorder.client.android.common
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import pl.karol202.sciorder.client.android.common.api.apiModule
@@ -19,6 +20,6 @@ class SCIOrderApplication : Application()
 		}
 		
 		// Temporary solution
-		//AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+		AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 	}
 }
