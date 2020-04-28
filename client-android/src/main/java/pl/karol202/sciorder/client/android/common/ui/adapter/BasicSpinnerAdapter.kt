@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Filter
+import android.widget.Filterable
 import kotlinx.android.extensions.LayoutContainer
 import pl.karol202.sciorder.client.android.common.ui.ctx
 
-abstract class BasicSpinnerAdapter<T> : BaseAdapter()
+abstract class BasicSpinnerAdapter<T> : BaseAdapter(), Filterable
 {
 	abstract class ViewHolder<T>(final override val containerView: View) : LayoutContainer
 	{
@@ -36,5 +38,12 @@ abstract class BasicSpinnerAdapter<T> : BaseAdapter()
 	{
 		val view = LayoutInflater.from(parent.ctx).inflate(layout, parent, false)
 		return createViewHolder(view).also { view.tag = it }
+	}
+	
+	override fun getFilter() = object : Filter()
+	{
+		override fun performFiltering(constraint: CharSequence?) = FilterResults()
+		
+		override fun publishResults(constraint: CharSequence?, results: FilterResults?) { }
 	}
 }

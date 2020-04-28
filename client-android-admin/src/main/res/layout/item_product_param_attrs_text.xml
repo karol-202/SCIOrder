@@ -13,8 +13,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editLayoutProductEditParamAttrsTextDefault"
             app:layout_constraintBottom_toBottomOf="@+id/editLayoutProductEditParamAttrsTextDefault"
-            android:text="@string/text_product_edit_param_attrs_default"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"/>
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:text="@string/text_product_edit_param_attrs_default"/>
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editLayoutProductEditParamAttrsTextDefault"
@@ -28,6 +28,7 @@
             app:layout_constraintStart_toEndOf="@+id/textProductEditParamAttrsTextDefault"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:hintEnabled="false"
             app:counterEnabled="true">
 

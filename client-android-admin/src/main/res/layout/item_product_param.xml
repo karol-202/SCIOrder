@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        app:cardCornerRadius="4dp">
+        android:layout_margin="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+            android:layout_height="wrap_content">
 
         <TextView
+                android:id="@+id/textProductEditParamName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textProductEditParamName"
-                android:text="@string/text_product_edit_param_name"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/editLayoutProductEditParamName"
-                app:layout_constraintBottom_toBottomOf="@+id/editLayoutProductEditParamName"/>
+                app:layout_constraintBottom_toBottomOf="@+id/editLayoutProductEditParamName"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:text="@string/text_product_edit_param_name"/>
 
         <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editLayoutProductEditParamName"
@@ -35,6 +32,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textProductEditParamName"
                 app:layout_constraintEnd_toStartOf="@+id/buttonProductEditParamRemove"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:errorEnabled="true"
                 app:hintEnabled="false"
                 app:counterEnabled="true">
@@ -46,40 +44,41 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
+                android:id="@+id/buttonProductEditParamRemove"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:id="@+id/buttonProductEditParamRemove"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_delete_white_24dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/editLayoutProductEditParamName"
-                app:layout_constraintTop_toTopOf="@+id/editLayoutProductEditParamName"/>
+                app:layout_constraintTop_toTopOf="@+id/editLayoutProductEditParamName"
+                app:srcCompat="@drawable/ic_delete_white_24dp"
+                style="@style/AppTheme.Icon.Button"/>
 
         <TextView
+                android:id="@+id/textProductEditParamType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textProductEditParamType"
-                android:text="@string/text_product_edit_param_type"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_marginStart="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/spinnerProductEditParamType"
-                app:layout_constraintTop_toTopOf="@+id/spinnerProductEditParamType"/>
+                app:layout_constraintTop_toTopOf="@+id/spinnerProductEditParamType"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:text="@string/text_product_edit_param_type"/>
 
         <Spinner
+                android:id="@+id/spinnerProductEditParamType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinnerProductEditParamType"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintStart_toEndOf="@+id/textProductEditParamType"
                 app:layout_constraintTop_toBottomOf="@+id/editLayoutProductEditParamName"/>
 
         <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerProductEditParamAttrs"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/recyclerProductEditParamAttrs"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerProductEditParamType"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -88,14 +87,14 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
+                android:id="@+id/textProductEditParamError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textProductEditParamError"
-                android:textAppearance="@style/TextAppearance.Design.Error"
-                android:visibility="gone"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:textAppearance="@style/TextAppearance.Design.Error"
+                android:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

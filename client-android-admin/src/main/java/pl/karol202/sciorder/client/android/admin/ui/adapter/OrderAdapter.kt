@@ -29,7 +29,6 @@ class OrderAdapter(private val orderStatusUpdateListener: (Long, Order.Status) -
 				val newStatus = it as Order.Status
 				if(newStatus == item.status) return@setOnItemSelectedListener
 				orderStatusUpdateListener(item.id, newStatus)
-				spinnerOrderStatus.setSelection(item.status.ordinal)
 			}
 			spinnerOrderStatus.setSelection(item.status.ordinal)
 

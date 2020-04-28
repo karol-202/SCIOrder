@@ -69,7 +69,6 @@ class ProductEditFragment : ExtendedFragment()
 	private fun initParamsRecycler()
 	{
 		recyclerProductEditParams.layoutManager = LinearLayoutManager(ctx)
-		recyclerProductEditParams.isNestedScrollingEnabled = false
 		recyclerProductEditParams.adapter = adapter
 		recyclerProductEditParams.simpleItemAnimator?.supportsChangeAnimations = false
 	}

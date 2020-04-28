@@ -20,5 +20,5 @@ class ProductParamAttrEnumNewValueDialog(context: Context,
 		setButton(BUTTON_POSITIVE, context.getString(R.string.action_enum_value_add)) { _, _ -> apply() }
 	}
 
-	private fun apply() = valueSetListener(editProductEditParamAttrEnumNewValue.text?.toString().orEmpty())
+	private fun apply() = valueSetListener(editTextProductEditParamAttrEnumNewValue.text?.toString().orEmpty())
 }

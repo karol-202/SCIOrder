@@ -5,6 +5,7 @@
 
     <color name="color_secondary">#00E676</color>
     <color name="color_secondary_variant">#00B248</color>
+    <color name="color_on_secondary">#FFFFFF</color>
 
     <color name="product_name_default">#FFFFFF</color>
     <color name="product_name_unavailable">#A0A0A0</color>

@@ -7,10 +7,32 @@
 
         <item name="colorSecondary">@color/color_secondary</item>
         <item name="colorSecondaryVariant">@color/color_secondary_variant</item>
+        <item name="colorOnSecondary">@color/color_on_secondary</item>
+
+        <item name="materialCardViewStyle">@style/AppTheme.Card</item>
     </style>
 
     <style name="AppTheme.Icon">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
         <item name="android:tint">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="AppTheme.Icon.Button" parent="AppTheme.Icon">
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="AppTheme.Surface">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AppTheme.Card">
+        <item name="strokeWidth">@dimen/card_stroke_width</item>
+        <item name="strokeColor">@color/card_stroke_color</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 </resources>

@@ -11,6 +11,7 @@ import pl.karol202.sciorder.client.android.admin.ui.adapter.OrderAdapter
 import pl.karol202.sciorder.client.android.admin.ui.dialog.fragment.OrderFilterDialogFragment
 import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetListener
 import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
+import pl.karol202.sciorder.client.android.common.ui.simpleItemAnimator
 import pl.karol202.sciorder.client.android.common.util.alertDialog
 import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.common.util.observeEvent
@@ -44,6 +45,7 @@ class OrdersFragment : FragmentWithMenu(), OnOrderFilterSetListener
 	{
 		recyclerOrders.layoutManager = LinearLayoutManager(context)
 		recyclerOrders.adapter = adapter
+		recyclerOrders.simpleItemAnimator?.supportsChangeAnimations = false
 	}
 
 	private fun observeOrders() =

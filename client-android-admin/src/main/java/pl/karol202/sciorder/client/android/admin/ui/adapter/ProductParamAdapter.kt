@@ -4,7 +4,6 @@ import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.item_product_param.*
-import kotlinx.android.synthetic.main.item_product_param_null.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.common.ui.adapter.BasicAdapter
 import pl.karol202.sciorder.client.android.common.ui.adapter.DynamicAdapter
@@ -92,11 +91,11 @@ class ProductParamAdapter(private val onParamAdd: () -> Unit,
 		}
 	}
 
-	inner class NullViewHolder(view: View) : BasicAdapter.ViewHolder<ProductParameter?>(view)
+	inner class NullViewHolder(private val view: View) : BasicAdapter.ViewHolder<ProductParameter?>(view)
 	{
 		override fun bind(item: ProductParameter?)
 		{
-			viewProductEditParamNull.setOnClickListener { onParamAdd() }
+			view.setOnClickListener { onParamAdd() }
 		}
 	}
 

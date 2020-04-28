@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
+
     <dimen name="snackbar_over_bottom_sheet_margin">72dp</dimen>
 </resources>
