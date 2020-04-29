@@ -5,6 +5,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <include
+            android:id="@+id/toolbarLayout"
+            layout="@layout/toolbar_layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/editLayoutRegisterAdminName"
             android:layout_width="0dp"
@@ -14,7 +21,7 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
             app:layout_constraintBottom_toTopOf="@+id/editLayoutRegisterPassword"
             app:layout_constraintVertical_chainStyle="packed"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

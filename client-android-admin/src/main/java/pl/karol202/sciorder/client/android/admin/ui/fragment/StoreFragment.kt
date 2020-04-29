@@ -3,12 +3,12 @@ package pl.karol202.sciorder.client.android.admin.ui.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.fragment_store.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
+import pl.karol202.sciorder.client.android.admin.ui.activity.ToolbarActivity
 import pl.karol202.sciorder.client.android.admin.ui.adapter.NavigationPagerAdapter
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.ctx
@@ -27,6 +27,7 @@ class StoreFragment : InflatedFragment()
 	{
 		handleBackPress()
 		
+		initToolbar()
 		initTabs()
 		
 		observeSelectedStore()
@@ -35,6 +36,8 @@ class StoreFragment : InflatedFragment()
 	private fun handleBackPress() = requireActivity().onBackPressedDispatcher.addCallback(this) {
 		storesViewModel.selectStore(null)
 	}
+	
+	private fun initToolbar() = (activity as? ToolbarActivity)?.setToolbar(toolbar)
 	
 	private fun initTabs()
 	{
@@ -51,6 +54,6 @@ class StoreFragment : InflatedFragment()
 	
 	private fun updateTitle(store: Store)
 	{
-		(activity as? AppCompatActivity)?.supportActionBar?.title = getString(R.string.fragment_store, store.name)
+		toolbar.title = getString(R.string.fragment_store, store.name)
 	}
 }

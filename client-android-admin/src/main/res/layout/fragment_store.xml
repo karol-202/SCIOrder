@@ -5,13 +5,25 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayoutStore"
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            app:tabMode="fixed"
-            style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"/>
+            android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"/>
+
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayoutStore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="fixed"
+                style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPagerStore"

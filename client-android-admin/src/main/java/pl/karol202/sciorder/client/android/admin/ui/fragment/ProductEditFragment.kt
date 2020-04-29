@@ -8,8 +8,10 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_product_edit.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
+import pl.karol202.sciorder.client.android.admin.ui.activity.ToolbarActivity
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
 import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
 import pl.karol202.sciorder.client.android.common.ui.setTextIfDiffer
@@ -40,6 +42,7 @@ class ProductEditFragment : ExtendedFragment()
 	{
 		handleBackPress()
 		
+		initToolbar()
 		initNameEditText()
 		initAvailabilityCheckbox()
 		initParamsRecycler()
@@ -54,6 +57,8 @@ class ProductEditFragment : ExtendedFragment()
 	private fun handleBackPress() = requireActivity().onBackPressedDispatcher.addCallback(this) {
 		viewModel.stopEditing()
 	}
+	
+	private fun initToolbar() = (activity as? ToolbarActivity)?.setToolbar(toolbar)
 
 	private fun initNameEditText()
 	{

@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
+import pl.karol202.sciorder.client.android.admin.ui.activity.ToolbarActivity
 import pl.karol202.sciorder.client.android.common.component.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.observeNonNull
@@ -23,6 +25,7 @@ class RegisterFragment : InflatedFragment()
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
+		initToolbar()
 		initRegisterButton()
 
 		observeAdmin()
@@ -35,6 +38,8 @@ class RegisterFragment : InflatedFragment()
 		initAdminNameEditText()
 		initPasswordEditText()
 	}
+	
+	private fun initToolbar() = (activity as? ToolbarActivity)?.setToolbar(toolbar)
 
 	private fun initRegisterButton() = buttonRegister.setOnClickListener { register() }
 	

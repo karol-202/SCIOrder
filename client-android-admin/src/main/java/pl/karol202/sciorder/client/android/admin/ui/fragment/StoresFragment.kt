@@ -7,8 +7,10 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_stores.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
+import pl.karol202.sciorder.client.android.admin.ui.activity.ToolbarActivity
 import pl.karol202.sciorder.client.android.admin.ui.adapter.StoreAdapter
 import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.ctx
@@ -34,6 +36,7 @@ class StoresFragment : FragmentWithMenu()
 	{
 		handleBackPress()
 		
+		initToolbar()
 		initRefreshLayout()
 		initRecycler()
 		
@@ -48,6 +51,8 @@ class StoresFragment : FragmentWithMenu()
 	private fun handleBackPress() = requireActivity().onBackPressedDispatcher.addCallback(this) {
 		requireActivity().finish()
 	}
+	
+	private fun initToolbar() = (activity as? ToolbarActivity)?.setToolbar(toolbar)
 	
 	private fun initRefreshLayout() = refreshLayoutStores.setOnRefreshListener { storesViewModel.refreshStores() }
 	
