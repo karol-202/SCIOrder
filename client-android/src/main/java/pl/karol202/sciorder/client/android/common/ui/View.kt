@@ -15,11 +15,6 @@ fun EditText.setTextIfDiffer(text: String)
 
 val RecyclerView.simpleItemAnimator get() = itemAnimator as? SimpleItemAnimator
 
-fun AutoCompleteTextView.setOnItemSelectedListener(listener: (Any) -> Unit)
-{
-	onItemSelectedListener = createOnItemSelectedListener(adapter, listener)
-}
-
 fun AdapterView<*>.setOnItemSelectedListener(listener: (Any) -> Unit)
 {
 	onItemSelectedListener = createOnItemSelectedListener(adapter, listener)

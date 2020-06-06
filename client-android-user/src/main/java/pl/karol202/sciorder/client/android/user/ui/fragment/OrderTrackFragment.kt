@@ -5,7 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_order_track.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import pl.karol202.sciorder.client.android.common.component.InflatedFragment
+import pl.karol202.sciorder.client.android.common.ui.fragment.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.TrackedOrderAdapter

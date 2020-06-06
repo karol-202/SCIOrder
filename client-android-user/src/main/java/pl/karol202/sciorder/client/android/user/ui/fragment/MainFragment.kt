@@ -3,7 +3,7 @@ package pl.karol202.sciorder.client.android.user.ui.fragment
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_main.*
-import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
+import pl.karol202.sciorder.client.android.common.ui.fragment.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.util.ctx
 import pl.karol202.sciorder.client.android.user.R
 import pl.karol202.sciorder.client.android.user.ui.adapter.NavigationPagerAdapter

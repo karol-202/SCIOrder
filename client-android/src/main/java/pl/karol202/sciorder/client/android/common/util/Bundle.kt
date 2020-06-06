@@ -3,30 +3,26 @@ package pl.karol202.sciorder.client.android.common.util
 import android.os.Bundle
 import android.os.Parcelable
 import java.io.Serializable
+import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-abstract class BundleDelegate<T>(private val bundleProvider: () -> Bundle) : ReadWriteProperty<Any?, T>
+abstract class BundleDelegate<T>(private val bundle: Bundle?) : ReadOnlyProperty<Any?, T>
 {
-	class Nullable<T : Any>(bundleProvider: () -> Bundle) : BundleDelegate<T?>(bundleProvider)
+	class Nullable<T : Any>(bundle: Bundle?) : BundleDelegate<T?>(bundle)
 	{
-		override operator fun getValue(thisRef: Any?, property: KProperty<*>): T? = getFromBundle(property.name)
+		override operator fun getValue(thisRef: Any?, property: KProperty<*>) = getFromBundle(property.name)
 	}
 
-	class NotNull<T : Any>(bundleProvider: () -> Bundle,
-	                       private val defaultValueProvider: () -> T) : BundleDelegate<T>(bundleProvider)
+	class NotNull<T : Any>(bundle: Bundle?,
+	                       private val defaultValueProvider: () -> T) : BundleDelegate<T>(bundle)
 	{
-		override operator fun getValue(thisRef: Any?, property: KProperty<*>): T =
-				getFromBundle(property.name) ?: defaultValueProvider().also { setValue(thisRef, property, it) }
+		override operator fun getValue(thisRef: Any?, property: KProperty<*>) =
+				getFromBundle(property.name) ?: defaultValueProvider()
 	}
 
 	@Suppress("UNCHECKED_CAST")
-	protected fun getFromBundle(name: String) = bundleProvider()[name] as T?
-
-	override operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T)
-	{
-		bundleProvider()[property.name] = value
-	}
+	protected fun getFromBundle(name: String) = bundle?.get(name) as T?
 }
 
 operator fun Bundle.set(key: String, value: Any?)

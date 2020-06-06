@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_products.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductAdapter
-import pl.karol202.sciorder.client.android.common.component.InflatedFragment
+import pl.karol202.sciorder.client.android.common.ui.fragment.InflatedFragment
 import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductEditAndroidViewModel
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductsAndroidViewModel
@@ -20,8 +20,6 @@ class ProductsFragment : InflatedFragment()
 {
 	private val productsViewModel by sharedViewModel<AdminProductsAndroidViewModel>()
 	private val productEditViewModel by sharedViewModel<AdminProductEditAndroidViewModel>()
-
-	private val navController by lazy { findNavController(this) }
 
 	private val adapter = ProductAdapter(productEditListener = { editExistingProduct(it) },
 	                                     productRemoveListener = { showProductRemoveDialog(it) })
@@ -37,7 +35,6 @@ class ProductsFragment : InflatedFragment()
 		observeProducts()
 		observeLoading()
 		observeLoadingError()
-		observeEditedProduct()
 		observeUpdateError()
 	}
 
@@ -63,10 +60,6 @@ class ProductsFragment : InflatedFragment()
 	private fun observeLoadingError() = productsViewModel.loadingErrorEventLiveData.observeEvent(viewLifecycleOwner) {
 		showSnackbar(R.string.text_loading_error)
 	}
-	
-	private fun observeEditedProduct() = productEditViewModel.editedProductLiveData.observeNonNull(viewLifecycleOwner) {
-		navigateToProductEditFragment()
-	}
 
 	private fun observeUpdateError() = productEditViewModel.updateErrorEventLiveData.observeEvent(viewLifecycleOwner) {
 		showSnackbar(R.string.text_update_error)
@@ -75,8 +68,6 @@ class ProductsFragment : InflatedFragment()
 	private fun editNewProduct() = productEditViewModel.editNewProduct()
 	
 	private fun editExistingProduct(product: Product) = productEditViewModel.editExistingProduct(product)
-
-	private fun navigateToProductEditFragment() = navController.navigate(StoreFragmentDirections.actionStoreToProductEdit())
 
 	private fun showProductRemoveDialog(product: Product)
 	{

@@ -8,15 +8,16 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_product_edit.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.activity.ToolbarActivity
 import pl.karol202.sciorder.client.android.admin.ui.adapter.ProductParamAdapter
-import pl.karol202.sciorder.client.android.common.component.ExtendedFragment
+import pl.karol202.sciorder.client.android.common.ui.fragment.InflatedFragment
 import pl.karol202.sciorder.client.android.common.ui.setTextIfDiffer
 import pl.karol202.sciorder.client.android.common.ui.simpleItemAnimator
 import pl.karol202.sciorder.client.android.common.util.ctx
+import pl.karol202.sciorder.client.android.common.util.inflateTransition
 import pl.karol202.sciorder.client.android.common.util.observeEvent
 import pl.karol202.sciorder.client.android.common.util.showSnackbar
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminProductEditAndroidViewModel
@@ -26,7 +27,7 @@ import pl.karol202.sciorder.common.model.Product
 import pl.karol202.sciorder.common.request.ProductRequest
 import pl.karol202.sciorder.common.validation.MAX_NAME_LENGTH
 
-class ProductEditFragment : ExtendedFragment()
+class ProductEditFragment : InflatedFragment()
 {
 	private val viewModel by sharedViewModel<AdminProductEditAndroidViewModel>()
 	
@@ -37,7 +38,15 @@ class ProductEditFragment : ExtendedFragment()
 	                                          onParamRemove = { viewModel.removeParameter(it) })
 	
 	override val layoutRes = R.layout.fragment_product_edit
-
+	
+	override fun onCreate(savedInstanceState: Bundle?)
+	{
+		super.onCreate(savedInstanceState)
+		sharedElementEnterTransition = ctx.inflateTransition(android.R.transition.move)
+		enterTransition = ctx.inflateTransition(android.R.transition.fade)
+		exitTransition = ctx.inflateTransition(android.R.transition.fade)
+	}
+	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		handleBackPress()

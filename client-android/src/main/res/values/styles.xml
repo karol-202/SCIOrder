@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/color_on_secondary</item>
 
         <item name="colorSurface">@color/color_surface</item>
+        <item name="colorError">@color/color_primary</item>
 
         <item name="materialCardViewStyle">@style/AppTheme.Card</item>
         <item name="toolbarNavigationButtonStyle">@style/AppTheme.ToolbarNavigationButton</item>

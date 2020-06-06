@@ -2,15 +2,13 @@ package pl.karol202.sciorder.client.android.user.ui.dialog.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import pl.karol202.sciorder.client.android.common.component.ExtendedDialogFragment
+import pl.karol202.sciorder.client.android.common.component.DialogFragmentWithArguments
 import pl.karol202.sciorder.client.android.common.util.ctx
-import pl.karol202.sciorder.client.android.common.util.setArguments
 import pl.karol202.sciorder.client.android.common.util.setTargetFragment
-import pl.karol202.sciorder.client.android.common.util.to
 import pl.karol202.sciorder.client.android.user.ui.dialog.OrderDialog
 import pl.karol202.sciorder.client.android.user.ui.listener.OnOrderDetailsSetListener
 
-class OrderDialogFragment : ExtendedDialogFragment()
+class OrderDialogFragment : DialogFragmentWithArguments()
 {
 	companion object
 	{

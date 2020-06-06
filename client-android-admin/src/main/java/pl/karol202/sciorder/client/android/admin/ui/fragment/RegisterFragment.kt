@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.android.synthetic.main.fragment_register.appBarLayout
+import kotlinx.android.synthetic.main.toolbar.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.activity.ToolbarActivity
-import pl.karol202.sciorder.client.android.common.component.InflatedFragment
-import pl.karol202.sciorder.client.android.common.util.observeEvent
-import pl.karol202.sciorder.client.android.common.util.observeNonNull
-import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.ui.fragment.InflatedFragment
+import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminLoginAndroidViewModel
 import pl.karol202.sciorder.client.common.viewmodel.AdminLoginViewModel
 
@@ -22,7 +21,15 @@ class RegisterFragment : InflatedFragment()
 	private val navController by lazy { NavHostFragment.findNavController(this) }
 
 	override val layoutRes = R.layout.fragment_register
-
+	
+	override fun onCreate(savedInstanceState: Bundle?)
+	{
+		super.onCreate(savedInstanceState)
+		sharedElementEnterTransition = ctx.inflateTransition(android.R.transition.move)
+		enterTransition = ctx.inflateTransition(android.R.transition.fade)
+		exitTransition = ctx.inflateTransition(android.R.transition.fade)
+	}
+	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		initToolbar()
@@ -68,5 +75,6 @@ class RegisterFragment : InflatedFragment()
 	
 	private fun getPassword() = editTextRegisterPassword.text?.toString().orEmpty()
 
-	private fun goToMainFragment() = navController.navigate(RegisterFragmentDirections.actionRegisterToStores())
+	private fun goToMainFragment() =
+			navController.navigate(RegisterFragmentDirections.actionRegisterToStores(), sharedElements(appBarLayout))
 }

@@ -4,16 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_order_filter.*
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.OrderFilterAdapter
-import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
 import pl.karol202.sciorder.common.model.Order
 
 class OrderFilterDialog(context: Context,
                         filter: Set<Order.Status>,
-                        private val filterSetListener: (Set<Order.Status>) -> Unit) : ExtendedAlertDialog(context)
+                        private val filterSetListener: (Set<Order.Status>) -> Unit) : AlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	private val view = LayoutInflater.from(context).inflate(R.layout.dialog_order_filter, null)

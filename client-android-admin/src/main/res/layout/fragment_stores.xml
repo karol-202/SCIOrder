@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <include layout="@layout/toolbar_layout"/>
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:transitionName="appBarLayout">
+
+        <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+                android:transitionName="toolbar"/>
+
+        <View
+                android:id="@+id/tabLayoutPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                style="@style/Widget.MaterialComponents.TabLayout.PrimarySurface"
+                android:transitionName="tabLayout"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshLayoutStores"

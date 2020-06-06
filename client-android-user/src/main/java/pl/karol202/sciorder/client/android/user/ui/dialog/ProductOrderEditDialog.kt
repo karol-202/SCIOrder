@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_product_order_edit.*
 import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
@@ -17,7 +18,7 @@ import pl.karol202.sciorder.common.model.Product
 
 class ProductOrderEditDialog(context: Context,
                              private val orderedProduct: OrderedProduct,
-                             private val orderListener: OnProductOrderEditListener) : ExtendedAlertDialog(context)
+                             private val orderListener: OnProductOrderEditListener) : AlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_product_order_edit, null)

@@ -6,17 +6,16 @@ import androidx.activity.addCallback
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Fade
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_stores.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
+import kotlinx.android.synthetic.main.fragment_stores.appBarLayout
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.activity.ToolbarActivity
 import pl.karol202.sciorder.client.android.admin.ui.adapter.StoreAdapter
-import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
-import pl.karol202.sciorder.client.android.common.util.ctx
-import pl.karol202.sciorder.client.android.common.util.observeEvent
-import pl.karol202.sciorder.client.android.common.util.observeNonNull
-import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.ui.fragment.FragmentWithMenu
+import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminLoginAndroidViewModel
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminStoresAndroidViewModel
 
@@ -31,6 +30,15 @@ class StoresFragment : FragmentWithMenu()
 	
 	override val layoutRes = R.layout.fragment_stores
 	override val menuRes = R.menu.menu_stores
+	
+	override fun onCreate(savedInstanceState: Bundle?)
+	{
+		super.onCreate(savedInstanceState)
+		sharedElementEnterTransition = ctx.inflateTransition(android.R.transition.move)
+		//enterTransition = ctx.inflateTransition(android.R.transition.fade)
+		exitTransition = ctx.inflateTransition(android.R.transition.fade)
+		returnTransition = ctx.inflateTransition(android.R.transition.fade)
+	}
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
@@ -88,7 +96,9 @@ class StoresFragment : FragmentWithMenu()
 	
 	private fun navigateBack() = navController.popBackStack()
 	
-	private fun goToStoreFragment() = navController.navigate(StoresFragmentDirections.actionStoresToStore())
+	private fun goToStoreFragment() =
+			navController.navigate(StoresFragmentDirections.actionStoresToStore(),
+			                       sharedElements(appBarLayout))
 	
 	override fun onMenuItemSelected(itemId: Int) = when(itemId)
 	{

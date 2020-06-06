@@ -3,12 +3,12 @@ package pl.karol202.sciorder.client.android.admin.ui.dialog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.dialog_product_param_attr_enum_new_value.*
 import pl.karol202.sciorder.client.android.admin.R
-import pl.karol202.sciorder.client.android.common.component.ExtendedAlertDialog
 
 class ProductParamAttrEnumNewValueDialog(context: Context,
-                                         private val valueSetListener: (String) -> Unit) : ExtendedAlertDialog(context)
+                                         private val valueSetListener: (String) -> Unit) : AlertDialog(context)
 {
 	@SuppressLint("InflateParams")
 	private val view = LayoutInflater.from(context).inflate(R.layout.dialog_product_param_attr_enum_new_value, null)

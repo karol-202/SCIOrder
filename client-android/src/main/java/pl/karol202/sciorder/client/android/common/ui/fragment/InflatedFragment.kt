@@ -1,4 +1,4 @@
-package pl.karol202.sciorder.client.android.common.component
+package pl.karol202.sciorder.client.android.common.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

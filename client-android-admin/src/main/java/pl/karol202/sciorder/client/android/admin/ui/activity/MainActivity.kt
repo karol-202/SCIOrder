@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.android.synthetic.main.activity_main.*
 import pl.karol202.sciorder.client.android.admin.R
 
 class MainActivity : AppCompatActivity(), ToolbarActivity

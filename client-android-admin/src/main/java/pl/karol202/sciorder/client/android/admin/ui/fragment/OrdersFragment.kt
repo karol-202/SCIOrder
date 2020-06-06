@@ -10,12 +10,9 @@ import pl.karol202.sciorder.client.android.admin.R
 import pl.karol202.sciorder.client.android.admin.ui.adapter.OrderAdapter
 import pl.karol202.sciorder.client.android.admin.ui.dialog.fragment.OrderFilterDialogFragment
 import pl.karol202.sciorder.client.android.admin.ui.listener.OnOrderFilterSetListener
-import pl.karol202.sciorder.client.android.common.component.FragmentWithMenu
+import pl.karol202.sciorder.client.android.common.ui.fragment.FragmentWithMenu
 import pl.karol202.sciorder.client.android.common.ui.simpleItemAnimator
-import pl.karol202.sciorder.client.android.common.util.alertDialog
-import pl.karol202.sciorder.client.android.common.util.ctx
-import pl.karol202.sciorder.client.android.common.util.observeEvent
-import pl.karol202.sciorder.client.android.common.util.showSnackbar
+import pl.karol202.sciorder.client.android.common.util.*
 import pl.karol202.sciorder.client.android.common.viewmodel.AdminOrdersAndroidViewModel
 import pl.karol202.sciorder.common.model.Order
 
